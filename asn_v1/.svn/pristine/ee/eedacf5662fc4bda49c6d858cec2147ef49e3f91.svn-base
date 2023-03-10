@@ -1,0 +1,604 @@
+package com.lonar.asn.dao;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.jdo.annotations.Transactional;
+import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
+import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureQuery;
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+
+
+import com.lonar.asn.model.BusinessException;
+import com.lonar.asn.model.LtPoShipment;
+import com.lonar.asn.model.LtShipmentHeaders;
+import com.lonar.asn.model.LtShipmentLines;
+import com.lonar.asn.model.ProcedureCall;
+import com.lonar.asn.model.SubmitAsn;
+import com.lonar.asn.repository.LtShipmentLinesRepository;
+
+@Repository
+@PropertySource(value = "classpath:asnQueries.properties", ignoreResourceNotFound = true)
+public class AsnHeaderDaoImpl implements AsnHeaderDao{
+
+	@Autowired
+	private Environment env;
+	
+	@Autowired
+	LtShipmentLinesRepository ltShipmentLinesRepository;
+	
+	@PersistenceContext(name = "em")
+	private EntityManager em;
+	
+	private JdbcTemplate jdbcTemplate;
+	
+	private JdbcTemplate getJdbcTemplate() {
+		return jdbcTemplate;
+	}
+	
+	@Autowired
+	public void setDataSource(DataSource dataSource) {
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
+	} 
+	
+	
+	@Override
+	public List<String> getListOfStr() throws BusinessException {
+		List<String> listStr = new ArrayList<>();
+		listStr.add("ABC");
+		listStr.add("PQR");
+		listStr.add("XYZ");
+		return listStr;
+	}
+
+	@Override
+	public Long getAsnHeaderDataCount(LtShipmentHeaders input) throws BusinessException {
+		String query = env.getProperty("asnDataTableDataCount");
+		
+		String shipmentNumber=null;
+		if(input.getShipmentNum()!=null && !input.getShipmentNum().equals(""))
+		{shipmentNumber="%"+input.getShipmentNum().trim().toUpperCase() + "%";}
+	   
+		if(input.getShippedDate() == null )
+		{
+			input.setShippedDate(null);
+		}
+		   
+		String vendorName=null;
+		if(input.getVendorName()!=null && !input.getVendorName().equals(""))
+		{vendorName="%"+input.getVendorName().trim().toUpperCase()+"%";}
+			
+		String vendorAddress=null;
+		if(input.getVendorAdd()!=null &&  !input.getVendorAdd().equals("")) 
+		{vendorAddress="%"+input.getVendorAdd().trim().trim().toUpperCase()+"%";}
+		   
+		String status=null;
+		if(input.getApprovalStatus()!=null && !input.getApprovalStatus().equals(""))
+		{status="%"+input.getApprovalStatus().trim().trim().toUpperCase()+"%";}
+		  
+		   
+		String count  = (String)getJdbcTemplate().queryForObject(
+				query, new Object[] {input.getVendorId(), shipmentNumber, input.getShippedDate(), 
+						vendorName, vendorAddress, status}, String.class);
+
+		return Long.parseLong(count);
+	}
+
+	@Override
+	public List<LtShipmentHeaders> getAsnHeaderDataTableDetails(LtShipmentHeaders input) throws BusinessException {
+		String query = env.getProperty("asnDataTableQueries");
+		
+		String shipmentNumber=null;
+		if(input.getShipmentNum()!=null && !input.getShipmentNum().equals(""))
+		{shipmentNumber="%"+input.getShipmentNum().trim().toUpperCase() + "%";}
+	   
+		if(input.getShippedDate() == null )
+		{
+			input.setShippedDate(null);
+		}
+		   
+		String vendorName=null;
+		if(input.getVendorName()!=null && !input.getVendorName().equals(""))
+		{vendorName="%"+input.getVendorName().trim().toUpperCase()+"%";}
+			
+		String vendorAddress=null;
+		if(input.getVendorAdd()!=null &&  !input.getVendorAdd().equals("")) 
+		{vendorAddress="%"+input.getVendorAdd().trim().trim().toUpperCase()+"%";}
+		   
+		String status=null;
+		if(input.getApprovalStatus()!=null && !input.getApprovalStatus().equals(""))
+		{status="%"+input.getApprovalStatus().trim().trim().toUpperCase()+"%";}
+			
+		if(input.getColumnNo()==0) {
+			input.setColumnNo(7);
+		}
+		
+			List<LtShipmentHeaders> list = (List<LtShipmentHeaders>) 
+					jdbcTemplate.query(query , new Object[]{input.getVendorId(), shipmentNumber, input.getShippedDate(), 
+							vendorName, vendorAddress, status,
+							input.getColumnNo(),input.getColumnNo(),
+							input.getColumnNo(),input.getColumnNo(),
+							input.getColumnNo(),input.getColumnNo(),
+							input.getColumnNo(),input.getColumnNo(),
+							input.getColumnNo(),input.getColumnNo(),
+							input.getColumnNo(),input.getColumnNo(),
+							input.getStart()+input.getLength(),input.getStart()},
+				 new  BeanPropertyRowMapper<LtShipmentHeaders>(LtShipmentHeaders.class));
+				return list;
+	}
+
+	@Override
+	public LtShipmentHeaders getByAsnHeaderId(Long id) throws BusinessException {
+		String query = env.getProperty("getByAsnHeaderId");
+		List<LtShipmentHeaders> list=   jdbcTemplate.query(query, new Object[]{ id}, 
+				 new BeanPropertyRowMapper<LtShipmentHeaders>(LtShipmentHeaders.class));
+		if(list.isEmpty())
+			return null;
+		else
+			return list.get(0);
+	}
+
+	@Override
+	public List<LtShipmentLines> getAsnLinesByAsnHeaderId(Long id) throws BusinessException {
+		String query = env.getProperty("getAsnLinesByAsnHeaderId");
+		List<LtShipmentLines> list=   jdbcTemplate.query(query, new Object[]{ id}, 
+				 new BeanPropertyRowMapper<LtShipmentLines>(LtShipmentLines.class));
+		return list;
+	}
+
+	@Override
+	public boolean updateLines(LtShipmentLines ltShipmentLines) throws BusinessException {
+		String query = "UPDATE LT_SHIPMENT_LINES SET QUANTITY_SHIPPED = ? WHERE SHIPMENT_LINE_ID = ? "
+				+ " AND SHIPMENT_HEADER_ID = ? AND LAST_UPDATE_DATE = ? ";
+		int res = jdbcTemplate
+				.update(query,ltShipmentLines.getQuantityShipped(),ltShipmentLines.getShipmentLineId(),
+						ltShipmentLines.getShipmentHeaderId(),new Date());
+				
+				if (res != 0)
+					return true;
+				else
+					return false;
+	}
+
+	@Override
+	public Long getAsnHeaderDataCountByLocation(LtShipmentHeaders input, Long locationId)
+			throws BusinessException {
+		String query = env.getProperty("asnDataTableDataCountByLocation");
+		
+		String shipmentNumber=null;
+		if(input.getShipmentNum()!=null && !input.getShipmentNum().equals(""))
+		{shipmentNumber="%"+input.getShipmentNum().trim().toUpperCase() + "%";}
+	   
+		if(input.getShippedDate() == null )
+		{
+			input.setShippedDate(null);
+		}
+		   
+		String vendorName=null;
+		if(input.getVendorName()!=null && !input.getVendorName().equals(""))
+		{vendorName="%"+input.getVendorName().trim().toUpperCase()+"%";}
+			
+		String vendorAddress=null;
+		if(input.getVendorAdd()!=null &&  !input.getVendorAdd().equals("")) 
+		{vendorAddress="%"+input.getVendorAdd().trim().trim().toUpperCase()+"%";}
+		   
+		String status=null;
+		if(input.getApprovalStatus()!=null && !input.getApprovalStatus().equals(""))
+		{status="%"+input.getApprovalStatus().trim().trim().toUpperCase()+"%";}
+		  
+		   
+		String count  = (String)getJdbcTemplate().queryForObject(
+				query, new Object[] {locationId, shipmentNumber, input.getShippedDate(), 
+						vendorName, vendorAddress, status}, String.class);
+
+		return Long.parseLong(count);
+	}
+
+	@Override
+	public List<LtShipmentHeaders> getAsnHeaderDataTableDetailsByLocation(LtShipmentHeaders input, Long locationId)
+			throws BusinessException {
+		String query = env.getProperty("asnDataTableQueriesByLocation");
+		
+		String shipmentNumber=null;
+		if(input.getShipmentNum()!=null && !input.getShipmentNum().equals(""))
+		{shipmentNumber="%"+input.getShipmentNum().trim().toUpperCase() + "%";}
+	   
+		if(input.getShippedDate() == null )
+		{
+			input.setShippedDate(null);
+		}
+		   
+		String vendorName=null;
+		if(input.getVendorName()!=null && !input.getVendorName().equals(""))
+		{vendorName="%"+input.getVendorName().trim().toUpperCase()+"%";}
+			
+		String vendorAddress=null;
+		if(input.getVendorAdd()!=null &&  !input.getVendorAdd().equals("")) 
+		{vendorAddress="%"+input.getVendorAdd().trim().trim().toUpperCase()+"%";}
+		   
+		String status=null;
+		if(input.getApprovalStatus()!=null && !input.getApprovalStatus().equals(""))
+		{status="%"+input.getApprovalStatus().trim().trim().toUpperCase()+"%";}
+			
+		if(input.getColumnNo()==0) {
+			input.setColumnNo(0);
+		}
+	
+			List<LtShipmentHeaders> list = (List<LtShipmentHeaders>) 
+					jdbcTemplate.query(query , new Object[]{locationId, shipmentNumber, input.getShippedDate(), 
+							vendorName, vendorAddress, status,
+							input.getColumnNo(),input.getColumnNo(),
+							input.getColumnNo(),input.getColumnNo(),
+							input.getColumnNo(),input.getColumnNo(),
+							input.getColumnNo(),input.getColumnNo(),
+							input.getStart()+input.getLength(),input.getStart()},
+				 new  BeanPropertyRowMapper<LtShipmentHeaders>(LtShipmentHeaders.class));
+				return list;
+	}
+
+	@Override
+	public boolean submitAsn(SubmitAsn submitAsn) throws BusinessException {
+		
+		int res;
+		if(submitAsn.getAcceptedBy() !=null) {
+			String query2 = " UPDATE LT_SHIPMENT_HEADERS SET APPROVAL_STATUS = ? , LAST_UPDATED_BY = ? ,"
+					+ "  LAST_UPDATE_LOGIN = ? , LAST_UPDATE_DATE = ?, ACCEPTED_BY = ? WHERE SHIPMENT_HEADER_ID = ? "
+					+ "    ";
+			
+			 res = jdbcTemplate
+						.update(query2,submitAsn.getStatus(),submitAsn.getLastUpdateLogin(),
+								submitAsn.getLastUpdateLogin(),new Date(), submitAsn.getAcceptedBy(), submitAsn.getAsnHeaderId());
+
+		}else {
+				
+			 String query = " UPDATE LT_SHIPMENT_HEADERS SET APPROVAL_STATUS = ? , LAST_UPDATED_BY = ? ,"
+						+ "  LAST_UPDATE_LOGIN = ? , LAST_UPDATE_DATE = ? WHERE SHIPMENT_HEADER_ID = ? "
+						+ "    ";
+				
+				 res = jdbcTemplate
+						.update(query,submitAsn.getStatus(),submitAsn.getLastUpdateLogin(),
+								submitAsn.getLastUpdateLogin(),new Date(),submitAsn.getAsnHeaderId());
+		}
+		System.out.println(res);		
+				if (res != 0)
+					return true;
+				else
+					return false;
+	}
+
+	@Override
+	public SubmitAsn getAsnStatusByAsnHeaderId(Long id) throws BusinessException {
+		String query = env.getProperty("getAsnStatusByAsnHeaderId");
+		List<SubmitAsn> list=   jdbcTemplate.query(query, new Object[]{ id}, 
+				 new BeanPropertyRowMapper<SubmitAsn>(SubmitAsn.class));
+		if(list.isEmpty())
+			return null;
+		else
+			return list.get(0);
+	}
+
+	@Override
+	public Long getCountpoShipmentDataTableByVendorId(LtPoShipment input, Long vendorId) throws BusinessException {
+
+		String query = env.getProperty("poShipmentDataTableCount");
+		
+		String poNumber=null;
+		if(input.getPoNumber()!=null && !input.getPoNumber().equals(""))
+		{poNumber="%"+input.getPoNumber().trim().toUpperCase() + "%";}
+		   
+		String poLineId =null;
+		if(input.getPoLineId()!=null && !input.getPoLineId().equals(""))
+		{poLineId="%"+input.getPoLineId().toString()+"%";}
+		
+		String shipmentNumber =null;
+		if(input.getShipmentNum()!=null && !input.getShipmentNum().equals(""))
+		{shipmentNumber="%"+input.getShipmentNum().toString()+"%";}
+		
+		String itemDescription =null;
+		if(input.getProductDescription()!=null &&  !input.getProductDescription().equals("")) 
+		{itemDescription="%"+input.getProductDescription().trim().trim().toUpperCase()+"%";}
+		
+		if(input.getDueDate() == null )
+		{
+			input.setDueDate(null);
+		}
+		
+		String orderQuantity =null;
+		if(input.getQuantityOrdered()!=null && !input.getQuantityOrdered().equals(""))
+		{orderQuantity="%"+input.getQuantityOrdered().toString()+"%";}
+		
+		String quantityRecived =null;
+		if(input.getQuantityReceived()!=null && !input.getQuantityReceived().equals(""))
+		{quantityRecived="%"+input.getQuantityReceived().toString()+"%";}
+		   
+		String shipToLocation =null;
+		if(input.getShipToLocation()!=null && !input.getShipToLocation().equals(""))
+		{shipToLocation="%"+input.getShipToLocation().trim().trim().toUpperCase()+"%";}
+		  
+		   
+		String count  = (String)getJdbcTemplate().queryForObject(
+				query, new Object[] {vendorId,
+						poNumber, poLineId,itemDescription, shipmentNumber
+						, input.getDueDate(), orderQuantity,
+						quantityRecived, shipToLocation}, String.class);
+		
+		return Long.parseLong(count);
+		
+	}
+
+	@Override
+	public List<LtPoShipment> getPoShipmentDataTableByVendorId(LtPoShipment input, Long vendorId)
+			throws BusinessException {
+		String query = env.getProperty("poShipmentDataTableList");
+		
+		String poNumber=null;
+		if(input.getPoNumber()!=null && !input.getPoNumber().equals(""))
+		{poNumber="%"+input.getPoNumber().trim().toUpperCase() + "%";}
+		   
+		String poLineId =null;
+		if(input.getLineNum()!=null && !input.getLineNum().equals(""))
+		{poLineId="%"+input.getLineNum().toString()+"%";}
+		
+		String shipmentNumber =null;
+		if(input.getShipmentNum()!=null && !input.getShipmentNum().equals(""))
+		{shipmentNumber="%"+input.getShipmentNum().toString()+"%";}
+		
+		String itemDescription =null;
+		if(input.getProductDescription()!=null &&  !input.getProductDescription().equals("")) 
+		{itemDescription="%"+input.getProductDescription().trim().trim().toUpperCase()+"%";}
+		
+		if(input.getDueDate() == null )
+		{
+			input.setDueDate(null);
+		}
+		
+		String orderQuantity =null;
+		if(input.getQuantityOrdered()!=null && !input.getQuantityOrdered().equals(""))
+		{orderQuantity="%"+input.getQuantityOrdered().toString()+"%";}
+		
+		String quantityRecived =null;
+		if(input.getQuantityReceived()!=null && !input.getQuantityReceived().equals(""))
+		{quantityRecived="%"+input.getQuantityReceived().toString()+"%";}
+		   
+		String shipToLocation =null;
+		if(input.getShipToLocation()!=null && !input.getShipToLocation().equals(""))
+		{shipToLocation="%"+input.getShipToLocation().trim().trim().toUpperCase()+"%";}
+		
+		List<LtPoShipment> list = (List<LtPoShipment>) 
+				jdbcTemplate.query(query , new Object[]{
+						vendorId,
+						poNumber, poLineId, itemDescription,shipmentNumber
+						, input.getDueDate(), orderQuantity,
+						quantityRecived, shipToLocation,
+						input.getColumnNo(),input.getColumnNo(),
+						input.getColumnNo(),input.getColumnNo(),
+						input.getColumnNo(),input.getColumnNo(),
+						input.getColumnNo(),input.getColumnNo(),
+						input.getColumnNo(),input.getColumnNo(),
+						input.getColumnNo(),input.getColumnNo(),
+						input.getColumnNo(),input.getColumnNo(),
+						input.getColumnNo(),input.getColumnNo(),
+					
+						input.getStart()+input.getLength(),input.getStart()},
+			 new  BeanPropertyRowMapper<LtPoShipment>(LtPoShipment.class));
+		
+			return list;
+	}
+	
+	@Override
+	@Transactional
+	public Long getShipmentSourceIds() throws BusinessException {
+		String sql = env.getProperty("shipmentSourceId");
+		return jdbcTemplate.queryForObject(sql, Long.class);
+	}
+	
+	// x_status OUT VARCHAR2,x_message OUT VARCHAR2,x_shipment_header_id OUT NUMBER,p_shipment_source_id IN NUMBER
+
+	@Override
+	@Transactional
+	public ProcedureCall saveAsnHeaderAndLineData(Long sourceId) throws BusinessException {
+		System.out.println("Source id :: "+sourceId);
+		ProcedureCall procedureCall= new ProcedureCall();
+			StoredProcedureQuery query = em
+				    .createStoredProcedureQuery("lt_vpal_asn_pkg.create_asn")
+				    .registerStoredProcedureParameter(1, String.class, 
+					         ParameterMode.OUT)
+				    .registerStoredProcedureParameter(2, String.class, 
+				         ParameterMode.OUT)
+			        .registerStoredProcedureParameter(3, Long.class, 
+			         ParameterMode.OUT)
+				    .registerStoredProcedureParameter(4, Long.class, 
+					         ParameterMode.IN)
+				    .setParameter(4, sourceId);
+				query.execute();
+
+				if(query.getOutputParameterValue(1).toString().trim().equals("ERROR")){
+					procedureCall.setStatusCode(query.getOutputParameterValue(1).toString().trim());
+					procedureCall.setStatusMessage(query.getOutputParameterValue(2).toString().trim());
+				}
+				else if(query.getOutputParameterValue(1).toString().trim().equals("SUCCESS")){
+					procedureCall.setStatusCode("SUCCESS");
+					if(query.getOutputParameterValue(2)!=null) {
+					procedureCall.setStatusMessage(query.getOutputParameterValue(2).toString());
+					}
+					procedureCall.setShipmentHeaderId((Long) query.getOutputParameterValue(3));
+				}
+				
+				System.out.println("Save ASN Proc call Status : "
+						+ ""+query.getOutputParameterValue(1).toString().trim() 
+						//+" MSG : "+ query.getOutputParameterValue(2).toString().trim()
+						+" Shipment header id : "+ query.getOutputParameterValue(3).toString().trim());
+				
+				return procedureCall;
+	}
+
+	@Override
+	public boolean deleteAsnLineAttachment(Long id) throws BusinessException {
+		int res=jdbcTemplate.update(" DELETE FROM LT_SHIPMENT_ATTACHMENT WHERE SHIPMENT_ATTACHMENT_ID = "
+		+ "( SELECT ATTACHMENT FROM LT_SHIPMENT_LINES WHERE SHIPMENT_LINE_ID = ? )",id );	
+	
+		if(res!=0) {
+		int res1=jdbcTemplate.update("UPDATE LT_SHIPMENT_LINES SET ATTACHMENT = ?, LAST_UPDATE_DATE = ?  WHERE SHIPMENT_LINE_ID = ?  "
+		, null,new Date(), id);	
+		if(res1!=0) {
+		return true;
+	
+		}else {
+		return false;
+		}
+		}
+		return false;
+	}
+
+	@Override
+	public ProcedureCall createInvoiceFromAsn(Long shipmentHeaderId, Long userId) throws BusinessException {
+		System.out.println("shipmentHeaderId :: "+shipmentHeaderId + "string ");
+		ProcedureCall procedureCall= new ProcedureCall();
+			StoredProcedureQuery query = em
+				    .createStoredProcedureQuery("lt_vpal_asn_pkg.create_invoice_from_asn")
+				    .registerStoredProcedureParameter(1, Long.class, 
+					         ParameterMode.IN)
+				    .registerStoredProcedureParameter(2, Long.class, 
+				         ParameterMode.IN)
+			        .registerStoredProcedureParameter(3, String.class, 
+			         ParameterMode.OUT)
+				    .registerStoredProcedureParameter(4, String.class, 
+					         ParameterMode.OUT)
+				    .registerStoredProcedureParameter(5, Long.class, 
+					         ParameterMode.OUT)
+				    .setParameter(1, shipmentHeaderId)
+				    .setParameter(2, userId);
+				query.execute();
+
+				if(query.getOutputParameterValue(3).toString().trim().equals("ERROR")){
+					procedureCall.setStatusCode(query.getOutputParameterValue(3).toString().trim());
+					procedureCall.setStatusMessage(query.getOutputParameterValue(4).toString().trim());
+				}
+				else if(query.getOutputParameterValue(3).toString().trim().equals("SUCCESS")){
+					procedureCall.setStatusCode("SUCCESS");
+					if(query.getOutputParameterValue(4)!=null) {
+						System.out.println("query.getOutputParameterValue(4).toString() "+query.getOutputParameterValue(4).toString());
+					procedureCall.setStatusMessage(query.getOutputParameterValue(4).toString());
+					}
+					if(query.getOutputParameterValue(5)!=null) {
+						System.out.println("Long)query.getOutputParameterValue(5) "+(Long)query.getOutputParameterValue(5));
+						procedureCall.setShipmentHeaderId((Long)query.getOutputParameterValue(5));
+						}
+					//procedureCall.setShipmentHeaderId((Long) query.getOutputParameterValue(3));
+				}
+				
+				System.out.println("Save Invoice Proc call Status : "
+						+ ""+query.getOutputParameterValue(3).toString().trim() 
+						+" MSG : "+ procedureCall.getStatusMessage()
+						//+" x_message: "+ query.getOutputParameterValue(4).toString().trim()
+						);
+				System.out.println("procedureCall "+procedureCall);
+				return procedureCall;
+	}
+
+	@Override
+	@Transactional
+	public boolean updatePoShipmentLines(LtShipmentLines ltShipmentLinesObj) throws BusinessException {
+		//System.out.println("ltShipmentLinesObj "+ltShipmentLinesObj);
+		System.out.println(ltShipmentLinesObj.getQuantityReceived()+" "+ltShipmentLinesObj.getPoShipmentId()+" "
+						+ltShipmentLinesObj.getPoHeaderId()+" "+ltShipmentLinesObj.getPoLineId());
+		/*String query = " UPDATE LT_PO_SHIPMENTS SET QUANTITY_RECEIVED =  QUANTITY_RECEIVED + ? ,QUANTITY_SHIPPED = ? WHERE PO_SHIPMENT_LINE_ID = ? AND PO_HEADER_ID = ? "
+				+ " AND PO_LINE_ID = ? AND QUANTITY_RECEIVED + ? <= QUANTITY_ORDERED ";*/
+		
+		String query1  = " SELECT SUM(sl.QUANTITY_RECEIVED) as QUANTITY_RECEIVED  FROM LT_SHIPMENT_LINES sl,LT_PO_SHIPMENTS ps " + 
+				"				   WHERE ps.PO_SHIPMENT_LINE_ID = sl.PO_SHIPMENT_ID " + 
+				"				   AND sl.PO_SHIPMENT_ID = ? AND sl.PO_HEADER_ID = ? AND sl.PO_LINE_ID = ?  ";
+		Double count  = getJdbcTemplate().queryForObject(
+				query1, new Object[] { ltShipmentLinesObj.getPoShipmentId(), ltShipmentLinesObj.getPoHeaderId(), 
+						ltShipmentLinesObj.getPoLineId() }, Double.class);
+		
+		if(count!=null) {
+				String query = " UPDATE LT_PO_SHIPMENTS " + 
+				"    SET QUANTITY_RECEIVED =  ? ," + 
+				"    QUANTITY_SHIPPED = ?, LAST_UPDATE_DATE = ? WHERE PO_SHIPMENT_LINE_ID = ? AND PO_HEADER_ID = ? " + 
+				"				 AND PO_LINE_ID = ? ";
+		
+				int res = 0;
+				res = jdbcTemplate
+						.update(query,count,ltShipmentLinesObj.getQuantityShipped(),new Date(),
+							ltShipmentLinesObj.getShipmentLineId(),ltShipmentLinesObj.getPoHeaderId(),
+						ltShipmentLinesObj.getPoLineId());
+		
+				System.out.println("res  "+res);
+				if(res!=0) {
+					return true;
+				}else {
+					return false;
+				}
+		}
+		return true;
+	}
+
+	@Override
+	@Transactional
+	public boolean updateRecivedQuantity(LtShipmentLines ltShipmentLinesObj) throws BusinessException {
+		/*if(ltShipmentLinesRepository.save(ltShipmentLinesObj)!=null)
+			return true;
+		else
+			return false;*/
+		System.out.println(ltShipmentLinesObj.getQuantityReceived()+" "+
+						ltShipmentLinesObj.getQuantityShipped()+" "+ltShipmentLinesObj.getShipmentLineId()+" "+ltShipmentLinesObj.getPoShipmentId()+" "+
+						ltShipmentLinesObj.getPoHeaderId()+" "+ltShipmentLinesObj.getPoLineId());
+		String query = " UPDATE LT_SHIPMENT_LINES " + 
+				"    SET QUANTITY_RECEIVED =  ? ," + 
+				"    QUANTITY_SHIPPED = ? , LAST_UPDATE_DATE = ? WHERE SHIPMENT_LINE_ID = ? AND PO_SHIPMENT_ID = ? AND PO_HEADER_ID = ? " + 
+				"				 AND PO_LINE_ID = ? ";
+		
+				int res = 0;
+				res = jdbcTemplate
+						.update(query,ltShipmentLinesObj.getQuantityReceived(),ltShipmentLinesObj.getQuantityShipped(),
+								new Date(),ltShipmentLinesObj.getShipmentLineId(),ltShipmentLinesObj.getPoShipmentId(),
+						ltShipmentLinesObj.getPoHeaderId(),ltShipmentLinesObj.getPoLineId());
+				if(res!=0) {
+					
+					String query1  = " SELECT SUM(sl.QUANTITY_RECEIVED) as QUANTITY_RECEIVED  FROM LT_SHIPMENT_LINES sl,LT_PO_SHIPMENTS ps " + 
+							"				   WHERE ps.PO_SHIPMENT_LINE_ID = sl.PO_SHIPMENT_ID " + 
+							"				   AND sl.PO_SHIPMENT_ID = ? AND sl.PO_HEADER_ID = ? AND sl.PO_LINE_ID = ?  ";
+					Double count  = getJdbcTemplate().queryForObject(
+							query1, new Object[] { ltShipmentLinesObj.getPoShipmentId(), ltShipmentLinesObj.getPoHeaderId(), 
+									ltShipmentLinesObj.getPoLineId() }, Double.class);
+					
+					
+					
+					if(count!=null) {
+						String updateQuery = " UPDATE LT_PO_SHIPMENTS " + 
+						"    SET QUANTITY_RECEIVED =  ? ," + 
+						"    QUANTITY_SHIPPED = ?, LAST_UPDATE_DATE = ? WHERE PO_SHIPMENT_LINE_ID = ? AND PO_HEADER_ID = ? " + 
+						"				 AND PO_LINE_ID = ? ";
+				
+						int res1 = 0;
+						res1 = jdbcTemplate
+								.update(updateQuery,count,ltShipmentLinesObj.getQuantityShipped(),
+										new Date(),ltShipmentLinesObj.getPoShipmentId(),
+								ltShipmentLinesObj.getPoHeaderId(),ltShipmentLinesObj.getPoLineId());
+				
+						if(res1!=0) {
+							return true;
+						}else {
+							return false;
+						}
+				}
+					
+					return true;
+				}else {
+					return false;
+				}
+		
+	}
+}

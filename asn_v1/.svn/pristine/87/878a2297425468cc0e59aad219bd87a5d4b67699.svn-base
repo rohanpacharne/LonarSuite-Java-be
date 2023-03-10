@@ -1,0 +1,15 @@
+db.driver: oracle.jdbc.OracleDriver
+db.url: jdbc:oracle:thin:@192.168.1.150:1521:VIS
+db.username: vpaldev
+db.password: vpaldev
+#db.password: Em7ddyz0Hg4=bGV4YV91YXQ=
+db.schema: vpaldev
+db.validationQuery: select 1
+db.validationInterval : 3000
+# Hibernate
+hibernate.dialect: org.hibernate.dialect.OracleDialect
+hibernate.show_sql: true
+hibernate.hbm2ddl.auto: none
+
+entitymanager.packagesToScan : com.lonar.asn.model
+

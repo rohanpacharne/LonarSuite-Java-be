@@ -1,0 +1,187 @@
+asnDataTableQueries = select  *  from (SELECT a.*,ROWNUM RNUM from (select shm.SHIPMENT_HEADER_ID,shm.SHIPMENT_NUM, shm.SHIPPED_DATE,\
+	ved.VENDOR_NAME, vedadd.ADDRESS_1, shm.APPROVAL_STATUS \
+	from LT_SHIPMENT_HEADERS shm, LT_MAST_VENDORS ved, LT_MAST_VENDOR_ADDRESSES vedadd \
+	where shm.VENDOR_ID = ved.VENDOR_ID \
+	AND shm.VENDOR_ADD_ID = vedadd.VENDOR_ADD_ID \
+	AND shm.VENDOR_ID = ? \
+	AND nvl(shm.SHIPMENT_NUM,'xx') like nvl(?,nvl(upper(shm.SHIPMENT_NUM),'xx')) \
+	AND  TO_CHAR(shm.SHIPPED_DATE,'DD-MM-YYYY') LIKE nvl(?, TO_CHAR(shm.SHIPPED_DATE,'DD-MM-YYYY')) \
+	AND nvl(upper(ved.VENDOR_NAME),'xx') like nvl(?,nvl(upper(ved.VENDOR_NAME),'xx')) \
+	AND nvl(upper(vedadd.ADDRESS_1),'xx') like nvl(?,nvl(upper(vedadd.ADDRESS_1),'xx')) \
+	AND nvl(upper(shm.APPROVAL_STATUS),'xx') like nvl(?,nvl(upper(shm.APPROVAL_STATUS),'xx')) \
+	order by \
+	CASE WHEN 2 = ? then shm.SHIPMENT_NUM END asc, \
+	CASE WHEN 12 = ? then shm.SHIPMENT_NUM END desc, \
+	CASE WHEN 3 = ? then upper(shm.SHIPPED_DATE) END asc, \
+	CASE WHEN 13 = ? then upper(shm.SHIPPED_DATE) END desc, \
+	CASE WHEN 4 = ? then upper(ved.VENDOR_NAME) END asc, \
+	CASE WHEN 14 = ? then upper(ved.VENDOR_NAME) END desc, \
+	CASE WHEN 5 = ? then upper(vedadd.ADDRESS_1) END asc, \
+	CASE WHEN 15 = ? then upper(vedadd.ADDRESS_1) END desc, \
+	CASE WHEN 6 = ? then upper(shm.APPROVAL_STATUS) END asc, \
+	CASE WHEN 16 = ? then upper(shm.APPROVAL_STATUS) END desc )a  where ROWNUM <=?) WHERE rnum >=?
+		
+asnDataTableDataCount = select count(SHIPMENT_HEADER_ID) \
+	from LT_SHIPMENT_HEADERS shm, \
+	LT_MAST_VENDORS ved, LT_MAST_VENDOR_ADDRESSES vedadd \
+	where shm.VENDOR_ID = ved.VENDOR_ID \
+	AND shm.VENDOR_ADD_ID = vedadd.VENDOR_ADD_ID \
+	AND shm.VENDOR_ID = ? \
+	AND nvl(shm.SHIPMENT_NUM,'xx') like nvl(?,nvl(upper(shm.SHIPMENT_NUM),'xx')) \
+	AND  TO_CHAR(shm.SHIPPED_DATE,'DD-MM-YYYY') LIKE nvl(?, TO_CHAR(shm.SHIPPED_DATE,'DD-MM-YYYY')) \
+	AND nvl(upper(ved.VENDOR_NAME),'xx') like nvl(?,nvl(upper(ved.VENDOR_NAME),'xx')) \
+	AND nvl(upper(vedadd.ADDRESS_1),'xx') like nvl(?,nvl(upper(vedadd.ADDRESS_1),'xx')) \
+	AND nvl(upper(shm.APPROVAL_STATUS),'xx') like nvl(?,nvl(upper(shm.APPROVAL_STATUS),'xx'))
+	
+getByAsnHeaderId =	SELECT (emp.TITLE ||' '|| emp.FIRST_NAME || ' ' ||emp.LAST_NAME ) as EMP_NAME, sh.* , \
+	mv.VENDOR_NAME||' ( '||mv.VENDOR_CODE||' )' as  VENDOR_NAME, va.ADDRESS_1, \
+	nvl2(sh.BRANCH_ID,mb.BRANCH_NAME||'( '||mb.BRANCH_CODE||' )','') as location   \
+	FROM 	LT_SHIPMENT_HEADERS sh ,LT_MAST_VENDORS mv, LT_MAST_VENDOR_ADDRESSES va, LT_MAST_BRANCHES mb , \
+	LT_MAST_EMPLOYEES emp \
+	WHERE sh.SHIPMENT_HEADER_ID = ? AND sh.VENDOR_ID = mv.VENDOR_ID(+)  \
+	AND sh.VENDOR_ADD_ID = va.VENDOR_ADD_ID(+) AND sh.BRANCH_ID = mb.BRANCH_ID(+) \
+	AND sh.ACCEPTED_BY = emp.EMPLOYEE_ID(+)
+
+
+getAsnStatusByAsnHeaderId = SELECT APPROVAL_STATUS as STATUS,SHIPMENT_HEADER_ID as asn_Header_Id \
+	FROM LT_SHIPMENT_HEADERS WHERE SHIPMENT_HEADER_ID = ?
+
+
+## contact person name from employeee
+
+getAsnLinesByAsnHeaderId = SELECT (emp.TITLE ||' '|| emp.FIRST_NAME || ' ' ||emp.LAST_NAME ) as empName, pl.PRODUCT_CODE, \
+	pl.line_num as poLineNum,  pl.PRODUCT_DESCRIPTION, sl.* ,ph.PO_NUMBER,sh.SHIPMENT_NUM SHIPMENT_NUMBER,pc.CATEGORY_NAME, \
+	psc.SUB_CATEGORY,  \
+	nvl2(pm.PRODUCT_ID,pm.PRODUCT_NAME||' ( '||pm.PRODUCT_CODE||' )','') as PRODUCT_NAME ,sa.FILE_PATH||sa.FILE_NAME as file_path \
+	FROM LT_SHIPMENT_LINES sl,  \
+	LT_SHIPMENT_HEADERS sh, \
+	LT_PO_HEADERS ph, \
+	LT_PO_LINES pl , \
+	LT_MAST_PRODUCT_CATEGORIES pc, \
+	LT_MAST_PROD_SUB_CATEGORIES psc, \
+	LT_MAST_PRODUCTS pm , \
+	LT_SHIPMENT_ATTACHMENT sa, \
+	LT_MAST_EMPLOYEES emp \
+	WHERE sl.SHIPMENT_HEADER_ID = ? \
+	AND sl.PO_HEADER_ID = ph.PO_HEADER_ID(+) \
+	AND ph.po_header_id = pl.po_header_id \
+	AND pl.PO_LINE_ID = sl.PO_LINE_ID  \
+	AND sl.SHIPMENT_HEADER_ID = sh.SHIPMENT_HEADER_ID(+) \
+	AND sl.CATEGORY_ID = pc.CATEGORY_ID(+)   \
+	AND sl.SUB_CATEGORY_ID = psc.SUB_CATEGORY_ID(+)  \
+	AND sl.PRODUCT_ID = pm.PRODUCT_ID(+)  \
+	AND sl.ATTACHMENT = sa.SHIPMENT_ATTACHMENT_ID(+) \
+	AND emp.EMPLOYEE_ID(+) = sl.CONTACT_PERSON_ID
+
+getAsnLinesByAsnHeaderId_olddd = SELECT pl.PRODUCT_CODE, \
+	pl.line_num as poLineNum,  pl.PRODUCT_DESCRIPTION, sl.* ,ph.PO_NUMBER,sh.SHIPMENT_NUM SHIPMENT_NUMBER,pc.CATEGORY_NAME, \
+	psc.SUB_CATEGORY,  \
+	nvl2(pm.PRODUCT_ID,pm.PRODUCT_NAME||' ( '||pm.PRODUCT_CODE||' )','') as PRODUCT_NAME ,sa.FILE_PATH||sa.FILE_NAME as file_path \
+	FROM LT_SHIPMENT_LINES sl,  \
+	LT_SHIPMENT_HEADERS sh, \
+	LT_PO_HEADERS ph, \
+	LT_PO_LINES pl , \
+	LT_MAST_PRODUCT_CATEGORIES pc, \
+	LT_MAST_PROD_SUB_CATEGORIES psc, \
+	LT_MAST_PRODUCTS pm ,  \
+	LT_SHIPMENT_ATTACHMENT sa \
+	WHERE sl.SHIPMENT_HEADER_ID = ? \
+	AND sl.PO_HEADER_ID = ph.PO_HEADER_ID(+) \
+	AND ph.po_header_id = pl.po_header_id \
+	AND pl.PO_LINE_ID = sl.PO_LINE_ID  \
+	AND sl.SHIPMENT_HEADER_ID = sh.SHIPMENT_HEADER_ID(+) \
+	AND sl.CATEGORY_ID = pc.CATEGORY_ID(+)   \
+	AND sl.SUB_CATEGORY_ID = psc.SUB_CATEGORY_ID(+) \
+	AND sl.PRODUCT_ID = pm.PRODUCT_ID(+)  \
+	AND sl.ATTACHMENT = sa.SHIPMENT_ATTACHMENT_ID(+)
+
+asnDataTableQueriesByLocation = select  *  from \
+	(SELECT a.*,ROWNUM RNUM from (select shm.SHIPMENT_HEADER_ID,shm.SHIPMENT_NUM, shm.SHIPPED_DATE, \
+	ved.VENDOR_NAME, vedadd.ADDRESS_1, shm.APPROVAL_STATUS  \
+	from LT_SHIPMENT_HEADERS shm, LT_MAST_VENDORS ved, LT_MAST_VENDOR_ADDRESSES vedadd \
+	where shm.VENDOR_ID = ved.VENDOR_ID(+)  AND shm.VENDOR_ADD_ID = vedadd.VENDOR_ADD_ID(+)  AND shm.BRANCH_ID = ? \
+	AND upper(shm.APPROVAL_STATUS) != ('DRAFT') \
+	AND nvl(shm.SHIPMENT_NUM,'xx') like nvl(?,nvl(upper(shm.SHIPMENT_NUM),'xx')) \
+	AND  TO_CHAR(shm.SHIPPED_DATE,'DD-MM-YYYY') LIKE nvl(?, TO_CHAR(shm.SHIPPED_DATE,'DD-MM-YYYY')) \
+	AND nvl(upper(ved.VENDOR_NAME),'xx') like nvl(?,nvl(upper(ved.VENDOR_NAME),'xx')) \
+	AND nvl(upper(vedadd.ADDRESS_1),'xx') like nvl(?,nvl(upper(vedadd.ADDRESS_1),'xx')) \
+	AND nvl(upper(shm.APPROVAL_STATUS),'xx') like nvl(?,nvl(upper(shm.APPROVAL_STATUS),'xx')) \
+	order by shm.LAST_UPDATE_DATE DESC, \
+	CASE WHEN 2 = ? then shm.SHIPMENT_NUM END asc, \
+	CASE WHEN 12 = ? then shm.SHIPMENT_NUM END desc, \
+	CASE WHEN 3 = ? then upper(shm.SHIPPED_DATE) END asc, \
+	CASE WHEN 13 = ? then upper(shm.SHIPPED_DATE) END desc, \
+	CASE WHEN 4 = ? then upper(ved.VENDOR_NAME) END asc, \
+	CASE WHEN 14 = ? then upper(ved.VENDOR_NAME) END desc, \
+	CASE WHEN 5 = ? then upper(shm.APPROVAL_STATUS) END asc, \
+	CASE WHEN 15 = ? then upper(shm.APPROVAL_STATUS) END desc )a  where ROWNUM <=?) WHERE rnum >=?
+
+
+asnDataTableDataCountByLocation = select count(shm.SHIPMENT_HEADER_ID) \
+	from LT_SHIPMENT_HEADERS shm, LT_MAST_VENDORS ved, LT_MAST_VENDOR_ADDRESSES vedadd \
+	where shm.VENDOR_ID = ved.VENDOR_ID(+)  AND shm.VENDOR_ADD_ID = vedadd.VENDOR_ADD_ID(+)  AND shm.BRANCH_ID = ? \
+	AND upper(shm.APPROVAL_STATUS) != ('DRAFT') \
+	AND nvl(shm.SHIPMENT_NUM,'xx') like nvl(?,nvl(upper(shm.SHIPMENT_NUM),'xx')) \
+	AND  TO_CHAR(shm.SHIPPED_DATE,'DD-MM-YYYY') LIKE nvl(?, TO_CHAR(shm.SHIPPED_DATE,'DD-MM-YYYY')) \
+	AND nvl(upper(ved.VENDOR_NAME),'xx') like nvl(?,nvl(upper(ved.VENDOR_NAME),'xx')) \
+	AND nvl(upper(vedadd.ADDRESS_1),'xx') like nvl(?,nvl(upper(vedadd.ADDRESS_1),'xx')) \
+	AND nvl(upper(shm.APPROVAL_STATUS),'xx') like nvl(?,nvl(upper(shm.APPROVAL_STATUS),'xx'))
+
+poShipmentDataTableCount = select count(*)  \
+	from lt_po_headers po, \
+	lt_po_Lines pl, \
+	LT_PO_SHIPMENTS ps \
+	where 1=1  \
+	AND ps.po_header_id = po.po_header_id \
+	AND ps.po_line_id = pl.po_line_id \
+	AND po.po_header_id = pl.po_header_id \
+	AND po.VENDOR_ID = ?  \
+	AND nvl(po.PO_NUMBER,'xx') like nvl( ? ,nvl(upper(po.PO_NUMBER),'xx'))  \
+	AND nvl(pl.line_num,-99) like nvl( ? ,nvl(upper(pl.line_num),-99))  \
+	AND nvl(upper(pl.PRODUCT_DESCRIPTION),'xx') like nvl( ? ,nvl(upper(pl.PRODUCT_DESCRIPTION),'xx')) \
+	AND nvl(ps.SHIPMENT_NUM,-99) like nvl( ? ,nvl(upper(ps.SHIPMENT_NUM),-99)) \
+	AND  TO_CHAR(nvl (ps.DUE_DATE, SYSDATE ),'DD-MM-YYYY') LIKE nvl( ? , TO_CHAR(nvl (ps.DUE_DATE, SYSDATE ),'DD-MM-YYYY')) \
+	AND nvl(ps.QUANTITY_ORDERED,-99) like nvl( ? ,nvl(upper(ps.QUANTITY_ORDERED),-99)) \
+	AND nvl(ps.QUANTITY_RECEIVED,-99) like nvl( ? ,nvl(upper(ps.QUANTITY_RECEIVED),-99)) \
+	AND nvl(upper(ps.SHIP_TO_LOCATION),'xx') like nvl( ? ,nvl(upper(ps.SHIP_TO_LOCATION),'xx')) \
+	AND (ps.quantity_ordered-ps.quantity_received > 0)
+ 
+poShipmentDataTableList =   select  *  from \
+	(SELECT a.*,ROWNUM RNUM from ( \
+	select  pl.line_num, pl.PRODUCT_DESCRIPTION, po.PO_NUMBER, po.VENDOR_ID, po.VENDOR_ADD_ID ,ps.* \
+	from lt_po_headers po, \
+	lt_po_Lines pl, \
+	LT_PO_SHIPMENTS ps \
+	where 1=1  \
+	AND ps.po_header_id = po.po_header_id \
+	AND ps.po_line_id = pl.po_line_id \
+	AND po.po_header_id = pl.po_header_id \
+	AND po.VENDOR_ID = ?  \
+	AND nvl(po.PO_NUMBER,'xx') like nvl( ? ,nvl(upper(po.PO_NUMBER),'xx'))  \
+	AND nvl(pl.line_num,-99) like nvl( ? ,nvl(upper(pl.line_num),-99))  \
+	AND nvl(upper(pl.PRODUCT_DESCRIPTION),'xx') like nvl( ? ,nvl(upper(pl.PRODUCT_DESCRIPTION),'xx')) \
+	AND nvl(ps.SHIPMENT_NUM,-99) like nvl( ? ,nvl(upper(ps.SHIPMENT_NUM),-99)) \
+	AND  TO_CHAR(nvl (ps.DUE_DATE, SYSDATE ),'DD-MM-YYYY') LIKE nvl( ? , TO_CHAR(nvl (ps.DUE_DATE, SYSDATE ),'DD-MM-YYYY')) \
+	AND nvl(ps.QUANTITY_ORDERED,-99) like nvl( ? ,nvl(upper(ps.QUANTITY_ORDERED),-99)) \
+	AND nvl(ps.QUANTITY_RECEIVED,-99) like nvl( ? ,nvl(upper(ps.QUANTITY_RECEIVED),-99)) \
+	AND nvl(upper(ps.SHIP_TO_LOCATION),'xx') like nvl( ? ,nvl(upper(ps.SHIP_TO_LOCATION),'xx')) \
+	AND (ps.quantity_ordered-ps.quantity_received > 0) \
+	order by  \
+	CASE WHEN 2 = ?  then po.PO_NUMBER END asc, \
+	CASE WHEN 12 = ?  then po.PO_NUMBER END desc, \
+	CASE WHEN 3 = ?  then pl.PO_LINE_ID END asc,  \
+	CASE WHEN 13 = ?  then pl.PO_LINE_ID END desc, \
+	CASE WHEN 4 = ?  then ps.SHIPMENT_NUM END asc, \
+	CASE WHEN 14 = ?  then ps.SHIPMENT_NUM END desc, \
+	CASE WHEN 5 = ?  then upper(pl.PRODUCT_DESCRIPTION) END asc, \
+	CASE WHEN 15 = ?  then upper(pl.PRODUCT_DESCRIPTION) END desc, \
+	CASE WHEN 6 = ?  then ps.DUE_DATE END asc,  \
+	CASE WHEN 16 = ?  then ps.DUE_DATE END desc, \
+	CASE WHEN 7 = ?  then ps.QUANTITY_ORDERED END asc, \
+	CASE WHEN 17 = ?  then ps.QUANTITY_ORDERED END desc, \
+	CASE WHEN 8 = ?  then ps.QUANTITY_RECEIVED END asc, \
+	CASE WHEN 18 = ?  then ps.QUANTITY_RECEIVED END desc, \
+	CASE WHEN 9 = ?  then ps.SHIP_TO_LOCATION END asc, \
+	CASE WHEN 19 = ?  then ps.SHIP_TO_LOCATION END desc )a  where ROWNUM <= ? ) WHERE rnum >= ?
+	
+shipmentSourceId = select LT_SHIPMENT_SOURCE_ID_S.nextval from dual

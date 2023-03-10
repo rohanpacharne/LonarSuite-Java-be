@@ -1,0 +1,422 @@
+asnDataTableQueries = select  *  from \
+(SELECT a.*,ROWNUM RNUM from (select shm.SHIPMENT_HEADER_ID,shm.SHIPMENT_NUM, shm.SHIPPED_DATE, \
+ved.VENDOR_NAME, vedadd.ADDRESS_1, cmv.VALUE_NAME as APPROVAL_STATUS \
+from LT_SHIPMENT_HEADERS shm, LT_MAST_VENDORS ved, LT_MAST_VENDOR_ADDRESSES vedadd , \
+LT_MAST_COMN_MASTER_VALUES cmv ,LT_MAST_COMN_MASTER cm \
+where shm.VENDOR_ID = ved.VENDOR_ID \
+AND shm.APPROVAL_STATUS = cmv.VALUE_CODE(+) AND cmv.MASTER_ID = cm.MASTER_ID AND cm.MASTER_NAME = 'ASN_STATUS' \
+AND shm.VENDOR_ADD_ID = vedadd.VENDOR_ADD_ID  AND shm.VENDOR_ID = ? \
+AND nvl(shm.SHIPMENT_NUM,'xx') like nvl(?,nvl(upper(shm.SHIPMENT_NUM),'xx')) \
+AND TO_CHAR(nvl (shm.SHIPPED_DATE, SYSDATE ),'DD-MM-YYYY') LIKE nvl(?, TO_CHAR(nvl (shm.SHIPPED_DATE, SYSDATE ),'DD-MM-YYYY')) \
+AND nvl(upper(ved.VENDOR_NAME),'xx') like nvl(?,nvl(upper(ved.VENDOR_NAME),'xx'))  \
+AND nvl(upper(vedadd.ADDRESS_1),'xx') like nvl(?,nvl(upper(vedadd.ADDRESS_1),'xx'))  \
+AND nvl(upper(cmv.VALUE_NAME),'xx') like nvl(?,nvl(upper(cmv.VALUE_NAME),'xx'))  \
+order by  \
+CASE WHEN 2 = ? then shm.SHIPMENT_NUM END asc,  \
+CASE WHEN 12 = ? then shm.SHIPMENT_NUM END desc,  \
+CASE WHEN 3 = ? then upper(shm.SHIPPED_DATE) END asc,  \
+CASE WHEN 13 = ? then upper(shm.SHIPPED_DATE) END desc,  \
+CASE WHEN 4 = ? then upper(ved.VENDOR_NAME) END asc,  \
+CASE WHEN 14 = ? then upper(ved.VENDOR_NAME) END desc,  \
+CASE WHEN 5 = ? then upper(vedadd.ADDRESS_1) END asc,  \
+CASE WHEN 15 = ? then upper(vedadd.ADDRESS_1) END desc,  \
+CASE WHEN 6 = ? then upper(cmv.VALUE_NAME) END asc,  \
+CASE WHEN 16 = ? then upper(cmv.VALUE_NAME) END desc, \
+CASE WHEN 7 = ? then shm.LAST_UPDATE_DATE END desc,  \
+CASE WHEN 17 = ? then shm.LAST_UPDATE_DATE END asc )a  where ROWNUM <=?) WHERE rnum >=?
+		
+asnDataTableDataCount = select count(SHIPMENT_HEADER_ID) \
+from LT_SHIPMENT_HEADERS shm, LT_MAST_VENDORS ved, LT_MAST_VENDOR_ADDRESSES vedadd , \
+LT_MAST_COMN_MASTER_VALUES cmv ,LT_MAST_COMN_MASTER cm \
+where shm.VENDOR_ID = ved.VENDOR_ID \
+AND shm.APPROVAL_STATUS = cmv.VALUE_CODE(+) AND cmv.MASTER_ID = cm.MASTER_ID AND cm.MASTER_NAME = 'ASN_STATUS' \
+AND shm.VENDOR_ADD_ID = vedadd.VENDOR_ADD_ID  AND shm.VENDOR_ID = ? \
+AND nvl(shm.SHIPMENT_NUM,'xx') like nvl(?,nvl(upper(shm.SHIPMENT_NUM),'xx')) \
+AND TO_CHAR(nvl (shm.SHIPPED_DATE, SYSDATE ),'DD-MM-YYYY') LIKE nvl(?, TO_CHAR(nvl (shm.SHIPPED_DATE, SYSDATE ),'DD-MM-YYYY')) \
+AND nvl(upper(ved.VENDOR_NAME),'xx') like nvl(?,nvl(upper(ved.VENDOR_NAME),'xx'))  \
+AND nvl(upper(vedadd.ADDRESS_1),'xx') like nvl(?,nvl(upper(vedadd.ADDRESS_1),'xx'))  \
+AND nvl(upper(cmv.VALUE_NAME),'xx') like nvl(?,nvl(upper(cmv.VALUE_NAME),'xx'))
+	
+getByAsnHeaderId =	SELECT (emp.TITLE ||' '|| emp.FIRST_NAME || ' ' ||emp.LAST_NAME ) as EMP_NAME, sh.* , \
+	mv.VENDOR_NAME||' ( '||mv.VENDOR_CODE||' )' as  VENDOR_NAME, va.ADDRESS_1, \
+	nvl2(sh.BRANCH_ID,mb.BRANCH_NAME||'( '||mb.BRANCH_CODE||' )','') as location   \
+	FROM 	LT_SHIPMENT_HEADERS sh ,LT_MAST_VENDORS mv, LT_MAST_VENDOR_ADDRESSES va, LT_MAST_BRANCHES mb , \
+	LT_MAST_EMPLOYEES emp \
+	WHERE sh.SHIPMENT_HEADER_ID = ? AND sh.VENDOR_ID = mv.VENDOR_ID(+)  \
+	AND sh.VENDOR_ADD_ID = va.VENDOR_ADD_ID(+) AND sh.BRANCH_ID = mb.BRANCH_ID(+) \
+	AND sh.ACCEPTED_BY = emp.EMPLOYEE_ID(+)
+
+
+getAsnStatusByAsnHeaderId = SELECT APPROVAL_STATUS as STATUS,SHIPMENT_HEADER_ID as asn_Header_Id \
+	FROM LT_SHIPMENT_HEADERS WHERE SHIPMENT_HEADER_ID = ?
+
+
+## contact person name from employeee
+
+getAsnLinesByAsnHeaderId_OLD = SELECT (emp.TITLE ||' '|| emp.FIRST_NAME || ' ' ||emp.LAST_NAME ) as empName, pl.PRODUCT_CODE, \
+pl.line_num as poLineNum,  pl.PRODUCT_DESCRIPTION, sl.SHIPMENT_LINE_ID,sl.SHIPMENT_HEADER_ID,sl.LINE_NUM,sl.PO_SHIPMENT_ID,  \
+sl.PO_HEADER_ID,sl.PO_LINE_ID,sl.PO_DISTRIBUTION_ID,sl.LINE_TYPE,sl.CATEGORY_ID,sl.SUB_CATEGORY_ID,sl.PRODUCT_ID,sl.DESCRIPTION,  \
+sl.QUANTITY_ORDERED,sl.QUANTITY_RECEIVED, \
+nvl2(sl.QUANTITY_SHIPPED,sl.QUANTITY_ORDERED-(sl.QUANTITY_SHIPPED+sl.QUANTITY_RECEIVED),(sl.QUANTITY_ORDERED-sl.QUANTITY_RECEIVED)) AS QUANTITY_SHIPPED,  \
+sl.CONTACT_PERSON_ID,  \
+sl.CONTACT_NUMBER,sl.SHIPMENT_LINE_STATUS_CODE,sl.ATTACHMENT,sl.CREATED_BY,sl.CREATION_DATE, sl.LAST_UPDATE_LOGIN, \
+sl.LAST_UPDATED_BY,sl.LAST_UPDATE_DATE,sl.UOM,sl.CONTACT_PERSON,sl.UNIT_PRICE ,ph.PO_NUMBER,sh.SHIPMENT_NUM SHIPMENT_NUMBER, \
+pc.CATEGORY_NAME,psc.SUB_CATEGORY, nvl2(pm.PRODUCT_ID,pm.PRODUCT_NAME||' ( '||pm.PRODUCT_CODE||' )','') as PRODUCT_NAME ,\
+nvl2(sa.FILE_NAME,svm.SYSTEM_VALUE||sa.FILE_NAME,'') AS FILE_PATH   \
+FROM LT_SHIPMENT_LINES sl, LT_SHIPMENT_HEADERS sh, LT_PO_HEADERS ph, LT_PO_LINES pl , LT_MAST_PRODUCT_CATEGORIES pc, \
+LT_MAST_PROD_SUB_CATEGORIES psc, LT_MAST_PRODUCTS pm , LT_SHIPMENT_ATTACHMENT sa, LT_MAST_EMPLOYEES emp ,LT_MAST_SYS_VARIABLES svm \
+WHERE sl.SHIPMENT_HEADER_ID = ? \
+AND sl.PO_HEADER_ID = ph.PO_HEADER_ID(+) \
+AND ph.po_header_id = pl.po_header_id \
+AND pl.PO_LINE_ID = sl.PO_LINE_ID  \
+AND sl.SHIPMENT_HEADER_ID = sh.SHIPMENT_HEADER_ID(+)   \
+AND sl.CATEGORY_ID = pc.CATEGORY_ID(+)   \
+AND sl.SUB_CATEGORY_ID = psc.SUB_CATEGORY_ID(+)  \
+AND sl.PRODUCT_ID = pm.PRODUCT_ID(+)  \
+AND sl.ATTACHMENT = sa.SHIPMENT_ATTACHMENT_ID(+) \
+AND emp.EMPLOYEE_ID(+) = sl.CONTACT_PERSON_ID  \
+AND svm.VARIABLE_NAME = 'FILE_OPEN_PATH'  \
+AND  svm.COMPANY_ID = ( SELECT mv.COMPANY_ID FROM LT_MAST_VENDORS mv  \
+				WHERE VENDOR_ID = (SELECT VENDOR_ID FROM LT_SHIPMENT_HEADERS WHERE SHIPMENT_HEADER_ID = ?) )
+				
+##Include Code of SUB_CATEGORY,CATEGORY_NAME
+				
+getAsnLinesByAsnHeaderId = SELECT (emp.TITLE ||' '|| emp.FIRST_NAME || ' ' ||emp.LAST_NAME ) as empName, pl.PRODUCT_CODE, \
+	pl.line_num as poLineNum,  pl.PRODUCT_DESCRIPTION, sl.SHIPMENT_LINE_ID,sl.SHIPMENT_HEADER_ID,sl.LINE_NUM,sl.PO_SHIPMENT_ID, \
+	sl.PO_HEADER_ID,sl.PO_LINE_ID,sl.PO_DISTRIBUTION_ID,sl.LINE_TYPE,sl.CATEGORY_ID,sl.SUB_CATEGORY_ID,sl.PRODUCT_ID,sl.DESCRIPTION, \
+	sl.QUANTITY_ORDERED,sl.QUANTITY_RECEIVED,  \
+	sl.QUANTITY_SHIPPED, sl.CONTACT_PERSON_ID,  \
+	sl.CONTACT_NUMBER,sl.SHIPMENT_LINE_STATUS_CODE,sl.ATTACHMENT,sl.CREATED_BY,sl.CREATION_DATE, sl.LAST_UPDATE_LOGIN, \
+	sl.LAST_UPDATED_BY,sl.LAST_UPDATE_DATE,sl.UOM,sl.CONTACT_PERSON,sl.UNIT_PRICE ,ph.PO_NUMBER,sh.SHIPMENT_NUM SHIPMENT_NUMBER, \
+	nvl2(pc.CATEGORY_CODE,(pc.CATEGORY_NAME || ' ( '|| pc.CATEGORY_CODE||' )'),'' ) as CATEGORY_NAME \
+	,nvl2(psc.SUB_CATEGORY_CODE,(psc.SUB_CATEGORY || ' ( '|| psc.SUB_CATEGORY_CODE||' )'),'') as SUB_CATEGORY, \
+	nvl2(pm.PRODUCT_ID,pm.PRODUCT_NAME||' ( '||pm.PRODUCT_CODE||' )','') as PRODUCT_NAME , \
+	nvl2(sa.FILE_NAME,svm.SYSTEM_VALUE||sa.FILE_NAME,'') AS FILE_PATH   \
+	FROM LT_SHIPMENT_LINES sl, LT_SHIPMENT_HEADERS sh, LT_PO_HEADERS ph, LT_PO_LINES pl , LT_MAST_PRODUCT_CATEGORIES pc, \
+	LT_MAST_PROD_SUB_CATEGORIES psc, LT_MAST_PRODUCTS pm , LT_SHIPMENT_ATTACHMENT sa, LT_MAST_EMPLOYEES emp ,LT_MAST_SYS_VARIABLES svm \
+	WHERE sl.SHIPMENT_HEADER_ID = ?  \
+	AND sl.PO_HEADER_ID = ph.PO_HEADER_ID(+) \
+	AND ph.po_header_id = pl.po_header_id \
+	AND pl.PO_LINE_ID = sl.PO_LINE_ID  \
+	AND sl.SHIPMENT_HEADER_ID = sh.SHIPMENT_HEADER_ID(+) \
+	AND sl.CATEGORY_ID = pc.CATEGORY_ID(+)   \
+	AND sl.SUB_CATEGORY_ID = psc.SUB_CATEGORY_ID(+) \
+	AND sl.PRODUCT_ID = pm.PRODUCT_ID(+)  \
+	AND sl.ATTACHMENT = sa.SHIPMENT_ATTACHMENT_ID(+) \
+	AND emp.EMPLOYEE_ID(+) = sl.CONTACT_PERSON_ID  \
+	AND svm.VARIABLE_NAME = 'FILE_OPEN_PATH'  \
+	AND  svm.COMPANY_ID = ( SELECT mv.COMPANY_ID FROM LT_MAST_VENDORS mv \
+	WHERE VENDOR_ID = (SELECT VENDOR_ID FROM LT_SHIPMENT_HEADERS WHERE SHIPMENT_HEADER_ID = ?) )
+	
+	
+	
+getAsnLinesByAsnHeaderId_13-8-2019 = 	SELECT sl.po_shipment_id,(emp.TITLE ||' '|| emp.FIRST_NAME || ' ' ||emp.LAST_NAME ) as empName, \
+pl.PRODUCT_CODE, pl.line_num as poLineNum,  pl.PRODUCT_DESCRIPTION, sl.SHIPMENT_LINE_ID,sl.SHIPMENT_HEADER_ID,sl.LINE_NUM, \
+sl.PO_SHIPMENT_ID, sl.PO_HEADER_ID,sl.PO_LINE_ID,sl.PO_DISTRIBUTION_ID,sl.LINE_TYPE,sl.CATEGORY_ID,sl.SUB_CATEGORY_ID, \
+sl.PRODUCT_ID,sl.DESCRIPTION, sl.QUANTITY_ORDERED,sl.QUANTITY_RECEIVED, sl.QUANTITY_SHIPPED shipment,  \
+sl.quantity_ordered - (NVL((SELECT sum(quantity_received)  FROM LT_SHIPMENT_LINES WHERE shipment_line_id != sl.shipment_line_id \
+AND po_shipment_id = sl.po_shipment_id),0) + NVL((SELECT sum(quantity_shipped) FROM LT_SHIPMENT_LINES \
+WHERE shipment_line_id != sl.shipment_line_id AND po_shipment_id = sl.po_shipment_id \
+AND NVL(quantity_received,0) = 0),0)) QUANTITY_SHIPPED,sl.CONTACT_PERSON_ID,  \
+sl.CONTACT_NUMBER,sl.SHIPMENT_LINE_STATUS_CODE,sl.ATTACHMENT,sl.CREATED_BY,sl.CREATION_DATE, sl.LAST_UPDATE_LOGIN, \
+sl.LAST_UPDATED_BY,sl.LAST_UPDATE_DATE,sl.UOM,sl.CONTACT_PERSON,sl.UNIT_PRICE ,ph.PO_NUMBER,sh.SHIPMENT_NUM SHIPMENT_NUMBER, \
+nvl2(pc.CATEGORY_CODE,(pc.CATEGORY_NAME || ' ( '|| pc.CATEGORY_CODE||' )'),'' ) as CATEGORY_NAME , \
+nvl2(psc.SUB_CATEGORY_CODE,(psc.SUB_CATEGORY || ' ( '|| psc.SUB_CATEGORY_CODE||' )'),'') as SUB_CATEGORY, \
+nvl2(pm.PRODUCT_ID,pm.PRODUCT_NAME||' ( '||pm.PRODUCT_CODE||' )','') as PRODUCT_NAME , \
+nvl2(sa.FILE_NAME,svm.SYSTEM_VALUE||sa.FILE_NAME,'') AS FILE_PATH   \
+FROM LT_SHIPMENT_LINES sl, LT_SHIPMENT_HEADERS sh, LT_PO_HEADERS ph, LT_PO_LINES pl , LT_MAST_PRODUCT_CATEGORIES pc, \
+LT_MAST_PROD_SUB_CATEGORIES psc, LT_MAST_PRODUCTS pm , LT_SHIPMENT_ATTACHMENT sa, LT_MAST_EMPLOYEES emp ,LT_MAST_SYS_VARIABLES svm \
+WHERE sl.SHIPMENT_HEADER_ID = ?  \
+AND sl.PO_HEADER_ID = ph.PO_HEADER_ID(+) \
+        AND ph.po_header_id = pl.po_header_id \
+        AND pl.PO_LINE_ID = sl.PO_LINE_ID  \
+        AND sl.SHIPMENT_HEADER_ID = sh.SHIPMENT_HEADER_ID(+) \
+        AND sl.CATEGORY_ID = pc.CATEGORY_ID(+)   \
+        AND sl.SUB_CATEGORY_ID = psc.SUB_CATEGORY_ID(+) \
+        AND sl.PRODUCT_ID = pm.PRODUCT_ID(+)  \
+        AND sl.ATTACHMENT = sa.SHIPMENT_ATTACHMENT_ID(+) \
+        AND emp.EMPLOYEE_ID(+) = sl.CONTACT_PERSON_ID  \
+        AND svm.VARIABLE_NAME = 'FILE_OPEN_PATH'  \
+        AND  svm.COMPANY_ID = ( SELECT mv.COMPANY_ID FROM LT_MAST_VENDORS mv \
+        WHERE VENDOR_ID = (SELECT VENDOR_ID FROM LT_SHIPMENT_HEADERS WHERE SHIPMENT_HEADER_ID = ?) )
+				
+
+getAsnLinesByAsnHeaderId_olddd = SELECT pl.PRODUCT_CODE, \
+	pl.line_num as poLineNum,  pl.PRODUCT_DESCRIPTION, sl.* ,ph.PO_NUMBER,sh.SHIPMENT_NUM SHIPMENT_NUMBER,pc.CATEGORY_NAME, \
+	psc.SUB_CATEGORY,  \
+	nvl2(pm.PRODUCT_ID,pm.PRODUCT_NAME||' ( '||pm.PRODUCT_CODE||' )','') as PRODUCT_NAME ,sa.FILE_PATH||sa.FILE_NAME as file_path \
+	FROM LT_SHIPMENT_LINES sl,  \
+	LT_SHIPMENT_HEADERS sh, \
+	LT_PO_HEADERS ph, \
+	LT_PO_LINES pl , \
+	LT_MAST_PRODUCT_CATEGORIES pc, \
+	LT_MAST_PROD_SUB_CATEGORIES psc, \
+	LT_MAST_PRODUCTS pm ,  \
+	LT_SHIPMENT_ATTACHMENT sa \
+	WHERE sl.SHIPMENT_HEADER_ID = ? \
+	AND sl.PO_HEADER_ID = ph.PO_HEADER_ID(+) \
+	AND ph.po_header_id = pl.po_header_id \
+	AND pl.PO_LINE_ID = sl.PO_LINE_ID  \
+	AND sl.SHIPMENT_HEADER_ID = sh.SHIPMENT_HEADER_ID(+) \
+	AND sl.CATEGORY_ID = pc.CATEGORY_ID(+)   \
+	AND sl.SUB_CATEGORY_ID = psc.SUB_CATEGORY_ID(+) \
+	AND sl.PRODUCT_ID = pm.PRODUCT_ID(+)  \
+	AND sl.ATTACHMENT = sa.SHIPMENT_ATTACHMENT_ID(+)
+
+#asnDataTableQueriesByLocation = select  *  from \
+#	(SELECT a.*,ROWNUM RNUM from (select shm.SHIPMENT_HEADER_ID,shm.SHIPMENT_NUM, shm.SHIPPED_DATE, \
+#	ved.VENDOR_NAME, vedadd.ADDRESS_1, cmv.VALUE_NAME as APPROVAL_STATUS  \
+#	from LT_SHIPMENT_HEADERS shm, LT_MAST_VENDORS ved, LT_MAST_VENDOR_ADDRESSES vedadd , LT_MAST_COMN_MASTER_VALUES cmv \
+#	where shm.VENDOR_ID = ved.VENDOR_ID(+)  AND shm.VENDOR_ADD_ID = vedadd.VENDOR_ADD_ID(+)  AND shm.BRANCH_ID = ? \
+#	AND shm.APPROVAL_STATUS = cmv.VALUE_CODE(+) \
+#	AND ( upper(shm.APPROVAL_STATUS) = ('ASN_APPROVED') OR upper(shm.APPROVAL_STATUS) = ('ASN_ACCEPTED')  ) \
+#	AND nvl(shm.SHIPMENT_NUM,'xx') like nvl(?,nvl(upper(shm.SHIPMENT_NUM),'xx')) \
+#	AND  TO_CHAR(shm.SHIPPED_DATE,'DD-MM-YYYY') LIKE nvl(?, TO_CHAR(shm.SHIPPED_DATE,'DD-MM-YYYY')) \
+#	AND nvl(upper(ved.VENDOR_NAME),'xx') like nvl(?,nvl(upper(ved.VENDOR_NAME),'xx')) \
+#	AND nvl(upper(vedadd.ADDRESS_1),'xx') like nvl(?,nvl(upper(vedadd.ADDRESS_1),'xx')) \
+#	AND nvl(upper(cmv.VALUE_NAME),'xx') like nvl(?,nvl(upper(cmv.VALUE_NAME),'xx')) \
+#	order by shm.LAST_UPDATE_DATE DESC, \
+#	CASE WHEN 2 = ? then shm.SHIPMENT_NUM END asc, \
+#	CASE WHEN 12 = ? then shm.SHIPMENT_NUM END desc, \
+#	CASE WHEN 3 = ? then upper(shm.SHIPPED_DATE) END asc, \
+#	CASE WHEN 13 = ? then upper(shm.SHIPPED_DATE) END desc, \
+#	CASE WHEN 4 = ? then upper(ved.VENDOR_NAME) END asc, \
+#	CASE WHEN 14 = ? then upper(ved.VENDOR_NAME) END desc, \
+#	CASE WHEN 5 = ? then upper(cmv.VALUE_NAME) END asc, \
+#	CASE WHEN 15 = ? then upper(cmv.VALUE_NAME) END desc )a  where ROWNUM <=?) WHERE rnum >=?
+
+asnDataTableQueriesByLocation = SELECT  bbb.* FROM 	(SELECT aaa.*,ROWNUM rnum \
+FROM (	SELECT shm.shipment_header_id,shm.SHIPMENT_NUM, shm.shipped_date, ved.vendor_name, vedadd.address_1, \
+cmv.value_name AS approval_status ,shm.LAST_UPDATE_DATE \
+FROM LT_SHIPMENT_HEADERS shm, LT_MAST_VENDORS ved, LT_MAST_VENDOR_ADDRESSES vedadd , \
+LT_MAST_COMN_MASTER_VALUES cmv ,LT_MAST_COMN_MASTER cm \
+WHERE shm.VENDOR_ID = ved.VENDOR_ID(+)  AND shm.VENDOR_ADD_ID = vedadd.VENDOR_ADD_ID(+)  AND shm.BRANCH_ID = ? \
+AND shm.APPROVAL_STATUS = cmv.VALUE_CODE(+) AND cmv.MASTER_ID = cm.MASTER_ID AND cm.MASTER_NAME = 'ASN_STATUS' \
+AND ( upper(shm.APPROVAL_STATUS) IN ('ASN_APPROVED' ,'ASN_ACCEPTED', 'NEW','ACCEPTED')  ) \
+AND nvl(shm.SHIPMENT_NUM,'xx') like nvl(?,nvl(upper(shm.SHIPMENT_NUM),'xx')) \
+AND TO_CHAR(nvl (shm.SHIPPED_DATE, SYSDATE ),'DD-MM-YYYY') LIKE nvl(?, TO_CHAR(nvl (shm.SHIPPED_DATE, SYSDATE ),'DD-MM-YYYY')) \
+AND nvl(upper(ved.VENDOR_NAME),'xx') like nvl(?,nvl(upper(ved.VENDOR_NAME),'xx')) \
+AND nvl(upper(vedadd.ADDRESS_1),'xx') like nvl(?,nvl(upper(vedadd.ADDRESS_1),'xx')) \
+AND nvl(UPPER(cmv.value_name),'xx') LIKE nvl(?,nvl(UPPER(cmv.value_name),'xx')) \
+ )aaa  \
+WHERE ROWNUM <=? \
+) bbb \
+WHERE rnum >=? \
+order by  \
+CASE WHEN 2 = ? THEN bbb.SHIPMENT_NUM END ASC, \
+CASE WHEN 12 = ? then bbb.SHIPMENT_NUM END desc,\
+CASE WHEN 3 = ? then upper(bbb.SHIPPED_DATE) END asc, \
+CASE WHEN 13 = ? then upper(bbb.SHIPPED_DATE) END desc, \
+CASE WHEN 4 = ? then upper(bbb.VENDOR_NAME) END asc, \
+CASE WHEN 14 = ? then upper(bbb.VENDOR_NAME) END desc, \
+CASE WHEN 5 = ? THEN UPPER(bbb.approval_status) || to_char(bbb.LAST_UPDATE_DATE,'RRRR-MM-DD HH24:MI:SS') END ASC, \
+CASE WHEN 15 = ? then upper(bbb.approval_status) || to_char(bbb.LAST_UPDATE_DATE,'RRRR-MM-DD HH24:MI:SS') END desc
+
+
+asnDataTableDataCountByLocation = select count(shm.SHIPMENT_HEADER_ID) \
+	FROM LT_SHIPMENT_HEADERS shm, LT_MAST_VENDORS ved, LT_MAST_VENDOR_ADDRESSES vedadd , \
+LT_MAST_COMN_MASTER_VALUES cmv ,LT_MAST_COMN_MASTER cm \
+WHERE shm.VENDOR_ID = ved.VENDOR_ID(+)  AND shm.VENDOR_ADD_ID = vedadd.VENDOR_ADD_ID(+)  AND shm.BRANCH_ID = ? \
+AND shm.APPROVAL_STATUS = cmv.VALUE_CODE(+) AND cmv.MASTER_ID = cm.MASTER_ID AND cm.MASTER_NAME = 'ASN_STATUS' \
+AND ( upper(shm.APPROVAL_STATUS) IN ('ASN_APPROVED' ,'ASN_ACCEPTED', 'NEW','ACCEPTED')  ) \
+AND nvl(shm.SHIPMENT_NUM,'xx') like nvl(?,nvl(upper(shm.SHIPMENT_NUM),'xx')) \
+AND TO_CHAR(nvl (shm.SHIPPED_DATE, SYSDATE ),'DD-MM-YYYY') LIKE nvl(?, TO_CHAR(nvl (shm.SHIPPED_DATE, SYSDATE ),'DD-MM-YYYY')) \
+AND nvl(upper(ved.VENDOR_NAME),'xx') like nvl(?,nvl(upper(ved.VENDOR_NAME),'xx')) \
+AND nvl(upper(vedadd.ADDRESS_1),'xx') like nvl(?,nvl(upper(vedadd.ADDRESS_1),'xx')) \
+AND nvl(UPPER(cmv.value_name),'xx') LIKE nvl(?,nvl(UPPER(cmv.value_name),'xx'))
+
+poShipmentDataTableCount = select count(*)  \
+	from lt_po_headers po, \
+	lt_po_Lines pl, \
+	LT_PO_SHIPMENTS ps \
+	where 1=1  \
+	AND ps.po_header_id = po.po_header_id \
+	AND ps.po_line_id = pl.po_line_id \
+	AND po.po_header_id = pl.po_header_id \
+	AND po.VENDOR_ID = ?  \
+	AND nvl(po.PO_NUMBER,'xx') like nvl( ? ,nvl(upper(po.PO_NUMBER),'xx'))  \
+	AND nvl(pl.line_num,-99) like nvl( ? ,nvl(upper(pl.line_num),-99))  \
+	AND nvl(upper(pl.PRODUCT_DESCRIPTION),'xx') like nvl( ? ,nvl(upper(pl.PRODUCT_DESCRIPTION),'xx')) \
+	AND nvl(ps.SHIPMENT_NUM,-99) like nvl( ? ,nvl(upper(ps.SHIPMENT_NUM),-99)) \
+	AND  TO_CHAR(nvl (ps.DUE_DATE, SYSDATE ),'DD-MM-YYYY') LIKE nvl( ? , TO_CHAR(nvl (ps.DUE_DATE, SYSDATE ),'DD-MM-YYYY')) \
+	AND nvl(ps.QUANTITY_ORDERED,-99) like nvl( ? ,nvl(upper(ps.QUANTITY_ORDERED),-99)) \
+	AND nvl(ps.QUANTITY_RECEIVED,-99) like nvl( ? ,nvl(upper(ps.QUANTITY_RECEIVED),-99)) \
+	AND nvl(upper(ps.SHIP_TO_LOCATION),'xx') like nvl( ? ,nvl(upper(ps.SHIP_TO_LOCATION),'xx')) \
+	AND (ps.quantity_ordered-((SELECT NVL(SUM(quantity_received),0)  FROM lt_shipment_lines lsl  \
+                          WHERE lsl.po_shipment_id = ps.po_shipment_line_id  ) + (SELECT NVL(SUM(quantity_shipped),0) \
+                          FROM lt_shipment_lines lsl WHERE lsl.po_shipment_id = ps.po_shipment_line_id AND NVL(quantity_received,0) = 0))) > 0
+ 
+poShipmentDataTableList =   select  *  from \
+	(SELECT a.*,ROWNUM RNUM from ( \
+	select  pl.line_num, pl.PRODUCT_DESCRIPTION, po.PO_NUMBER, po.VENDOR_ID, po.VENDOR_ADD_ID ,ps.* \
+	from lt_po_headers po, \
+	lt_po_Lines pl, \
+	LT_PO_SHIPMENTS ps \
+	where 1=1  \
+	AND ps.po_header_id = po.po_header_id \
+	AND ps.po_line_id = pl.po_line_id \
+	AND po.po_header_id = pl.po_header_id \
+	AND po.VENDOR_ID = ?  \
+	AND nvl(po.PO_NUMBER,'xx') like nvl( ? ,nvl(upper(po.PO_NUMBER),'xx'))  \
+	AND nvl(pl.line_num,-99) like nvl( ? ,nvl(upper(pl.line_num),-99))  \
+	AND nvl(upper(pl.PRODUCT_DESCRIPTION),'xx') like nvl( ? ,nvl(upper(pl.PRODUCT_DESCRIPTION),'xx')) \
+	AND nvl(ps.SHIPMENT_NUM,-99) like nvl( ? ,nvl(upper(ps.SHIPMENT_NUM),-99)) \
+	AND  TO_CHAR(nvl (ps.DUE_DATE, SYSDATE ),'DD-MM-YYYY') LIKE nvl( ? , TO_CHAR(nvl (ps.DUE_DATE, SYSDATE ),'DD-MM-YYYY')) \
+	AND nvl(ps.QUANTITY_ORDERED,-99) like nvl( ? ,nvl(upper(ps.QUANTITY_ORDERED),-99)) \
+	AND nvl(ps.QUANTITY_RECEIVED,-99) like nvl( ? ,nvl(upper(ps.QUANTITY_RECEIVED),-99)) \
+	AND nvl(upper(ps.SHIP_TO_LOCATION),'xx') like nvl( ? ,nvl(upper(ps.SHIP_TO_LOCATION),'xx')) \
+	AND (ps.quantity_ordered-((SELECT NVL(SUM(quantity_received),0)  FROM lt_shipment_lines lsl  \
+                          WHERE lsl.po_shipment_id = ps.po_shipment_line_id  ) + (SELECT NVL(SUM(quantity_shipped),0) \
+                          FROM lt_shipment_lines lsl WHERE lsl.po_shipment_id = ps.po_shipment_line_id AND NVL(quantity_received,0) = 0))) > 0  \
+	order by  \
+	CASE WHEN 2 = ?  then po.PO_NUMBER END asc, \
+	CASE WHEN 12 = ?  then po.PO_NUMBER END desc, \
+	CASE WHEN 3 = ?  then pl.PO_LINE_ID END asc,  \
+	CASE WHEN 13 = ?  then pl.PO_LINE_ID END desc, \
+	CASE WHEN 4 = ?  then ps.SHIPMENT_NUM END asc, \
+	CASE WHEN 14 = ?  then ps.SHIPMENT_NUM END desc, \
+	CASE WHEN 5 = ?  then upper(pl.PRODUCT_DESCRIPTION) END asc, \
+	CASE WHEN 15 = ?  then upper(pl.PRODUCT_DESCRIPTION) END desc, \
+	CASE WHEN 6 = ?  then ps.DUE_DATE END asc,  \
+	CASE WHEN 16 = ?  then ps.DUE_DATE END desc, \
+	CASE WHEN 7 = ?  then ps.QUANTITY_ORDERED END asc, \
+	CASE WHEN 17 = ?  then ps.QUANTITY_ORDERED END desc, \
+	CASE WHEN 8 = ?  then ps.QUANTITY_RECEIVED END asc, \
+	CASE WHEN 18 = ?  then ps.QUANTITY_RECEIVED END desc, \
+	CASE WHEN 9 = ?  then ps.SHIP_TO_LOCATION END asc, \
+	CASE WHEN 19 = ?  then ps.SHIP_TO_LOCATION END desc )a  where ROWNUM <= ? ) WHERE rnum >= ?
+	
+Change_line = AND (ps.quantity_ordered-ps.quantity_received > 0)
+	
+shipmentSourceId = select LT_SHIPMENT_SOURCE_ID_S.nextval from dual
+
+
+getInprocessAsnList = SELECT sh.*  \
+FROM LT_SHIPMENT_HEADERS sh,LT_MAST_VENDORS vm  \
+WHERE UPPER(APPROVAL_STATUS) = ?  \
+AND vm.ASN_APPROVAL_REQUIRED = 'Y' \
+AND sh.VENDOR_ID = vm.VENDOR_ID
+
+
+ upDateVStatus1 = UPDATE lt_shipment_approval SET STATUS=?,LAST_UPDATE_DATE=?  \
+ WHERE SHIPMENT_HEADER_ID=? AND APPROVAL_LEVEL =? AND STATUS <> ?
+ 
+ 
+ upDateVStatus2 = UPDATE lt_shipment_approval SET \
+STATUS=? ,LAST_UPDATE_DATE= ?, CURRENT_APPROVAL_LEVEL=? WHERE SHIPMENT_HEADER_ID=?
+
+
+updateCurrentApprovalLevelV = UPDATE lt_shipment_approval SET \
+CURRENT_APPROVAL_LEVEL = ?  WHERE SHIPMENT_HEADER_ID = ?
+
+
+getQuantityByPoHeaderId = SELECT SUM(  QUANTITY_SHIPPED ) AS QUANTITY_SHIPPED FROM LT_SHIPMENT_LINES WHERE PO_HEADER_ID = ?
+
+
+getShipmentInbox = select * from  \
+(SELECT a.*,ROWNUM RNUM from( \
+select ia.SHIPMENT_APPROVAL_ID,ia.SHIPMENT_HEADER_ID,ia.APPROVAL_ID,ih.SHIPMENT_NUM, \
+lt_vpal_common_pkg.get_comn_value_name('ASN_STATUS',ia.STATUS)  as  STATUS,  \
+ia.DELEGATION_ID,  vm.VENDOR_NAME \
+from LT_SHIPMENT_APPROVAL ia, LT_SHIPMENT_HEADERS ih, LT_MAST_VENDORS vm \
+where ia.SHIPMENT_HEADER_ID = ih.SHIPMENT_HEADER_ID   \
+AND ih.VENDOR_ID = vm.VENDOR_ID(+)     \
+and upper (ia.STATUS) in (?,?)  \
+and (ia.APPROVAL_ID = ? or ia.DELEGATION_ID = ? )  \
+AND upper(ia.STATUS) LIKE nvl( ?, upper(ia.STATUS))  \
+AND upper(ih.SHIPMENT_NUM) LIKE nvl( ?, upper(ih.SHIPMENT_NUM))  \
+AND  upper( vm.VENDOR_NAME )  LIKE nvl(?, upper( vm.VENDOR_NAME ))\
+order by  \
+CASE WHEN 2 = ? then upper(ih.SHIPMENT_NUM) END asc , \
+CASE WHEN 12 = ? then upper(ih.SHIPMENT_NUM) END desc , \
+CASE WHEN 3 = ? then upper(vm.VENDOR_NAME) END asc , \
+CASE WHEN 13 = ? then upper(vm.VENDOR_NAME) END desc , \
+CASE WHEN 4 = ? then ia.STATUS || to_char(ia.LAST_UPDATE_DATE,'RRRR-MM-DD HH24:MI:SS')  END desc ,  \
+CASE WHEN 14 = ? then ia.STATUS END asc,  \
+CASE WHEN 5 = ? then ia.LAST_UPDATE_DATE END asc ,  \
+CASE WHEN 15 = ? then ia.LAST_UPDATE_DATE END desc ) a  where ROWNUM <=? )  WHERE RNUM >=?
+
+
+getShipmentCountInbox = select COUNT(ia.SHIPMENT_APPROVAL_ID) \
+from LT_SHIPMENT_APPROVAL ia, LT_SHIPMENT_HEADERS ih, LT_MAST_VENDORS vm \
+where ia.SHIPMENT_HEADER_ID = ih.SHIPMENT_HEADER_ID   \
+AND ih.VENDOR_ID = vm.VENDOR_ID(+)     \
+and upper (ia.STATUS) in (?,?)  \
+and (ia.APPROVAL_ID = ? or ia.DELEGATION_ID = ? )  \
+AND upper(ia.STATUS) LIKE nvl( ?, upper(ia.STATUS))  \
+AND upper(ih.SHIPMENT_NUM) LIKE nvl( ?, upper(ih.SHIPMENT_NUM))  \
+AND  upper( vm.VENDOR_NAME )  LIKE nvl(?, upper( vm.VENDOR_NAME ))
+
+
+getShipmentApprovalByShipmentId = SELECT ea.*, nvl2 (  ea.DELEGATION_ID,  \
+(  ( cmv.VALUE_NAME||' '|| em.FIRST_NAME|| ' '||em.LAST_NAME||' '||'('|| em.EMPLOYEE_NUMBER|| ')' ) ||    \
+( ' ('|| ( cmvv.VALUE_NAME||' '|| emm.FIRST_NAME|| ' '||emm.LAST_NAME||' '||'('|| emm.EMPLOYEE_NUMBER|| ')' ) ||')' ) ), \
+( cmv.VALUE_NAME||' '|| em.FIRST_NAME|| ' '||em.LAST_NAME||' '||'('|| em.EMPLOYEE_NUMBER|| ')' ) )  AS buyer_Name , \
+'Buyer' as approval_level \
+FROM lt_shipment_approval ea, lt_mast_employees em ,LT_MAST_COMN_MASTER_VALUES cmv, \
+LT_MAST_COMN_MASTER_VALUES cmvv,  lt_mast_employees emm  \
+where ea.APPROVAL_ID=em.EMPLOYEE_ID(+) \
+and ea.DELEGATION_ID = emm.EMPLOYEE_ID(+)  \
+and em.TITLE = cmv.value_code(+)  \
+and emm.TITLE = cmvv.value_code(+)  \
+and ea.SHIPMENT_HEADER_ID = ? \
+order by ea.APPROVAL_LEVEL  
+
+
+getCurrLevelByShipmentApprovalId = select  CURRENT_APPROVAL_LEVEL from lt_shipment_approval where SHIPMENT_APPROVAL_ID= ?
+
+
+submitShipmentForApproval1 = UPDATE LT_SHIPMENT_HEADERS \
+SET  APPROVAL_STATUS= ? , LAST_UPDATE_DATE = ? ,LAST_UPDATE_LOGIN = ?  WHERE SHIPMENT_HEADER_ID=?
+
+
+submitShipmentForApproval2 = UPDATE LT_SHIPMENT_HEADERS SET  \
+  APPROVAL_STATUS= ? ,  LAST_UPDATE_DATE = ? ,LAST_UPDATE_LOGIN = ?  WHERE SHIPMENT_HEADER_ID=?
+  
+  
+checkShipmentStatusIsPending = select * from LT_SHIPMENT_APPROVAL  \
+  where SHIPMENT_HEADER_ID = ? \
+  AND (APPROVAL_ID = ? OR DELEGATION_ID = ? ) \
+  AND APPROVAL_LEVEL = CURRENT_APPROVAL_LEVEL \
+  AND STATUS = 'PENDING'
+  
+  
+getShipmentApprovalByShipmentIdAndApproverId = SELECT ia.SHIPMENT_APPROVAL_ID,ia.MODULE_APPROVAL_ID,ia.APPROVAL_ID, \
+ia.APPROVAL_LEVEL, ia.CURRENT_APPROVAL_LEVEL,ia.SHIPMENT_HEADER_ID,ia.STATUS,ia.DELEGATION_ID  \
+FROM LT_SHIPMENT_APPROVAL ia  \
+WHERE ia.SHIPMENT_HEADER_ID = ?   \
+AND ia.APPROVAL_ID =  ?  \
+AND APPROVAL_LEVEL = CURRENT_APPROVAL_LEVEL
+
+
+getShipmentApprovalHistoryByShipmentId = SELECT sah.SHIPMENT_APPROVAL_HISTORY_ID, sah.SHIPMENT_APPROVAL_ID, \
+sah.NOTE,sah.LAST_UPDATE_DATE,sah.SHIPMENT_HEADER_ID,sah.EMPLOYEE_ID,  \
+sah.REMARK,lt_vpal_common_pkg.get_comn_value_name('ASN_STATUS',sah.status)  as  STATUS, \
+(CASE WHEN sah.user_type = 'VENDOR' then vm.VENDOR_NAME \
+ELSE  ( cmv.value_name||' ' || em.first_name || ' '|| em.LAST_NAME||' ' || '(' ||em.EMPLOYEE_NUMBER||')' ) \
+END ) AS approval_Name  \
+FROM LT_SHIPMENT_APPROVAL_HISTORY sah,LT_MAST_EMPLOYEES em,LT_MAST_COMN_MASTER_VALUES cmv , \
+LT_SHIPMENT_HEADERS sh ,LT_MAST_VENDORS vm  \
+WHERE sah.SHIPMENT_HEADER_ID = ? \
+AND  sah.SHIPMENT_HEADER_ID = sh.SHIPMENT_HEADER_ID(+)  \
+AND sah.VENDOR_ID = vm.VENDOR_ID(+)  \
+and sah.employee_id  = em.employee_id(+) \
+and em.title = cmv.value_code(+) \
+order by sah.SHIPMENT_APPROVAL_HISTORY_ID desc 
+
+
+getAsnApprovalByAsnHeaderId = SELECT ASN_APPROVAL_REQUIRED FROM LT_MAST_VENDORS \
+WHERE VENDOR_ID = ( SELECT VENDOR_ID FROM LT_SHIPMENT_HEADERS WHERE SHIPMENT_HEADER_ID = ? )
+
+
+
+getAsnAttachmentList = SELECT am.ATTACHMENT_TYPE_ID,am.MODULE_CODE,am.ATTACHMENT_NAME,am.DESCRIPTION, \
+am.FILE_SIZE,am.PDF,am.IMAGE,am.DOCUMENT,am.EXCEL,am.ZIP,am.START_DATE,am.END_DATE,  \
+lt_vpal_common_pkg.get_comn_value_name('STATUS_MASTER',am.STATUS) as STATUS,am.IS_MANDATORY , \
+am.CREATED_BY,am.CREATION_DATE,am.LAST_UPDATE_LOGIN,am.LAST_UPDATED_BY,am.LAST_UPDATE_DATE,am.COMPANY_ID \
+FROM LT_MAST_ATTACHMENT_TYPE am ,LT_MAST_VENDORS vm \
+WHERE UPPER(am.status) = 'ACTIVE'  \
+AND am.START_DATE <= SYSDATE \
+AND (am.END_DATE IS NULL OR am.END_DATE >= SYSDATE) \
+AND UPPER(am.MODULE_CODE) = ? \
+AND am.COMPANY_ID = vm.COMPANY_ID AND vm.VENDOR_ID = ? AND am.IS_MANDATORY = 'Y'

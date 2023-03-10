@@ -1,0 +1,221 @@
+package com.lonar.asn.config;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.sql.DataSource;
+
+import org.hibernate.service.spi.ServiceException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
+import com.lonar.asn.dao.LtShipmentHeaderDao;
+import com.lonar.asn.dao.LtMastUsersDao;
+import com.lonar.asn.model.AsnApproval;
+import com.lonar.asn.model.CodeMaster;
+import com.lonar.asn.model.LtShipmentApprovalHistory;
+import com.lonar.asn.model.LtShipmentHeaders;
+import com.lonar.asn.model.SubmitAsn;
+import com.lonar.asn.repository.LtMastEmailtokenRepository;
+import com.lonar.asn.service.LtMastEmailtokenService;
+import com.lonar.asn.service.LtShipmentApprovalHistoryService;
+
+@Component
+@EnableScheduling
+@PropertySource(value = "classpath:application.properties", ignoreResourceNotFound = true)
+public class ScheduledTasks implements CodeMaster{
+
+	@Autowired
+	LtShipmentHeaderDao asnHeaderDao;
+	@Autowired
+	LtMastEmailtokenService ltMastEmailtokenService;
+	
+	@Autowired
+	LtMastEmailtokenRepository ltMastEmailtokenRepository;
+	
+	@Autowired
+	LtShipmentApprovalHistoryService ltShipmentApprovalHistoryService;
+
+	@Autowired
+	LtMastUsersDao ltMastUsersDao;
+	
+	private JdbcTemplate jdbcTemplate;
+	
+	private JdbcTemplate getJdbcTemplate() {
+		return jdbcTemplate;
+	}
+
+	@Autowired
+	public void setDataSource(DataSource dataSource) {
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
+	} 
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+
+    @Scheduled(fixedRate = 30000)
+    public void reportCurrentTime() throws ServiceException {
+    	SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+		asnChronJob();
+    }
+
+    private void asnChronJob() {
+    	
+    	try {
+    		List<LtShipmentHeaders> inprocessListOfAsn = asnHeaderDao.getInprocessAsnList(ASN_INPROGRESS);	
+			String currentApprovalLavel = null ;
+			List<AsnApproval> asnApprovalsList = null;
+			
+    		for (Iterator iterator = inprocessListOfAsn.iterator(); iterator.hasNext();) {
+    			LtShipmentHeaders ltShipmentHeader =  (LtShipmentHeaders) iterator.next();
+    			AsnApproval approvalLavel =  asnHeaderDao.getApprovalLevel(ltShipmentHeader.getShipmentHeaderId());
+				if(approvalLavel != null){
+					if( approvalLavel.getCurrentApprovalLevel() != null &&  !approvalLavel.getCurrentApprovalLevel().trim().equals("")){ 
+						 currentApprovalLavel = approvalLavel.getCurrentApprovalLevel();
+						 asnApprovalsList = asnHeaderDao.getApprovalList(ltShipmentHeader.getShipmentHeaderId(), approvalLavel.getCurrentApprovalLevel());
+					}
+					else { 
+						currentApprovalLavel = approvalLavel.getApprovalLevel();
+						asnApprovalsList = asnHeaderDao.getApprovalList(ltShipmentHeader.getShipmentHeaderId(), approvalLavel.getApprovalLevel());
+					}
+				}
+				
+				boolean isApproved = false;
+				boolean isNoAction = false;
+				
+				for (AsnApproval asnApproval : asnApprovalsList) {
+					if(asnApproval.getStatus().equals(NO_ACTION)) {	
+						isNoAction = true;
+						break;
+					}else if(asnApproval.getStatus().equals(ASN_APPROVED) && 
+							( asnApproval.getApprovedByAnyone() != null && asnApproval.getApprovedByAnyone().equals("N"))){
+						isApproved = true;						
+					} else if( !asnApproval.getStatus().equals(ASN_APPROVED) && 
+							( asnApproval.getApprovedByAnyone() != null && asnApproval.getApprovedByAnyone().equals("N") )){
+						isApproved = false;
+						break;
+					}
+					else if (asnApproval.getStatus().equals(ASN_APPROVED) &&
+							( asnApproval.getApprovedByAnyone() == null || asnApproval.getApprovedByAnyone().equals("Y"))){
+						isApproved = true;						
+						break;
+					}
+				} 
+				
+				
+				if(isNoAction || isApproved ){
+					
+					if(isApproved) {
+						currentApprovalLavel = asnHeaderDao.getNextApprovalLevel(ltShipmentHeader.getShipmentHeaderId() , currentApprovalLavel);
+						if(currentApprovalLavel != null && !currentApprovalLavel.trim().equals("") ){		
+							//ltExpExpenseHeadersService.updateCurrentApprovalLevel(ltExpExpenseHeader.getExpHeaderId(), currentApprovalLavel);
+							asnApprovalsList = asnHeaderDao.getApprovalList(ltShipmentHeader.getShipmentHeaderId(), currentApprovalLavel);
+						}else {
+							SubmitAsn submitAsn = new SubmitAsn();
+							submitAsn.setShipmentHeaderId(ltShipmentHeader.getShipmentHeaderId());
+							submitAsn.setStatus(ASN_APPROVED);
+							submitAsn.setLastUpdateLogin(-1L);
+							if(asnHeaderDao.submitAsn(submitAsn)) {
+						
+								List<AsnApproval> approvalsList = new ArrayList<AsnApproval>();
+								AsnApproval asn = new AsnApproval();
+								asn.setApprovalId(ltShipmentHeader.getCreatedBy());
+								asn.setLastUpdateDate(new Date());
+						
+								approvalsList.add(asn);
+							
+							/////Remaining 
+							saveAsnEmailToken(approvalsList,"shipmentApproval",ltShipmentHeader); 
+							}
+							
+						}
+					}  
+					
+					if(currentApprovalLavel != null && !currentApprovalLavel.trim().equals("") )
+					{	
+						asnHeaderDao.upDateStatus(ltShipmentHeader.getShipmentHeaderId(), PENDING, currentApprovalLavel);
+						asnHeaderDao.updateCurrentApprovalLevel(ltShipmentHeader.getShipmentHeaderId(), currentApprovalLavel);
+								
+						//--------------------------chk for delegation here
+						AsnApproval obj = new AsnApproval();
+						for(AsnApproval asnApproval : asnApprovalsList)
+						{
+							if(asnApproval.getDelegationId()!=null)
+							{
+								obj.setApprovalId(asnApproval.getDelegationId());
+								obj.setApprovalLevel(asnApproval.getApprovalLevel());
+								obj.setApprovedByAnyone(asnApproval.getApprovedByAnyone());
+								obj.setCurrentApprovalLevel(asnApproval.getCurrentApprovalLevel());
+								obj.setShipmentHeaderId(asnApproval.getShipmentHeaderId());
+								obj.setModuleApprovalId(asnApproval.getModuleApprovalId());
+								obj.setStatus(asnApproval.getStatus());
+							}
+							
+						}
+						if(obj!=null && obj.getShipmentHeaderId()!=null)
+						{ asnApprovalsList.add(obj); }
+		
+						//---------------------SAVE HISTORY-----------------------------
+						saveAsnApprovalHistoryData(asnApprovalsList, PENDING);
+						saveAsnEmailToken(asnApprovalsList,"asnApprovalNotification",ltShipmentHeader); 
+					}
+				} 
+			}
+    		
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    }
+
+	private void saveAsnEmailToken(List<AsnApproval> invoiceApprovalsList, String emailTemplate,
+			LtShipmentHeaders ltShipmentHeader) 
+	{
+		try
+		{
+			ltMastEmailtokenService.makeAsnEntryInEmailToken(invoiceApprovalsList,emailTemplate,ltShipmentHeader,"MAIL");
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+	}
+
+
+	
+	private void saveAsnApprovalHistoryData(List<AsnApproval> asnApprovalList ,String status) throws Exception
+	{
+		for(AsnApproval asnApproval:asnApprovalList)
+		{
+			LtShipmentApprovalHistory ltShipmentApprovalHistory = new LtShipmentApprovalHistory();
+			
+			ltShipmentApprovalHistory.setStatus(status);
+			ltShipmentApprovalHistory.setShipmentHeaderId(asnApproval.getShipmentHeaderId());
+			ltShipmentApprovalHistory.setShipmentApprovalId(asnApproval.getAsnApprovalId());
+			ltShipmentApprovalHistory.setEmployeeId(asnApproval.getApprovalId());
+			ltShipmentApprovalHistory.setLastUpdateDate(asnApproval.getLastUpdateDate());
+			
+		try
+		{
+			ltShipmentApprovalHistoryService.saveShipmentApprovalHistory(ltShipmentApprovalHistory);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		}
+	}
+	
+	
+	
+	
+	
+		
+	
+}

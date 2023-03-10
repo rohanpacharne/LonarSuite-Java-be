@@ -1,0 +1,148 @@
+package com.lonar.asn.controller;
+
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.lonar.asn.model.BusinessException;
+import com.lonar.asn.model.CustomeDataTable;
+import com.lonar.asn.model.LtPoShipment;
+import com.lonar.asn.model.LtShipmentHeaders;
+import com.lonar.asn.model.LtShipmentLines;
+import com.lonar.asn.model.ShipmenntSources;
+import com.lonar.asn.model.Status;
+import com.lonar.asn.model.SubmitAsn;
+import com.lonar.asn.service.AsnHeaderService;
+
+@RestController
+@RequestMapping("/API/asnheader")
+public class AsnHeaderController {
+
+	@Autowired
+	AsnHeaderService asnHeaderService;
+	
+	@RequestMapping(value = "/asnheaderdataTable", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public CustomeDataTable getAsnHeaderDataTableDetails(LtShipmentHeaders shipmentHeaders) 
+	{
+		try {
+		CustomeDataTable customeDataTable = new CustomeDataTable();
+		Long count= asnHeaderService.getAsnHeaderDataCount(shipmentHeaders);
+		customeDataTable.setRecordsTotal(count);
+	    customeDataTable.setRecordsFiltered(count);
+	    List<LtShipmentHeaders> shipmentHeadersList= 
+	    		asnHeaderService.getAsnHeaderDataTableDetails(shipmentHeaders);
+		customeDataTable.setData(shipmentHeadersList);	
+		return customeDataTable;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+	
+	
+	@RequestMapping(value = "/asnheaderdataTableByLocation/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public CustomeDataTable getAsnHeaderDataTableByLocation(LtShipmentHeaders shipmentHeaders,@PathVariable("id") Long locationId) 
+	{
+		try {
+		CustomeDataTable customeDataTable = new CustomeDataTable();
+		Long count= asnHeaderService.getAsnHeaderDataCountByLocation(shipmentHeaders,locationId);
+		customeDataTable.setRecordsTotal(count);
+	    customeDataTable.setRecordsFiltered(count);
+	    List<LtShipmentHeaders> shipmentHeadersList= 
+	    		asnHeaderService.getAsnHeaderDataTableDetailsByLocation(shipmentHeaders,locationId);
+		customeDataTable.setData(shipmentHeadersList);	
+		return customeDataTable;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+	
+	@RequestMapping(value="/getbyasnheaderid/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<LtShipmentHeaders> getByAsnHeaderId(@PathVariable("id") Long id) {
+		try {
+		LtShipmentHeaders ltShipmentHeaders = asnHeaderService.getByAsnHeaderId(id);
+		return new ResponseEntity<LtShipmentHeaders>(ltShipmentHeaders, HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@RequestMapping(value="/submitasn", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Status> submitAsn(@RequestBody SubmitAsn submitAsn) {
+		return asnHeaderService.submitAsn(submitAsn);
+	}
+	
+	@RequestMapping(value="/getasnstatusbyheaderid/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<SubmitAsn> getAsnStatusByAsnHeaderId(@PathVariable("id") Long id) {
+		SubmitAsn submitAsn = asnHeaderService.getAsnStatusByAsnHeaderId(id);
+		return new ResponseEntity<SubmitAsn>(submitAsn, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/updateasnheader", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Status> updateAsnHeader(@RequestBody LtShipmentHeaders ltShipmentHeaders,
+			BindingResult bindingResult) throws BusinessException {
+		return asnHeaderService.updateAsnHeader(ltShipmentHeaders);
+	}
+	
+	@RequestMapping(value="/getasnlinesbyasnheaderid/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<LtShipmentLines>> getAsnLinesByAsnHeaderId(@PathVariable("id") Long id) {
+		List<LtShipmentLines> ltShipmentLinesList = asnHeaderService.getAsnLinesByAsnHeaderId(id);
+		return new ResponseEntity<List<LtShipmentLines>>(ltShipmentLinesList, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/updateasnline", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Status> updateAsnLine(@RequestBody List<LtShipmentLines> listOfShipmentLines,
+			BindingResult bindingResult) throws BusinessException {
+		return asnHeaderService.updateAsnLine(listOfShipmentLines);
+	}
+	
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Status> deleteAsn(@PathVariable("id") Long id) throws BusinessException {
+		return asnHeaderService.deleteAsn(id);
+	}
+	
+	@RequestMapping(value = "/poshipmentdatatablebyvendorid/{vendorid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public CustomeDataTable poShipmentDataTableByVendorId(LtPoShipment poShipment, @PathVariable("vendorid") Long vendorid) 
+	{
+		try {
+		CustomeDataTable customeDataTable = new CustomeDataTable();
+		Long count= asnHeaderService.getCountpoShipmentDataTableByVendorId(poShipment,vendorid);
+		customeDataTable.setRecordsTotal(count);
+	    customeDataTable.setRecordsFiltered(count);
+	    List<LtPoShipment> poShipmentList= 
+	    		asnHeaderService.getPoShipmentDataTableByVendorId(poShipment,vendorid);
+		customeDataTable.setData(poShipmentList);	
+		return customeDataTable;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	@RequestMapping(value = "/saveshipmentsource", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Status> saveShipmentSource(@RequestBody List<ShipmenntSources> shipmenntSources,
+			BindingResult bindingResult) throws BusinessException {
+		return asnHeaderService.saveShipmentSource(shipmenntSources);
+	}
+	
+
+	@RequestMapping(value = "/deletelineattch/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Status> deleteAsnLineAttachment(@PathVariable("id") Long id) throws BusinessException {
+		return asnHeaderService.deleteAsnLineAttachment(id);
+	}
+		
+}
