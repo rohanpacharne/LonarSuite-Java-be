@@ -210,5 +210,21 @@ public class LtMastCommonMessageDaoImpl implements LtMastCommonMessageDao
 		else
 			return null;
 	}
+	
+	@Transactional
+	@Override
+	public LtMastCommonMessage getMessageNameByCode(String messageCode) throws Exception 
+	{
+		String query = env.getProperty("getMessageNameByCode");
+		
+		LtMastCommonMessage ltMastCommonMessage =   jdbcTemplate.queryForObject(query, new Object[]{ messageCode }, 
+					 new BeanPropertyRowMapper<LtMastCommonMessage>(LtMastCommonMessage.class));
+//		if( !list.isEmpty())
+//		{	return list.get(0); }
+//		else
+//			return null;
+		return ltMastCommonMessage;
+	}
+
 
 }

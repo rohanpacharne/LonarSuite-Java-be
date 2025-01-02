@@ -67,11 +67,11 @@ public class LtMastVendorCocServiceImpl implements LtMastVendorCocService, CodeM
 		Status status = new Status();
 		LtMastVendorCoc list=ltMastVendorCocDao.getAttachmentByVendorId(venId);
 		if(list==null) {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Please fill vendor Coc details");
 		}
 		else {
-			status.setCode(SUCCESS);
+			status.setCode(1);
 		}
 		return status;
 	}
@@ -81,17 +81,31 @@ public class LtMastVendorCocServiceImpl implements LtMastVendorCocService, CodeM
 	public Status deleteLtMastVendorCoc(Long vendorId) throws ServiceException {
 		Status status = new Status();
 		if( ltMastVendorCocDao.deleteLtMastVendorCoc(vendorId)) {
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+			}
 			if(status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action was successful");
 			}
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if(status.getMessage()==null)
 			{
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 		}

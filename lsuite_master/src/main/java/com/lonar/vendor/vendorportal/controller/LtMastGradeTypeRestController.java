@@ -41,7 +41,7 @@ public class LtMastGradeTypeRestController implements CodeMaster {
 			
 		} 
 		catch (Exception e) {		
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 	}
@@ -52,7 +52,7 @@ public class LtMastGradeTypeRestController implements CodeMaster {
 		try {
 			return ltMastGradeTypeService.save(ltMastGradeType);	
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 	}
 	//------------------------------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ public class LtMastGradeTypeRestController implements CodeMaster {
 		try {
 			return ltMastGradeTypeService.update(ltMastGradeType);	
 		}catch(Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 	}
 			
@@ -72,7 +72,7 @@ public class LtMastGradeTypeRestController implements CodeMaster {
 		try {
 			return ltMastGradeTypeService.delete(id);
 		}catch(Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 	}	
 			

@@ -17,15 +17,16 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "LT_MAST_PRODUCTS")
-public class LtMastProducts extends BaseClass implements Serializable {
+public class LtMastProducts extends WhoColumns implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Basic(optional = false)
-	@NotNull
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_seq")
-	@SequenceGenerator(name = "product_seq", sequenceName = " LT_MAST_PRODUCTS_S", allocationSize = 1)
+//	@NotNull
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_seq")
+//	@SequenceGenerator(name = "product_seq", sequenceName = " LT_MAST_PRODUCTS_S", allocationSize = 1)
 	@Column(name = "PRODUCT_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long productId;
 	
 	@Column(name = "PRODUCT_CODE")
@@ -38,7 +39,7 @@ public class LtMastProducts extends BaseClass implements Serializable {
 	private String productDesc;
 	
 	@Column(name = "UOM")
-	private Long uom;
+	private String uom;
 	
 	@Column(name = "MIN_ORDER_QTY")
 	private Double minOrderQty;
@@ -139,11 +140,11 @@ public class LtMastProducts extends BaseClass implements Serializable {
 		this.productDesc = productDesc;
 	}
 
-	public Long getUom() {
+	public String getUom() {
 		return uom;
 	}
 
-	public void setUom(Long uom) {
+	public void setUom(String uom) {
 		this.uom = uom;
 	}
 

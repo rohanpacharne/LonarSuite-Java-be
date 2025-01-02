@@ -49,7 +49,7 @@ public class LtMastCityRestController implements CodeMaster {
 			customeDataTable.setData(ltMastCityList);
 
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 
@@ -95,7 +95,7 @@ public class LtMastCityRestController implements CodeMaster {
 		try {
 			return ltMastCityService.save(ltMastCity);
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 		
 	}
@@ -108,7 +108,7 @@ public class LtMastCityRestController implements CodeMaster {
 		try {
 			return ltMastCityService.update(ltMastCity);
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 		
 
@@ -121,7 +121,7 @@ public class LtMastCityRestController implements CodeMaster {
 		try {
 			return ltMastCityService.delete(id);
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 		
 

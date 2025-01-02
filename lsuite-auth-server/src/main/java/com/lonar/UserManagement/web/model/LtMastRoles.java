@@ -24,14 +24,15 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @Table(name = "LT_MAST_ROLES")
 @XmlRootElement
 @JsonInclude(Include.NON_NULL)
-public class LtMastRoles extends BaseClass implements Serializable {
+public class LtMastRoles extends WhoColumns implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq")
-	@SequenceGenerator(name = "role_seq", sequenceName = "LT_MAST_ROLES_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq")
+//	@SequenceGenerator(name = "role_seq", sequenceName = "LT_MAST_ROLES_S", allocationSize = 1)
 	@Column(name = "ROLE_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long roleId;
 	
 	@Basic(optional = false)

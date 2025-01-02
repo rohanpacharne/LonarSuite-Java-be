@@ -12,13 +12,14 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "LT_MAST_BILLING_ADDRESSES")
-public class LtMastBillingAddresses extends BaseClass
+public class LtMastBillingAddresses extends WhoColumns
 {
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "billing_seq")
-	@SequenceGenerator(name = "billing_seq", sequenceName = "LT_MAST_BILLING_ADDRESSES_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "billing_seq")
+//	@SequenceGenerator(name = "billing_seq", sequenceName = "LT_MAST_BILLING_ADDRESSES_S", allocationSize = 1)
 	@Column(name = "BILLING_ADDRESS_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long billingAddressId;
 	
 	@Column(name = "BILLING_ADDRESS_CODE")

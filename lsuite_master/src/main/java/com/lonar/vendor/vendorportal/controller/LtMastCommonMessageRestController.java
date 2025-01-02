@@ -52,7 +52,7 @@ public class LtMastCommonMessageRestController implements CodeMaster
 		} 
 		catch (Exception e) 
 		{	
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 		
@@ -83,7 +83,7 @@ public class LtMastCommonMessageRestController implements CodeMaster
 		try {
 			return ltMastCommonMessageService.save(ltMastCommonMessage);
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 		
 	}
@@ -95,7 +95,7 @@ public class LtMastCommonMessageRestController implements CodeMaster
 		try {
 			return ltMastCommonMessageService.updateMessage(mastCommonMessage);
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 			
 		}
@@ -108,7 +108,7 @@ public class LtMastCommonMessageRestController implements CodeMaster
 		try {
 			return ltMastCommonMessageService.delete(id);
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 		
 	}

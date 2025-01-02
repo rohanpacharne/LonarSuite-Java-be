@@ -28,8 +28,10 @@ public interface LtInvoiceLinesDao
 
 	boolean deleteByHeaderId(Long invoiceHeaderId) throws ServiceException;
 
-	Status loadLines(List<LtPoLines> poLinelist, Long invoiceHeaderId) throws ServiceException;
+	Status loadLines(List<LtPoLines> poLinelist, Long invoiceHeaderId,Long companyId) throws ServiceException;
 
 	boolean updateFlag(LtInvoiceLines ltInvoiceLines) throws ServiceException;
+	
+	Status callCreateInvoiceLineTaxes(LtInvoiceLines ltInvoiceLines,Long companyId) throws ServiceException;
 
 }

@@ -49,5 +49,9 @@ public interface LtPoHeadersService
 	List<LtPoHeaders> getActivePoHeadersByPoNumber(Long companyId, Long userId, String poNumber) throws ServiceException;
 
 	Status createPOPDFReport(Long poHeaderId,long companyId);
+	
+	Status createPOPDFReportWithTemplate(Long poHeaderId,long companyId);
+	
+	Status createPOPDFReportWithTemplate_Testing(Long poHeaderId,long companyId);
 
 }

@@ -75,38 +75,68 @@ public class LtInvoiceApprovalServiceImpl implements LtInvoiceApprovalService,Co
 				{
 					if(ltInvoiceApprovalDao.updateAllStatusApproval(approvalHistory))
 					{
-						status=ltMastCommonMessageService.getCodeAndMessage(INV_APPROVED);
+//						status=ltMastCommonMessageService.getCodeAndMessage(INV_APPROVED);
+						try {
+							status.setCode(1);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INV_APPROVED").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 						if(status.getMessage()==null)
 						{
-							status.setCode(SUCCESS);
+							status.setCode(1);
 							status.setMessage("Error in finding message! The action was successful");
 						}
 					}
 					else
 					{
-						status=ltMastCommonMessageService.getCodeAndMessage(INVOICE_APPROVAL_FAIL);
+//						status=ltMastCommonMessageService.getCodeAndMessage(INVOICE_APPROVAL_FAIL);
+						try {
+							status.setCode(0);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INVOICE_APPROVAL_FAIL").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 						if(status.getMessage()==null)
 						{
-							status.setCode(SUCCESS);
-							status.setMessage("Error in finding message! The action was successful");
+							status.setCode(0);
+							status.setMessage("Error in finding message! The action was unsuccessful");
 						}
 					}
 						
 				}
 			}else 
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INVOICE_APPROVAL_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INVOICE_APPROVAL_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INVOICE_APPROVAL_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
-					status.setMessage("Error in finding message! The action was successful");
+					status.setCode(0);
+					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			}
 				
-			status=ltMastCommonMessageService.getCodeAndMessage(INV_APPROVED);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INV_APPROVED);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INV_APPROVED").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if(status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 			}
 		}
 		
@@ -151,10 +181,18 @@ public class LtInvoiceApprovalServiceImpl implements LtInvoiceApprovalService,Co
 					//ltMastEmailtoken.setSendCc(ltMastEmployees.get(0).getOfficialEmail());
 					ltMastEmailtokenDao.makeEntryInEmailToken(ltMastEmailtoken);
 					
-					status=ltMastCommonMessageService.getCodeAndMessage(INV_FEEDBACK_AWAITED);
+//					status=ltMastCommonMessageService.getCodeAndMessage(INV_FEEDBACK_AWAITED);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INV_FEEDBACK_AWAITED").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 					if(status.getMessage()==null) 
 					{
-						status.setCode(SUCCESS);
+						status.setCode(1);
 						status.setMessage("Error in finding message! The action was successful");
 					}
 					
@@ -205,10 +243,18 @@ public class LtInvoiceApprovalServiceImpl implements LtInvoiceApprovalService,Co
 							}
 							ltMastEmailtokenDao.makeEntryInEmailToken(ltMastEmailtoken);
 		
-							status=ltMastCommonMessageService.getCodeAndMessage(INV_REJECTED);
+//							status=ltMastCommonMessageService.getCodeAndMessage(INV_REJECTED);
+							try {
+								status.setCode(1);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INV_REJECTED").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
 							if(status.getMessage()==null)
 							{
-								status.setCode(SUCCESS);
+								status.setCode(1);
 								status.setMessage("Error in finding message! The action was successful");
 							}
 					}

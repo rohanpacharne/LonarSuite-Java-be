@@ -15,10 +15,12 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lonar.vendor.vendorportal.model.LtExpExpenseHeaders;
 import com.lonar.vendor.vendorportal.model.LtMastEmployees;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.model.Status;
 import com.lonar.vendor.vendorportal.reports.ReportParameters;
+import com.lonar.vendor.vendorportal.repository.LtExpExpenseHeadersRepository;
 import com.lonar.vendor.vendorportal.repository.LtMastEmployeesRepository;
 
 
@@ -34,6 +36,9 @@ public class LtMastEmployeesDaoImpl implements LtMastEmployeesDao
 	
 	@Autowired
 	private Environment env;
+	
+	@Autowired
+	LtExpExpenseHeadersRepository ltExpExpenseHeadersRepository;
 	
 	private JdbcTemplate getJdbcTemplate() {
 		// TODO Auto-generated method stub
@@ -548,7 +553,7 @@ public class LtMastEmployeesDaoImpl implements LtMastEmployeesDao
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
-							input.getStart()+input.getLength(),input.getStart()+1},
+							input.getStart()+1,input.getStart()+input.getLength()},
 				 new  BeanPropertyRowMapper<LtMastEmployees>(LtMastEmployees.class));
 				return list;
 	}
@@ -614,6 +619,16 @@ public class LtMastEmployeesDaoImpl implements LtMastEmployeesDao
 		String query = env.getProperty("getEmployeeLikeNameByComId");
 		
 		List<LtMastEmployees> list=   jdbcTemplate.query(query, new Object[]{ "%"+name.toUpperCase()+"%",companyId}, 
+		 new BeanPropertyRowMapper<LtMastEmployees>(LtMastEmployees.class)); 
+	
+		return list;
+	}
+	
+	@Override
+	public List<LtMastEmployees> getCustomerArCollectorsLikeNameByComId(Long companyId,String name) throws ServiceException {
+		String query = env.getProperty("getCustomerArCollectorsLikeNameByComId");
+		
+		List<LtMastEmployees> list=   jdbcTemplate.query(query, new Object[]{companyId,"%"+name.toUpperCase()+"%"}, 
 		 new BeanPropertyRowMapper<LtMastEmployees>(LtMastEmployees.class)); 
 	
 		return list;

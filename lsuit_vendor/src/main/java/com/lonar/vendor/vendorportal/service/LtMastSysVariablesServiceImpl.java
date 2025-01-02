@@ -86,33 +86,63 @@ public class LtMastSysVariablesServiceImpl implements LtMastSysVariablesService,
 							ltMastSysVariableValues.setLastUpdateDate(new Date());
 							ltMastSysVariableValuesRepository.save(ltMastSysVariableValues);
 						}
-						status = ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//						status = ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+						try {
+							status.setCode(1);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 						if (status.getMessage() == null) {
-							status.setCode(EXCEPTION);
+							status.setCode(1);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 						}
 					} else {
-						status = ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//						status = ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+						try {
+							status.setCode(1);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						if (status.getMessage() == null) {
-							status.setCode(SUCCESS);
+							status.setCode(1);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 						}
 					}
 				} else {
-					status = ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//					status = ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					if (status.getMessage() == null) {
-						status.setCode(EXCEPTION);
+						status.setCode(0);
 						status.setMessage("Error in finding message! The action was unsuccessful");
 					}
 				}
 			} else {
 				status.setMessage(stat);
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 			}
 		} else {
-			status = ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//			status = ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if (status.getMessage() == null) {
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 
@@ -154,10 +184,17 @@ public class LtMastSysVariablesServiceImpl implements LtMastSysVariablesService,
 						ltMastSysVariableValues =ltMastSysVariableValuesRepository.save(ltMastSysVariableValues);
 						if(ltMastSysVariableValues.getVariableValuesId()== null)
 						{
-							status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//							status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+							try {
+								status.setCode(0);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 							if(status.getMessage()==null)
 							{
-							status.setCode(EXCEPTION);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 							}
 						}
@@ -172,29 +209,50 @@ public class LtMastSysVariablesServiceImpl implements LtMastSysVariablesService,
 						ltMastSysVariableValues = ltMastSysVariableValuesRepository.save(ltMastSysVariableValues);
 						if(ltMastSysVariableValues != null)
 						{
-							status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//							status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+							try {
+								status.setCode(0);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 							if(status.getMessage()==null)
 							{
-							status.setCode(EXCEPTION);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 							}
 						}
 					}
 				}
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(status.getMessage()==null)
 				{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 				
 			}
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(status.getMessage()==null)
 				{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			}
@@ -204,16 +262,23 @@ public class LtMastSysVariablesServiceImpl implements LtMastSysVariablesService,
 			}
 			else {
 				status.setMessage(stat);
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 			}
 			
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if(status.getMessage()==null)
 			{
-			status.setCode(EXCEPTION);
+			status.setCode(0);
 			status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 		}
@@ -315,11 +380,26 @@ public class LtMastSysVariablesServiceImpl implements LtMastSysVariablesService,
 			}
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(NO_RESULT);
+//				status=ltMastCommonMessageService.getCodeAndMessage(NO_RESULT);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("NO_RESULT").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				return new ResponseEntity<Status>(status,HttpStatus.OK);
 
 			}
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+		try {
+			status.setCode(1);
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 			return new ResponseEntity<Status>(status,HttpStatus.OK);
 			
 
@@ -330,7 +410,14 @@ public class LtMastSysVariablesServiceImpl implements LtMastSysVariablesService,
 		Status status=new Status();
 		
 			ltMastSysVariableValuesRepository.delete(id);	
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		return new ResponseEntity<Status>(status,HttpStatus.OK);
 	}
 
@@ -353,27 +440,49 @@ public class LtMastSysVariablesServiceImpl implements LtMastSysVariablesService,
 				ltMastSysVariables = ltMastSysVariablesRepository.save(ltMastSysVariables);
 				if (ltMastSysVariables.getVariableId() != null) 
 				{
-						status = ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//						status = ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 						if (status.getMessage() == null) {
-							status.setCode(SUCCESS);
+							status.setCode(1);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 						}
 						status.setData(ltMastSysVariables.getVariableId());
 				} else {
-					status = ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//					status = ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					if (status.getMessage() == null) {
-						status.setCode(EXCEPTION);
+						status.setCode(0);
 						status.setMessage("Error in finding message! The action was unsuccessful");
 					}
 				}
 			} else {
 				status.setMessage(stat);
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 			}
 		} else {
-			status = ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//			status = ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if (status.getMessage() == null) {
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 
@@ -397,26 +506,41 @@ public class LtMastSysVariablesServiceImpl implements LtMastSysVariablesService,
 			ltMastSysVariables.setLastUpdateLogin(ltMastSysVariables.getLastUpdateLogin());
 		
 			ltMastSysVariables = ltMastSysVariablesRepository.save(ltMastSysVariables);
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 				if(status.getMessage()==null)
 				{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 				status.setData(ltMastSysVariables.getVariableId());
 			}
 			else {
 				status.setMessage(stat);
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 			}
 			
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if(status.getMessage()==null)
 			{
-			status.setCode(EXCEPTION);
+			status.setCode(0);
 			status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 		}

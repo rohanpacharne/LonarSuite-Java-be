@@ -35,8 +35,8 @@ public class LtMastModules implements Serializable {
 	@Id
 	@Basic(optional = false)
 	//@NotNull
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "module_seq")
-	@SequenceGenerator(name = "module_seq", sequenceName = "LT_MAST_MODULES_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "module_seq")
+//	@SequenceGenerator(name = "module_seq", sequenceName = "LT_MAST_MODULES_S", allocationSize = 1)
 	@Column(name = "MODULE_ID")
 	private Long moduleId;
 	
@@ -105,6 +105,9 @@ public class LtMastModules implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastUpdateDate;
 	
+	@Column(name = "COMPANY_ID")
+	private Long companyId;
+	
 	
 	@Transient
 	private Long draw;
@@ -128,6 +131,19 @@ public class LtMastModules implements Serializable {
 	}
 
 	
+	
+	public Long getCompanyId() {
+		return companyId;
+	}
+
+
+
+	public void setCompanyId(Long companyId) {
+		this.companyId = companyId;
+	}
+
+
+
 	public LtMastModules(Long moduleId) {
 		this.moduleId = moduleId;
 	}
@@ -344,6 +360,8 @@ public class LtMastModules implements Serializable {
 		this.sort = sort;
 	}
 
+
+
 	@Override
 	public String toString() {
 		return "LtMastModules [moduleId=" + moduleId + ", moduleCode=" + moduleCode + ", moduleName=" + moduleName
@@ -351,9 +369,12 @@ public class LtMastModules implements Serializable {
 				+ ", status=" + status + ", startDate=" + startDate + ", endDate=" + endDate + ", createdBy="
 				+ createdBy + ", creationDate=" + creationDate + ", lastUpdateLogin=" + lastUpdateLogin
 				+ ", lastUpdatedBy=" + lastUpdatedBy + ", sequenceNumber=" + sequenceNumber + ", lastUpdateDate="
-				+ lastUpdateDate + ", draw=" + draw + ", start=" + start + ", length=" + length + ", stDate=" + stDate
-				+ ", enDate=" + enDate + ", columnNo=" + columnNo + ", sort=" + sort + "]";
+				+ lastUpdateDate + ", companyId=" + companyId + ", draw=" + draw + ", start=" + start + ", length="
+				+ length + ", stDate=" + stDate + ", enDate=" + enDate + ", columnNo=" + columnNo + ", sort=" + sort
+				+ "]";
 	}
+
+	
 
 	
 	

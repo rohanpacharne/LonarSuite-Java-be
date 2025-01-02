@@ -47,7 +47,7 @@ public class LtMastDivisionEmployeeGradeRestController implements CodeMaster {
 			} 
 			catch (Exception e) 
 			{
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 			return customeDataTable;
 		}
@@ -92,7 +92,7 @@ public class LtMastDivisionEmployeeGradeRestController implements CodeMaster {
 		try {
 			return ltP2pDivisionEmployeeGradeService.save(ltP2pDivisionEmployeeGrade);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 	}
 
@@ -104,7 +104,7 @@ public class LtMastDivisionEmployeeGradeRestController implements CodeMaster {
 		try {
 			return ltP2pDivisionEmployeeGradeService.update(ltP2pDivisionEmployeeGrade);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 	}
 	// -------------------Retrieve Single Bank details----------------------------
@@ -114,7 +114,7 @@ public class LtMastDivisionEmployeeGradeRestController implements CodeMaster {
 		try {
 			return ltP2pDivisionEmployeeGradeService.delete(id);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 	}
 

@@ -28,6 +28,6 @@ public interface LtInvoiceLineService
 
 	List<LtInvoiceLines> getLtInvoiceLinesDataTableByHeader(LtInvoiceLines input, Long id) throws ServiceException;
 
-	Status loadLines(List<Long> poLinelist, Long invoiceHeaderId) throws ServiceException;
+	Status loadLines(List<Long> poLinelist, Long invoiceHeaderId,Long companyId) throws ServiceException;
 
 }

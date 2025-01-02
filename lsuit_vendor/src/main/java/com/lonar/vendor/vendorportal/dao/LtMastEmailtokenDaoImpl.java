@@ -62,7 +62,8 @@ public class LtMastEmailtokenDaoImpl implements LtMastEmailtokenDao
 
 	@Override
 	public void updateStatus(Long emailTokenId, String status, Integer count) throws ServiceException {
-		String sqlQuery = " UPDATE lt_mast_emailtoken SET EMAIL_STATUS= ?, FAILURECOUNT= ( nvl2(FAILURECOUNT,FAILURECOUNT + ?, 1) ) where EMAIL_TOKEN_ID = ? ";
+//		String sqlQuery = " UPDATE lt_mast_emailtoken SET EMAIL_STATUS= ?, FAILURECOUNT= ( nvl2(FAILURECOUNT,FAILURECOUNT + ?, 1) ) where EMAIL_TOKEN_ID = ? ";
+		String sqlQuery = "UPDATE lt_mast_emailtoken SET EMAIL_STATUS = ?, FAILURECOUNT = COALESCE(FAILURECOUNT, 0) + ? WHERE EMAIL_TOKEN_ID = ?";
 		int res=jdbcTemplate.update(sqlQuery,status, count , emailTokenId );
 		
 	}

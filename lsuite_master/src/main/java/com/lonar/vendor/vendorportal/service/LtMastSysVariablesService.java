@@ -32,5 +32,7 @@ public interface LtMastSysVariablesService
 	public ResponseEntity<Status> saveSysVariable(LtMastSysVariables ltMastSysVariables) throws ServiceException;
 
 	public ResponseEntity<Status> updateSysVariable(LtMastSysVariables ltMastSysVariables) throws ServiceException;
+	
+	public SysVariableWithValues getBySysVariableName1(String name,int companyId) throws Exception;
 
 }

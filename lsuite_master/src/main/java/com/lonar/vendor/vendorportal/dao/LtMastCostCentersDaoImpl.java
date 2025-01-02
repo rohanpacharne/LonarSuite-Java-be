@@ -152,7 +152,7 @@ public class LtMastCostCentersDaoImpl implements LtMastCostCentersDao
 				
 			
 		return (List<LtMastCostCenters>) 
-				jdbcTemplate.query(query , new Object[]{companyId, costCenterCode,costCenterName,name,status,
+				jdbcTemplate.query(query , new Object[]{companyId, costCenterCode,costCenterName,status,
 						input.getStDate(),input.getEnDate(),
 						input.getColumnNo(),input.getColumnNo(),
 						input.getColumnNo(),input.getColumnNo(),
@@ -196,7 +196,7 @@ public class LtMastCostCentersDaoImpl implements LtMastCostCentersDao
 				}
 			
 				String count  = (String)getJdbcTemplate().queryForObject(
-						query, new Object[] {companyId, costCenterCode,costCenterName,name,status,
+						query, new Object[] {companyId, costCenterCode,costCenterName,status,
 								input.getStDate(),input.getEnDate()}, String.class);
 
 				

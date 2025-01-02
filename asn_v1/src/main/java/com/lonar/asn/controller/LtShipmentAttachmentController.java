@@ -40,13 +40,13 @@ public class LtShipmentAttachmentController {
 
 	}
 	
-	@RequestMapping(value = "/MultipalUpload", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/MultipalUpload/{companyId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Status> saveAsnAttachments(@RequestParam("file") MultipartFile[] files,
 		 @RequestParam("asnHeaderId") Long asnHeaderId,  @RequestParam("userId") Long userId,
-		 @RequestParam("attachmentTypeId") Long attachmentTypeId) throws BusinessException, FileNotFoundException, IOException {
+		 @RequestParam("attachmentTypeId") Long attachmentTypeId,@PathVariable("companyId") Long companyId) throws BusinessException, FileNotFoundException, IOException {
 
 		Status status = new Status();
-		status = asnAttachmentService.saveAsnAttachments(files,asnHeaderId,userId,attachmentTypeId);
+		status = asnAttachmentService.saveAsnAttachments(files,asnHeaderId,userId,attachmentTypeId,companyId);
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 
 	}

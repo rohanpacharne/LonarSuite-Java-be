@@ -43,7 +43,7 @@ public class LtMastBillingAddressesRestController implements CodeMaster {
 		} 
 		catch (Exception e) 
 		{
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 				
@@ -90,7 +90,7 @@ public class LtMastBillingAddressesRestController implements CodeMaster {
 		try {
 			return ltP2pBillingAddressesService.save(ltP2pBillingAddresses);
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 	}
 	//----------------------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ public class LtMastBillingAddressesRestController implements CodeMaster {
 		try {
 			return ltP2pBillingAddressesService.update(ltP2pBillingAddresses);
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 		
 		
@@ -111,7 +111,7 @@ public class LtMastBillingAddressesRestController implements CodeMaster {
 			try {
 				return ltP2pBillingAddressesService.delete(id);
 				}catch(Exception e) {
-					throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+					throw new BusinessException(0, null, e);
 				}
 			
 		}

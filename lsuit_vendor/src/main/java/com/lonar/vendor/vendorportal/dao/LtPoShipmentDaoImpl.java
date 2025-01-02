@@ -80,6 +80,8 @@ public class LtPoShipmentDaoImpl implements LtPoShipmentDao{
 	@Override
 	public List<LtPoShipment> getLtPoShipmentDataTable(Long headerId, Long branchId, LtPoShipment input)
 			throws ServiceException {
+		System.out.println("header id = "+headerId);
+		System.out.println("branch id = "+branchId);
 		String query = env.getProperty("poShipmentDataTableList");
 		
 		String poNumber=null;
@@ -131,7 +133,9 @@ public class LtPoShipmentDaoImpl implements LtPoShipmentDao{
 						input.getColumnNo(),input.getColumnNo(),
 						input.getStart()+input.getLength(),input.getStart()+1},
 			 new  BeanPropertyRowMapper<LtPoShipment>(LtPoShipment.class));
-		
+		System.out.println("Query = "+query);
+		System.out.println();
+		System.out.println("list = "+list);
 			return list;
 	}
 

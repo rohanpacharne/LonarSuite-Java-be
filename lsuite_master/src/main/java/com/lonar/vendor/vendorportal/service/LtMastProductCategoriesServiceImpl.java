@@ -101,7 +101,7 @@ public class LtMastProductCategoriesServiceImpl implements LtMastProductCategori
 		if (!ltMastProductCategoriesList.isEmpty() && 
 				!ltMastProductCategoriesList.get(0).getCategoryId().equals(ltMastProductCategories.getCategoryId())) 
 		{
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Category code already exists.");
 
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -111,7 +111,7 @@ public class LtMastProductCategoriesServiceImpl implements LtMastProductCategori
 					: !ltMastProductCategories.getCategoryId()
 							.equals(ltMastProductCategoriesList.get(0).getCategoryId()))) 
 			{
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("Category name already exists.");
 
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -134,9 +134,17 @@ public class LtMastProductCategoriesServiceImpl implements LtMastProductCategori
 			ltMastProductCategories.setLastUpdateLogin(ltMastProductCategories.getLastUpdateLogin());
 			ltMastProductCategories = ltMastProductCategoriesRepository.save(ltMastProductCategories);
 			if(ltMastProductCategories.getCategoryId()!=null) {
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+						
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(status.getMessage()==null) {
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			
@@ -145,9 +153,16 @@ public class LtMastProductCategoriesServiceImpl implements LtMastProductCategori
 			
 			}
 			else {
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(status.getMessage()==null) {
-					status.setCode(FAIL);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				}
 			}
@@ -171,7 +186,7 @@ public class LtMastProductCategoriesServiceImpl implements LtMastProductCategori
 					: !ltMastProductCategories.getCategoryId()
 							.equals(ltMastProductCategoriesList.get(0).getCategoryId()))) 
 			{
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("Category name already exists.");
 
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -182,9 +197,17 @@ public class LtMastProductCategoriesServiceImpl implements LtMastProductCategori
 			ltMastProductCategories.setLastUpdateLogin(ltMastProductCategories.getLastUpdateLogin());
 			ltMastProductCategories = ltMastProductCategoriesRepository.save(ltMastProductCategories);
 			if(ltMastProductCategories.getCategoryId()!=null) {
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+						
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(status.getMessage()==null) {
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			
@@ -192,9 +215,17 @@ public class LtMastProductCategoriesServiceImpl implements LtMastProductCategori
 			
 			}
 			else {
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+				
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(status.getMessage()==null) {
-					status.setCode(FAIL);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				}
 			}
@@ -208,24 +239,36 @@ public class LtMastProductCategoriesServiceImpl implements LtMastProductCategori
 		try {
 			if (ltMastProductCategoriesRepository.exists(id)) {
 				ltMastProductCategoriesRepository.delete(id);
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+				status.setCode(1);		
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
 				if(status.getMessage()==null) {
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			} 
 			else {
-			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+				status.setCode(0);		
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
 			if(status.getMessage()==null) {
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 			
 		}
 		}catch(Exception e) {
-			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+					
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			if(status.getMessage()==null) {
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		}

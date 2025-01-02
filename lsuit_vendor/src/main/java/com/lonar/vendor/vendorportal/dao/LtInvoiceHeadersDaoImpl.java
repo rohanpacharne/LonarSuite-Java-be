@@ -111,9 +111,13 @@ public class LtInvoiceHeadersDaoImpl implements LtInvoiceHeadersDao,CodeMaster{
 		   {pAmount="%"+Double.valueOf(input.getAmountPaid()).intValue()+"%";}
 		  
 		   
-		String count  = (String)getJdbcTemplate().queryForObject(
-				query, new Object[] {companyId,input.getBuyerId(),input.getBuyerId(),typeLookupCode,intInvoiceNumber, 
-						invoiceNumber,input.getiDate(),desc,iAmount,pAmount,status,poNumber}, String.class);
+//		String count  = (String)getJdbcTemplate().queryForObject(
+//				query, new Object[] {companyId,input.getBuyerId(),input.getBuyerId(),typeLookupCode,intInvoiceNumber, 
+//						invoiceNumber,input.getiDate(),desc,iAmount,pAmount,status,poNumber}, String.class);
+		   
+		   String count  = (String)getJdbcTemplate().queryForObject(
+					query, new Object[] {companyId,typeLookupCode,intInvoiceNumber, 
+							invoiceNumber,input.getiDate(),desc,iAmount,pAmount,status,poNumber}, String.class);
 
 		return Long.parseLong(count);
 	}
@@ -121,9 +125,8 @@ public class LtInvoiceHeadersDaoImpl implements LtInvoiceHeadersDao,CodeMaster{
 	@Override
 	public List<LtInvoiceHeaders> getLtInvoiceHeadersDataTable(LtInvoiceHeaders input,Long companyId) throws ServiceException 
 	{
-		companyId= Long.parseLong("1");
+//		companyId= Long.parseLong("1");
 		String query = env.getProperty("getLtInvoiceHeadersDataTable");
-		
 		String typeLookupCode=null;
 		   if(input.getInvoiceType()!=null && !input.getInvoiceType().equals(""))
 		   {typeLookupCode="%"+input.getInvoiceType().trim().toUpperCase() + "%";}
@@ -169,30 +172,62 @@ public class LtInvoiceHeadersDaoImpl implements LtInvoiceHeadersDao,CodeMaster{
 			{
 				input.setColumnNo(1);
 			}
+			System.out.println("companyId = "+companyId);
+			System.out.println("Buyer id = "+input.getBuyerId());
+			System.out.println("typeLookupCode = "+typeLookupCode);
+			System.out.println("intInvoiceNumber = "+intInvoiceNumber);
+			System.out.println("invoiceNumber = "+invoiceNumber);
+			System.out.println("input.getiDate() = "+input.getiDate());
+			System.out.println("desc = "+desc);
+			System.out.println("iAmount = "+iAmount);
+			System.out.println("pAmount = "+pAmount);
+			System.out.println("status = "+status);
+			System.out.println("poNumber = "+poNumber);
+			System.out.println("input.getColumnNo() = "+input.getColumnNo());
 			
-			
-			List<LtInvoiceHeaders> list = (List<LtInvoiceHeaders>) 
-					jdbcTemplate.query(query , new Object[]{companyId,input.getBuyerId(),input.getBuyerId(),
-							typeLookupCode,intInvoiceNumber,invoiceNumber,input.getiDate(),desc,iAmount,pAmount,status,poNumber,
-							input.getColumnNo(),input.getColumnNo(),
-							input.getColumnNo(),input.getColumnNo(),
-							input.getColumnNo(),input.getColumnNo(),
-							input.getColumnNo(),input.getColumnNo(),
-							input.getColumnNo(),input.getColumnNo(),
-							input.getColumnNo(),input.getColumnNo(),
-							input.getColumnNo(),input.getColumnNo(),
-							input.getColumnNo(),input.getColumnNo(),
-							input.getColumnNo(),input.getColumnNo(),
-							input.getColumnNo(),input.getColumnNo(),
-							
-							input.getStart()+input.getLength(),input.getStart()+1},
-				 new  BeanPropertyRowMapper<LtInvoiceHeaders>(LtInvoiceHeaders.class));
+			//commented to this to remove BuyerId, initiatiorId from query - 09 Nov 24
+//			List<LtInvoiceHeaders> list = (List<LtInvoiceHeaders>) 
+//					jdbcTemplate.query(query , new Object[]{companyId,input.getBuyerId(),input.getBuyerId(),
+//							typeLookupCode,intInvoiceNumber,invoiceNumber,input.getiDate(),desc,iAmount,pAmount,status,poNumber,
+//							input.getColumnNo(),input.getColumnNo(),
+//							input.getColumnNo(),input.getColumnNo(),
+//							input.getColumnNo(),input.getColumnNo(),
+//							input.getColumnNo(),input.getColumnNo(),
+//							input.getColumnNo(),input.getColumnNo(),
+//							input.getColumnNo(),input.getColumnNo(),
+//							input.getColumnNo(),input.getColumnNo(),
+//							input.getColumnNo(),input.getColumnNo(),
+//							input.getColumnNo(),input.getColumnNo(),
+//							input.getColumnNo(),input.getColumnNo(),
+//							
+//							input.getStart()+input.getLength(),input.getStart()+1},
+//				 new  BeanPropertyRowMapper<LtInvoiceHeaders>(LtInvoiceHeaders.class));
+//				System.out.println("count of invoice is "+list.size());
+				
+				List<LtInvoiceHeaders> list = (List<LtInvoiceHeaders>) 
+						jdbcTemplate.query(query , new Object[]{companyId,
+								typeLookupCode,intInvoiceNumber,invoiceNumber,input.getiDate(),desc,iAmount,pAmount,status,poNumber,
+								input.getColumnNo(),input.getColumnNo(),
+								input.getColumnNo(),input.getColumnNo(),
+								input.getColumnNo(),input.getColumnNo(),
+								input.getColumnNo(),input.getColumnNo(),
+								input.getColumnNo(),input.getColumnNo(),
+								input.getColumnNo(),input.getColumnNo(),
+								input.getColumnNo(),input.getColumnNo(),
+								input.getColumnNo(),input.getColumnNo(),
+								input.getColumnNo(),input.getColumnNo(),
+								input.getColumnNo(),input.getColumnNo(),
+								
+								input.getStart()+input.getLength(),input.getStart()+1},
+					 new  BeanPropertyRowMapper<LtInvoiceHeaders>(LtInvoiceHeaders.class));
+					System.out.println("count of invoice is "+list.size());
+					
 				return list;
 	}
 
 	@Override
 	public Long getLtInvoiceHeadersCountByVendorId(LtInvoiceHeaders input, Long venId) throws ServiceException{
-		String query = env.getProperty("getLtInvoiceHeadersCountByVendorId");
+		String query = env.getProperty("getLtInvoiceHeadersCountByVendorId_21-05-24");
 		 
 		String typeLookupCode=null;
 		   if(input.getInvoiceType()!=null && !input.getInvoiceType().equals(""))
@@ -241,8 +276,9 @@ public class LtInvoiceHeadersDaoImpl implements LtInvoiceHeadersDao,CodeMaster{
 
 	@Override
 	public List<LtInvoiceHeaders> getLtInvoiceHeadersDataTableByVendorId(LtInvoiceHeaders input, Long venId) throws ServiceException {
-		String query = env.getProperty("getLtInvoiceHeadersDataTableByVendorId");
 		
+//		String query = env.getProperty("getLtInvoiceHeadersDataTableByVendorId");
+		String query = env.getProperty("getLtInvoiceHeadersDataTableByVendorId_21-05-24");
 		String typeLookupCode=null;
 		   if(input.getInvoiceType()!=null && !input.getInvoiceType().equals(""))
 		   {typeLookupCode="%"+input.getInvoiceType().trim().toUpperCase() + "%";}
@@ -254,7 +290,6 @@ public class LtInvoiceHeadersDaoImpl implements LtInvoiceHeadersDao,CodeMaster{
 		   String invoiceNumber=null;
 		   if(input.getInvoiceNum()!=null && !input.getInvoiceNum().equals(""))
 		   {invoiceNumber="%"+input.getInvoiceNum().trim().toUpperCase()+"%";}
-		   
 		   
 			if(input.getiDate() == null || input.getiDate().trim().equals(""))
 			{
@@ -268,13 +303,10 @@ public class LtInvoiceHeadersDaoImpl implements LtInvoiceHeadersDao,CodeMaster{
 		   String iAmount=null;
 		   if(input.getInvoiceAmount()!=null)
 		   {iAmount="%"+Double.valueOf(input.getInvoiceAmount()).intValue()+"%";}
-			
-		   
 		   
 		   String status=null;
 		   if(input.getStatus()!=null &&  !input.getStatus().equals("")) 
 		   {status="%"+input.getStatus().trim().toUpperCase()+"%";}
-		   
 
 		   String pAmount=null;
 		   if(input.getAmountPaid()!=null)
@@ -284,7 +316,6 @@ public class LtInvoiceHeadersDaoImpl implements LtInvoiceHeadersDao,CodeMaster{
 			{
 				input.setColumnNo(1);
 			}
-			
 			
 			List<LtInvoiceHeaders> list = (List<LtInvoiceHeaders>) 
 					jdbcTemplate.query(query , new Object[]{venId,typeLookupCode,intInvoiceNumber,invoiceNumber,input.getiDate(),
@@ -345,14 +376,14 @@ public class LtInvoiceHeadersDaoImpl implements LtInvoiceHeadersDao,CodeMaster{
 	public Long save(LtInvoiceHeaders ltInvoiceHeaders) throws ServiceException {
 		if(ltInvoiceHeaders.getInvoiceHeaderId()!=null) {
 		String internalInvoiceNum =  (String) em.createNativeQuery(
-			        "SELECT LT_VPAL_COMMON_PKG.get_internal_invoice_number(:p_invoice_header_id) FROM DUAL"
+			        "SELECT get_internal_invoice_number(:p_invoice_header_id) FROM DUAL"
 			    )
 			    .setParameter("p_invoice_header_id", ltInvoiceHeaders.getInvoiceHeaderId())
 			    .getSingleResult();
 	    		  
 		ltInvoiceHeaders.setInternalInvoiceNumber(internalInvoiceNum);
 		}
-		
+		System.out.println("company Id = "+ltInvoiceHeaders.getCompanyId());
 		ltInvoiceHeaders = ltInvoiceHeadersRepository.save(ltInvoiceHeaders);
 		if(ltInvoiceHeaders.getInvoiceHeaderId()!=null) {
 			
@@ -435,7 +466,7 @@ public class LtInvoiceHeadersDaoImpl implements LtInvoiceHeadersDao,CodeMaster{
 		String query = " SELECT a.*,'N' as APPROVED_BY_ANYONE " + 
 				" FROM LT_INVOICE_APPROVAL a left outer join lt_mast_module_approvals b " + 
 				" on a.MODULE_APPROVAL_ID=b.MODULE_APPROVAL_ID  " + 
-				" WHERE a.INVOICE_HEADER_ID = ? AND a.APPROVAL_LEVEL = nvl(?,a.APPROVAL_LEVEL) ORDER BY a.APPROVAL_LEVEL ASC ";
+				" WHERE a.INVOICE_HEADER_ID = ? AND a.APPROVAL_LEVEL = ifnull(?,a.APPROVAL_LEVEL) ORDER BY a.APPROVAL_LEVEL ASC ";
 		List<InvoiceApproval> list=   jdbcTemplate.query(query, new Object[]{ invoiceHeaderId,currentApprovalLevel}, 
 				 new BeanPropertyRowMapper<InvoiceApproval>(InvoiceApproval.class));
 			return list;
@@ -443,7 +474,7 @@ public class LtInvoiceHeadersDaoImpl implements LtInvoiceHeadersDao,CodeMaster{
 
 	@Override
 	public String getNextApprovalLevel(Long invoiceHeaderId, String currentApprovalLavel) throws ServiceException {
-		String query = "select MIN (APPROVAL_LEVEL) AS  CURRENT_APPROVAL_LEVEL " + 
+		String query = "select MIN(APPROVAL_LEVEL) AS  CURRENT_APPROVAL_LEVEL " + 
 				" from LT_INVOICE_APPROVAL where INVOICE_HEADER_ID = ? AND APPROVAL_LEVEL > ? AND STATUS <> ? ";
 		
 		String nextlavel  = (String)getJdbcTemplate().queryForObject(
@@ -528,30 +559,48 @@ public class LtInvoiceHeadersDaoImpl implements LtInvoiceHeadersDao,CodeMaster{
 	@Override
 	public boolean chkForApprovers(Long invoiceHeaderId) throws ServiceException {
 		// TODO Auto-generated method stub
-		String query = " SELECT ea.*, "
-				+" nvl2 (  ea.DELEGATION_ID,  "
-				+" (  ( cmv.VALUE_NAME||' '|| em.FIRST_NAME|| ' '||em.LAST_NAME||' '||'('|| em.EMPLOYEE_NUMBER|| ')' )  "
-				+" ||   " 
-				+" ( ' ('|| ( cmvv.VALUE_NAME||' '|| emm.FIRST_NAME|| ' '||emm.LAST_NAME||' '||'('|| emm.EMPLOYEE_NUMBER|| ')' ) ||')' ) ), "
-				+" ( cmv.VALUE_NAME||' '|| em.FIRST_NAME|| ' '||em.LAST_NAME||' '||'('|| em.EMPLOYEE_NUMBER|| ')' ) "
-				+" )  AS approval_Name ,  "
-				+" CASE ea.MODULE_APPROVAL_ID  "
-				+" WHEN 0 THEN 'Invitor' "
-				+" ELSE ema.approval_role_name END as approval_level_name "
-				+" FROM "
-				+" lt_Invoice_Approval ea, "
-				+" lt_mast_employees em ,"
-				+" LT_MAST_COMN_MASTER_VALUES cmv,  "
-				+" LT_MAST_COMN_MASTER_VALUES cmvv, "
-				+" lt_mast_module_approvals ema , "
-				+" lt_mast_employees emm  "
-				+" where ea.APPROVAL_ID=em.EMPLOYEE_ID(+) "
-				+" and ea.DELEGATION_ID = emm.EMPLOYEE_ID(+)  "
-				+" and em.TITLE = cmv.value_code(+)  "
-				+" and emm.TITLE = cmvv.value_code(+) "
-				+" and ea.APPROVAL_LEVEL = ema.APPROVAL_LEVEL(+)  "
-				+" and ea.MODULE_APPROVAL_ID = ema.MODULE_APPROVAL_ID(+)  "
-				+" and ea.INVOICE_HEADER_ID = ? order by ea.APPROVAL_LEVEL ";
+//		String query = " SELECT ea.*, "
+//				+" nvl2 (  ea.DELEGATION_ID,  "
+//				+" (  ( cmv.VALUE_NAME||' '|| em.FIRST_NAME|| ' '||em.LAST_NAME||' '||'('|| em.EMPLOYEE_NUMBER|| ')' )  "
+//				+" ||   " 
+//				+" ( ' ('|| ( cmvv.VALUE_NAME||' '|| emm.FIRST_NAME|| ' '||emm.LAST_NAME||' '||'('|| emm.EMPLOYEE_NUMBER|| ')' ) ||')' ) ), "
+//				+" ( cmv.VALUE_NAME||' '|| em.FIRST_NAME|| ' '||em.LAST_NAME||' '||'('|| em.EMPLOYEE_NUMBER|| ')' ) "
+//				+" )  AS approval_Name ,  "
+//				+" CASE ea.MODULE_APPROVAL_ID  "
+//				+" WHEN 0 THEN 'Invitor' "
+//				+" ELSE ema.approval_role_name END as approval_level_name "
+//				+" FROM "
+//				+" lt_Invoice_Approval ea, "
+//				+" lt_mast_employees em ,"
+//				+" LT_MAST_COMN_MASTER_VALUES cmv,  "
+//				+" LT_MAST_COMN_MASTER_VALUES cmvv, "
+//				+" lt_mast_module_approvals ema , "
+//				+" lt_mast_employees emm  "
+//				+" where ea.APPROVAL_ID=em.EMPLOYEE_ID(+) "
+//				+" and ea.DELEGATION_ID = emm.EMPLOYEE_ID(+)  "
+//				+" and em.TITLE = cmv.value_code(+)  "
+//				+" and emm.TITLE = cmvv.value_code(+) "
+//				+" and ea.APPROVAL_LEVEL = ema.APPROVAL_LEVEL(+)  "
+//				+" and ea.MODULE_APPROVAL_ID = ema.MODULE_APPROVAL_ID(+)  "
+//				+" and ea.INVOICE_HEADER_ID = ? order by ea.APPROVAL_LEVEL ";
+		
+		String query = "SELECT ea.*, \n" +
+	               "       COALESCE(CONCAT( \n" +
+	               "           COALESCE(CONCAT(em.FIRST_NAME, ' ', em.LAST_NAME, ' (', em.EMPLOYEE_NUMBER, ')'), ''), \n" +
+	               "           COALESCE(ea.DELEGATION_ID, CONCAT(' (', CONCAT(emm.FIRST_NAME, ' ', emm.LAST_NAME, ' (', emm.EMPLOYEE_NUMBER, ')')), '') \n" +
+	               "       )) AS approval_Name, \n" +
+	               "       CASE \n" +
+	               "           WHEN ea.MODULE_APPROVAL_ID = 0 THEN 'Invitor' \n" +
+	               "           ELSE ema.approval_role_name \n" +
+	               "       END AS approval_level_name \n" +
+	               "FROM lt_Invoice_Approval ea \n" +
+	               "LEFT JOIN lt_mast_employees em ON ea.APPROVAL_ID = em.EMPLOYEE_ID \n" +
+	               "LEFT JOIN lt_mast_employees emm ON ea.DELEGATION_ID = emm.EMPLOYEE_ID \n" +
+	               "LEFT JOIN lt_mast_module_approvals ema ON ea.APPROVAL_LEVEL = ema.APPROVAL_LEVEL \n" +
+	               "    AND ea.MODULE_APPROVAL_ID = ema.MODULE_APPROVAL_ID \n" +
+	               "WHERE ea.INVOICE_HEADER_ID = ? \n" +
+	               "ORDER BY ea.APPROVAL_LEVEL";
+
 
 		List<InvoiceApproval> invoiceApprovalList = jdbcTemplate.query(query, new Object[] {invoiceHeaderId},
 				new RowMapper<InvoiceApproval>() {
@@ -590,8 +639,8 @@ public class LtInvoiceHeadersDaoImpl implements LtInvoiceHeadersDao,CodeMaster{
 					+ " WHERE a.MODULE_APPROVAL_ID=b.MODULE_APPROVAL_ID "
 					+ " AND DIVISION_ID= ? "
 					+ " AND MODULE= 'INVOICE'  "
-					+ " AND STATUS= 'DRAFT' "
-					+ " AND ( a.START_DATE <= SYSDATE AND (a.END_DATE is null or a.END_DATE > SYSDATE) ) ";
+					+ " AND STATUS= 'ACTIVE' "
+					+ " AND ( a.START_DATE <= SYSDATE() AND (a.END_DATE is null or a.END_DATE > SYSDATE()) ) ";
 			
 			List<Approval> approvalList=   jdbcTemplate.query(query, new Object[]{ ltInvoiceHeaders.getDivisionId()}, 
 				 new BeanPropertyRowMapper<Approval>(Approval.class)); 
@@ -608,8 +657,10 @@ public class LtInvoiceHeadersDaoImpl implements LtInvoiceHeadersDao,CodeMaster{
 			boolean flag=false;
 		if(approvalList.size()>0)
 		{
+			
 			for(Approval approvalObj:approvalList)
 			{
+				System.out.println("approvalObj = "+approvalObj);
 				Approval approval=approvalObj;
 				List<LtMastEmployeeDelegation> ltMastEmployeeDelegation = ltMastEmployeeDelegationDao
 						.findForDelegation(approvalObj.getEmployeesId());
@@ -622,10 +673,10 @@ public class LtInvoiceHeadersDaoImpl implements LtInvoiceHeadersDao,CodeMaster{
 				if(approval.getEmployeesId()!=null && approval.getModuleApprovalId()!=null && approval.getApprovalLevel()!=null)
 				{
 					res=jdbcTemplate.update(" INSERT INTO lt_invoice_approval "
-							+ " ( INVOICE_APPROVAL_ID,MODULE_APPROVAL_ID,APPROVAL_ID,APPROVAL_LEVEL,CURRENT_APPROVAL_LEVEL,DELEGATION_ID, "
+							+ " (MODULE_APPROVAL_ID,APPROVAL_ID,APPROVAL_LEVEL,CURRENT_APPROVAL_LEVEL,DELEGATION_ID, "
 							+ " INVOICE_HEADER_ID, STATUS,START_DATE,END_DATE, CREATED_BY,CREATION_DATE,LAST_UPDATE_LOGIN,"
 							+ " LAST_UPDATED_BY,LAST_UPDATE_DATE ,MODULE_APP_EMPLOYEES_ID)  "
-			 		+ " VALUES(LT_VENDOR_APPROVAL_S.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ",
+			 		+ " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ",
 			 		approval.getModuleApprovalId(),approval.getEmployeesId(),approval.getApprovalLevel(),
 			 		null,approval.getDelegationId(),ltInvoiceHeaders.getInvoiceHeaderId(),NO_ACTION,new Date(),
 			 		null,ltInvoiceHeaders.getCreatedBy(),new Date(),
@@ -738,7 +789,7 @@ public class LtInvoiceHeadersDaoImpl implements LtInvoiceHeadersDao,CodeMaster{
 	public Status callInvoiceValidationProc(Long invoiceHeaderId) throws ServiceException {
 		Status status = new Status();
 		StoredProcedureQuery query = em
-			    .createStoredProcedureQuery("lt_vpal_invoice_validation_pkg.validate_invoice")
+			    .createStoredProcedureQuery("validate_invoice")
 			    .registerStoredProcedureParameter(1, Long.class, 
 				         ParameterMode.IN)
 			    .registerStoredProcedureParameter(2, String.class, 
@@ -749,15 +800,50 @@ public class LtInvoiceHeadersDaoImpl implements LtInvoiceHeadersDao,CodeMaster{
 			query.execute();
 
 			if(query.getOutputParameterValue(2).toString().trim().equals("ERROR")){
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage(query.getOutputParameterValue(3).toString().trim());
 			}
 			else if(query.getOutputParameterValue(2).toString().trim().equals("SUCCESS")){
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage(query.getOutputParameterValue(3).toString().trim());
 				
 			}
 			return status;
+	}
+	
+	@Override
+	public Status callUpdatePoShipmentQuantitiesProc(Long companyId, Long userId, Long invoiceHeaderId) throws ServiceException {
+	    System.out.println(companyId+" "+userId+" "+invoiceHeaderId);
+		Status status = new Status();
+	    StoredProcedureQuery query = em
+	            .createStoredProcedureQuery("update_po_shipment_quantities")
+	            .registerStoredProcedureParameter(1, Long.class, ParameterMode.IN) // p_company_id
+	            .registerStoredProcedureParameter(2, Long.class, ParameterMode.IN) // p_user_id
+	            .registerStoredProcedureParameter(3, Long.class, ParameterMode.IN) // p_invoice_header_id
+	            .registerStoredProcedureParameter(4, String.class, ParameterMode.OUT) // x_status
+	            .registerStoredProcedureParameter(5, String.class, ParameterMode.OUT); // x_message
+
+	    // Set input parameters
+	    query.setParameter(1, companyId);
+	    query.setParameter(2, userId);
+	    query.setParameter(3, invoiceHeaderId);
+
+	    // Execute the stored procedure
+	    query.execute();
+
+	    // Get output parameters and set the Status object
+	    String xStatus = query.getOutputParameterValue(4).toString();
+	    String xMessage = query.getOutputParameterValue(5).toString();
+
+	    if ("ERROR".equalsIgnoreCase(xStatus.trim())) {
+	        status.setCode(0);
+	        status.setMessage(xMessage.trim());
+	    } else if ("SUCCESS".equalsIgnoreCase(xStatus.trim())) {
+	        status.setCode(1);
+	        status.setMessage(xMessage.trim());
+	    }
+
+	    return status;
 	}
 
 	@Override

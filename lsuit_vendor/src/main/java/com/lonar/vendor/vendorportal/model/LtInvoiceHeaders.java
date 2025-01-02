@@ -23,8 +23,9 @@ public class LtInvoiceHeaders {
 	
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendor_seq")
-	@SequenceGenerator(name = "vendor_seq", sequenceName = "LT_INVOICE_HEADERS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendor_seq")
+//	@SequenceGenerator(name = "vendor_seq", sequenceName = "LT_INVOICE_HEADERS_S", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "Invoice_Header_Id")
 	private Long invoiceHeaderId;
 	
@@ -121,6 +122,10 @@ public class LtInvoiceHeaders {
 	@Column(name = "PAYTERM_ID")
 	private Long paytermId;
 	
+	@Column(name = "COMPANY_ID")
+	private Long companyId;
+	
+	
 	@Transient
 	private Long draw;
 
@@ -166,6 +171,22 @@ public class LtInvoiceHeaders {
 	@Transient
 	private Double poAmount;
 	
+	@Transient
+	private String valueCode;
+	
+	@Transient
+	private String valueName;
+	
+	
+	
+	public Long getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(Long companyId) {
+		this.companyId = companyId;
+	}
+
 	public Long getInvoiceHeaderId() {
 		return invoiceHeaderId;
 	}
@@ -535,6 +556,24 @@ public class LtInvoiceHeaders {
 	public void setPoAmount(Double poAmount) {
 		this.poAmount = poAmount;
 	}
+	
+	
+
+	public String getValueCode() {
+		return valueCode;
+	}
+
+	public void setValueCode(String valueCode) {
+		this.valueCode = valueCode;
+	}
+
+	public String getValueName() {
+		return valueName;
+	}
+
+	public void setValueName(String valueName) {
+		this.valueName = valueName;
+	}
 
 	@Override
 	public String toString() {
@@ -548,12 +587,17 @@ public class LtInvoiceHeaders {
 				+ ", source=" + source + ", sourceRefNo=" + sourceRefNo + ", createdBy=" + createdBy + ", creationDate="
 				+ creationDate + ", lastUpdateLogin=" + lastUpdateLogin + ", lastUpdatedBy=" + lastUpdatedBy
 				+ ", lastUpdateDate=" + lastUpdateDate + ", exchangeRate=" + exchangeRate + ", baseAmount=" + baseAmount
-				+ ", initiatorId=" + initiatorId + ", divisionId=" + divisionId + ", paytermId=" + paytermId + ", draw="
-				+ draw + ", start=" + start + ", length=" + length + ", iDate=" + iDate + ", revDate=" + revDate
-				+ ", columnNo=" + columnNo + ", sort=" + sort + ", buyer=" + buyer + ", invoiceStatus=" + invoiceStatus
-				+ ", type=" + type + ", vendorName=" + vendorName + ", initiatorName=" + initiatorName
-				+ ", divisionName=" + divisionName + ", poNumber=" + poNumber + ", poAmount=" + poAmount + "]";
+				+ ", initiatorId=" + initiatorId + ", divisionId=" + divisionId + ", paytermId=" + paytermId
+				+ ", companyId=" + companyId + ", draw=" + draw + ", start=" + start + ", length=" + length + ", iDate="
+				+ iDate + ", revDate=" + revDate + ", columnNo=" + columnNo + ", sort=" + sort + ", buyer=" + buyer
+				+ ", invoiceStatus=" + invoiceStatus + ", type=" + type + ", vendorName=" + vendorName
+				+ ", initiatorName=" + initiatorName + ", divisionName=" + divisionName + ", poNumber=" + poNumber
+				+ ", poAmount=" + poAmount + ", valueCode=" + valueCode + ", valueName=" + valueName + "]";
 	}
+
+	
+
+	
 
 	
 

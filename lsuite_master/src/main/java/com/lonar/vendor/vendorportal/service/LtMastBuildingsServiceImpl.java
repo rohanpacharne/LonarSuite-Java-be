@@ -78,7 +78,7 @@ public class LtMastBuildingsServiceImpl implements LtMastBuildingsService,CodeMa
 		
 		LtMastBuildings building = ltP2pBuildingsDao.getByBuildingCode(ltP2pBuildings.getBuildingCode());
 		if(building!=null && !(building.getBuildingId().equals(ltP2pBuildings.getBuildingId()))) {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Building code already exists.");
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 		}
@@ -92,9 +92,18 @@ public class LtMastBuildingsServiceImpl implements LtMastBuildingsService,CodeMa
 		
 		if(ltP2pBuildings.getStartDate()==null || ltP2pBuildings.getLastUpdateLogin() == null )
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+					
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if( status.getMessage()==null) {
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		}
@@ -106,17 +115,31 @@ public class LtMastBuildingsServiceImpl implements LtMastBuildingsService,CodeMa
 		ltP2pBuildings = ltP2pBuildingsRepository.save(ltP2pBuildings);
 			if(ltP2pBuildings.getBuildingId()!=null)
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if( status.getMessage()==null) {
-					status.setCode(INSERT_SUCCESSFULLY);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			}
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if( status.getMessage()==null) {
-					status.setCode(INSERT_FAIL);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				}
 			}
@@ -180,7 +203,7 @@ public class LtMastBuildingsServiceImpl implements LtMastBuildingsService,CodeMa
 		
 			LtMastBuildings building = ltP2pBuildingsDao.getByBuildingCode(ltP2pBuildings.getBuildingCode());
 			if(building!=null && !(building.getBuildingId().equals(ltP2pBuildings.getBuildingId()))) {
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("Building code already exists.");
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
@@ -191,24 +214,47 @@ public class LtMastBuildingsServiceImpl implements LtMastBuildingsService,CodeMa
 		ltP2pBuildings = ltP2pBuildingsRepository.save(ltP2pBuildings);
 			if(ltP2pBuildings.getBuildingId()!=null)
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+						
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if( status.getMessage()==null) {
-					status.setCode(UPDATE_SUCCESSFULLY);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			}
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if( status.getMessage()==null) {
-					status.setCode(UPDATE_FAIL);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				}
 			}
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if( status.getMessage()==null) {
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		}
@@ -222,17 +268,34 @@ public class LtMastBuildingsServiceImpl implements LtMastBuildingsService,CodeMa
 		ltP2pBuildingsRepository.delete(id);
 		if (!ltP2pBuildingsRepository.exists(id))
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if( status.getMessage()==null) {
-				status.setCode(DELETE_SUCCESSFULLY);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		} 
 		else 
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if( status.getMessage()==null) {
-				status.setCode(ENTITY_CANNOT_DELETE);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		} 

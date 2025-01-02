@@ -98,17 +98,17 @@ public class LtMastFileUploadDaoImpl implements LtMastFileUploadDao,CodeMaster{
 			if(query.getOutputParameterValue(2).toString().trim().equals("ERROR")){
 				
 				System.out.println("1");
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage(query.getOutputParameterValue(3).toString().trim());
 			}
 			else if(query.getOutputParameterValue(2).toString().trim().equals("SUCCESS")){
 				System.out.println("2");
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage(query.getOutputParameterValue(3).toString().trim());
 				
 			}else if(query.getOutputParameterValue(2).toString().trim().equals("WARNING")){
 				System.out.println("3");
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage(query.getOutputParameterValue(3).toString().trim());
 				
 			}

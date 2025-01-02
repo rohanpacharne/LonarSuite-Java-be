@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lonar.vendor.vendorportal.model.LtMastComnMaster;
 import com.lonar.vendor.vendorportal.model.LtMastComnMasterValues;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 
@@ -24,6 +25,11 @@ public class LtMastComnMasterValuesDaoImpl implements LtMastComnMasterValuesDao
 	private Environment env;
 
 	private JdbcTemplate jdbcTemplate;
+	
+	private JdbcTemplate getJdbcTemplate() {
+		
+		return jdbcTemplate;
+	}
 	
 	@Autowired
 	public void setDataSource(DataSource dataSource)
@@ -174,5 +180,99 @@ public class LtMastComnMasterValuesDaoImpl implements LtMastComnMasterValuesDao
 		List<LtMastComnMasterValues> list=   jdbcTemplate.query(query, new Object[]{ masterName.trim().toUpperCase()}, 
 				 new BeanPropertyRowMapper<LtMastComnMasterValues>(LtMastComnMasterValues.class)); 
 		return list;
+	}
+	
+	@Override
+	public Long getCount(LtMastComnMasterValues input, Long masterId) 
+	{
+		String query = env.getProperty("getCountLtMastComnMasterValues");
+		
+		 String valueCode=null;
+		   if(input.getValueCode()!=null)
+		   {valueCode="%"+input.getValueCode().toUpperCase()+"%";}
+		   
+		   String valueName=null;
+		   if(input.getValueName()!=null)
+		   {valueName="%"+input.getValueName().toUpperCase()+"%";}
+		   else{
+			   valueName="%";
+		   }
+		   
+		   String valueDesc=null;
+		   if(input.getValueDescription()!=null) 
+		   {valueDesc="%"+input.getValueDescription().toUpperCase()+"%";}
+		   
+		   String valueTag=null;
+		   if(input.getValueTag()!=null) 
+		   {valueTag="%"+input.getValueTag().toUpperCase()+"%";}
+		   
+//		   String status=null;
+//		   if(input.getValueStatus()!=null) 
+//		   {status="%"+input.getValueStatus().toUpperCase()+"%";}
+		   
+			
+			if(input.getStartDate() == null || input.getStartDate().equals(""))
+			{
+				input.setStartDate(null);
+			}
+			if(input.getEndDate() == null || input.getEndDate().equals(""))
+			{
+				input.setEndDate(null);
+			}
+			
+				String count  = (String)getJdbcTemplate().queryForObject(
+						query, new Object[] {masterId,valueCode,valueName,valueDesc,
+								valueTag,input.getStartDate(),input.getEndDate()}, String.class);
+
+				return Long.parseLong(count);
+	}
+
+	@Override
+	public List<LtMastComnMasterValues> getDataTable(LtMastComnMasterValues input, Long masterId) throws ServiceException {
+		String query = env.getProperty("getLtMastComnMasterValuesDataTable");
+		
+		String valueCode=null;
+		   if(input.getValueCode()!=null)
+		   {valueCode="%"+input.getValueCode().toUpperCase()+"%";}
+		   
+		   String valueName=null;
+		   if(input.getValueName()!=null)
+		   {valueName="%"+input.getValueName().toUpperCase()+"%";}
+		   else{
+			   valueName="%";
+		   }
+		   
+		   String valueDesc=null;
+		   if(input.getValueDescription()!=null) 
+		   {valueDesc="%"+input.getValueDescription().toUpperCase()+"%";}
+		   
+		   String valueTag=null;
+		   if(input.getValueTag()!=null) 
+		   {valueTag="%"+input.getValueTag().toUpperCase()+"%";}
+		   
+			
+			if(input.getStartDate() == null || input.getStartDate().equals(""))
+			{
+				input.setStartDate(null);
+			}
+			if(input.getEndDate() == null || input.getEndDate().equals(""))
+			{
+				input.setEndDate(null);
+			}
+			
+			
+	return (List<LtMastComnMasterValues>) 
+			jdbcTemplate.query(query , new Object[]{masterId,valueCode,valueName,valueDesc,valueTag,
+					input.getStartDate(),input.getEndDate(),
+					input.getColumnNo(),input.getColumnNo(),
+					input.getColumnNo(),input.getColumnNo(),
+					input.getColumnNo(),input.getColumnNo(),
+					input.getColumnNo(),input.getColumnNo(),
+					input.getColumnNo(),input.getColumnNo(),
+					input.getColumnNo(),input.getColumnNo(),
+					input.getColumnNo(),input.getColumnNo(),
+					input.getStart()+1,input.getLength() +input.getStart()
+					},
+		 new  BeanPropertyRowMapper<LtMastComnMasterValues>(LtMastComnMasterValues.class));
 	}
 }

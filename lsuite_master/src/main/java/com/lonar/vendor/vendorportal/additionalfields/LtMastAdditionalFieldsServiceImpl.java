@@ -38,7 +38,15 @@ public class LtMastAdditionalFieldsServiceImpl implements LtMastAdditionalFields
 			additionalFields.setLastUpdateDate(new Date());
 			additionalFields.setLastUpdatedBy(additionalFields.getLastUpdateLogin());
 			additionalFields = additionalFieldsDao.saveAdditionalFieldsDef(additionalFields);
-			status = ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//			status = ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			status.setData(additionalFields.getFieldDefinitionId());
 		}else {
 			String chkDuplicate = checkDuplicateFieldDefName(additionalFields);
@@ -48,13 +56,28 @@ public class LtMastAdditionalFieldsServiceImpl implements LtMastAdditionalFields
 				additionalFields.setLastUpdatedBy(additionalFields.getLastUpdateLogin());
 				additionalFields = additionalFieldsDao.saveAdditionalFieldsDef(additionalFields);
 				if (additionalFields.getFieldDefinitionId() != null) {
-					status = ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//					status = ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 					status.setData(additionalFields.getFieldDefinitionId());
 				} else {
-					status = ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//					status = ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			} else {
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage(chkDuplicate);
 			}
 		}
@@ -76,12 +99,27 @@ public class LtMastAdditionalFieldsServiceImpl implements LtMastAdditionalFields
 		if (addFieldsColUses.getAppColumnId() != null) {
 			addFieldsColUses.setLastUpdateDate(new Date());
 			addFieldsColUsesRepository.save(addFieldsColUses);
-			status = ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//			status = ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		} else {
 			addFieldsColUses.setCreationDate(new Date());
 			addFieldsColUses.setLastUpdateDate(new Date());
 			addFieldsColUsesRepository.save(addFieldsColUses);
-			status = ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status = ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
@@ -121,9 +159,17 @@ public class LtMastAdditionalFieldsServiceImpl implements LtMastAdditionalFields
 			additionalFieldsRepository.delete(fieldDefinationId);
 			status.setMessage("Data deleted successfully");
 		} catch (Exception e) {
-			status = ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//			status = ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if (status.getMessage() == null) {
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		}
@@ -185,9 +231,17 @@ public class LtMastAdditionalFieldsServiceImpl implements LtMastAdditionalFields
 			addFieldsColUsesRepository.delete(appColumnId);
 			status.setMessage("Data deleted successfully");
 		} catch (Exception e) {
-			status = ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//			status = ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if (status.getMessage() == null) {
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		}

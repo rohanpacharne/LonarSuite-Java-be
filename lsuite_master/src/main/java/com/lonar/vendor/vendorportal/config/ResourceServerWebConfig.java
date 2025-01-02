@@ -41,7 +41,7 @@ public class ResourceServerWebConfig extends WebMvcConfigurerAdapter {
 				while(itr.hasNext())
 				{
 					LtMastCommonMessage ltMastCommonMessage=itr.next();
-					messages.put(Integer.parseInt(ltMastCommonMessage.getMessageCode()),ltMastCommonMessage.getMessageDesc());
+//					messages.put(Integer.parseInt(ltMastCommonMessage.getMessageCode()),ltMastCommonMessage.getMessageDesc());
 				}
 			
 		}

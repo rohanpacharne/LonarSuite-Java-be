@@ -172,7 +172,7 @@ public class LtShipmentHeaderController implements CodeMaster{
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
@@ -202,7 +202,7 @@ public class LtShipmentHeaderController implements CodeMaster{
 			}
 			status.setCode(2);
 		}catch(Exception e){
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}

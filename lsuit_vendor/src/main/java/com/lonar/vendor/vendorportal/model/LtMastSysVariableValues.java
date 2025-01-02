@@ -18,16 +18,17 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "LT_MAST_SYS_VARIABLE_VALUES")
 
-public class LtMastSysVariableValues extends BaseClass implements Serializable 
+public class LtMastSysVariableValues extends WhoColumns implements Serializable 
 {
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Basic(optional = false)
 	//@GeneratedValue(strategy = GenerationType.AUTO)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "variableValues_seq")
-	@SequenceGenerator(name = "variableValues_seq", sequenceName = "LT_MAST_SYS_VARIABLE_VALUES_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "variableValues_seq")
+//	@SequenceGenerator(name = "variableValues_seq", sequenceName = "LT_MAST_SYS_VARIABLE_VALUES_S", allocationSize = 1)
 	@Column(name = "VARIABLEVALUESID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long variableValuesId;
 	
 	@Column(name = "VARIABLE_ID")

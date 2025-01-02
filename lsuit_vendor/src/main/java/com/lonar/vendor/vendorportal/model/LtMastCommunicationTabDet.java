@@ -17,9 +17,10 @@ public class LtMastCommunicationTabDet {
 
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "communication_det_seq")
-	@SequenceGenerator(name = "communication_det_seq", sequenceName = "LT_MAST_COMM_TAB_DET_SEQ", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "communication_det_seq")
+//	@SequenceGenerator(name = "communication_det_seq", sequenceName = "LT_MAST_COMM_TAB_DET_SEQ", allocationSize = 1)
 	@Column(name = "MESSAGE_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long messageId;
 	
 	@Column(name = "COMMUNICATION_ID")

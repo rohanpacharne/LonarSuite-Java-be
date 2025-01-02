@@ -20,15 +20,16 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @Entity
 @Table(name = "LT_MAST_DIVISIONS")
 @JsonInclude(Include.NON_NULL)
-public class LtMastDivisions extends BaseClass implements Serializable {
+public class LtMastDivisions extends WhoColumns implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Basic(optional = false)
 	// @NotNull
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "division_seq")
-	@SequenceGenerator(name = "division_seq", sequenceName = "LT_MAST_DIVISIONS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "division_seq")
+//	@SequenceGenerator(name = "division_seq", sequenceName = "LT_MAST_DIVISIONS_S", allocationSize = 1)
 	@Column(name = "DIVISION_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long divisionId;
 
 	@Basic(optional = false)

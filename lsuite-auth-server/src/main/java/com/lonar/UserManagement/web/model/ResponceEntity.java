@@ -17,7 +17,21 @@ public class ResponceEntity {
 	private Long companyId;
 	private String isBuyer;
 	private String companyName;
+	private String globalFilePath;
+	private String paginationEntries;
 	
+	public String getPaginationEntries() {
+		return paginationEntries;
+	}
+	public void setPaginationEntries(String paginationEntries) {
+		this.paginationEntries = paginationEntries;
+	}
+	public String getGlobalFilePath() {
+		return globalFilePath;
+	}
+	public void setGlobalFilePath(String globalFilePath) {
+		this.globalFilePath = globalFilePath;
+	}
 	public Integer getCode() {
 		return code;
 	}
@@ -114,8 +128,10 @@ public class ResponceEntity {
 				+ ", employeeId=" + employeeId + ", vendorId=" + vendorId + ", employeeName=" + employeeName + ", role="
 				+ role + ", divisionId=" + divisionId + ", locationId=" + locationId + ", locationCode=" + locationCode
 				+ ", divisionName=" + divisionName + ", companyId=" + companyId + ", isBuyer=" + isBuyer
-				+ ", companyName=" + companyName + "]";
+				+ ", companyName=" + companyName + ", globalFilePath=" + globalFilePath + ", paginationEntries="
+				+ paginationEntries + "]";
 	}
+	
 	
 	
 	

@@ -39,19 +39,35 @@ public class LtInvoiceAttachmentServiceImpl implements LtInvoiceAttachmentServic
 		Status status = new Status();
 		if(ltMastInvoiceAttachmentDao.deleteLtMastInvoiceAttachmentFile(invoiceAttachmentId))
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(ATTACHEMENT_DELETED_SUCCESS);
+//			System.out.println("In if of deleteLtMastInvoiceAttachmentFile");
+//			status=ltMastCommonMessageService.getCodeAndMessage(ATTACHEMENT_DELETED_SUCCESS);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ATTACHMENT_DELETED_SUCCESS").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(ATTACHEMENT_DELETED_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(ATTACHEMENT_DELETED_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ATTACHMENT_DELETED_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if( status.getMessage()==null)
 			{
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed UnSuccessfully.");
 			}
 		}

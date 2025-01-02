@@ -26,9 +26,10 @@ public class LtMastVendorMiscQuestions
 
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendorMiscQuestion_seq")
-	@SequenceGenerator(name = "vendorMiscQuestion_seq", sequenceName = "LT_MAST_VEND_MISC_QUESTIONS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendorMiscQuestion_seq")
+//	@SequenceGenerator(name = "vendorMiscQuestion_seq", sequenceName = "LT_MAST_VEND_MISC_QUESTIONS_S", allocationSize = 1)
 	@Column(name = "QUESTION_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long questionId;
 	
 	@Column(name = "MISC_QUESTION_ID")

@@ -63,7 +63,7 @@ public class LtMastProdSubCategoriesRestController implements CodeMaster{
 		} 
 		catch (Exception e) 
 		{		
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 	
 		return customeDataTable;
@@ -76,7 +76,7 @@ public class LtMastProdSubCategoriesRestController implements CodeMaster{
 				dataTable = ltP2pProdSubCategoriesService.getDataTabledetails(subCatId);
 				return dataTable;
 			} catch (Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 		}
 		
@@ -88,7 +88,7 @@ public class LtMastProdSubCategoriesRestController implements CodeMaster{
 			try {
 				return ltP2pProdSubCategoriesService.save(ltMastProdSubCategories);	
 			}catch(Exception e) {
-					throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+					throw new BusinessException(0, null, e);
 			}
 				
 		}
@@ -99,7 +99,7 @@ public class LtMastProdSubCategoriesRestController implements CodeMaster{
 			try {
 				return ltP2pProdSubCategoriesService.update(ltMastProdSubCategories);	
 			}catch(Exception e) {
-					throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+					throw new BusinessException(0, null, e);
 			}
 				
 		}
@@ -111,7 +111,7 @@ public class LtMastProdSubCategoriesRestController implements CodeMaster{
 			try {
 				return ltP2pProdSubCategoriesService.delete(id);
 			}catch(Exception e) {
-					throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+					throw new BusinessException(0, null, e);
 			}
 		}	
 		// -------------------Retrieve Single Products----------------------------
@@ -171,7 +171,7 @@ public class LtMastProdSubCategoriesRestController implements CodeMaster{
 				ltP2pProdSubCategoriesList = ltP2pProdSubCategoriesService.getByProdSubCategory(filterOb);
 				return new ResponseEntity<List<LtMastProdSubCategories>>(ltP2pProdSubCategoriesList, HttpStatus.OK);
 			} catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 		}
 		

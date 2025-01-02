@@ -38,11 +38,12 @@ public class ResourceServerWebConfig extends WebMvcConfigurerAdapter {
 		{
 		  //Map<Integer,String> messages=new HashMap<Integer,String>();
 			List<LtMastCommonMessage> messageList = (List<LtMastCommonMessage>) ltMastCommonMessageRepository.findAll();
+//			System.out.println("message list is "+messageList);
 			 Iterator<LtMastCommonMessage> itr=messageList.iterator();
 				while(itr.hasNext())
 				{
 					LtMastCommonMessage ltMastCommonMessage=itr.next();
-					messages.put(Integer.parseInt(ltMastCommonMessage.getMessageCode()),ltMastCommonMessage.getMessageDesc());
+//					messages.put(Integer.parseInt(ltMastCommonMessage.getMessageCode()),ltMastCommonMessage.getMessageDesc());
 				}
 			
 		}
@@ -50,6 +51,7 @@ public class ResourceServerWebConfig extends WebMvcConfigurerAdapter {
 		{
 			e.printStackTrace();
 		}
+//		System.out.println("messages = "+messages);
         return messages;
     }
 }

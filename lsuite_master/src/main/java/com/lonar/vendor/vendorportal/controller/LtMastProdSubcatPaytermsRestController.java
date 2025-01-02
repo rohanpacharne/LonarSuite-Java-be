@@ -67,7 +67,7 @@ public class LtMastProdSubcatPaytermsRestController implements CodeMaster{
 		try {
 			return ltP2pProdSubcatPaytermsService.save(prodSubcatPayterms);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 	}
 
@@ -76,7 +76,7 @@ public class LtMastProdSubcatPaytermsRestController implements CodeMaster{
 		try {
 			return ltP2pProdSubcatPaytermsService.update(prodSubcatPayterms);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 	}
 	
@@ -85,7 +85,7 @@ public class LtMastProdSubcatPaytermsRestController implements CodeMaster{
 		try {
 			return ltP2pProdSubcatPaytermsService.delete(id);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 	}
 }

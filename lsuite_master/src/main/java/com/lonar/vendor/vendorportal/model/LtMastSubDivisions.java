@@ -21,14 +21,14 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @Table(name = "LT_MAST_SUB_DIVISIONS")
 @XmlRootElement
 @JsonInclude(Include.NON_NULL)
-public class LtMastSubDivisions extends BaseClass implements Serializable {
+public class LtMastSubDivisions extends WhoColumns implements Serializable {
 
 	private static final Long serialVersionUID = 1L;
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subDivision_seq")
-	@SequenceGenerator(name = "subDivision_seq", sequenceName = "LT_MAST_SUB_DIVISIONS_S", allocationSize = 1)
-
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subDivision_seq")
+//	@SequenceGenerator(name = "subDivision_seq", sequenceName = "LT_MAST_SUB_DIVISIONS_S", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "SUB_DIVISION_ID")
 	private Long subDivisionId;
 

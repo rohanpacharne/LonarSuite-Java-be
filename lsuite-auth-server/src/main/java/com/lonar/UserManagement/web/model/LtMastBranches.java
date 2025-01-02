@@ -30,16 +30,16 @@ import com.fasterxml.jackson.annotation.JsonView;
 @Table(name = "LT_MAST_BRANCHES")
 @XmlRootElement
 @JsonInclude(Include.NON_NULL)
-public class LtMastBranches extends BaseClass implements Serializable {
+public class LtMastBranches extends WhoColumns implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@Basic(optional = false)
 	//@NotNull(message="notnull")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "branch_seq")
-	@SequenceGenerator(name = "branch_seq", sequenceName = "LT_MAST_BRANCHES_S", allocationSize = 1)
-
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "branch_seq")
+//	@SequenceGenerator(name = "branch_seq", sequenceName = "LT_MAST_BRANCHES_S", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonView(DataTablesOutput.View.class)
 	@Column(name = "BRANCH_ID")
 	private Long branchId;

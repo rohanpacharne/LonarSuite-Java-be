@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.lonar.vendor.vendorportal.model.LtCompanyVenMgmtInclude;
+import com.lonar.vendor.vendorportal.model.LtCompanyVenMgmtIncludedto;
 import com.lonar.vendor.vendorportal.model.LtVendCompanyMgmtDdetails;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 
@@ -75,12 +76,15 @@ public class LtVendCompanyMgmtDdetailsDaoImpl implements LtVendCompanyMgmtDdetai
 	}
 
 	@Override
-	public List<LtCompanyVenMgmtInclude> getManagementBycompanyId(Long companyId) throws ServiceException {
+	public List<LtCompanyVenMgmtIncludedto> getManagementBycompanyId(Long companyId) throws ServiceException {
+		System.out.println("Inside getManagementBycompanyId...");
 		String query = env.getProperty("getCompanyVenMgmtBycompanyId");
-		
-		List<LtCompanyVenMgmtInclude> list = (List<LtCompanyVenMgmtInclude>) 
+		System.out.println("Company id = "+companyId);
+		System.out.println("Query is "+query);
+		List<LtCompanyVenMgmtIncludedto> list = (List<LtCompanyVenMgmtIncludedto>) 
 				jdbcTemplate.query(query , new Object[]{ companyId},
-		new  BeanPropertyRowMapper<LtCompanyVenMgmtInclude>(LtCompanyVenMgmtInclude.class));
+		new  BeanPropertyRowMapper<LtCompanyVenMgmtIncludedto>(LtCompanyVenMgmtIncludedto.class));
+		System.out.println("list is "+list);
 		return list;
 	}
 

@@ -62,7 +62,7 @@ public class LtMastEmailtokenRestController implements CodeMaster
 			customeDataTable.setData(ltMastEmailtokenList);
 
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 
@@ -81,9 +81,9 @@ public class LtMastEmailtokenRestController implements CodeMaster
 				return new ResponseEntity<LtMastEmailtoken>(ltMastEmailtoken, HttpStatus.OK);
 			}
 		} catch (NumberFormatException e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<LtMastEmailtoken>(ltMastEmailtoken, HttpStatus.OK);
 	}
@@ -100,16 +100,20 @@ public class LtMastEmailtokenRestController implements CodeMaster
 				ltMastEmailtoken.setSendDate(new Date());
 				ltMastEmailtoken = ltMastEmailtokenRepository.save(ltMastEmailtoken);
 
-				status = ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//				status = ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+				status.setCode(1);		
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
 				if (status.getMessage() == null) {
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 
 			}
 
 			else {
-				status = ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status = ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+				status.setCode(0);		
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
 				}
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 
@@ -117,10 +121,18 @@ public class LtMastEmailtokenRestController implements CodeMaster
 
 		catch (NullPointerException e) {
 			e.printStackTrace();
-			status = ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//			status = ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+					
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 
 	}

@@ -20,8 +20,9 @@ public class LtMastLogger
 	@Basic(optional = false)
 	//@NotNull(message="notnull")
 	@Column(name = "LOGGER_ID")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "logger_seq")
-	@SequenceGenerator(name = "logger_seq", sequenceName = "LT_MAST_LOGGER_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "logger_seq")
+//	@SequenceGenerator(name = "logger_seq", sequenceName = "LT_MAST_LOGGER_S", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long loggerId;
 	
 	@Column(name = "CODE")

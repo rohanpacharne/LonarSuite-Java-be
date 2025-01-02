@@ -63,7 +63,7 @@ public class LtInvoiceHeadersRestController implements CodeMaster
 				    customeDataTable.setRecordsFiltered(count);
 				    List<LtInvoiceHeaders> ltMastCommonMessageList= 
 				    		ltInvoiceHeadersService.getLtInvoiceHeadersDataTableById(input,id);
-					customeDataTable.setData(ltMastCommonMessageList);	
+					customeDataTable.setData(ltMastCommonMessageList);
 			} 
 			catch (Exception e) 
 			{	
@@ -120,6 +120,7 @@ public class LtInvoiceHeadersRestController implements CodeMaster
 	    public ResponseEntity<Status> save(@RequestBody LtInvoiceHeaders ltInvoiceHeaders) throws ServiceException
 		{
 				Status status=new Status();
+				System.out.println("ltInvoiceHeaders = "+ltInvoiceHeaders);
 				status =  ltInvoiceHeadersService.save(ltInvoiceHeaders);
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 		}
@@ -164,16 +165,23 @@ public class LtInvoiceHeadersRestController implements CodeMaster
 				String stat =checkforApprovals(invoiceheaderid);
 				if(stat.equals("null"))
 				{
-					status.setCode(FAIL);
+					status.setCode(0);
 					status.setMessage("No approvers found for employee's division.");
 					return new ResponseEntity<Status>(status, HttpStatus.OK);
 				}else {
 					
 					LtInvoiceHeaders ltInvoiceHeaders =ltInvoiceHeadersService.getInvoiceById(invoiceheaderid);
+					Long userId = ltInvoiceHeaders.getCreatedBy();
+					Long companyId = ltInvoiceHeaders.getCompanyId();
+					System.out.println("companyId in controller = "+companyId);
+					System.out.println("ltInvoiceHeaders = "+ltInvoiceHeaders);
 					if(  ltInvoiceHeaders.getInvoiceAmount()!=null &&  ltInvoiceHeaders.getInvoiceAmount()>0) {
-						status=ltInvoiceHeadersService.submitForApproval(new Date(),invoiceheaderid,INVOICE_INPROCESS,null);
+						System.out.println("in if");
+						status=ltInvoiceHeadersService.submitForApproval(new Date(),invoiceheaderid,INVOICE_INPROCESS,null,userId,companyId);
+						System.out.println("status = "+status);
 					}else {
-						status.setCode(FAIL);
+						System.out.println("in else");
+						status.setCode(0);
 						status.setMessage("Invoice with zero amount can not be sent for approval.");
 						return new ResponseEntity<Status>(status, HttpStatus.OK);
 					}
@@ -182,9 +190,11 @@ public class LtInvoiceHeadersRestController implements CodeMaster
 			}
 			catch(Exception e)
 			{
+				System.out.println("e = "+e.getMessage());
 				e.printStackTrace();
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
+			System.out.println("status 1 = "+status);
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 		}
 

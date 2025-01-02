@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.lonar.asn.dao.LtMastEmailtokenDao;
 import com.lonar.asn.dao.LtMastEmployeesDao;
 import com.lonar.asn.dao.LtMastUsersDao;
@@ -81,6 +83,8 @@ public class LtShipmentHeaderServiceImpl implements LtShipmentHeaderService , Co
 	
 	@Autowired
 	LtMastVendorsDao ltMastVendorsDao;
+	
+	private static AtomicInteger counter = new AtomicInteger(0);
 
 	
 	@Override
@@ -100,17 +104,32 @@ public class LtShipmentHeaderServiceImpl implements LtShipmentHeaderService , Co
 		ltShipmentHeaders = ltShipmentHeadersRepository.save(ltShipmentHeaders);
 	    if(ltShipmentHeaders.getShipmentHeaderId()!=null)
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+	    	try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if( status.getMessage()==null) {
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if( status.getMessage()==null) {
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		}
@@ -199,6 +218,8 @@ public class LtShipmentHeaderServiceImpl implements LtShipmentHeaderService , Co
 	@Override
 	public List<LtShipmentHeaders> getAsnHeaderDataTableDetailsByLocation(LtShipmentHeaders input,
 			Long locationId) throws BusinessException {
+		System.out.println(input.getColumnNo());
+		System.out.println(input.getSort());
 		if(input.getColumnNo()==2 && input.getSort().equals("desc"))
 		{
 			input.setColumnNo(12);
@@ -233,13 +254,35 @@ public class LtShipmentHeaderServiceImpl implements LtShipmentHeaderService , Co
 			ProcedureCall procedureCall = asnHeaderDao.asnDeletePkgCall(id);
 			if(procedureCall.getStatusCode().equals("SUCCESS")) {
 				ltShipmentAttachmentDao.deleteAttachmentByShipmentHeaderId(id);
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			}else {
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
-			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -247,20 +290,29 @@ public class LtShipmentHeaderServiceImpl implements LtShipmentHeaderService , Co
 
 	@Override
 	public ResponseEntity<Status> submitAsn(SubmitAsn submitAsn) throws BusinessException {
+		System.out.println("in submit asn method");
 		Status status= new Status();
 		LtShipmentHeaders ltShipmentHeaders = asnHeaderDao.getByAsnHeaderId(submitAsn.getShipmentHeaderId());
+		System.out.println("ltShipmentHeaders "+ltShipmentHeaders);
+		System.out.println("recepted date "+ltShipmentHeaders.getExpectedReceiptDate()==null);
 		if(ltShipmentHeaders.getExpectedReceiptDate()==null) {
-			status.setCode(UPDATE_FAIL);
+			System.out.println("in recept date date condition");
+			status.setCode(0);
 			status.setMessage("Please select Expected Receipt Date");
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 		}
 		
 		if(submitAsn.getStatus().equals("NEW")) {
+			System.out.println("in status condition");
 			List<LtMastAttachmentType> attachmentList = asnHeaderDao.getAsnAttachmentList(ltShipmentHeaders);
+			System.out.println("attachment List ="+attachmentList);
 			if(!attachmentList.isEmpty()) {
+				System.out.println("in not empty condition");
 				List<LtShipmentAttachment> ltShipmentAttachmentList = ltShipmentAttachmentDao.getAllFilesByShipmentHeaderId(ltShipmentHeaders.getShipmentHeaderId());
+				System.out.println("ltShipmentAttachmentList"+ltShipmentAttachmentList);
 				if(ltShipmentAttachmentList.isEmpty() ) {
-					status.setCode(UPDATE_FAIL);
+					System.out.println("in ltShipmentAttachmentList empty");
+					status.setCode(0);
 					status.setMessage("Please attach mandatory attachments");
 					return new ResponseEntity<Status>(status, HttpStatus.OK);
 				}
@@ -269,30 +321,66 @@ public class LtShipmentHeaderServiceImpl implements LtShipmentHeaderService , Co
 		
 		
 		if(submitAsn.getStatus().equals("NEW")) {
+			System.out.println("in status NEW");
 			ProcedureCall procedureCall = asnHeaderDao.asnValidationPkgCall(ltShipmentHeaders.getShipmentHeaderId());
 			status.setData(procedureCall.getShipmentHeaderId());
 			System.out.println("procedureCall "+procedureCall);
 			if(procedureCall.getStatusCode().equals("SUCCESS")) {
 				if(asnHeaderDao.submitAsn(submitAsn)) {
-				
+					System.out.println("in status submitasn");
 					if(submitAsn.getStatus().equals("NEW")) {
+						System.out.println("in status new");
 						sendAcknowledgeMail(ltShipmentHeaders,submitAsn.getStatus());
-						status=ltMastCommonMessageService.getCodeAndMessage(SHIPMENT_SUBMIT);
+//						status=ltMastCommonMessageService.getCodeAndMessage(SHIPMENT_SUBMIT);
+						try {
+							status.setCode(1);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("SHIPMENT_SUBMIT").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+						System.out.println("return status = "+status);
 					}else if(submitAsn.getStatus().equals("ASN_INPROGRESS")){
-						status=ltMastCommonMessageService.getCodeAndMessage(SHIPMENT_SUBMIT_FOR_APPROVAL);
+						System.out.println("in status asn progress");
+//						status=ltMastCommonMessageService.getCodeAndMessage(SHIPMENT_SUBMIT_FOR_APPROVAL);
+						try {
+							status.setCode(1);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("SHIPMENT_SUBMIT_FOR_APPROVAL").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}else if(submitAsn.getStatus().equals("ASN_ACCEPTED")) {
+						System.out.println("in status asn accepted");
 					sendAcknowledgeMail(ltShipmentHeaders,submitAsn.getStatus());
-					status=ltMastCommonMessageService.getCodeAndMessage(SHIPMENT_ACCEPT);
+//					status=ltMastCommonMessageService.getCodeAndMessage(SHIPMENT_ACCEPT);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("SHIPMENT_ACCEPT").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					}
 				}else {
-					status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//					status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					System.out.println("status = "+status);
+					System.out.println("status message "+status.getMessage());
 					if( status.getMessage()==null) {
-						status.setCode(EXCEPTION);
+						status.setCode(0);
 						status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 					}
 				}
 			}else {
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage(procedureCall.getStatusMessage());
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
@@ -300,15 +388,37 @@ public class LtShipmentHeaderServiceImpl implements LtShipmentHeaderService , Co
 			if(asnHeaderDao.submitAsn(submitAsn)) {
 				
 				if(submitAsn.getStatus().equals("ASN_INPROGRESS")){
-					status=ltMastCommonMessageService.getCodeAndMessage(SHIPMENT_SUBMIT_FOR_APPROVAL);
+//					status=ltMastCommonMessageService.getCodeAndMessage(SHIPMENT_SUBMIT_FOR_APPROVAL);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("SHIPMENT_SUBMIT_FOR_APPROVAL").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 				}else if(submitAsn.getStatus().equals("ASN_ACCEPTED")) {
 					sendAcknowledgeMail(ltShipmentHeaders,submitAsn.getStatus());
-					status=ltMastCommonMessageService.getCodeAndMessage(SHIPMENT_ACCEPT);
+//					status=ltMastCommonMessageService.getCodeAndMessage(SHIPMENT_ACCEPT);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("SHIPMENT_ACCEPT").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}else {
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if( status.getMessage()==null) {
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				}
 			}
@@ -321,8 +431,10 @@ public class LtShipmentHeaderServiceImpl implements LtShipmentHeaderService , Co
 	
 	
 	private void sendAcknowledgeMail(LtShipmentHeaders ltShipmentHeaders, String status) {
+		System.out.println("status = "+status);
 		LtMastEmailtoken ltMastEmailtoken=new LtMastEmailtoken();
 		if(status.equals("ASN_ACCEPTED")) {
+			System.out.println("in status equals ASN_ACCEPTED");
 			LtMastVendors ltMastVendors = ltMastVendorsDao.getVendorById(ltShipmentHeaders.getVendorId());
 			//LtMastEmailtoken ltMastEmailtoken=new LtMastEmailtoken();
 			String vendorName = ltMastVendors.getVendorName()+" ( "+ltMastVendors.getVendorCode()+" )";
@@ -343,6 +455,7 @@ public class LtShipmentHeaderServiceImpl implements LtShipmentHeaderService , Co
 			ltMastEmailtoken.setExpiredWithin(1296000L);
 			ltMastEmailtoken.setSendDate(new Date());
 		}else {
+			System.out.println("in else condition");
 			StringBuffer emails = new StringBuffer();
 			List<LtShipmentLines> lines =  asnHeaderDao.getAsnLinesByAsnHeaderId(ltShipmentHeaders.getShipmentHeaderId());
 			for(LtShipmentLines ltShipmentLines : lines) {
@@ -431,6 +544,8 @@ public class LtShipmentHeaderServiceImpl implements LtShipmentHeaderService , Co
 	public ResponseEntity<Status> saveShipmentSource(List<ShipmenntSources> shipmenntSources) throws BusinessException {
 		Status status = new Status();
 		Long sourcesId = asnHeaderDao.getShipmentSourceIds();
+//		int sourcesId = counter.incrementAndGet();
+		System.out.println("sourcesId = "+sourcesId);
 		List<ShipmenntSources> shipmenntSourcesUpdated = new ArrayList<>();
 		
 		for (Iterator iterator = shipmenntSources.iterator(); iterator.hasNext();) {
@@ -445,9 +560,20 @@ public class LtShipmentHeaderServiceImpl implements LtShipmentHeaderService , Co
 			shipmenntSourcesUpdated.add(shipmenntSources2);
 		}
 		
-		if(shipmenntSourcesUpdated.size() > 0) {
-			saveShipmentSourceData(shipmenntSourcesUpdated);
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+		if(shipmenntSourcesUpdated.size() > 0) { 
+		saveShipmentSourceData(shipmenntSourcesUpdated);
+//		List<ShipmenntSources> savedSources = saveShipmentSourceData(shipmenntSourcesUpdated);
+			        // Extract shipment_source_id from the saved entities
+//			        Long sourcesId = savedSources.get(0).getShipmentSourceId();
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+		try {
+			status.setCode(1);
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 			//status.setMessage("Data inserted successfuly ");
 		}
 		
@@ -457,10 +583,10 @@ public class LtShipmentHeaderServiceImpl implements LtShipmentHeaderService , Co
 		ProcedureCall procedureCall = asnHeaderDao.saveAsnHeaderAndLineData(sourcesId);
 		status.setData(procedureCall.getShipmentHeaderId());
 		if(procedureCall.getStatusCode().equals("SUCCESS")) {
-		status.setCode(SUCCESS);
+		status.setCode(1);
 		status.setMessage(procedureCall.getStatusMessage());
 		}else {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage(procedureCall.getStatusMessage());
 		}
 		
@@ -471,21 +597,40 @@ public class LtShipmentHeaderServiceImpl implements LtShipmentHeaderService , Co
 	private void saveShipmentSourceData(List<ShipmenntSources> shipmenntSourcesUpdated) {
 		shipmenntSourcesRepository.save(shipmenntSourcesUpdated);
 	}
+//	@Transactional
+//	private List<ShipmenntSources> saveShipmentSourceData(List<ShipmenntSources> shipmenntSourcesUpdated) {
+//	    return shipmenntSourcesRepository.saveAll(shipmenntSourcesUpdated);
+//	}
 
 	@Override
 	public ResponseEntity<Status> deleteAsnLineAttachment(Long id) throws BusinessException 
 	{
 		Status status = new Status();
 		if(asnHeaderDao.deleteAsnLineAttachment(id)) {
-		status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//		status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		if( status.getMessage()==null) {
-		status.setCode(SUCCESS);
+		status.setCode(1);
 		status.setMessage("Error in finding message! The action is completed successfully.");
 		}
 		}else {
-		status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//		status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		if( status.getMessage()==null) {
-		status.setCode(EXCEPTION);
+		status.setCode(0);
 		status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 		}
 		}
@@ -501,16 +646,16 @@ public class LtShipmentHeaderServiceImpl implements LtShipmentHeaderService , Co
 		if(procedureCall.getStatusCode().equals("SUCCESS")) {
 			
 			if(!asnHeaderDao.loadInvoiceApprovers(procedureCall.getShipmentHeaderId())){
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage(procedureCall.getStatusMessage());
 				status.setData(procedureCall.getShipmentHeaderId());
 			}else {
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage(procedureCall.getStatusMessage());
 				status.setData(procedureCall.getShipmentHeaderId());
 			}
 		}else {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage(procedureCall.getStatusMessage());
 		}
 		
@@ -532,15 +677,30 @@ public class LtShipmentHeaderServiceImpl implements LtShipmentHeaderService , Co
 		if(approvalHistory.getStatus().equals(ASN_APPROVED))
 		{
 			if(asnHeaderDao.updateStatusApproval(approvalHistory) ){
-				status=ltMastCommonMessageService.getCodeAndMessage(SHIPMENT_APPROVED);
+//				status=ltMastCommonMessageService.getCodeAndMessage(SHIPMENT_APPROVED);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("SHIPMENT_APPROVED").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if(status==null) {
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully");
 				}
 			}else {
-				status=ltMastCommonMessageService.getCodeAndMessage(SHIPMENT_APPROVAL_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(SHIPMENT_APPROVAL_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("SHIPMENT_APPROVAL_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(status==null) {
-					status.setCode(FAIL);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully");
 				}
 			}
@@ -583,7 +743,14 @@ public class LtShipmentHeaderServiceImpl implements LtShipmentHeaderService , Co
 					//ltMastEmailtoken.setSendCc(ltMastEmployees.get(0).getOfficialEmail());
 					ltMastEmailtokenDao.makeEntryInEmailToken(ltMastEmailtoken);
 					
-					status=ltMastCommonMessageService.getCodeAndMessage(SHIPMENT_FEEDBACK_AWAITED);
+//					status=ltMastCommonMessageService.getCodeAndMessage(SHIPMENT_FEEDBACK_AWAITED);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("SHIPMENT_FEEDBACK_AWAITED").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 			}
 				String currentLevel=null;
 				if(approvalHistory.getShipmentApprovalId()!=null	)
@@ -630,7 +797,14 @@ public class LtShipmentHeaderServiceImpl implements LtShipmentHeaderService , Co
 							}*/
 							ltMastEmailtokenDao.makeEntryInEmailToken(ltMastEmailtoken);
 		
-							status=ltMastCommonMessageService.getCodeAndMessage(SHIPMENT_REJECTED);
+//							status=ltMastCommonMessageService.getCodeAndMessage(SHIPMENT_REJECTED);
+							try {
+								status.setCode(0);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("SHIPMENT_REJECTED").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 					}
 					asnHeaderDao.upDateStatus(approvalHistory.getShipmentHeaderId(), NO_ACTION, null);	
 			
@@ -664,11 +838,26 @@ public class LtShipmentHeaderServiceImpl implements LtShipmentHeaderService , Co
 		ltShipmentApprovalHistory.setLastUpdateDate(new Date());
 		if (asnHeaderDao.saveRemark(ltShipmentApprovalHistory)) 
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(SHIPMENT_REMARK_SAVED);
+//			status=ltMastCommonMessageService.getCodeAndMessage(SHIPMENT_REMARK_SAVED);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("SHIPMENT_REMARK_SAVED").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		 return new ResponseEntity<Status>(status, HttpStatus.OK);

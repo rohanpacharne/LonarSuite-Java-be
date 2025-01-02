@@ -160,5 +160,18 @@ public class LtMastPoHeadersRestController {
 		Status status = ltPoHeadersService.createPOPDFReport(poHeaderId,companyId);
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/createPOPDFReportWithTemplate/{poHeaderId}/{companyId}/{logTime}", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<Status> createPOPDFReportWithTemplate(@PathVariable("poHeaderId") Long poHeaderId,@PathVariable("companyId") long companyId,@PathVariable("logTime") String logTime){
+		Status status = ltPoHeadersService.createPOPDFReportWithTemplate(poHeaderId,companyId);
+		return new ResponseEntity<Status>(status, HttpStatus.OK);
+	}
+	
+	//This API is for testing purpose...
+	@RequestMapping(value = "/createPOPDFReportWithTemplate_Testing/{poHeaderId}/{companyId}/{logTime}", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<Status> createPOPDFReportWithTemplate_Testing(@PathVariable("poHeaderId") Long poHeaderId,@PathVariable("companyId") long companyId,@PathVariable("logTime") String logTime){
+		Status status = ltPoHeadersService.createPOPDFReportWithTemplate_Testing(poHeaderId,companyId);
+		return new ResponseEntity<Status>(status, HttpStatus.OK);
+	}
  
 }

@@ -21,9 +21,12 @@ import com.lonar.UserManagement.common.BusinessException;
 import com.lonar.UserManagement.web.model.CodeMaster;
 import com.lonar.UserManagement.web.model.LtMastAuditRecords;
 import com.lonar.UserManagement.web.model.LtMastRoles;
+import com.lonar.UserManagement.web.model.LtMastSysVariableValues;
+import com.lonar.UserManagement.web.model.LtMastSysVariables;
 import com.lonar.UserManagement.web.model.LtMastUserRoles;
 import com.lonar.UserManagement.web.model.LtMastUsers;
 import com.lonar.UserManagement.web.model.Menu;
+import com.lonar.UserManagement.web.model.SysVariableWithValues;
 import com.lonar.UserManagement.web.repository.LtMastUsersRepository;
 
 @Repository
@@ -164,9 +167,19 @@ public class LtMastUsersDaoImpl implements LtMastUsersDao, CodeMaster
 		
 	}
 	@Override
-	  public List<LtMastUsers> findByActiveLikeUserName(String userName){
+	  public List<LtMastUsers> findByActiveLikeUserName(String userName,long companyId){
 			String sqlQuery = env.getProperty("findByLikeActiveUserName");
-			List<LtMastUsers> list=   jdbcTemplate.query(sqlQuery, new Object[]{ "%"+userName.toUpperCase()+"%" }, 
+			List<LtMastUsers> list=   jdbcTemplate.query(sqlQuery, new Object[]{ "%"+userName.toUpperCase()+"%",companyId }, 
+					 new BeanPropertyRowMapper<LtMastUsers>(LtMastUsers.class)); 
+			System.out.println(list.toString());
+			return list;
+			
+		}
+	
+	@Override
+	  public List<LtMastUsers> findByActiveLikeUserName1(String userName){
+			String sqlQuery = env.getProperty("findByLikeActiveUserName1");
+			List<LtMastUsers> list=   jdbcTemplate.query(sqlQuery, new Object[]{ "%"+userName.toUpperCase()+"%"}, 
 					 new BeanPropertyRowMapper<LtMastUsers>(LtMastUsers.class)); 
 			System.out.println(list.toString());
 			return list;
@@ -255,12 +268,26 @@ public class LtMastUsersDaoImpl implements LtMastUsersDao, CodeMaster
 	public List<LtMastUsers> findVendorByUserName(String userName) {
 		
 		//String query = env.getProperty("getAllLtMastCompany");
-		String query = " SELECT mu.*, em.DIVISION_ID, d.DIVISION_NAME||' ( '||d.DIVISION_CODE||' )' as DIVISION_NAME, " + 
-				"				 vm.VENDOR_NAME||' ( '||vm.VENDOR_CODE||' )'  as employee_name,vm.COMPANY_ID ,cm.COMPANY_NAME  " + 
-				"				 FROM LT_MAST_USERS mu,LT_MAST_VENDORS vm, LT_MAST_EMPLOYEES em , LT_MAST_DIVISIONS d,LT_VEND_COMPANY_MASTER cm " + 
-				"				 WHERE upper(USER_NAME) = ?  " + 
-				"				 AND mu.VENDOR_ID = vm.VENDOR_ID(+) AND mu.COMPANY_ID = cm.COMPANY_ID(+) " + 
-				"                 AND vm.INITIATOR_ID = em.EMPLOYEE_ID(+)  AND em.DIVISION_ID = d.DIVISION_ID(+)  ";
+//		String query = " SELECT mu.*, nvl(em.DIVISION_ID,vm.DIVISION_ID) AS division_Id, d.DIVISION_NAME||' ( '||d.DIVISION_CODE||' )' as DIVISION_NAME, " + 
+//				"				 vm.VENDOR_NAME||' ( '||vm.VENDOR_CODE||' )'  as employee_name,vm.COMPANY_ID ,cm.COMPANY_NAME  " + 
+//				"				 FROM LT_MAST_USERS mu,LT_MAST_VENDORS vm, LT_MAST_EMPLOYEES em , LT_MAST_DIVISIONS d,LT_VEND_COMPANY_MASTER cm " + 
+//				"				 WHERE upper(USER_NAME) = ?  " + 
+//				"				 AND mu.VENDOR_ID = vm.VENDOR_ID(+) AND mu.COMPANY_ID = cm.COMPANY_ID(+) " + 
+//				"                 AND vm.INITIATOR_ID = em.EMPLOYEE_ID(+)  AND vm.DIVISION_ID = d.DIVISION_ID(+)  ";
+		
+		String query = "SELECT mu.*, " + 
+	               "COALESCE(em.DIVISION_ID, vm.DIVISION_ID) AS division_Id, " + 
+	               "CONCAT(d.DIVISION_NAME, ' (', d.DIVISION_CODE, ')') AS DIVISION_NAME, " + 
+	               "CONCAT(vm.VENDOR_NAME, ' (', vm.VENDOR_CODE, ')') AS employee_name, " + 
+	               "vm.COMPANY_ID, cm.COMPANY_NAME " + 
+	               "FROM LT_MAST_USERS mu " + 
+	               "LEFT JOIN LT_MAST_VENDORS vm ON mu.VENDOR_ID = vm.VENDOR_ID " + 
+	               "LEFT JOIN LT_MAST_EMPLOYEES em ON vm.INITIATOR_ID = em.EMPLOYEE_ID " + 
+	               "LEFT JOIN LT_MAST_DIVISIONS d ON vm.DIVISION_ID = d.DIVISION_ID " + 
+	               "LEFT JOIN LT_VEND_COMPANY_MASTER cm ON mu.COMPANY_ID = cm.COMPANY_ID " + 
+	               "WHERE UPPER(mu.USER_NAME) = ?";
+
+		
 		List<LtMastUsers> list = (List<LtMastUsers>) 
 				jdbcTemplate.query(query , new Object[]{userName.toUpperCase() },
 			 new  BeanPropertyRowMapper<LtMastUsers>(LtMastUsers.class));
@@ -268,10 +295,10 @@ public class LtMastUsersDaoImpl implements LtMastUsersDao, CodeMaster
 	}
 
 	@Override
-	public List<LtMastUsers> findActiveLikeEmail(String email) throws Exception {
+	public List<LtMastUsers> findActiveLikeEmail(String email,long companyId) throws Exception {
 		String sqlQuery = env.getProperty("findActiveLikeEmail");
 		 
-			List<LtMastUsers> list=  jdbcTemplate.query(sqlQuery, new Object[]{ email.toUpperCase()}, 
+			List<LtMastUsers> list=  jdbcTemplate.query(sqlQuery, new Object[]{ email.toUpperCase(),companyId}, 
 			 new BeanPropertyRowMapper<LtMastUsers>(LtMastUsers.class)); 
 			return list;
 	}
@@ -436,7 +463,16 @@ public class LtMastUsersDaoImpl implements LtMastUsersDao, CodeMaster
 			return list;
 		
 	}
-	  
+
+	@Override
+	public String paginationEntries(String sysVar, Long userId, Long companyId) {
+		String sql = "SELECT get_sys_variable_value(?, ?, ?)";  // MySQL function call
+
+        // Call the function and get the result as an Integer
+        return jdbcTemplate.queryForObject(sql, new Object[]{sysVar, userId, companyId}, String.class);
+	}
+	
+	
 	  
 	
  

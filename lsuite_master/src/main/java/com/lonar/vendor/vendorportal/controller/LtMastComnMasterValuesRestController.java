@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lonar.vendor.vendorportal.model.BusinessException;
 import com.lonar.vendor.vendorportal.model.CodeMaster;
+import com.lonar.vendor.vendorportal.model.CustomeDataTable;
 import com.lonar.vendor.vendorportal.model.LtMastComnMaster;
 import com.lonar.vendor.vendorportal.model.LtMastComnMasterValues;
 import com.lonar.vendor.vendorportal.model.ServiceException;
@@ -44,6 +45,24 @@ public class LtMastComnMasterValuesRestController implements CodeMaster {
 	LtMastComnMasterService ltMastComnMasterService;
 	@Autowired
 	LtMastCommonMessageService ltMastCommonMessageService;
+	
+	@RequestMapping(value = "/dataTable/{masterId}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public CustomeDataTable getDataTable(@Valid LtMastComnMasterValues input,@PathVariable("masterId") Long masterId,@PathVariable("logTime") String logTime) 
+	{
+		CustomeDataTable customeDataTable = new CustomeDataTable();
+		try  {
+				Long count=ltMastComnMasterValuesService.getCount(input,masterId);
+			    customeDataTable.setRecordsTotal(count);
+			    customeDataTable.setRecordsFiltered(count);
+				List<LtMastComnMasterValues> ltMastComnMasterValuesList= ltMastComnMasterValuesService.getDataTable(input,masterId);
+				customeDataTable.setData(ltMastComnMasterValuesList);
+		} 
+		catch (Exception e) 
+		{
+			throw new BusinessException(0, null, e);
+		}
+		return customeDataTable;
+	}
 
 	
 
@@ -116,7 +135,7 @@ public class LtMastComnMasterValuesRestController implements CodeMaster {
 		try {
 			return ltMastComnMasterValuesService.save(ltMastComnMasterValues);
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 	}
 	
@@ -128,7 +147,7 @@ public class LtMastComnMasterValuesRestController implements CodeMaster {
 			try {
 				return ltMastComnMasterValuesService.update(ltMastComnMasterValues);
 				}catch(Exception e) {
-					throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+					throw new BusinessException(0, null, e);
 				}
 		}
 //---------------------------------------------------------------------------------------------------------
@@ -154,22 +173,26 @@ public class LtMastComnMasterValuesRestController implements CodeMaster {
 			} 
 			else 
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(NO_RESULT);
+//				status=ltMastCommonMessageService.getCodeAndMessage(NO_RESULT);
+				status.setCode(0);		
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("NO_RESULT").getMessageName());
 				return new ResponseEntity<Status>(status,HttpStatus.OK);
 
 			}
 		
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+			status.setCode(1);		
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
 			return new ResponseEntity<Status>(status,HttpStatus.OK);
 
 		} 
 		catch (org.springframework.dao.DataIntegrityViolationException e) 
 		{
-			throw new BusinessException(ENTITY_CANNOT_DELETE, null, e);
+			throw new BusinessException(0, null, e);
 		} 
 		catch (Exception e) 
 		{
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 
 		

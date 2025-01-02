@@ -2,6 +2,7 @@ package com.lonar.vendor.vendorportal.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -57,7 +58,7 @@ public class LtMastVendorClientsDaoImpl implements LtMastVendorClientsDao {
 						ltMastVendorClients.setProductSupplied(rs.getString("PRODUCT_SUPPLIED"));
 						ltMastVendorClients.setValueSupplies(rs.getString("VALUE_SUPPLIES"));
 
-						ltMastVendorClients.setCreatedBy(rs.getInt("CREATED_BY"));
+						ltMastVendorClients.setCreatedBy(rs.getLong("CREATED_BY"));
 						ltMastVendorClients.setCreationDate(rs.getDate("CREATION_DATE"));
 						ltMastVendorClients.setLastUpdateLogin(rs.getLong("LAST_UPDATE_LOGIN"));
 						ltMastVendorClients.setLastUpdatedBy(rs.getLong("LAST_UPDATED_BY"));
@@ -93,7 +94,7 @@ public class LtMastVendorClientsDaoImpl implements LtMastVendorClientsDao {
 						ltMastVendorClients.setProductSupplied(rs.getString("PRODUCT_SUPPLIED"));
 						ltMastVendorClients.setValueSupplies(rs.getString("VALUE_SUPPLIES"));
 
-						ltMastVendorClients.setCreatedBy(rs.getInt("CREATED_BY"));
+						ltMastVendorClients.setCreatedBy(rs.getLong("CREATED_BY"));
 						ltMastVendorClients.setCreationDate(rs.getDate("CREATION_DATE"));
 						ltMastVendorClients.setLastUpdateLogin(rs.getLong("LAST_UPDATE_LOGIN"));
 						ltMastVendorClients.setLastUpdatedBy(rs.getLong("LAST_UPDATED_BY"));
@@ -130,7 +131,7 @@ public class LtMastVendorClientsDaoImpl implements LtMastVendorClientsDao {
 						ltMastVendorClients.setProductSupplied(rs.getString("PRODUCT_SUPPLIED"));
 						ltMastVendorClients.setValueSupplies(rs.getString("VALUE_SUPPLIES"));
 
-						ltMastVendorClients.setCreatedBy(rs.getInt("CREATED_BY"));
+						ltMastVendorClients.setCreatedBy(rs.getLong("CREATED_BY"));
 						ltMastVendorClients.setCreationDate(rs.getDate("CREATION_DATE"));
 						ltMastVendorClients.setLastUpdateLogin(rs.getLong("LAST_UPDATE_LOGIN"));
 						ltMastVendorClients.setLastUpdatedBy(rs.getLong("LAST_UPDATED_BY"));
@@ -156,7 +157,7 @@ public class LtMastVendorClientsDaoImpl implements LtMastVendorClientsDao {
 
 				ltMastVendorClients.getCreatedBy(), ltMastVendorClients.getCreationDate(),
 				ltMastVendorClients.getLastUpdateLogin(), ltMastVendorClients.getLastUpdatedBy(),
-				ltMastVendorClients.getLastUpdateDate());
+				ltMastVendorClients.getLastUpdateDate(),new Date());
 
 		if (res == 1)
 			return true;
@@ -317,7 +318,7 @@ public class LtMastVendorClientsDaoImpl implements LtMastVendorClientsDao {
 				valueOfSuppliedStr, input.getColumnNo(), input.getColumnNo(), input.getColumnNo(), input.getColumnNo(),
 				input.getColumnNo(), input.getColumnNo(), input.getColumnNo(), input.getColumnNo(), input.getColumnNo(),
 				input.getColumnNo(), input.getColumnNo(), input.getColumnNo(), input.getColumnNo(), input.getColumnNo(),
-				input.getColumnNo(), input.getColumnNo(), input.getStart() + input.getLength(), input.getStart() + 1 },
+				input.getColumnNo(), input.getColumnNo(),input.getStart() + 1, input.getStart() + input.getLength() },
 				new BeanPropertyRowMapper<LtMastVendorClients>(LtMastVendorClients.class));
 		return list;
 	}

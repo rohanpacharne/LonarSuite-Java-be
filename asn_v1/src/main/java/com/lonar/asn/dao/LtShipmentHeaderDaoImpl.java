@@ -145,9 +145,9 @@ public class LtShipmentHeaderDaoImpl implements LtShipmentHeaderDao, CodeMaster{
 		if(input.getApprovalStatus()!=null && !input.getApprovalStatus().equals(""))
 		{status="%"+input.getApprovalStatus().trim().trim().toUpperCase()+"%";}
 			
-		if(input.getColumnNo()==0) {
+//		if(input.getColumnNo()==0) {
 			input.setColumnNo(7);
-		}
+//		}
 		
 			List<LtShipmentHeaders> list = (List<LtShipmentHeaders>) 
 					jdbcTemplate.query(query , new Object[]{input.getVendorId(), shipmentNumber, input.getShippedDateStr(), 
@@ -158,8 +158,9 @@ public class LtShipmentHeaderDaoImpl implements LtShipmentHeaderDao, CodeMaster{
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
-							input.getStart()+input.getLength(),input.getStart()},
+							input.getStart()+input.getLength(),input.getStart()+1},
 				 new  BeanPropertyRowMapper<LtShipmentHeaders>(LtShipmentHeaders.class));
+			System.out.println("asn list = "+list);
 				return list;
 	}
 
@@ -258,27 +259,41 @@ public class LtShipmentHeaderDaoImpl implements LtShipmentHeaderDao, CodeMaster{
 		String status=null;
 		if(input.getApprovalStatus()!=null && !input.getApprovalStatus().equals(""))
 		{status="%"+input.getApprovalStatus().trim().trim().toUpperCase()+"%";}
+		
+		System.out.println("input.getColumnNo() = "+input.getColumnNo());
 			
 		if(input.getColumnNo()==0) {
 			input.setColumnNo(15);
 		}
 	
+//			List<LtShipmentHeaders> list = (List<LtShipmentHeaders>) 
+//					jdbcTemplate.query(query , new Object[]{locationId, shipmentNumber, input.getShippedDateStr(), 
+//							vendorName, vendorAddress, status,
+//							input.getStart()+input.getLength(),input.getStart(),
+//							input.getColumnNo(),input.getColumnNo(),
+//							input.getColumnNo(),input.getColumnNo(),
+//							input.getColumnNo(),input.getColumnNo(),
+//							input.getColumnNo(),input.getColumnNo()
+//							},
+//				 new  BeanPropertyRowMapper<LtShipmentHeaders>(LtShipmentHeaders.class));
+			
 			List<LtShipmentHeaders> list = (List<LtShipmentHeaders>) 
-					jdbcTemplate.query(query , new Object[]{locationId, shipmentNumber, input.getShippedDateStr(), 
+					jdbcTemplate.query(query , new Object[]{locationId,shipmentNumber, input.getShippedDateStr(), 
 							vendorName, vendorAddress, status,
-							input.getStart()+input.getLength(),input.getStart(),
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
-							input.getColumnNo(),input.getColumnNo()
+							input.getColumnNo(),input.getColumnNo(),
+							input.getStart()+input.getLength(),input.getStart()+1
 							},
 				 new  BeanPropertyRowMapper<LtShipmentHeaders>(LtShipmentHeaders.class));
+			
 				return list;
 	}
 
 	@Override
 	public boolean submitAsn(SubmitAsn submitAsn) throws BusinessException {
-		
+		System.out.println("in submit asn = "+submitAsn.getStatus());
 		int res;
 		if(submitAsn.getAcceptedBy() !=null) {
 			String query2 = " UPDATE LT_SHIPMENT_HEADERS SET APPROVAL_STATUS = ? , LAST_UPDATED_BY = ? ,"
@@ -439,7 +454,7 @@ public class LtShipmentHeaderDaoImpl implements LtShipmentHeaderDao, CodeMaster{
 	public ProcedureCall saveAsnHeaderAndLineData(Long sourceId) throws BusinessException {
 		ProcedureCall procedureCall= new ProcedureCall();
 			StoredProcedureQuery query = em
-				    .createStoredProcedureQuery("lt_vpal_asn_pkg.create_asn")
+				    .createStoredProcedureQuery("create_asn")
 				    .registerStoredProcedureParameter(1, String.class, 
 					         ParameterMode.OUT)
 				    .registerStoredProcedureParameter(2, String.class, 
@@ -485,9 +500,11 @@ public class LtShipmentHeaderDaoImpl implements LtShipmentHeaderDao, CodeMaster{
 
 	@Override
 	public ProcedureCall createInvoiceFromAsn(Long shipmentHeaderId, Long userId) throws BusinessException {
+		System.out.println("userId = "+userId);
+		System.out.println("shipmentHeaderId = "+shipmentHeaderId);
 		ProcedureCall procedureCall= new ProcedureCall();
 			StoredProcedureQuery query = em
-				    .createStoredProcedureQuery("lt_vpal_asn_pkg.create_invoice_from_asn")
+				    .createStoredProcedureQuery("create_invoice_from_asn")
 				    .registerStoredProcedureParameter(1, Long.class, 
 					         ParameterMode.IN)
 				    .registerStoredProcedureParameter(2, Long.class, 
@@ -812,9 +829,9 @@ public class LtShipmentHeaderDaoImpl implements LtShipmentHeaderDao, CodeMaster{
 		String count  = (String)getJdbcTemplate().queryForObject(query, new Object[] {venId}, String.class);
 		if(count!=null) {
 			status.setData(count);
-			status.setCode(SUCCESS);
+			status.setCode(1);
 		}else {
-			status.setCode(FAIL);
+			status.setCode(0);
 		}
 		return status;
 	}
@@ -833,7 +850,7 @@ public class LtShipmentHeaderDaoImpl implements LtShipmentHeaderDao, CodeMaster{
 		System.out.println("in procedure");
 		ProcedureCall procedureCall= new ProcedureCall();
 		StoredProcedureQuery query = em
-			    .createStoredProcedureQuery("LT_VPAL_ASN_VALIDATION_PKG.validate_asn")
+			    .createStoredProcedureQuery("validate_asn")
 			    .registerStoredProcedureParameter(1, String.class, 
 				         ParameterMode.OUT)
 			    .registerStoredProcedureParameter(2, String.class, 
@@ -862,7 +879,7 @@ public class LtShipmentHeaderDaoImpl implements LtShipmentHeaderDao, CodeMaster{
 	public ProcedureCall asnDeletePkgCall(Long id) throws BusinessException {
 		ProcedureCall procedureCall= new ProcedureCall();
 		StoredProcedureQuery query = em
-			    .createStoredProcedureQuery("LT_VPAL_ASN_PKG.delete_asn")
+			    .createStoredProcedureQuery("delete_asn")
 			    .registerStoredProcedureParameter(1, String.class, 
 				         ParameterMode.OUT)
 			    .registerStoredProcedureParameter(2, String.class, 
@@ -900,18 +917,34 @@ public class LtShipmentHeaderDaoImpl implements LtShipmentHeaderDao, CodeMaster{
 		List<InvoiceApproval> invoiceApprovalsList = getInvoiceApprovalList(invoiceHeaderId,null);
 		LtInvoiceHeaders ltInvoiceHeaders = ltInvoiceHeadersRepository.findOne(invoiceHeaderId);
 		if(invoiceApprovalsList.isEmpty()) {
-		 String query = " SELECT a.module_app_employees_id,a.employees_id,b.approval_level,b.module, "
-					+ " a.MODULE_APPROVAL_ID ,a.START_DATE,a.END_DATE  "
-					+ " FROM lt_mast_module_app_emp a,lt_mast_module_approvals b "
-					+ " WHERE a.MODULE_APPROVAL_ID=b.MODULE_APPROVAL_ID "
-					+ " AND DIVISION_ID= (SELECT DIVISION_ID FROM LT_INVOICE_HEADERS WHERE INVOICE_HEADER_ID = ? ) "
-					+ " AND MODULE= 'INVOICE'  "
-					+ " AND STATUS= 'DRAFT' "
-					+ " AND ( a.START_DATE <= SYSDATE AND (a.END_DATE is null or a.END_DATE > SYSDATE) ) ";
+//		 String query = " SELECT a.module_app_employees_id,a.employees_id,b.approval_level,b.module, "
+//					+ " a.MODULE_APPROVAL_ID ,a.START_DATE,a.END_DATE  "
+//					+ " FROM lt_mast_module_app_emp a,lt_mast_module_approvals b "
+//					+ " WHERE a.MODULE_APPROVAL_ID=b.MODULE_APPROVAL_ID "
+//					+ " AND DIVISION_ID= (SELECT DIVISION_ID FROM LT_INVOICE_HEADERS WHERE INVOICE_HEADER_ID = ? ) "
+//					+ " AND MODULE= 'INVOICE'  "
+//					+ " AND STATUS= 'ACTIVE' "
+//					+ " AND ( a.START_DATE <= SYSDATE() AND (a.END_DATE is null or a.END_DATE > SYSDATE()) ) ";
+		 
+		 String query = "SELECT mae.module_app_employees_id,mae.employees_id,ma.approval_level,ma.module," +
+		 	" ma.MODULE_APPROVAL_ID ,ma.START_DATE,ma.END_DATE  " +
+	        " FROM lt_mast_module_approvals ma " +
+	        " JOIN lt_mast_module_app_emp mae ON ma.module_approval_id = mae.module_approval_id " +
+	        " JOIN lt_mast_employees emp ON mae.employees_id = emp.employee_id " +
+	        " WHERE ma.module = 'INVOICE' " +
+	        " AND ma.status = 'ACTIVE' " +
+	        " AND NOW() BETWEEN ma.start_date AND IFNULL(ma.end_date, NOW()) " +
+	        " AND ma.required_level = 'Y' " +
+	        " AND ma.isdelete = 'N' " +
+	        " AND ma.division_id = (SELECT DIVISION_ID FROM LT_INVOICE_HEADERS WHERE INVOICE_HEADER_ID = ? ) "+
+	        " AND NOW() BETWEEN mae.start_date AND IFNULL(mae.end_date, NOW()) " +
+	        " AND NOW() BETWEEN emp.start_date AND IFNULL(emp.end_date, NOW()) " +
+	        " AND emp.status = 'ACTIVE' " +
+	        " ORDER BY ma.approval_level ";
 			
 			List<Approval> approvalList=   jdbcTemplate.query(query, new Object[]{ invoiceHeaderId}, 
 				 new BeanPropertyRowMapper<Approval>(Approval.class)); 
-		 
+		 System.out.println("approvalList = "+approvalList);
 			
 			//List<LtMastEmployees>  empList=ltMastEmployeesDao.getByEmpId(ltInvoiceHeaders.getBuyerId());
 			
@@ -939,10 +972,10 @@ public class LtShipmentHeaderDaoImpl implements LtShipmentHeaderDao, CodeMaster{
 				if(approval.getEmployeesId()!=null && approval.getModuleApprovalId()!=null && approval.getApprovalLevel()!=null)
 				{
 					res=jdbcTemplate.update(" INSERT INTO lt_invoice_approval "
-							+ " ( INVOICE_APPROVAL_ID,MODULE_APPROVAL_ID,APPROVAL_ID,APPROVAL_LEVEL,CURRENT_APPROVAL_LEVEL,DELEGATION_ID, "
+							+ " ( MODULE_APPROVAL_ID,APPROVAL_ID,APPROVAL_LEVEL,CURRENT_APPROVAL_LEVEL,DELEGATION_ID, "
 							+ " INVOICE_HEADER_ID, STATUS,START_DATE,END_DATE, CREATED_BY,CREATION_DATE,LAST_UPDATE_LOGIN,"
 							+ " LAST_UPDATED_BY,LAST_UPDATE_DATE ,MODULE_APP_EMPLOYEES_ID)  "
-			 		+ " VALUES(LT_VENDOR_APPROVAL_S.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ",
+			 		+ " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ",
 			 		approval.getModuleApprovalId(),approval.getEmployeesId(),approval.getApprovalLevel(),
 			 		null,approval.getDelegationId(),ltInvoiceHeaders.getInvoiceHeaderId(),NO_ACTION,new Date(),
 			 		null,ltInvoiceHeaders.getCreatedBy(),new Date(),
@@ -978,7 +1011,7 @@ public class LtShipmentHeaderDaoImpl implements LtShipmentHeaderDao, CodeMaster{
 		String query = " SELECT a.*,'N' as APPROVED_BY_ANYONE " + 
 				" FROM LT_INVOICE_APPROVAL a left outer join lt_mast_module_approvals b " + 
 				" on a.MODULE_APPROVAL_ID=b.MODULE_APPROVAL_ID  " + 
-				" WHERE a.INVOICE_HEADER_ID = ? AND a.APPROVAL_LEVEL = nvl(?,a.APPROVAL_LEVEL) ORDER BY a.APPROVAL_LEVEL ASC ";
+				" WHERE a.INVOICE_HEADER_ID = ? AND a.APPROVAL_LEVEL = IFNULL(?,a.APPROVAL_LEVEL) ORDER BY a.APPROVAL_LEVEL ASC ";
 		List<InvoiceApproval> list=   jdbcTemplate.query(query, new Object[]{ invoiceHeaderId,currentApprovalLevel}, 
 				 new BeanPropertyRowMapper<InvoiceApproval>(InvoiceApproval.class));
 			return list;

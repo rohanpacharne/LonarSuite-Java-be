@@ -1,0 +1,47 @@
+{"properties": [
+  {
+    "name": "email.host",
+    "type": "java.lang.String",
+    "description": "A description for 'email.host'"
+  },
+  {
+    "name": "email.port",
+    "type": "java.lang.String",
+    "description": "A description for 'email.port'"
+  },
+  {
+    "name": "email.username",
+    "type": "java.lang.String",
+    "description": "A description for 'email.username'"
+  },
+  {
+    "name": "email.password",
+    "type": "java.lang.String",
+    "description": "A description for 'email.password'"
+  },
+  {
+    "name": "email.smtp.starttls.enable",
+    "type": "java.lang.String",
+    "description": "A description for 'email.smtp.starttls.enable'"
+  },
+  {
+    "name": "email.smtp.auth",
+    "type": "java.lang.String",
+    "description": "A description for 'email.smtp.auth'"
+  },
+  {
+    "name": "email.transport.protocol",
+    "type": "java.lang.String",
+    "description": "A description for 'email.transport.protocol'"
+  },
+  {
+    "name": "email.smtp.sendpartial",
+    "type": "java.lang.String",
+    "description": "A description for 'email.smtp.sendpartial'"
+  },
+  {
+    "name": "email.debug",
+    "type": "java.lang.String",
+    "description": "A description for 'email.debug'"
+  }
+]}

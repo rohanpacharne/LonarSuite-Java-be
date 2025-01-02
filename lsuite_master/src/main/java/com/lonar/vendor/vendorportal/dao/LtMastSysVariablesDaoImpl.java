@@ -49,16 +49,34 @@ public class LtMastSysVariablesDaoImpl implements LtMastSysVariablesDao
 	{
 		//String query = env.getProperty("getBySysVariableName");
 		
-		String query ="select lmsv.Variable_Code , lmsv.Variable_Name ,lmsvv.User_id , "
-				+ " case when lmsvv.User_Value is null then  lmsv.system_Value "
-				+ " ELSE lmsvv.User_Value END Value "
-				+ " from lt_mast_sys_variables lmsv ,  lt_mast_sys_variable_values lmsvv  "
-				+ " WHERE lmsv.variable_id=lmsvv.variable_Id "
-				+ " AND( SYSDATE >=lmsv.start_date ) "
-				+ " AND ((SYSDATE < lmsv.end_date) or (lmsv.end_date is null) ) "
-				+ " AND (SYSDATE >=lmsvv.start_date )  "
-				+ " AND ((SYSDATE < lmsvv.end_date ) or (lmsvv.end_date  is null) )	 "
-				+ " AND lmsv.Variable_Name=? AND lmsv.COMPANY_ID = ? ";
+//		String query ="select lmsv.Variable_Code , lmsv.Variable_Name ,lmsvv.User_id , "
+//				+ " case when lmsvv.User_Value is null then  lmsv.system_Value "
+//				+ " ELSE lmsvv.User_Value END Value "
+//				+ " from lt_mast_sys_variables lmsv ,  lt_mast_sys_variable_values lmsvv  "
+//				+ " WHERE lmsv.variable_id=lmsvv.variable_Id "
+//				+ " AND( SYSDATE >=lmsv.start_date ) "
+//				+ " AND ((SYSDATE < lmsv.end_date) or (lmsv.end_date is null) ) "
+//				+ " AND (SYSDATE >=lmsvv.start_date )  "
+//				+ " AND ((SYSDATE < lmsvv.end_date ) or (lmsvv.end_date  is null) )	 "
+//				+ " AND lmsv.Variable_Name=? AND lmsv.COMPANY_ID = ? ";
+		
+		String query = "SELECT lmsv.Variable_Code, " +
+	             "       lmsv.Variable_Name, " +
+	             "       lmsvv.User_id, " +
+	             "       CASE " +
+	             "           WHEN lmsvv.User_Value IS NULL THEN lmsv.system_Value " +
+	             "           ELSE lmsvv.User_Value " +
+	             "       END AS Value " +
+	             "FROM lt_mast_sys_variables lmsv " +
+	             "LEFT JOIN lt_mast_sys_variable_values lmsvv " +
+	             "    ON lmsv.variable_id = lmsvv.variable_Id " +
+	             "    AND NOW() >= lmsvv.start_date " +
+	             "    AND (NOW() < lmsvv.end_date OR lmsvv.end_date IS NULL) " +
+	             "WHERE NOW() >= lmsv.start_date " +
+	             "    AND (NOW() < lmsv.end_date OR lmsv.end_date IS NULL) " +
+	             "    AND lmsv.Variable_code = ? " +
+	             "    AND lmsv.COMPANY_ID = ?";
+
 		return   jdbcTemplate.query(query,new Object[]{name , companyId}, 
 				 new RowMapper<SysVariableWithValues>()
 		{
@@ -152,6 +170,8 @@ public class LtMastSysVariablesDaoImpl implements LtMastSysVariablesDao
 	public List<LtMastSysVariables> getDatatableRecords(LtMastSysVariables input,Long companyId) throws Exception 
 	{
 			String query = env.getProperty("getLtMastSysVariablesDataTableRecords");
+			
+			System.out.println("Query = "+query);
 		
 			String variableCode = null;
 			if(input.getVariableCode()!=null && !input.getVariableCode().equals(""))
@@ -203,6 +223,75 @@ public class LtMastSysVariablesDaoImpl implements LtMastSysVariablesDao
 				}
 		   	});
 		
+	}
+	
+	
+	@Transactional
+	@Override
+	public List<SysVariableWithValues> getBySysVariableName1(String name,int companyId) throws Exception
+	{
+		//String query = env.getProperty("getBySysVariableName");
+		
+//		String query ="select lmsv.Variable_Code , lmsv.Variable_Name ,lmsvv.User_id , "
+//				+ " case when lmsvv.User_Value is null then  lmsv.system_Value "
+//				+ " ELSE lmsvv.User_Value END Value "
+//				+ " from lt_mast_sys_variables lmsv ,  lt_mast_sys_variable_values lmsvv  "
+//				+ " WHERE lmsv.variable_id=lmsvv.variable_Id "
+//				+ " AND( SYSDATE() >=lmsv.start_date ) "
+//				+ " AND ((SYSDATE() < lmsv.end_date) or (lmsv.end_date is null) ) "
+//				+ " AND (SYSDATE() >=lmsvv.start_date )  "
+//				+ " AND ((SYSDATE() < lmsvv.end_date ) or (lmsvv.end_date  is null) )	 "
+//				+ " AND lmsv.Variable_Code=? ";
+		
+		String query = "SELECT " +
+	               "    lmsv.Variable_Code, " +
+	               "    lmsv.Variable_Name, " +
+	               "    lmsvv.User_id," +
+	               "    CASE " +
+	               "        WHEN lmsvv.User_Value IS NULL THEN lmsv.system_Value " +
+	               "        ELSE lmsvv.User_Value " +
+	               "    END AS Value " +
+	               "FROM " +
+	               "    lt_mast_sys_variables lmsv " +
+	               "    LEFT JOIN lt_mast_sys_variable_values lmsvv ON lmsv.variable_id = lmsvv.variable_Id " +
+	               "    AND (SYSDATE() >= lmsvv.start_date) " +
+	               "    AND ((SYSDATE() < lmsvv.end_date) " +
+	               "    OR (lmsvv.end_date IS NULL)) " +
+	               "WHERE \n" +
+	               "    (SYSDATE() >= lmsv.start_date) " +
+	               "    AND ((SYSDATE() < lmsv.end_date) " +
+	               "    OR (lmsv.end_date IS NULL)) " +
+	               "    AND lmsv.Variable_Code = ? " +
+	               "    AND lmsv.company_id = ? ";
+
+		
+		return   jdbcTemplate.query(query,new Object[]{name,companyId},
+				 new RowMapper<SysVariableWithValues>()
+		{
+					@Override
+					public SysVariableWithValues mapRow(ResultSet rs, int row) throws SQLException
+					{
+						SysVariableWithValues sysVariableWithValues = new SysVariableWithValues();
+						
+						LtMastSysVariables ltMastSysVariables=new LtMastSysVariables();
+						LtMastSysVariableValues ltMastSysVariableValues=new LtMastSysVariableValues();
+					
+						
+						ltMastSysVariables.setVariableCode(rs.getString("VARIABLE_CODE"));
+						
+						ltMastSysVariables.setVariableName(rs.getString("VARIABLE_NAME"));
+						ltMastSysVariableValues.setUserId(rs.getString("User_id"));
+						ltMastSysVariableValues.setUserValue(rs.getString("Value"));
+		
+						List<LtMastSysVariableValues> list=new ArrayList<LtMastSysVariableValues>();
+						list.add(ltMastSysVariableValues);
+						
+						sysVariableWithValues.setLtMastSysVariables(ltMastSysVariables);
+						sysVariableWithValues.setLtMastSysVariableValues(list);
+						
+						return sysVariableWithValues;
+					}
+		});
 	}
 	
 

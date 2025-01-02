@@ -10,11 +10,15 @@ import org.springframework.stereotype.Service;
 
 import com.lonar.vendor.vendorportal.dao.LtInvoiceApprovalDao;
 import com.lonar.vendor.vendorportal.dao.LtInvoiceApprovalHistoryDao;
+import com.lonar.vendor.vendorportal.dao.LtRentalAgreementApprovalDao;
+import com.lonar.vendor.vendorportal.dao.LtRentalAgreementApprovalHistoryDao;
 import com.lonar.vendor.vendorportal.dao.LtVendorApprovalDao;
 import com.lonar.vendor.vendorportal.dao.LtVendorApprovalHistoryDao;
 import com.lonar.vendor.vendorportal.model.CodeMaster;
 import com.lonar.vendor.vendorportal.model.InvoiceApproval;
 import com.lonar.vendor.vendorportal.model.LtInvoiceApprovalHistory;
+import com.lonar.vendor.vendorportal.model.LtRentalAgrApprovalHistory;
+import com.lonar.vendor.vendorportal.model.LtRentalAgreementApproval;
 import com.lonar.vendor.vendorportal.model.LtVendorApproval;
 import com.lonar.vendor.vendorportal.model.LtVendorApprovalHistory;
 import com.lonar.vendor.vendorportal.model.ServiceException;
@@ -36,7 +40,13 @@ public class LtVendorApprovalHistoryServiceImpl implements LtVendorApprovalHisto
 	LtInvoiceApprovalDao invoiceApprovalDao;
 	
 	@Autowired
+	LtRentalAgreementApprovalDao ltRentalAgreementApprovalDao;
+	
+	@Autowired
 	LtInvoiceApprovalHistoryDao ltInvoiceApprovalHistoryDao;
+	
+	@Autowired
+	LtRentalAgreementApprovalHistoryDao ltRentalAgreementApprovalHistoryDao;
 	
 	@Override
 	public void saveApprovalHistory(LtVendorApprovalHistory ltExpenseApprovalHistory) throws ServiceException 
@@ -53,17 +63,33 @@ public class LtVendorApprovalHistoryServiceImpl implements LtVendorApprovalHisto
 		
 		if (ltVendorApprovalHistoryDao.save(ltExpenseApprovalHistory))
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if (status.getMessage() == null) 
 			{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		}
 		else {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 				if (status.getMessage() == null) {
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 		}
@@ -81,18 +107,34 @@ public class LtVendorApprovalHistoryServiceImpl implements LtVendorApprovalHisto
 		ltVendorApprovalHistory.setLastUpdateDate(new Date());
 		if (ltVendorApprovalHistoryDao.save(ltVendorApprovalHistory)) 
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(REMARK_SAVED);
+//			status=ltMastCommonMessageService.getCodeAndMessage(REMARK_SAVED);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("REMARK_SAVED").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if (status.getMessage() == null) 
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if (status.getMessage() == null) {
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 		}
@@ -114,17 +156,31 @@ public class LtVendorApprovalHistoryServiceImpl implements LtVendorApprovalHisto
 		
 		if (ltInvoiceApprovalHistoryDao.save(ltInvoiceApprovalHistory))
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if (status.getMessage() == null) 
 			{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		}
 		else {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 				if (status.getMessage() == null) {
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 		}
@@ -135,6 +191,54 @@ public class LtVendorApprovalHistoryServiceImpl implements LtVendorApprovalHisto
 	public List<LtInvoiceApprovalHistory> getInvoiceApprovalHistoryByInvoiceId(Long invoiceHeaderId)
 			throws ServiceException {
 		return ltInvoiceApprovalHistoryDao.getInvoiceApprovalHistoryByInvoiceHeaderId(invoiceHeaderId);
+	}
+
+	@Override
+	public void saveAgreementApprovalHistory(LtRentalAgrApprovalHistory ltRentalAgrApprovalHistory)
+			throws ServiceException {
+		
+		Status status=new Status();
+		
+		ltRentalAgrApprovalHistory.setLastUpdateDate(new Date());
+		List<LtRentalAgreementApproval> agreementApprovalList =ltRentalAgreementApprovalDao.chkAgreementEmpApproval(ltRentalAgrApprovalHistory.getEmployeeId()
+				,ltRentalAgrApprovalHistory.getAgreementHeaderId());
+		
+		if(agreementApprovalList.size()>0)
+		{
+			ltRentalAgrApprovalHistory.setStatus(APPROVED);
+		}
+		
+		if (ltRentalAgreementApprovalHistoryDao.save(ltRentalAgrApprovalHistory))
+		{
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (status.getMessage() == null) 
+			{
+					status.setCode(1);
+					status.setMessage("Error in finding message! The action is completed successfully.");
+			}
+		}
+		else {
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+				if (status.getMessage() == null) {
+				status.setCode(0);
+				status.setMessage("Error in finding message! The action was unsuccessful");
+			}
+		}
+		
 	}
 
 }

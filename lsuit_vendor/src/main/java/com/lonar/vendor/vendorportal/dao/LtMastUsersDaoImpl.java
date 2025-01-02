@@ -199,11 +199,17 @@ public class LtMastUsersDaoImpl implements LtMastUsersDao, CodeMaster
 	public List<LtMastUsers> findVendorByUserName(String userName) {
 		
 		//String query = env.getProperty("getAllLtMastCompany");
-		String query = " SELECT mu.*, em.DIVISION_ID," + 
-				" VENDOR_NAME as employee_name  " + 
-				" FROM LT_MAST_USERS mu,LT_MAST_VENDORS em  " + 
-				" WHERE upper(USER_NAME) = ? " + 
-				" AND mu.VENDOR_ID = em.VENDOR_ID(+)   ";
+//		String query = " SELECT mu.*, em.DIVISION_ID," + 
+//				" VENDOR_NAME as employee_name  " + 
+//				" FROM LT_MAST_USERS mu,LT_MAST_VENDORS em  " + 
+//				" WHERE upper(USER_NAME) = ? " + 
+//				" AND mu.VENDOR_ID = em.VENDOR_ID(+)   ";
+		String query = "SELECT mu.*, em.DIVISION_ID, " + 
+                "em.VENDOR_NAME AS employee_name " + 
+                "FROM LT_MAST_USERS mu " + 
+                "LEFT JOIN LT_MAST_VENDORS em ON mu.VENDOR_ID = em.VENDOR_ID " + 
+                "WHERE UPPER(mu.USER_NAME) = ?";
+
 		List<LtMastUsers> list = (List<LtMastUsers>) 
 				jdbcTemplate.query(query , new Object[]{userName.toUpperCase() },
 			 new  BeanPropertyRowMapper<LtMastUsers>(LtMastUsers.class));

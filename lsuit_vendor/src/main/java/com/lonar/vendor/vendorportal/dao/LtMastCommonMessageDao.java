@@ -25,5 +25,8 @@ public interface LtMastCommonMessageDao
 	public List<LtMastCommonMessage> getCommonMessageDataTable(LtMastCommonMessage input) throws ServiceException;
 
 	public Long getCount(LtMastCommonMessage input) throws ServiceException;
+	
+	public LtMastCommonMessage getMessageNameByCode(String messageCode) throws Exception;
+
 
 }

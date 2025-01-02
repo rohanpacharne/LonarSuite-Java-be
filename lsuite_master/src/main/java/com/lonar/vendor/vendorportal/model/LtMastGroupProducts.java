@@ -18,14 +18,15 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "LT_MAST_GROUP_PRODUCTS")
-public class LtMastGroupProducts extends BaseClass implements Serializable {
+public class LtMastGroupProducts extends WhoColumns implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "groupProduct_seq")
-	@SequenceGenerator(name = "groupProduct_seq", sequenceName = "LT_MAST_GROUP_PRODUCTS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "groupProduct_seq")
+//	@SequenceGenerator(name = "groupProduct_seq", sequenceName = "LT_MAST_GROUP_PRODUCTS_S", allocationSize = 1)
 	@Column(name = "GROUP_PRODUCTS_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long groupProductsId;
 	@Basic(optional = false)
 	@NotNull

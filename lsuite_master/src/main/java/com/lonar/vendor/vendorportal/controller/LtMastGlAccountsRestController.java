@@ -49,7 +49,7 @@ public class LtMastGlAccountsRestController implements CodeMaster {
 			} 
 			catch (Exception e) 
 			{
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 			return customeDataTable;
 			
@@ -97,7 +97,7 @@ public class LtMastGlAccountsRestController implements CodeMaster {
 		try {
 			status=ltMastGlAccountsService.save(ltMastGlAccounts);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
@@ -109,7 +109,7 @@ public class LtMastGlAccountsRestController implements CodeMaster {
 		try {
 			status=ltMastGlAccountsService.update(ltMastGlAccounts);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}		
@@ -120,7 +120,7 @@ public class LtMastGlAccountsRestController implements CodeMaster {
 		try {
 			return ltMastGlAccountsService.delete(id);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 	}
 

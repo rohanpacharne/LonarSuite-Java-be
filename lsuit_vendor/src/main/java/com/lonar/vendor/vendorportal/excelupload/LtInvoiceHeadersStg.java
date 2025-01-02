@@ -19,8 +19,8 @@ import javax.persistence.Transient;
 public class LtInvoiceHeadersStg {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_stg_s")
-	@SequenceGenerator(name = "invoice_stg_s", sequenceName = "LT_INVOICE_HEADERS_STG_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_stg_s")
+//	@SequenceGenerator(name = "invoice_stg_s", sequenceName = "LT_INVOICE_HEADERS_STG_S", allocationSize = 1)
 	@Column(name = "INVOICE_IMPORT_ID")
 	private Long invoiceImportId;
 	

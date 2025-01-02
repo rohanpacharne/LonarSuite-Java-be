@@ -34,17 +34,31 @@ public class LtShipmentApprovalHistoryServiceImpl implements LtShipmentApprovalH
 		
 		if (ltShipmentApprovalHistoryDao.save(ltShipmentApprovalHistory))
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if (status.getMessage() == null) 
 			{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		}
 		else {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 				if (status.getMessage() == null) {
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 		}

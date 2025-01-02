@@ -2,6 +2,7 @@ package com.lonar.vendor.vendorportal.dao;
 
 import java.util.List;
 
+import com.lonar.vendor.vendorportal.model.LtExpEmailTokenlLine;
 import com.lonar.vendor.vendorportal.model.LtMastEmailtoken;
 
 public interface LtMastEmailtokenDao {
@@ -19,6 +20,9 @@ public interface LtMastEmailtokenDao {
 	public void updateEmailToken(String sending) throws Exception;
 
 	public void updateStatus(Long tokenId, String status, Long count) throws Exception;
+	
+	public void batchInsertLine(List<LtExpEmailTokenlLine> emailTokenLines)  throws Exception;
+
 
 
 	public List<LtMastEmailtoken> getDataTable(LtMastEmailtoken input)throws Exception;

@@ -30,6 +30,7 @@ import com.lonar.vendor.vendorportal.model.LtMastProductCategories;
 import com.lonar.vendor.vendorportal.model.LtMastProducts;
 import com.lonar.vendor.vendorportal.model.LtMastReportRequest;
 import com.lonar.vendor.vendorportal.model.LtMastStates;
+import com.lonar.vendor.vendorportal.model.LtMastSysRequests;
 import com.lonar.vendor.vendorportal.model.LtMastTaxes;
 import com.lonar.vendor.vendorportal.model.LtVendCompany;
 import com.lonar.vendor.vendorportal.model.ServiceException;
@@ -89,9 +90,12 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 	
 	@Override
 	public Status createExcelReport(ReportParameters reportParameters) throws ServiceException, IOException {
+		System.out.println("in create excel report method");
+		System.out.println("master name = "+reportParameters.getMasterName());
 		Status status = new Status();
 		String saveDirectory=null;;
 		List<LtMastMasterReportMap> colNameList = ltMastExcelReportsDao.getHeader(reportParameters.getMasterName());
+		System.out.println("colNameList = "+colNameList);
 		for(LtMastMasterReportMap ltMastMasterReportMap:colNameList) {
 			colName.add(ltMastMasterReportMap.getReportColName());
 		}
@@ -121,7 +125,7 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 			Thread t1 =new Thread(costCenterThread);  
 			t1.start(); 
 			status.setMessage("Report exctracting! Request ID is "+requestId);
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			return status;
 			
 		}else if(reportParameters.getMasterName().trim().equals("BRANCH")) {
@@ -134,7 +138,7 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 			t1.start(); 
 			
 			status.setMessage("Report exctracting! Request ID is "+requestId);
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			return status;
 		}else if(reportParameters.getMasterName().trim().equals("EMPLOYEE")) {
 			List<LtMastEmployees> excelData=new ArrayList<LtMastEmployees>();
@@ -146,7 +150,7 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 			t1.start(); 
 			
 			status.setMessage("Report exctracting! Request ID is "+requestId);
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			return status;
 		}else if(reportParameters.getMasterName().trim().equals("STATE")) {
 			List<LtMastStates> excelData=new ArrayList<LtMastStates>();
@@ -158,7 +162,7 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 			t1.start(); 
 			
 			status.setMessage("Report exctracting! Request ID is "+requestId);
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			return status;
 		}else if(reportParameters.getMasterName().trim().equals("PRODUCT_CATEGORY")) {
 			List<LtMastProductCategories> excelData=new ArrayList<LtMastProductCategories>();
@@ -170,7 +174,7 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 			t1.start(); 
 			
 			status.setMessage("Report exctracting! Request ID is "+requestId);
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			return status;
 		}else if(reportParameters.getMasterName().trim().equals("SUB_PRODUCT_CATEGORY")) {
 			List<LtMastProdSubCategories> excelData=new ArrayList<LtMastProdSubCategories>();
@@ -182,7 +186,7 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 			t1.start(); 
 			
 			status.setMessage("Report exctracting! Request ID is "+requestId);
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			return status;
 		}else if(reportParameters.getMasterName().trim().equals("TAX")) {
 			List<LtMastTaxes> excelData=new ArrayList<LtMastTaxes>();
@@ -194,7 +198,7 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 			t1.start(); 
 			
 			status.setMessage("Report exctracting! Request ID is "+requestId);
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			return status;
 		}else if(reportParameters.getMasterName().trim().equals("GL_ACCOUNT")) {
 			List<LtMastGlAccounts> excelData=new ArrayList<LtMastGlAccounts>();
@@ -206,7 +210,7 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 			t1.start(); 
 			
 			status.setMessage("Report exctracting! Request ID is "+requestId);
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			return status;
 		}else if(reportParameters.getMasterName().trim().equals("DIVISION")) {
 			List<DivisionSubDivision> excelData=new ArrayList<DivisionSubDivision>();
@@ -218,7 +222,7 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 			t1.start(); 
 			
 			status.setMessage("Report exctracting! Request ID is "+requestId);
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			return status;
 		}else if(reportParameters.getMasterName().trim().equals("PRODUCT")) {
 			List<LtMastProducts> excelData=new ArrayList<LtMastProducts>();
@@ -230,7 +234,7 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 			t1.start(); 
 			
 			status.setMessage("Report exctracting! Request ID is "+requestId);
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			return status;
 		}else if(reportParameters.getMasterName().trim().equals("COMPANY")) {
 			List<LtVendCompany> excelData=new ArrayList<LtVendCompany>();
@@ -242,10 +246,15 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 			t1.start(); 
 			
 			status.setMessage("Report exctracting! Request ID is "+requestId);
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			return status;
 		}
-		return null;
+		else {
+			status.setMessage("Something went wrong ");
+			status.setCode(0);
+			return status;
+		}
+		//return null;
 	}
 
 
@@ -296,6 +305,40 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 
 
 
+//	@Override
+//	public List<LtMastReportRequest> getReportRequestDataTableRecords(LtMastReportRequest input,Long companyId)
+//			throws ServiceException {
+//		if(input.getColumnNo()==1 && input.getSort().equals("desc"))
+//		{
+//			input.setColumnNo(11);
+//		}
+//		if(input.getColumnNo()==2 && input.getSort().equals("desc"))
+//		{
+//			input.setColumnNo(12);
+//		}
+//		if(input.getColumnNo()==3 && input.getSort().equals("desc"))
+//		{
+//			input.setColumnNo(13);
+//		}
+//		if(input.getColumnNo()==4 && input.getSort().equals("asc"))
+//		{
+//			input.setColumnNo(14);
+//		}
+//		if(input.getColumnNo()==5 && input.getSort().equals("desc"))
+//		{
+//			input.setColumnNo(15);
+//		}
+//		if(input.getColumnNo()==6 && input.getSort().equals("desc"))
+//		{
+//			input.setColumnNo(16);
+//		}
+//		if(input.getColumnNo()==7 && input.getSort().equals("desc"))
+//		{
+//			input.setColumnNo(17);
+//		}
+//		return ltMastExcelReportsDao.getReportRequestDataTableRecords(input,companyId);
+//	}
+	
 	@Override
 	public List<LtMastReportRequest> getReportRequestDataTableRecords(LtMastReportRequest input,Long companyId)
 			throws ServiceException {
@@ -328,6 +371,52 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 			input.setColumnNo(17);
 		}
 		return ltMastExcelReportsDao.getReportRequestDataTableRecords(input,companyId);
+	}
+
+
+
+
+	@Override
+	public List<LtMastSysRequests> getReportRequestDataTableRecords(LtMastSysRequests input, Long companyId)
+			throws ServiceException {
+		if(input.getColumnNo()==1 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(11);
+		}
+		if(input.getColumnNo()==2 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(12);
+		}
+		if(input.getColumnNo()==3 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(13);
+		}
+		if(input.getColumnNo()==4 && input.getSort().equals("asc"))
+		{
+			input.setColumnNo(14);
+		}
+		if(input.getColumnNo()==5 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(15);
+		}
+		if(input.getColumnNo()==6 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(16);
+		}
+		if(input.getColumnNo()==7 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(17);
+		}
+		return ltMastExcelReportsDao.getReportRequestDataTableRecords(input,companyId);
+	}
+
+
+
+
+	@Override
+	public Long getCount(LtMastSysRequests input, Long companyId) throws ServiceException {
+		// TODO Auto-generated method stub
+		return ltMastExcelReportsDao.getCount(input,companyId);
 	}
 
 	

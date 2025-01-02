@@ -78,12 +78,29 @@ public class LtMastVendorManagementsDaoImpl implements LtMastVendorManagementsDa
 		ltMastVendorManagements.setLastUpdateDate(new Date());
 		ltMastVendorManagements.setCreatedBy(ltMastVendorManagements.getLastUpdateLogin());
 		ltMastVendorManagements.setLastUpdatedBy(ltMastVendorManagements.getLastUpdateLogin());
-		int res=jdbcTemplate.update(
-     		query,
-     		ltMastVendorManagements.getVendorId(),ltMastVendorManagements.getName(),ltMastVendorManagements.getVenManDesgId(),
-     		ltMastVendorManagements.getMobileNo(),ltMastVendorManagements.getPhoneNo(),ltMastVendorManagements.getEmailAdd(),
-     		ltMastVendorManagements.getCreatedBy(),ltMastVendorManagements.getCreationDate(),ltMastVendorManagements.getLastUpdateLogin(),
-     		ltMastVendorManagements.getLastUpdatedBy(),ltMastVendorManagements.getLastUpdateDate());
+//		int res=jdbcTemplate.update(
+//     		query,
+//     		ltMastVendorManagements.getVendorId(),ltMastVendorManagements.getName(),ltMastVendorManagements.getVenManDesgId(),
+//     		ltMastVendorManagements.getMobileNo(),ltMastVendorManagements.getPhoneNo(),ltMastVendorManagements.getEmailAdd(),
+//     		ltMastVendorManagements.getCreatedBy(),ltMastVendorManagements.getCreationDate(),ltMastVendorManagements.getLastUpdateLogin(),
+//     		ltMastVendorManagements.getLastUpdatedBy(),ltMastVendorManagements.getLastUpdateDate(),new Date(),ltMastVendorManagements.getVenManDesgCode());
+		
+		int res = jdbcTemplate.update(
+			    query,
+			    ltMastVendorManagements.getVendorId(),
+			    ltMastVendorManagements.getName(),
+			    ltMastVendorManagements.getMobileNo(),
+			    ltMastVendorManagements.getPhoneNo(),
+			    ltMastVendorManagements.getEmailAdd(),
+			    ltMastVendorManagements.getCreatedBy(),
+			    ltMastVendorManagements.getCreationDate(),
+			    ltMastVendorManagements.getLastUpdateLogin(),
+			    ltMastVendorManagements.getLastUpdatedBy(),
+			    ltMastVendorManagements.getLastUpdateDate(),
+			    new Date(),  // Assuming this is the START_DATE
+			    ltMastVendorManagements.getVenManDesgCode()
+			);
+
 		
 		if(res==1)
 			return true;
@@ -100,10 +117,12 @@ public class LtMastVendorManagementsDaoImpl implements LtMastVendorManagementsDa
 		ltMastVendorManagements.setLastUpdatedBy(ltMastVendorManagements.getLastUpdateLogin());
 		int res=jdbcTemplate.update(
 			query,
-     		ltMastVendorManagements.getVendorId(),ltMastVendorManagements.getName(),ltMastVendorManagements.getVenManDesgId(),
+     		ltMastVendorManagements.getVendorId(),ltMastVendorManagements.getName(),
      		ltMastVendorManagements.getMobileNo(),ltMastVendorManagements.getPhoneNo(),ltMastVendorManagements.getEmailAdd(),
      		ltMastVendorManagements.getCreatedBy(),ltMastVendorManagements.getCreationDate(),ltMastVendorManagements.getLastUpdateLogin(),
-     		ltMastVendorManagements.getLastUpdatedBy(),ltMastVendorManagements.getLastUpdateDate(),ltMastVendorManagements.getVendorManagementId());
+     		ltMastVendorManagements.getLastUpdatedBy(),ltMastVendorManagements.getLastUpdateDate(),ltMastVendorManagements.getVenManDesgCode(),
+     		ltMastVendorManagements.getVendorManagementId()
+     		);
 		
 		if(res==1)
 			return true;
@@ -190,7 +209,7 @@ public class LtMastVendorManagementsDaoImpl implements LtMastVendorManagementsDa
 	public List<LtMastVendorManagements> getLtMastVendorManagementsDataTable(Long vendorId,
 			LtMastVendorManagements input) throws ServiceException {
 		String query = env.getProperty("getLtMastVendorManagementsDataTable");
-		
+		System.out.println("vendorId = "+vendorId);
 		   String name=null;
 		   if(input.getName()!=null && !input.getName().equals(""))
 		   {name="%"+input.getName().trim().toUpperCase() + "%";}
@@ -221,7 +240,7 @@ public class LtMastVendorManagementsDaoImpl implements LtMastVendorManagementsDa
 				input.setEnDate(null);
 			}
 			List<LtMastVendorManagements> list = (List<LtMastVendorManagements>) 
-					jdbcTemplate.query(query , new Object[]{vendorId,name,designation,email,mobile,phone,
+					jdbcTemplate.query(query , new Object[]{vendorId,name,designation,email,mobile,
 						
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
@@ -231,6 +250,7 @@ public class LtMastVendorManagementsDaoImpl implements LtMastVendorManagementsDa
 							input.getColumnNo(),input.getColumnNo(),
 							input.getStart()+input.getLength(),input.getStart()+1},
 				 new  BeanPropertyRowMapper<LtMastVendorManagements>(LtMastVendorManagements.class));
+			System.out.println("list = " +list);
 				return list;
 	}
 

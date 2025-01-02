@@ -107,12 +107,14 @@ public class LtPoHeadersDaoImpl implements LtPoHeadersDao {
 		if (input.getPoType() != null && !input.getPoType().equals("")) {
 			typeLookupCode = "%" + input.getPoType().trim().toUpperCase() + "%";
 		}
-
+		System.out.println("typeLookupCode for po = "+typeLookupCode);
 		String poNumber = null;
 		if (input.getPoNumber() != null && !input.getPoNumber().equals("")) {
 			poNumber = "%" + input.getPoNumber().trim().toUpperCase() + "%";
 		}
 
+		System.out.println("poNumber for po = "+poNumber);
+		
 		String revNumber = null;
 		if (input.getRevisionNum() != null) {
 			revNumber = "%" + input.getRevisionNum() + "%";
@@ -153,7 +155,7 @@ public class LtPoHeadersDaoImpl implements LtPoHeadersDao {
 		}
 
 		if (input.getColumnNo() == 0) {
-			input.setColumnNo(9);
+			input.setColumnNo(1);
 		}
 
 		List<LtPoHeaders> list = (List<LtPoHeaders>) jdbcTemplate.query(query,
@@ -353,7 +355,10 @@ public class LtPoHeadersDaoImpl implements LtPoHeadersDao {
 		if (buyerId == 0) {
 			buyerId = null;
 		}
-		List<DashboardDetails> list = jdbcTemplate.query(query, new Object[] { buyerId, companyId },
+//		List<DashboardDetails> list = jdbcTemplate.query(query, new Object[] { buyerId, companyId },
+//				new BeanPropertyRowMapper<DashboardDetails>(DashboardDetails.class));
+		
+		List<DashboardDetails> list = jdbcTemplate.query(query, new Object[] {companyId },
 				new BeanPropertyRowMapper<DashboardDetails>(DashboardDetails.class));
 
 		return list;
@@ -391,11 +396,21 @@ public class LtPoHeadersDaoImpl implements LtPoHeadersDao {
 	@Override
 	public List<LtPoHeaders> getActivePoHeadersByPoNumber(Long companyId, Long userId, String poNumber)
 			throws ServiceException {
-		String query = env.getProperty("getActivePoHeadersByPoNumber");
-		List<LtPoHeaders> list = jdbcTemplate.query(query, new Object[] { "%" + poNumber + "%", companyId, userId },
-				new BeanPropertyRowMapper<LtPoHeaders>(LtPoHeaders.class));
+		
+		if(userId==-1) {
+			String query = env.getProperty("getActivePoHeadersByPoNumberBuyer");
+			List<LtPoHeaders> list = jdbcTemplate.query(query, new Object[] { "%" + poNumber + "%", companyId },
+					new BeanPropertyRowMapper<LtPoHeaders>(LtPoHeaders.class));
+			return list;
+		}else {
+			String query = env.getProperty("getActivePoHeadersByPoNumber");
+			List<LtPoHeaders> list = jdbcTemplate.query(query, new Object[] { "%" + poNumber + "%", userId, companyId },
+					new BeanPropertyRowMapper<LtPoHeaders>(LtPoHeaders.class));
+			return list;
+		}
+		
 
-		return list;
+		
 	}
 
 	@Override
@@ -457,7 +472,7 @@ class LtPoReportRowMapper implements RowMapper<LtPoReport>
 		
 		LtPoLineReport poLineReport=new LtPoLineReport();
 		poLineReport.setLineNum(rs.getString("line_no"));
-		poLineReport.setShipmentNum(rs.getString("ship_num"));
+//		poLineReport.setShipmentNum(rs.getString("ship_num"));
 		poLineReport.setItem(rs.getString("item"));
 		poLineReport.setItemDescription(rs.getString("item_desc"));
 		poLineReport.setDeliveryDate(rs.getTimestamp("delivery"));
@@ -468,7 +483,7 @@ class LtPoReportRowMapper implements RowMapper<LtPoReport>
 		poLineReport.setLineNoOne(rs.getString("linec"));
 		poLineReport.setTaxNameAndDescriptionCGST(rs.getString("tax_name_and_descc"));
 		poLineReport.setTaxAmountCGST(rs.getString("ratec"));
-		poLineReport.setLineNoTwo(rs.getString("LINES"));
+		poLineReport.setLineNoTwo(rs.getString("LINESGST"));
 		poLineReport.setTaxNameAndDescriptionSGST(rs.getString("tax_name_and_descs"));
 		poLineReport.setTaxAmountSGST(rs.getString("rates"));
 		poLineReport.setRateCGST(rs.getString("taxc"));

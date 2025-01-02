@@ -63,7 +63,7 @@ public class LtMastGroupProductsServiceImpl implements LtMastGroupProductsServic
 		if ( !ltP2pGroupProductsList.isEmpty() &&
 				( ltP2pGroupProductsList.get(0).getGroupProductsId().equals(ltP2pGroupProducts.getGroupProductsId())))
 		{
-			status.setCode(PARENT_PROD_ID_PRESENT);
+			status.setCode(0);
 			status.setMessage("parentproductidpresent");
 
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -76,16 +76,32 @@ public class LtMastGroupProductsServiceImpl implements LtMastGroupProductsServic
 		ltP2pGroupProducts.setLastUpdateLogin(ltP2pGroupProducts.getLastUpdateLogin());
 		ltP2pGroupProducts = ltP2pGroupProductsRepository.save(ltP2pGroupProducts);
 		if(ltP2pGroupProducts.getGroupProductsId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if( status.getMessage()==null) {
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		}else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if( status.getMessage()==null) {
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		}
@@ -100,15 +116,31 @@ public class LtMastGroupProductsServiceImpl implements LtMastGroupProductsServic
 		{
 			ltP2pGroupProductsRepository.delete(id);
 			if(ltP2pGroupProductsRepository.exists(id)) {
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+						
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if( status.getMessage()==null) {
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				}
 			}else {
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if( status.getMessage()==null) {
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			}
@@ -141,16 +173,32 @@ public class LtMastGroupProductsServiceImpl implements LtMastGroupProductsServic
 		ltP2pGroupProducts.setLastUpdateLogin(ltP2pGroupProducts.getLastUpdateLogin());
 		ltP2pGroupProducts = ltP2pGroupProductsRepository.save(ltP2pGroupProducts);
 		if(ltP2pGroupProducts.getGroupProductsId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if( status.getMessage()==null) {
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		}else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if( status.getMessage()==null) {
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		}

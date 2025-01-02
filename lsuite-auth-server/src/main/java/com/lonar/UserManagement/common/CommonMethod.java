@@ -234,6 +234,7 @@ public class CommonMethod {
 			ltMastAudit.setCreationDate(new Date());
 			ltMastAudit.setCreatedBy(1L);
 			ltMastAudit.setMasterName(work.getClass().getName());
+			ltMastAudit.setDifference("Audit");
 			if(base!=null) {
 			ltMastAudit.setOldEntity(base+"");
 			}

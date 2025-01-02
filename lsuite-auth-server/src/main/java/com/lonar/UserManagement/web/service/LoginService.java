@@ -14,6 +14,8 @@ import com.lonar.UserManagement.web.model.Status;
 public interface LoginService {
 
 	ResponceEntity loginUser(LtMastUsers user,  HttpServletResponse response) ;
+	ResponceEntity loginUserForMobile(LtMastUsers user,  HttpServletResponse response) ;
+
 	ResponceEntity logoutUser (HttpServletRequest request, HttpServletResponse response);
 	String tokenExtend(String token);
 	

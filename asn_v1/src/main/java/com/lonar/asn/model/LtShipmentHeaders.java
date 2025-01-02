@@ -6,6 +6,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -24,6 +26,7 @@ public class LtShipmentHeaders implements Serializable {
 	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipmentHeaders_seq")
 	//@SequenceGenerator(name = "shipmentHeaders_seq", sequenceName = "LT_SHIPMENT_HEADERS_S", allocationSize = 1)
 	@Column(name = "Shipment_Header_Id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long shipmentHeaderId;
 	
 	@Column(name = "Receipt_Source_Code")
@@ -110,6 +113,12 @@ public class LtShipmentHeaders implements Serializable {
 	
 	@Transient
 	private String poNumber;
+	
+	@Transient
+	private String valueName;
+	
+	@Transient
+	private String valueCode;
 	
 	@Transient
 	private Long draw;
@@ -459,6 +468,24 @@ public class LtShipmentHeaders implements Serializable {
 	public void setSupplierInvoiceAmount(Double supplierInvoiceAmount) {
 		this.supplierInvoiceAmount = supplierInvoiceAmount;
 	}
+	
+	
+
+	public String getValueName() {
+		return valueName;
+	}
+
+	public void setValueName(String valueName) {
+		this.valueName = valueName;
+	}
+
+	public String getValueCode() {
+		return valueCode;
+	}
+
+	public void setValueCode(String valueCode) {
+		this.valueCode = valueCode;
+	}
 
 	@Override
 	public String toString() {
@@ -473,10 +500,13 @@ public class LtShipmentHeaders implements Serializable {
 				+ ", lastUpdateLogin=" + lastUpdateLogin + ", lastUpdatedBy=" + lastUpdatedBy + ", lastUpdateDate="
 				+ lastUpdateDate + ", supplierInvoiceNumber=" + supplierInvoiceNumber + ", supplierInvoiceDate="
 				+ supplierInvoiceDate + ", supplierInvoiceAmount=" + supplierInvoiceAmount + ", poNumber=" + poNumber
-				+ ", draw=" + draw + ", start=" + start + ", length=" + length + ", columnNo=" + columnNo + ", sort="
-				+ sort + ", shippedDateStr=" + shippedDateStr + ", vendorName=" + vendorName + ", vendorAdd="
-				+ vendorAdd + ", location=" + location + ", empName=" + empName + "]";
+				+ ", valueName=" + valueName + ", valueCode=" + valueCode + ", draw=" + draw + ", start=" + start
+				+ ", length=" + length + ", columnNo=" + columnNo + ", sort=" + sort + ", shippedDateStr="
+				+ shippedDateStr + ", vendorName=" + vendorName + ", vendorAdd=" + vendorAdd + ", location=" + location
+				+ ", empName=" + empName + "]";
 	}
+
+	
 
 	
 	

@@ -16,9 +16,10 @@ import javax.persistence.Table;
 public class LtVendCompanySistConcern {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_sist_conc_seq")
-	@SequenceGenerator(name = "company_sist_conc_seq", sequenceName = "LT_VEND_COMPANY_SIST_CONC_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_sist_conc_seq")
+//	@SequenceGenerator(name = "company_sist_conc_seq", sequenceName = "LT_VEND_COMPANY_SIST_CONC_S", allocationSize = 1)
 	@Column(name = "COMP_SIST_CONCERNS_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long compSistConcernsId;
 	
 	@Column(name = "COMPANY_ID")

@@ -39,9 +39,10 @@ public class LtMastUsers implements Serializable {
 	@Basic(optional = false)
 	//@NotNull
 	//@GeneratedValue(strategy = GenerationType.AUTO)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
-	@SequenceGenerator(name = "user_seq", sequenceName = "LT_MAST_USERS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+//	@SequenceGenerator(name = "user_seq", sequenceName = "LT_MAST_USERS_S", allocationSize = 1)
 	@Column(name = "USER_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long userId;
 	
 	@Basic(optional = false)

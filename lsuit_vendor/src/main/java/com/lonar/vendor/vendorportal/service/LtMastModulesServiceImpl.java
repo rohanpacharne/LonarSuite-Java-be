@@ -15,9 +15,9 @@ public class LtMastModulesServiceImpl implements LtMastModulesService {
 	LtMastModulesDao ltMastModulesDao;
 	
 	@Override
-	public List<LtMastModules> findByModuleName(String string) {
+	public List<LtMastModules> findByModuleName(String string,Long companyId) {
 		// TODO Auto-generated method stub
-		return ltMastModulesDao.findByModuleName(string);
+		return ltMastModulesDao.findByModuleName(string,companyId);
 	}
 
 }

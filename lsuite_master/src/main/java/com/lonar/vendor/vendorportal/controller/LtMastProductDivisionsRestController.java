@@ -73,7 +73,7 @@ public class LtMastProductDivisionsRestController implements CodeMaster{
 		try {
 			return ltP2pProductDivisionsService.save(ltP2pProductDivisions);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 	}
 	
@@ -84,7 +84,7 @@ public class LtMastProductDivisionsRestController implements CodeMaster{
 		try {
 			return ltP2pProductDivisionsService.update(ltP2pProductDivisions);	
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 	}
 	
@@ -95,7 +95,7 @@ public class LtMastProductDivisionsRestController implements CodeMaster{
 		try {
 			return ltP2pProductDivisionsService.delete(id);	
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 	}
 

@@ -26,15 +26,16 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @Table(name = "LT_MAST_BRANCHES")
 @XmlRootElement
 @JsonInclude(Include.NON_NULL)
-public class LtMastBranches extends BaseClass implements Serializable {
+public class LtMastBranches extends WhoColumns implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@Basic(optional = false)
 	//@NotNull(message="notnull")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "branch_seq")
-	@SequenceGenerator(name = "branch_seq", sequenceName = "LT_MAST_BRANCHES_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "branch_seq")
+//	@SequenceGenerator(name = "branch_seq", sequenceName = "LT_MAST_BRANCHES_S", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "BRANCH_ID")
 	private Long branchId;
 	
@@ -84,7 +85,7 @@ public class LtMastBranches extends BaseClass implements Serializable {
 	@Column(name = "STATE_CODE")
 	private String stateCode;
 	
-	@NotNull(message="notnull")
+//	@NotNull(message="notnull")
 	@Size(max = 15)
 	@Column(name = "GST_REG_NO")
 	private String gstRegNo;
@@ -105,6 +106,9 @@ public class LtMastBranches extends BaseClass implements Serializable {
 	
 	@Column(name = "COMPANY_ID")
 	private Long companyId;
+	
+	@Column(name = "BRANCH_ADDRESS")
+	private String branchAddress;
 
 	@Transient
 	private String managerName;
@@ -135,6 +139,14 @@ public class LtMastBranches extends BaseClass implements Serializable {
 	
 	@Transient
 	private String stateName;
+
+	public String getBranchAddress() {
+		return branchAddress;
+	}
+
+	public void setBranchAddress(String branchAddress) {
+		this.branchAddress = branchAddress;
+	}
 
 	public Long getBranchId() {
 		return branchId;
@@ -361,11 +373,11 @@ public class LtMastBranches extends BaseClass implements Serializable {
 				+ ", reportingBranch=" + reportingBranch + ", openingDate=" + openingDate + ", managerId=" + managerId
 				+ ", stateCode=" + stateCode + ", gstRegNo=" + gstRegNo + ", status=" + status + ", branchType="
 				+ branchType + ", billableLocation=" + billableLocation + ", shippingLocation=" + shippingLocation
-				+ ", companyId=" + companyId + ", managerName=" + managerName + ", managerCode=" + managerCode
-				+ ", managerOfficalEmailId=" + managerOfficalEmailId + ", reportingBranchName=" + reportingBranchName
-				+ ", reportingBranchCode=" + reportingBranchCode + ", companyName=" + companyName + ", statusValue="
-				+ statusValue + ", countryValue=" + countryValue + ", branchTypeValue=" + branchTypeValue
-				+ ", stateValue=" + stateName + "]";
+				+ ", companyId=" + companyId + ", branchAddress=" + branchAddress + ", managerName=" + managerName
+				+ ", managerCode=" + managerCode + ", managerOfficalEmailId=" + managerOfficalEmailId
+				+ ", reportingBranchName=" + reportingBranchName + ", reportingBranchCode=" + reportingBranchCode
+				+ ", companyName=" + companyName + ", statusValue=" + statusValue + ", countryValue=" + countryValue
+				+ ", branchTypeValue=" + branchTypeValue + ", stateName=" + stateName + "]";
 	}
 
 	

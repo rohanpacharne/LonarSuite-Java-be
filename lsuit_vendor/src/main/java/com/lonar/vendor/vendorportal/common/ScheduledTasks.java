@@ -22,6 +22,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import com.lonar.vendor.vendorportal.dao.LtInvoiceHeadersDao;
 import com.lonar.vendor.vendorportal.dao.LtMastUsersDao;
 import com.lonar.vendor.vendorportal.dao.LtMastVendorsDao;
+import com.lonar.vendor.vendorportal.dao.LtRentalAgreementHeadersDao;
 import com.lonar.vendor.vendorportal.dao.LtVendorApprovalDao;
 import com.lonar.vendor.vendorportal.model.BusinessException;
 import com.lonar.vendor.vendorportal.model.CodeMaster;
@@ -30,12 +31,16 @@ import com.lonar.vendor.vendorportal.model.LtInvoiceApprovalHistory;
 import com.lonar.vendor.vendorportal.model.LtInvoiceHeaders;
 import com.lonar.vendor.vendorportal.model.LtMastEmailtoken;
 import com.lonar.vendor.vendorportal.model.LtMastVendors;
+import com.lonar.vendor.vendorportal.model.LtRentalAgrApprovalHistory;
+import com.lonar.vendor.vendorportal.model.LtRentalAgreementApproval;
+import com.lonar.vendor.vendorportal.model.LtRentalAgreementHeaders;
 import com.lonar.vendor.vendorportal.model.LtVendorApprovalHistory;
 import com.lonar.vendor.vendorportal.model.Mail;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.model.VendorApproval;
 import com.lonar.vendor.vendorportal.repository.LtMastEmailtokenRepository;
 import com.lonar.vendor.vendorportal.service.LtMastEmailtokenService;
+import com.lonar.vendor.vendorportal.service.LtRentalAgreementApprovalService;
 import com.lonar.vendor.vendorportal.service.LtVendorApprovalHistoryService;
 import com.lonar.vendor.vendorportal.service.LtVendorApprovalService;
 
@@ -61,6 +66,12 @@ public class ScheduledTasks implements CodeMaster{
 	
 	@Autowired
 	LtInvoiceHeadersDao ltInvoiceHeadersDao;
+	
+	@Autowired
+	LtRentalAgreementHeadersDao ltRentalAgreementHeadersDao;
+	
+	@Autowired
+	LtRentalAgreementApprovalService ltRentalAgreementApprovalService;
 
 	@Autowired
 	LtMastUsersDao ltMastUsersDao;
@@ -95,7 +106,9 @@ public class ScheduledTasks implements CodeMaster{
 		
 		invoiceChronJob();
 		 
-		sendMail();
+		//sendMail();
+		
+		rentalAgreementChronJob();
     }
 
     private void invoiceChronJob() {
@@ -201,6 +214,8 @@ public class ScheduledTasks implements CodeMaster{
 						}
 						if(obj!=null && obj.getInvoiceHeaderId()!=null)
 						{ invoiceApprovalsList.add(obj); }
+						
+						System.out.println("invoiceApprovalsList for debugging.."+invoiceApprovalsList);
 		
 						//---------------------SAVE HISTORY-----------------------------
 						saveInvoiceApprovalHistoryData(invoiceApprovalsList, PENDING);
@@ -291,7 +306,7 @@ public class ScheduledTasks implements CodeMaster{
 						}else {
 					
 							ltMastVendorsDao.submitForApproval(new Date(),
-									ltMastVendors.getVendorId(), "VENDOR_ACTIVE", new Date());
+									ltMastVendors.getVendorId(), "ACTIVE", new Date());
 						
 							expenseApprovals.get(0).setApprovalId(ltMastVendors.getInitiatorId());
 							expenseApprovals.get(0).setLastUpdateDate(new Date());
@@ -494,9 +509,178 @@ public class ScheduledTasks implements CodeMaster{
 				ltMastEmailtokenRepository.save(ltMastEmailtoken2);
 			}
 			//ex.printStackTrace();
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, ex);	
+			throw new BusinessException(0, null, ex);	
 		}
 	}
 		
+	}
+	
+	private void rentalAgreementChronJob() {
+		
+		try {
+			List<LtRentalAgreementHeaders> inprocessAgreementHeaders = ltRentalAgreementHeadersDao.getInprocessAgreementList(RA_INPROCESS);
+			
+			System.out.println("inprocessAgreementHeaders = "+inprocessAgreementHeaders);
+			System.out.println("inprocessAgreementHeaders count = "+inprocessAgreementHeaders.size());
+			
+			String currentApprovalLavel = null ;
+			List<LtRentalAgreementApproval> agreementApprovalsList = null;
+			List<LtRentalAgreementApproval> agreementApprovals1 = new ArrayList<LtRentalAgreementApproval>();
+			
+			for (Iterator iterator = inprocessAgreementHeaders.iterator(); iterator.hasNext();) {
+				LtRentalAgreementHeaders ltRentalAgreementHeaders = (LtRentalAgreementHeaders) iterator.next();
+				
+				LtRentalAgreementApproval approvalLavel =  ltRentalAgreementHeadersDao.getApprovalLevel(ltRentalAgreementHeaders.getAgreementHeaderId());
+				
+				if(approvalLavel != null){
+					if( approvalLavel.getCurrentApprovalLevel() != null &&  !approvalLavel.getCurrentApprovalLevel().trim().equals("")){ 
+						 currentApprovalLavel = approvalLavel.getCurrentApprovalLevel();
+						 agreementApprovalsList = ltRentalAgreementHeadersDao.getApprovalList(ltRentalAgreementHeaders.getAgreementHeaderId(), approvalLavel.getCurrentApprovalLevel());
+					}
+					else { 
+						currentApprovalLavel = approvalLavel.getApprovalLevel();
+						agreementApprovalsList = ltRentalAgreementHeadersDao.getApprovalList(ltRentalAgreementHeaders.getAgreementHeaderId(), approvalLavel.getApprovalLevel());
+					}
+				}
+				
+				boolean isApproved = false;
+				boolean isNoAction = false;
+				
+				for (LtRentalAgreementApproval ltRentalAgreementApproval : agreementApprovalsList) {
+					
+					if(ltRentalAgreementApproval.getStatus().equals(NO_ACTION)) {	
+						isNoAction = true;
+						break;
+					}else if(ltRentalAgreementApproval.getStatus().equals(RA_APPROVED) && 
+							( ltRentalAgreementApproval.getApprovedByAnyone() != null && ltRentalAgreementApproval.getApprovedByAnyone().equals("N"))){
+						isApproved = true;						
+					} else if( !ltRentalAgreementApproval.getStatus().equals(RA_APPROVED) && 
+							( ltRentalAgreementApproval.getApprovedByAnyone() != null && ltRentalAgreementApproval.getApprovedByAnyone().equals("N") )){
+						isApproved = false;
+						break;
+					}
+					else if (ltRentalAgreementApproval.getStatus().equals(RA_APPROVED) &&
+							( ltRentalAgreementApproval.getApprovedByAnyone() == null || ltRentalAgreementApproval.getApprovedByAnyone().equals("Y"))){
+						isApproved = true;						
+						break;
+					}
+				}
+				
+				if(isNoAction || isApproved ){
+					
+					if(isApproved) {
+						currentApprovalLavel = ltRentalAgreementHeadersDao.getNextApprovalLevel(ltRentalAgreementHeaders.getAgreementHeaderId() , currentApprovalLavel);
+						
+						if(currentApprovalLavel != null && !currentApprovalLavel.trim().equals("") ){		
+							//ltExpExpenseHeadersService.updateCurrentApprovalLevel(ltExpExpenseHeader.getExpHeaderId(), currentApprovalLavel);
+							agreementApprovalsList = ltRentalAgreementHeadersDao.getApprovalList(ltRentalAgreementHeaders.getAgreementHeaderId(), currentApprovalLavel);
+						}else {
+					
+							if(ltRentalAgreementHeadersDao.submitForApproval(new Date(),
+									ltRentalAgreementHeaders.getAgreementHeaderId(), RA_APPROVED, new Date())) {
+								
+								List<LtRentalAgreementApproval> approvalsList = new ArrayList<LtRentalAgreementApproval>();
+								LtRentalAgreementApproval ltRentalAgreementApproval = new LtRentalAgreementApproval();
+								ltRentalAgreementApproval.setApprovalId(ltRentalAgreementHeaders.getCreatedBy());
+								ltRentalAgreementApproval.setLastUpdateDate(new Date());
+							//invoiceApprovalsList.get(0).setApprovalId(ltInvoiceHeaders.getInitiatorId());
+							//invoiceApprovalsList.get(0).setApprovalId(ltInvoiceHeaders.getCreatedBy());
+							//invoiceApprovalsList.get(0).setLastUpdateDate(new Date());
+								approvalsList.add(ltRentalAgreementApproval);
+							
+							/////Remaining 
+//							saveInvoiceEmailTokan(approvalsList,"invoiceApproval",ltInvoiceHeaders);
+								
+							}
+							}
+					}
+					
+					if(currentApprovalLavel != null && !currentApprovalLavel.trim().equals("") )
+					{	
+						ltRentalAgreementHeadersDao.upDateStatus(ltRentalAgreementHeaders.getAgreementHeaderId(), PENDING, currentApprovalLavel);
+						ltRentalAgreementHeadersDao.updateCurrentApprovalLevel(ltRentalAgreementHeaders.getAgreementHeaderId(), currentApprovalLavel);
+						
+						//--------------------------chk for delegation here
+						LtRentalAgreementApproval obj = new LtRentalAgreementApproval();
+						for(LtRentalAgreementApproval agreementApproval : agreementApprovalsList)
+						{
+							if(agreementApproval.getDelegationId()!=null)
+							{
+								obj.setApprovalId(agreementApproval.getDelegationId());
+								obj.setApprovalLevel(agreementApproval.getApprovalLevel());
+								obj.setApprovedByAnyone(agreementApproval.getApprovedByAnyone());
+								obj.setCurrentApprovalLevel(agreementApproval.getCurrentApprovalLevel());
+								obj.setAgreementHeaderId(agreementApproval.getAgreementHeaderId());
+								obj.setModuleApprovalId(agreementApproval.getModuleApprovalId());
+								obj.setStatus(agreementApproval.getStatus());
+							}
+							
+						}
+						
+						if(obj!=null && obj.getAgreementHeaderId()!=null)
+						{ agreementApprovals1.add(obj); }
+						
+						//---------------------SAVE HISTORY-----------------------------
+						saveAgreementApprovalHistoryData(agreementApprovals1, PENDING);
+//						saveInvoiceEmailTokan(invoiceApprovalsList,"invoiceApprovalNotification",ltInvoiceHeaders); 
+						
+					}
+					
+					//---------------------- for the self approval ---------------------------
+//					System.out.println("outer "+expenseApprovals);
+					for(LtRentalAgreementApproval ltRentalAgreementApproval:agreementApprovalsList)
+					{
+//						System.out.println("akshay "+ltExpExpenseHeader.getExpHeaderId()+" "+
+//					ltExpExpenseHeader.getEmployeeId()+" "+expApproval.getApprovalId());
+						if(ltRentalAgreementHeaders.getInitiatorId().equals(ltRentalAgreementApproval.getApprovalId())
+								&& currentApprovalLavel != null)
+						{
+							LtRentalAgrApprovalHistory approvalHistory= new LtRentalAgrApprovalHistory();
+							
+							approvalHistory.setLastUpdateDate(new Date());
+							approvalHistory.setAgreementHeaderId(ltRentalAgreementHeaders.getAgreementHeaderId());
+							approvalHistory.setEmployeeId(ltRentalAgreementHeaders.getInitiatorId());
+							approvalHistory.setStatus(APPROVED);
+							ltRentalAgreementApprovalService.updateStatusApproval(approvalHistory);	
+						}
+					}
+					//---------------------end for the self approval--------------------------
+				}
+				
+				//initial for loop
+			}
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+
+		
+	}
+	
+	private void saveAgreementApprovalHistoryData(List<LtRentalAgreementApproval> approvalList ,String status) throws Exception
+	{
+		for(LtRentalAgreementApproval ltRentalAgreementApproval:approvalList)
+		{
+			System.out.println("in cron job saveAgreementApprovalHistoryData");
+			System.out.println("ltRentalAgreementApproval = "+ltRentalAgreementApproval);
+			LtRentalAgrApprovalHistory ltRentalAgrApprovalHistory = new LtRentalAgrApprovalHistory();
+			
+			ltRentalAgrApprovalHistory.setStatus(status);
+			ltRentalAgrApprovalHistory.setAgreementHeaderId(ltRentalAgreementApproval.getAgreementHeaderId());
+			ltRentalAgrApprovalHistory.setAgreementApprovalId(ltRentalAgreementApproval.getAgreementApprovalId());
+			ltRentalAgrApprovalHistory.setEmployeeId(ltRentalAgreementApproval.getApprovalId());
+			ltRentalAgrApprovalHistory.setLastUpdateDate(ltRentalAgreementApproval.getLastUpdateDate());
+//			ltRentalAgrApprovalHistory.setRemark(ltRentalAgreementApproval.getR);
+			
+		try
+		{
+			ltVendorApprovalHistoryService.saveAgreementApprovalHistory(ltRentalAgrApprovalHistory);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		}
 	}
 }

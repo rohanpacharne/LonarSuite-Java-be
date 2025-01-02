@@ -58,12 +58,28 @@ public class LtMastTaxTypeServiceImpl implements LtMastTaxTypeService,CodeMaster
 		ltMastTaxType.setLastUpdatedBy(ltMastTaxType.getLastUpdateLogin());
 		ltMastTaxType = ltMastTaxTypeDao.save(ltMastTaxType);
 		if(ltMastTaxType.getTaxTypeId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		}else {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage(chkDuplicate);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -96,12 +112,28 @@ public class LtMastTaxTypeServiceImpl implements LtMastTaxTypeService,CodeMaster
 		ltMastTaxType.setLastUpdatedBy(ltMastTaxType.getLastUpdateLogin());
 		ltMastTaxType = ltMastTaxTypeDao.update(ltMastTaxType);
 		if(ltMastTaxType.getTaxTypeId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		}else {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage(chkDuplicate);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -112,9 +144,25 @@ public class LtMastTaxTypeServiceImpl implements LtMastTaxTypeService,CodeMaster
 		Status status = new Status();
 		LtMastTaxType ltMastTaxType = ltMastTaxTypeDao.delete(id);
 		if(ltMastTaxType ==null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}

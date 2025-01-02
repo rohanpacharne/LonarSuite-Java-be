@@ -22,9 +22,10 @@ public class LtInvoiceAccounting
 {
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_accounting_seq")
-	@SequenceGenerator(name = "invoice_accounting_seq", sequenceName = "LT_INVOICE_ACCOUNTING_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_accounting_seq")
+//	@SequenceGenerator(name = "invoice_accounting_seq", sequenceName = "LT_INVOICE_ACCOUNTING_S", allocationSize = 1)
 	@Column(name = "invoice_accounting_id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long invoiceAccountingId;
 	
 	@Column(name = "INVOICE_HEADER_ID")

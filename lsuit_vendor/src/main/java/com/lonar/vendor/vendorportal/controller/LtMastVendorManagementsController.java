@@ -86,6 +86,7 @@ public class LtMastVendorManagementsController implements CodeMaster
 	@RequestMapping(value = "/update", method= RequestMethod.POST, consumes = "application/json")
     public ResponseEntity<Status> update(@RequestBody LtMastVendorManagements ltMastVendorManagements) throws ServiceException
 	{
+		System.out.println("ltMastVendorManagements = "+ltMastVendorManagements);
 			 status =  ltMastVendorManagementsService.update(ltMastVendorManagements);
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
@@ -101,7 +102,15 @@ public class LtMastVendorManagementsController implements CodeMaster
 			{
 				logger.error("ERROR "+ e );
 				e.printStackTrace();
-				status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//				status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				return new ResponseEntity<Status>(status,HttpStatus.OK);
 			} 
 			catch(Exception e)

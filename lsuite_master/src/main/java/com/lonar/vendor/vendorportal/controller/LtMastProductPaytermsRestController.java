@@ -70,7 +70,7 @@ public class LtMastProductPaytermsRestController implements CodeMaster {
 			try {
 				return ltP2pProductPaytermsService.save(ltP2pProductPayterms);
 			}catch(Exception e) {
-					throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+					throw new BusinessException(0, null, e);
 			}
 			}
 		// -------------------Create and update Tax details-----------------
@@ -80,7 +80,7 @@ public class LtMastProductPaytermsRestController implements CodeMaster {
 			try {
 				return ltP2pProductPaytermsService.update(ltP2pProductPayterms);
 			}catch(Exception e) {
-					throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+					throw new BusinessException(0, null, e);
 			}
 		}
 		
@@ -91,7 +91,7 @@ public class LtMastProductPaytermsRestController implements CodeMaster {
 			try {
 				return ltP2pProductPaytermsService.delete(id);
 			}catch(Exception e) {
-					throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+					throw new BusinessException(0, null, e);
 			}
 		}
 

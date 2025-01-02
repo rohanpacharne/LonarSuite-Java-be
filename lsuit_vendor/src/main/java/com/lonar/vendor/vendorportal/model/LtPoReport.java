@@ -28,6 +28,7 @@ public class LtPoReport {
 	private String freightTerms;
 	private String incotermsFOB;
 	private String carrier;
+//	private int linesgst;
 
 	
 	

@@ -57,7 +57,7 @@ public class LtInvoiceApprovalRestController implements CodeMaster
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
@@ -93,7 +93,7 @@ public class LtInvoiceApprovalRestController implements CodeMaster
 		}
 		catch(Exception e)
 		{
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
@@ -112,7 +112,7 @@ public class LtInvoiceApprovalRestController implements CodeMaster
 				// ltExpenseApprovalHistory.setNote(inboxBulkInput.getNote());
 				ltInvoiceApprovalHistory.setStatus(inboxBulkInput.getAction());
 				ltInvoiceApprovalHistory.setInvoiceApprovalId(bulkIdWithName.getInvoiceApprovalId());
-				ltInvoiceApprovalHistory.setInvoiceHeaderId(bulkIdWithName.getInvoiceId());
+				ltInvoiceApprovalHistory.setInvoiceHeaderId(bulkIdWithName.getInvoiceHeaderId());
 				ltInvoiceApprovalHistory.setRemark(inboxBulkInput.getNote());
 				ltInvoiceApprovalHistory.setEmployeeId(inboxBulkInput.getApprovalId());
 
@@ -125,7 +125,7 @@ public class LtInvoiceApprovalRestController implements CodeMaster
 				}
 
 				//LtMastVendors ltMastVendors = ltMastVendorsService.getVendorById(bulkIdWithName.getVendorId());
-				LtInvoiceHeaders ltInvoiceHeader =  ltInvoiceHeadersService.getInvoiceById(bulkIdWithName.getInvoiceId());
+				LtInvoiceHeaders ltInvoiceHeader =  ltInvoiceHeadersService.getInvoiceById(bulkIdWithName.getInvoiceHeaderId());
 				status = ltInvoiceApprovalService.updateInvoiceStatusApproval(ltInvoiceApprovalHistory);
 				responseMessage.add(ltInvoiceHeader.getInvoiceNum() + " " + status.getMessage());
 				
@@ -133,7 +133,7 @@ public class LtInvoiceApprovalRestController implements CodeMaster
 			status.setData(responseMessage);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}

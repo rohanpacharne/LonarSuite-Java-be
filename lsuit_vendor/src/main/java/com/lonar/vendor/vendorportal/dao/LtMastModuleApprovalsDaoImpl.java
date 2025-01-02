@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.lonar.vendor.vendorportal.model.LtInvoiceApprovalHistory;
 import com.lonar.vendor.vendorportal.model.LtMastModuleApprovals;
+import com.lonar.vendor.vendorportal.model.LtRentalAgrApprovalHistory;
 import com.lonar.vendor.vendorportal.model.LtVendorApproval;
 import com.lonar.vendor.vendorportal.model.LtVendorApprovalHistory;
 import com.lonar.vendor.vendorportal.model.ServiceException;
@@ -84,6 +85,27 @@ public class LtMastModuleApprovalsDaoImpl implements LtMastModuleApprovalsDao{
 		
 		boolean flag=false;
 				
+		if(!ltExpModuleApprovalsList.isEmpty() && ltExpModuleApprovalsList.size()>0)
+		{
+			 if(ltExpModuleApprovalsList.get(0).getApprovedByAnyone().equals("Y"))
+			 { flag= true; }
+		}
+		else
+		{	 flag= false; }
+		return flag;
+	}
+
+
+	@Override
+	public boolean chkRentalAgreementIsAprovedByAnyOne(LtRentalAgrApprovalHistory approvalHistory)
+			throws ServiceException {
+		String query = env.getProperty("chkRentalAgreementIsAprovedByAnyOne");
+		
+		List<LtMastModuleApprovals> ltExpModuleApprovalsList = jdbcTemplate.query(query,  new Object[] 
+				{approvalHistory.getAgreementApprovalId()},
+				new BeanPropertyRowMapper<LtMastModuleApprovals> (LtMastModuleApprovals.class));
+		
+		boolean flag=false;
 		if(!ltExpModuleApprovalsList.isEmpty() && ltExpModuleApprovalsList.size()>0)
 		{
 			 if(ltExpModuleApprovalsList.get(0).getApprovedByAnyone().equals("Y"))

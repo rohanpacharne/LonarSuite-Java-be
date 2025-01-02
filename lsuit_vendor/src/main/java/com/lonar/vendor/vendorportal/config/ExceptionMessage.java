@@ -15,16 +15,24 @@ public class ExceptionMessage implements CodeMaster    ///akshay expense dnt del
 		Status status=new Status();
 		try
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if(status.getMessage()==null)
 			{
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 		}
 		catch(Exception o)
 		{
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 				o.printStackTrace();
 		}

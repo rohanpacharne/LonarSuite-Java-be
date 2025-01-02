@@ -138,10 +138,18 @@ private JdbcTemplate jdbcTemplate;
 			String chknull=checkNull(vendorAggreement);
 			if(chknull.equals("null"))
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if(status.getMessage()==null)
 				{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			}
@@ -151,19 +159,34 @@ private JdbcTemplate jdbcTemplate;
 				Long venAgreementId=ltMastVendorAgreementsDao.save(vendorAggreement);
 				if(venAgreementId!=null)
 				{
-					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 					if( status.getMessage()==null)
 					{
-						status.setCode(SUCCESS);
+						status.setCode(1);
 						status.setMessage("Error in finding message! The action is completed successfully.");
 					}
 				}
 				else
 				{
-					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					if(status.getMessage()==null)
 					{
-						status.setCode(EXCEPTION);
+						status.setCode(0);
 						status.setMessage("Error in finding message! The action was unsuccessful");
 					}
 				}
@@ -182,10 +205,18 @@ private JdbcTemplate jdbcTemplate;
 		String chknull=checkNull(vendorAggreement);
 		if(chknull.equals("null"))
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if(status.getMessage()==null)
 			{
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 		}
@@ -214,10 +245,18 @@ private JdbcTemplate jdbcTemplate;
 						dir.mkdirs();
 						if(!dir.isDirectory())
 						{
-							status=ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+//							status=ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+							try {
+								status.setCode(0);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("NO_DIRECTIVE_EXISTS").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
 							if(status.getMessage()==null)
 							{
-								status.setCode(EXCEPTION);
+								status.setCode(0);
 								status.setMessage("Error in finding message! The action was unsuccessful");
 							}
 							
@@ -243,19 +282,35 @@ private JdbcTemplate jdbcTemplate;
 		            	  if( ltMastVendorAgreementsDao.update(vendorAggreement))
 		            	  {
 		            		  buffStream.close();
-			            	   status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			            	   status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+		            		  try {
+		          				status.setCode(1);
+		          				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+		          			} catch (Exception e) {
+		          				// TODO Auto-generated catch block
+		          				e.printStackTrace();
+		          			}
+
 			            	   if( status.getMessage()==null)
 			            	   {
-			            		   status.setCode(SUCCESS);
+			            		   status.setCode(1);
 			            		   status.setMessage("Error in finding message! The action is completed successfully.");
 			            	   }
 		            	  }
 		            	  else
 			               {
-			            	   status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//			            	   status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+		            		  try {
+		          				status.setCode(0);
+		          				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+		          			} catch (Exception e) {
+		          				// TODO Auto-generated catch block
+		          				e.printStackTrace();
+		          			}
+
 			   					if(status.getMessage()==null)
 			   					{
-			   						status.setCode(EXCEPTION);
+			   						status.setCode(0);
 			   						status.setMessage("Error in finding message! The action was unsuccessful");
 			   					}
 			            	   
@@ -264,10 +319,18 @@ private JdbcTemplate jdbcTemplate;
 		               }
 		               else
 		               {
-		            	   status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//		            	   status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+		            	   try {
+		       				status.setCode(0);
+		       				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+		       			} catch (Exception e) {
+		       				// TODO Auto-generated catch block
+		       				e.printStackTrace();
+		       			}
+
 		   					if(status.getMessage()==null)
 		   					{
-		   						status.setCode(EXCEPTION);
+		   						status.setCode(0);
 		   						status.setMessage("Error in finding message! The action was unsuccessful");
 		   					}
 		            	   
@@ -276,20 +339,36 @@ private JdbcTemplate jdbcTemplate;
 		            catch (Exception e)
 		            {
 		            	e.printStackTrace();
-		            	 status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//		            	 status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+		            	try {
+		    				status.setCode(0);
+		    				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+		    			} catch (Exception e1) {
+		    				// TODO Auto-generated catch block
+		    				e.printStackTrace();
+		    			}
+
 						if(status.getMessage()==null)
 						{
-							status.setCode(EXCEPTION);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 						}
 		            }
 	    		}
 	    		
 	    		}
-			   status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			   status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
           	   if( status.getMessage()==null)
           	   {
-          		   status.setCode(SUCCESS);
+          		   status.setCode(1);
           		   status.setMessage("Error in finding message! The action is completed successfully.");
           	   }
 				
@@ -298,10 +377,18 @@ private JdbcTemplate jdbcTemplate;
 			}
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if(status.getMessage()==null)
 				{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			}
@@ -322,10 +409,18 @@ private JdbcTemplate jdbcTemplate;
 			String chknull=checkNull(vendorAggreement);
 			if(chknull.equals("null"))
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if(status.getMessage()==null)
 				{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			}
@@ -356,10 +451,19 @@ private JdbcTemplate jdbcTemplate;
 							dir.mkdirs();
 							if(!dir.isDirectory())
 							{
-								status=ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+//								status=ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+								
+								try {
+									status.setCode(0);
+									status.setMessage(ltMastCommonMessageService.getMessageNameByCode("NO_DIRECTIVE_EXISTS").getMessageName());
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+
 								if(status.getMessage()==null)
 								{
-									status.setCode(EXCEPTION);
+									status.setCode(0);
 									status.setMessage("Error in finding message! The action was unsuccessful");
 								}
 								return status;
@@ -384,19 +488,34 @@ private JdbcTemplate jdbcTemplate;
 				            	  {
 				            		  buffStream.close();
 				            		   
-					            	   status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//					            	   status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+				            		  try {
+				          				status.setCode(1);
+				          				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+				          			} catch (Exception e) {
+				          				// TODO Auto-generated catch block
+				          				e.printStackTrace();
+				          			}
+
 					            	   if( status.getMessage()==null)
 					            	   {
-					            		   status.setCode(SUCCESS);
+					            		   status.setCode(1);
 					            		   status.setMessage("Error in finding message! The action is completed successfully.");
 					            	   }
 				            	  }
 				            	  else
 					              {
-					            	status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//					            	status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+				            		  try {
+					          				status.setCode(0);
+					          				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+					          			} catch (Exception e) {
+					          				// TODO Auto-generated catch block
+					          				e.printStackTrace();
+					          			}
 					   				if(status.getMessage()==null)
 					   				{
-					   					status.setCode(EXCEPTION);
+					   					status.setCode(0);
 					   					status.setMessage("Error in finding message! The action was unsuccessful");
 					   				}
 					            	   
@@ -405,10 +524,17 @@ private JdbcTemplate jdbcTemplate;
 				               }
 				               else
 				               {
-				            	   status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//				            	   status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				            	   try {
+				          				status.setCode(0);
+				          				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+				          			} catch (Exception e) {
+				          				// TODO Auto-generated catch block
+				          				e.printStackTrace();
+				          			}
 				   					if(status.getMessage()==null)
 				   					{
-				   						status.setCode(EXCEPTION);
+				   						status.setCode(0);
 				   						status.setMessage("Error in finding message! The action was unsuccessful");
 				   					}
 				            	   
@@ -417,10 +543,18 @@ private JdbcTemplate jdbcTemplate;
 				            catch (Exception e)
 				            {
 				            	e.printStackTrace();
-				            	 status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//				            	 status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+				            	try {
+				    				status.setCode(0);
+				    				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+				    			} catch (Exception e1) {
+				    				// TODO Auto-generated catch block
+				    				e.printStackTrace();
+				    			}
+
 								if(status.getMessage()==null)
 								{
-									status.setCode(EXCEPTION);
+									status.setCode(0);
 									status.setMessage("Error in finding message! The action was unsuccessful");
 								}
 				            }
@@ -433,27 +567,51 @@ private JdbcTemplate jdbcTemplate;
 						 if(vendorAggreement.getAttachment()==null)
 	            		  {
 	            			  ltMastVendorAgreementAttachmentDao.deleteFile(vendorAggreement.getAgreementId().longValue());
-	            			  status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//	            			  status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+	            			  try {
+	            					status.setCode(1);
+	            					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+	            				} catch (Exception e) {
+	            					// TODO Auto-generated catch block
+	            					e.printStackTrace();
+	            				}
+
 	            			  if( status.getMessage()==null)
 	            			  {
-	            				  status.setCode(SUCCESS);
+	            				  status.setCode(1);
 	            				  status.setMessage("Error in finding message! The action is completed successfully.");
 	            			  }
 	            		  }	
 					}
-						status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//						status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 						if( status.getMessage()==null)
 						{
-							status.setCode(SUCCESS);
+							status.setCode(1);
 							status.setMessage("Error in finding message! The action is completed successfully.");
 						}
 					}
 					else
 					{
-						status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//						status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+						try {
+							status.setCode(0);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 						if(status.getMessage()==null)
 						{
-							status.setCode(EXCEPTION);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 						}
 					}
@@ -462,10 +620,18 @@ private JdbcTemplate jdbcTemplate;
 			}
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if(status.getMessage()==null)
 				{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			}
@@ -480,19 +646,35 @@ private JdbcTemplate jdbcTemplate;
 		
 			if(ltMastVendorAgreementsDao.delete(vendorAgreementId))
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			}
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if(status.getMessage()==null)
 				{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			}
@@ -578,19 +760,34 @@ private JdbcTemplate jdbcTemplate;
 		Status status = new Status();
 		if(ltMastVendorAgreementsDao.deleteAttachment(vendorAgreementId))
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(ATTACHEMENT_DELETED_SUCCESS);
+//			status=ltMastCommonMessageService.getCodeAndMessage(ATTACHEMENT_DELETED_SUCCESS);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ATTACHEMENT_DELETED_SUCCESS").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(ATTACHEMENT_DELETED_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(ATTACHEMENT_DELETED_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ATTACHEMENT_DELETED_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if(status.getMessage()==null)
 			{
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 		}

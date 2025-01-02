@@ -5,6 +5,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -24,6 +26,7 @@ public class LtShipmentAttachment
 	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "shipmentHeaders_seq")
 	//@SequenceGenerator(name = "shipmentHeaders_seq", sequenceName = "LT_SHIPMENT_HEADERS_S", allocationSize = 1)
 	@Column(name = "SHIPMENT_ATTACHMENT_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long shipmentAttachmentId;
 	
 	@Column(name = "SHIPMENT_HEADER_ID")

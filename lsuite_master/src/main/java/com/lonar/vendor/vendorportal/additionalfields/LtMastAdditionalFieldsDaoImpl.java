@@ -315,13 +315,13 @@ System.out.println("input "+input);
 		System.out.println("rs "+res);
 		if(res!=0) {
 			Status status = new Status();
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			status.setMessage("inserted successfully");
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 		}
 		else {
 			Status status = new Status();
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("inserted fail");
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 		}

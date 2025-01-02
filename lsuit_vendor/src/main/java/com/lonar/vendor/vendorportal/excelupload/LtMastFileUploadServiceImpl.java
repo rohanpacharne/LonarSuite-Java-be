@@ -65,21 +65,21 @@ public class LtMastFileUploadServiceImpl implements LtMastFileUploadService,Code
 			throws ServiceException {
 		Status status = new Status();
 		status = saveFile(files,requestName,requestorId);
-		if(status.getCode()==SUCCESS) {
+		if(status.getCode()==0) {
 			status = insertExcelDataToTable(status,requestName,requestorId);
 			System.out.println("status = == "+status);
-			if(status.getCode()==SUCCESS) {
+			if(status.getCode()==0) {
 				return status;
-			}else if(status.getCode()==EXCEPTION){
+			}else if(status.getCode()==0){
 				return status;
 			}else {
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Please upload a File with valid format");
 				status.setData(null);
 			}
 			
 		}else {
-			status.setCode(EXCEPTION);
+			status.setCode(0);
 			status.setMessage("Error in finding message! The action was unsuccessful");
 			
 		}
@@ -119,18 +119,18 @@ public class LtMastFileUploadServiceImpl implements LtMastFileUploadService,Code
                     	System.out.println("hree");
                     	if(colCount == 1) {
                     		System.out.println("in");
-                    		status.setCode(EXCEPTION);
+                    		status.setCode(0);
                 			status.setMessage("Please insert Invoice number");
                 			System.out.println(status);
                 			return status;
                     	}else if(colCount == 15) {
                     		System.out.println("in 2 ");
-                    		status.setCode(EXCEPTION);
+                    		status.setCode(0);
                     		status.setMessage("Please insert Invoice line number");
                 			System.out.println(status);
                 			return status;
                     	}else if(colCount == 26) {
-                    		status.setCode(EXCEPTION);
+                    		status.setCode(0);
                 			status.setMessage("Please insert Tax name");
                 			return status;
                     	}
@@ -254,7 +254,7 @@ public class LtMastFileUploadServiceImpl implements LtMastFileUploadService,Code
         catch (Exception e)
         {
             e.printStackTrace();
-            status.setCode(EXCEPTION);
+            status.setCode(0);
         }
 		return status;
 	}
@@ -321,9 +321,16 @@ public class LtMastFileUploadServiceImpl implements LtMastFileUploadService,Code
 				if (!dir.exists()) {
 					dir.mkdirs();
 					if (!dir.isDirectory()) {
-						status = ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+//						status = ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+						try {
+							status.setCode(0);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("NO_DIRECTIVE_EXISTS").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						if (status.getMessage() == null) {
-							status.setCode(EXCEPTION);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 						}
 
@@ -349,7 +356,7 @@ public class LtMastFileUploadServiceImpl implements LtMastFileUploadService,Code
 							status.setCode(200);
 							status.setData(fileLoc);
 							if (status.getMessage() == null) {
-								status.setCode(SUCCESS);
+								status.setCode(1);
 								status.setMessage("You have successfully uploaded " + fileName );
 							}
 							return status;
@@ -358,23 +365,45 @@ public class LtMastFileUploadServiceImpl implements LtMastFileUploadService,Code
 							status.setCode(200);
 							status.setData(saveDirectory + fileName);
 							if (status.getMessage() == null) {
-								status.setCode(SUCCESS);
+								status.setCode(1);
 								status.setMessage("You have successfully uploaded " + fileName );
 							}
 							return status;
 						}
 				} catch (Exception e) {
 					e.printStackTrace();
-					status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//					status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 				}
 			} else {
-				status = ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status = ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			return status;
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//			status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return status;
 	}

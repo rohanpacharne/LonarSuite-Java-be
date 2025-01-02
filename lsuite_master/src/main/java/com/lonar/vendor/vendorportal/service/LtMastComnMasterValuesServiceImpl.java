@@ -207,7 +207,7 @@ public class LtMastComnMasterValuesServiceImpl implements LtMastComnMasterValues
 					.get(0).getComnMasterValuesId().equals(ltMastComnMasterValues.getComnMasterValuesId())
 					&& ltMastComnMasterValuesList.get(0).getMasterId().equals(ltMastComnMasterValues.getMasterId()))
 					{
-				status.setCode(VALUE_CODE_PRESENT);
+				status.setCode(0);
 				status.setMessage(" Value code already exists.");
 
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -219,7 +219,7 @@ public class LtMastComnMasterValuesServiceImpl implements LtMastComnMasterValues
 			if (!ltMastComnMasterValuesList.isEmpty() && !ltMastComnMasterValuesList
 					.get(0).getComnMasterValuesId().equals(ltMastComnMasterValues.getComnMasterValuesId())
 					&& ltMastComnMasterValuesList.get(0).getMasterId().equals(ltMastComnMasterValues.getMasterId())) {
-				status.setCode(VALUE_CODE_PRESENT);
+				status.setCode(0);
 				status.setMessage("Value name already exists.");
 
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -233,20 +233,36 @@ public class LtMastComnMasterValuesServiceImpl implements LtMastComnMasterValues
 			ltMastComnMasterValues = ltMastComnMasterValuesRepository.save(ltMastComnMasterValues);
 			
 			if(ltMastComnMasterValues.getComnMasterValuesId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+						
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 			status.setData(ltMastComnMasterValues.getComnMasterValuesId());
 			}
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if( status.getMessage()==null)
 				{
-					status.setCode(FAIL);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				}
 			}
@@ -275,7 +291,7 @@ public class LtMastComnMasterValuesServiceImpl implements LtMastComnMasterValues
 		
 		if (!ltMastComnMasterValuesList.isEmpty() && !ltMastComnMasterValuesList
 				.get(0).getComnMasterValuesId().equals(ltMastComnMasterValues.getComnMasterValuesId())) {
-			status.setCode(VALUE_CODE_PRESENT);
+			status.setCode(0);
 			status.setMessage(messageSource.getMessage("valuecodepresent", null, "valuecodepresent", Locale.getDefault()));
 
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -290,7 +306,7 @@ public class LtMastComnMasterValuesServiceImpl implements LtMastComnMasterValues
 	
 		if (!ltMastComnMasterValuesList.isEmpty() && !ltMastComnMasterValuesList
 				.get(0).getComnMasterValuesId().equals(ltMastComnMasterValues.getComnMasterValuesId())) {
-			status.setCode(VALUE_CODE_PRESENT);
+			status.setCode(0);
 			status.setMessage(messageSource.getMessage("valuenamepresent", null, "valuenamepresent", Locale.getDefault()));
 
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -303,20 +319,34 @@ public class LtMastComnMasterValuesServiceImpl implements LtMastComnMasterValues
 		ltMastComnMasterValues = ltMastComnMasterValuesRepository.save(ltMastComnMasterValues);
 		
 		if(ltMastComnMasterValues.getComnMasterValuesId()!=null) {
-		status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//		status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		if( status.getMessage()==null)
 		{
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			status.setMessage("Error in finding message! The action is completed successfully.");
 		}
 		status.setData(ltMastComnMasterValues.getComnMasterValuesId());
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		}
@@ -328,7 +358,49 @@ public class LtMastComnMasterValuesServiceImpl implements LtMastComnMasterValues
 	@Override
 	public ResponseEntity<List<LtMastComnMasterValues>> getMasterList(String masterName) throws ServiceException {
 		List<LtMastComnMasterValues> list = ltMastComnMasterValuesDao.getMasterList(masterName);
+		System.out.println("list is "+list);
 		return new ResponseEntity(list, HttpStatus.OK); 
+	}
+	
+	@Transactional
+	@Override
+	public Long getCount(LtMastComnMasterValues input, Long masterId){
+		return ltMastComnMasterValuesDao.getCount(input,masterId);
+	}
+
+	@Override
+	public List<LtMastComnMasterValues> getDataTable(LtMastComnMasterValues input, Long masterId)
+			throws ServiceException {
+		if(input.getColumnNo()==1 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(11);
+		}
+		if(input.getColumnNo()==2 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(12);
+		}
+		if(input.getColumnNo()==3 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(13);
+		}
+		if(input.getColumnNo()==4 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(14);
+		}
+		if(input.getColumnNo()==5 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(15);
+		}
+		if(input.getColumnNo()==6 && input.getSort().equals("asc"))
+		{
+			input.setColumnNo(16);
+		}
+		if(input.getColumnNo()==0)
+		{
+			input.setColumnNo(1);
+		}
+		
+		return ltMastComnMasterValuesDao.getDataTable(input, masterId);
 	}
 
 }

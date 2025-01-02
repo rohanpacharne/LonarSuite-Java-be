@@ -149,7 +149,15 @@ public class LtMastVendorSisterConcernsRestController  implements CodeMaster
 			}
 			catch (org.springframework.dao.DataIntegrityViolationException e)
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//				status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				logger.error("ERROR "+ e );
 				e.printStackTrace();
 				return new ResponseEntity<Status>(status,HttpStatus.OK);

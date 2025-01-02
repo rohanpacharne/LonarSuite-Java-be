@@ -11,13 +11,14 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "LT_MAST_TAX_TYPE")
-public class LtMastTaxType extends BaseClass {
+public class LtMastTaxType extends WhoColumns {
 
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "unit_seq")
-	@SequenceGenerator(name = "unit_seq", sequenceName = "LT_MAST_TAX_TYPE_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "unit_seq")
+//	@SequenceGenerator(name = "unit_seq", sequenceName = "LT_MAST_TAX_TYPE_S", allocationSize = 1)
 	@Column(name = "TAX_TYPE_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long taxTypeId;
 	
 	@Column(name = "TAX_TYPE_CODE")

@@ -109,7 +109,7 @@ public class LtMastDepartmentsDaoImpl implements LtMastDepartmentsDao{
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							
-							input.getStart()+input.getLength(),input.getStart()+1},
+							input.getStart(),input.getStart()+input.getLength()},
 				 new  BeanPropertyRowMapper<LtMastDepartments>(LtMastDepartments.class));
 				return list;
 	}

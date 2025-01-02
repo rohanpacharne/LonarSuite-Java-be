@@ -68,6 +68,9 @@ public class LtMastComnMasterValues implements Serializable {
 	 * 
 	 * @Column(name = "STATUS") private String status;
 	 */
+	
+	@Column(name = "STATUS")
+	private String valueStatus;
 
 	@Basic(optional = false)
 	// @NotNull(message="notnull")
@@ -100,10 +103,11 @@ public class LtMastComnMasterValues implements Serializable {
 	private Date lastUpdateDate;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comnMasterValues_seq")
-	@SequenceGenerator(name = "comnMasterValues_seq", sequenceName = "lt_mast_comn_master_values_s", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comnMasterValues_seq")
+//	@SequenceGenerator(name = "comnMasterValues_seq", sequenceName = "lt_mast_comn_master_values_s", allocationSize = 1)
 	@Basic(optional = false)
 	@Column(name = "COMN_MASTER_VALUES_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long comnMasterValuesId;
 
 	@Transient
@@ -111,9 +115,37 @@ public class LtMastComnMasterValues implements Serializable {
 
 	@Transient
 	private String masterDesc;
+	
+	//for pagination
+	@Transient
+	private Long draw;
+
+	@Transient
+	private Long start;
+
+	@Transient
+	private Long length;
+
+	@Transient
+	private int columnNo;
+	
+	@Transient
+	private String sort;
+	//for pagination
 
 	public LtMastComnMasterValues() {
 	}
+
+	
+	public String getSort() {
+		return sort;
+	}
+
+
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
+
 
 	public LtMastComnMasterValues(Long comnMasterValuesId) {
 		this.comnMasterValuesId = comnMasterValuesId;
@@ -260,6 +292,40 @@ public class LtMastComnMasterValues implements Serializable {
 			masterDesc = "";
 		this.masterDesc = masterDesc;
 	}
+	
+	
+
+	public Long getDraw() {
+		return draw;
+	}
+
+	public void setDraw(Long draw) {
+		this.draw = draw;
+	}
+
+	public Long getStart() {
+		return start;
+	}
+
+	public void setStart(Long start) {
+		this.start = start;
+	}
+
+	public Long getLength() {
+		return length;
+	}
+
+	public void setLength(Long length) {
+		this.length = length;
+	}
+
+	public int getColumnNo() {
+		return columnNo;
+	}
+
+	public void setColumnNo(int columnNo) {
+		this.columnNo = columnNo;
+	}
 
 	@Override
 	public int hashCode() {
@@ -282,15 +348,28 @@ public class LtMastComnMasterValues implements Serializable {
 		}
 		return true;
 	}
+	
+
+	public String getValueStatus() {
+		return valueStatus;
+	}
+
+	public void setValueStatus(String valueStatus) {
+		this.valueStatus = valueStatus;
+	}
+
 
 	@Override
 	public String toString() {
 		return "LtMastComnMasterValues [masterId=" + masterId + ", valueCode=" + valueCode + ", valueName=" + valueName
-				+ ", valueDescription=" + valueDescription + ", valueTag=" + valueTag + ", startDate=" + startDate
-				+ ", endDate=" + endDate + ", createdBy=" + createdBy + ", creationDate=" + creationDate
-				+ ", lastUpdateLogin=" + lastUpdateLogin + ", lastUpdatedBy=" + lastUpdatedBy + ", lastUpdateDate="
-				+ lastUpdateDate + ", comnMasterValuesId=" + comnMasterValuesId + ", masterName=" + masterName
-				+ ", masterDesc=" + masterDesc + "]";
+				+ ", valueDescription=" + valueDescription + ", valueTag=" + valueTag + ", valueStatus=" + valueStatus
+				+ ", startDate=" + startDate + ", endDate=" + endDate + ", createdBy=" + createdBy + ", creationDate="
+				+ creationDate + ", lastUpdateLogin=" + lastUpdateLogin + ", lastUpdatedBy=" + lastUpdatedBy
+				+ ", lastUpdateDate=" + lastUpdateDate + ", comnMasterValuesId=" + comnMasterValuesId + ", masterName="
+				+ masterName + ", masterDesc=" + masterDesc + ", draw=" + draw + ", start=" + start + ", length="
+				+ length + ", columnNo=" + columnNo + ", sort=" + sort + "]";
 	}
+
+	
 
 }

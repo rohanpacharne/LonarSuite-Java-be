@@ -30,9 +30,9 @@ public class LtMastPasswords implements Serializable {
 	@Id
 	@Basic(optional = false)
 	// @GeneratedValue(strategy = GenerationType.AUTO)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "password_seq")
-	@SequenceGenerator(name = "password_seq", sequenceName = "LT_MAST_PASSWORDS_S", allocationSize = 1)
-
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "password_seq")
+//	@SequenceGenerator(name = "password_seq", sequenceName = "LT_MAST_PASSWORDS_S", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "PASSWORDID")
 	private Long passwordid;
 	@Basic(optional = false)

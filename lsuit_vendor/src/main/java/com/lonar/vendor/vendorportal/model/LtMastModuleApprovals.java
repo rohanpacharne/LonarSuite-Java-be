@@ -22,12 +22,12 @@ import com.fasterxml.jackson.annotation.JsonView;
 @Entity
 @Table(name = "LT_MAST_MODULE_APPROVALS")
 @JsonInclude(Include.NON_NULL)
-public class LtMastModuleApprovals extends BaseClass implements Serializable
+public class LtMastModuleApprovals extends WhoColumns implements Serializable
 {
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "moduleApproval_seq")
-	@SequenceGenerator(name = "moduleApproval_seq", sequenceName = "LT_MAST_MODULE_APPROVALS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "moduleApproval_seq")
+//	@SequenceGenerator(name = "moduleApproval_seq", sequenceName = "LT_MAST_MODULE_APPROVALS_S", allocationSize = 1)
 	@Column(name = "MODULE_APPROVAL_ID")
 	@JsonView(DataTablesOutput.View.class)
 	private Long moduleApprovalId;

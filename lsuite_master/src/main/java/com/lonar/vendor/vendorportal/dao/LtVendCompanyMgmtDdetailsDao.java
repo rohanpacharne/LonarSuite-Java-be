@@ -3,6 +3,7 @@ package com.lonar.vendor.vendorportal.dao;
 import java.util.List;
 
 import com.lonar.vendor.vendorportal.model.LtCompanyVenMgmtInclude;
+import com.lonar.vendor.vendorportal.model.LtCompanyVenMgmtIncludedto;
 import com.lonar.vendor.vendorportal.model.LtVendCompanyMgmtDdetails;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 
@@ -17,6 +18,6 @@ public interface LtVendCompanyMgmtDdetailsDao
 
 	List<LtVendCompanyMgmtDdetails> getAllActive();
 	
-	List<LtCompanyVenMgmtInclude> getManagementBycompanyId(Long companyId) throws ServiceException;
+	List<LtCompanyVenMgmtIncludedto> getManagementBycompanyId(Long companyId) throws ServiceException;
 
 }

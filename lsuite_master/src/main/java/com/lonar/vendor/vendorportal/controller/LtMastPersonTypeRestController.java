@@ -40,7 +40,7 @@ public class LtMastPersonTypeRestController implements CodeMaster{
 			
 		} 
 		catch (Exception e) {		
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 	}
@@ -52,7 +52,7 @@ public class LtMastPersonTypeRestController implements CodeMaster{
 		try {
 				return ltMastPersonTypeService.save(ltMastPersonType);	
 		}catch(Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 	}
 	//------------------------------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ public class LtMastPersonTypeRestController implements CodeMaster{
 		try {
 				return ltMastPersonTypeService.update(ltMastPersonType);	
 		}catch(Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 	}
 			
@@ -73,7 +73,7 @@ public class LtMastPersonTypeRestController implements CodeMaster{
 		try {
 			return ltMastPersonTypeService.delete(id);
 		}catch(Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 	}	
 			

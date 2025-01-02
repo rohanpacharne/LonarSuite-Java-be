@@ -22,12 +22,16 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class ShipmenntSources {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "source_seq")
-	@SequenceGenerator(name = "source_seq", sequenceName = "LT_SHIPMENNT_SOURCES_S", allocationSize = 1)
-	@Basic(optional = false)
+//	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "source_seq")
+//	//@SequenceGenerator(name = "source_seq", sequenceName = "LT_SHIPMENNT_SOURCES_S", allocationSize = 1)
+//	@Basic(optional = false)
 	@Column(name = "SHIP_ID")
-	private Long SHIP_ID;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long shipId;
     
+//	@Id
+//	@Basic(optional = false)
+//	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "shipment_source_id")
 	private Long shipmentSourceId;
 	
@@ -64,6 +68,14 @@ public class ShipmenntSources {
 	
 	@Column(name = "VENDOR_ADD_ID")
 	private Long vendorAddId;
+	
+	public Long getShipId() {
+		return shipId;
+	}
+
+	public void setShipId(Long shipID) {
+		this.shipId = shipID;
+	}
 
 	public Long getShipmentSourceId() {
 		return shipmentSourceId;
@@ -137,13 +149,13 @@ public class ShipmenntSources {
 		this.poLineId = poLineId;
 	}
 
-	public Long getSHIP_ID() {
-		return SHIP_ID;
-	}
-
-	public void setSHIP_ID(Long sHIP_ID) {
-		SHIP_ID = sHIP_ID;
-	}
+//	public Long getSHIP_ID() {
+//		return SHIP_ID;
+//	}
+//
+//	public void setSHIP_ID(Long sHIP_ID) {
+//		SHIP_ID = sHIP_ID;
+//	}
 
 	public Long getPoShipmentId() {
 		return poShipmentId;

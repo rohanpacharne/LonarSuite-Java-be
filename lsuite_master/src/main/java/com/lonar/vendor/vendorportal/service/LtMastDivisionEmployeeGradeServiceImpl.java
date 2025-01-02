@@ -81,7 +81,7 @@ public class LtMastDivisionEmployeeGradeServiceImpl implements LtMastDivisionEmp
 					&& !(ltP2pDivisionEmployeeGradeList.get(0).getDivEmployeeGradeId().equals(ltP2pDivisionEmployeeGrade.getDivEmployeeGradeId())
 			)) {
 
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("Division with same grade already exists.");
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
@@ -91,15 +91,31 @@ public class LtMastDivisionEmployeeGradeServiceImpl implements LtMastDivisionEmp
 			ltP2pDivisionEmployeeGrade.setCreationDate(new Date());
 			ltP2pDivisionEmployeeGradeRepository.save(ltP2pDivisionEmployeeGrade);
 			if(ltP2pDivisionEmployeeGrade.getDivEmployeeGradeId()!=null) {
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+						
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			}
 			else {
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 				
 			}
@@ -120,7 +136,7 @@ public class LtMastDivisionEmployeeGradeServiceImpl implements LtMastDivisionEmp
 							: !ltP2pDivisionEmployeeGrade.getDivEmployeeGradeId()
 									.equals(ltP2pDivisionEmployeeGradeList.get(0).getDivEmployeeGradeId()))) {
 
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("Division with same grade already exists.");
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
@@ -130,15 +146,31 @@ public class LtMastDivisionEmployeeGradeServiceImpl implements LtMastDivisionEmp
 			ltP2pDivisionEmployeeGrade.setCreationDate(new Date());
 			ltP2pDivisionEmployeeGradeRepository.save(ltP2pDivisionEmployeeGrade);
 			if(ltP2pDivisionEmployeeGrade.getDivEmployeeGradeId()!=null) {
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+						
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			}
 			else {
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 				
 			}
@@ -150,17 +182,33 @@ public class LtMastDivisionEmployeeGradeServiceImpl implements LtMastDivisionEmp
 		Status status = new Status();
 		ltP2pDivisionEmployeeGradeRepository.delete(id);
 			if (!ltP2pDivisionEmployeeGradeRepository.exists(id)) {
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+						
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			} else {
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				}
 				

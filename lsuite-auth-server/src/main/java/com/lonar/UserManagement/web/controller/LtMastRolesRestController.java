@@ -131,7 +131,7 @@ public class LtMastRolesRestController implements CodeMaster {
 					}
 				}
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<RoleWithModule>(roleWithModule, HttpStatus.OK);
 	}
@@ -142,7 +142,7 @@ public class LtMastRolesRestController implements CodeMaster {
 		try {
 		return ltMastRolesService.saveRole(ltMastRoles);
 		}catch(Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 	}
 	
@@ -152,7 +152,7 @@ public class LtMastRolesRestController implements CodeMaster {
 		try {
 			return ltMastRolesService.updateRole(ltMastRoles);
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 		
 	}
@@ -162,7 +162,7 @@ public class LtMastRolesRestController implements CodeMaster {
 		try {
 			return ltMastRolesService.saveRoleWithModule(roleWithModule);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 		
 	}
@@ -175,18 +175,24 @@ public class LtMastRolesRestController implements CodeMaster {
 			if (ltMastRolesRepository.exists(Long.parseLong(id))) {
 				ltMastRolesRepository.delete(Long.parseLong(id));
 		} else {
-				
 				return new ResponseEntity<Status>(
-						new Status(NO_RESULT,
-								messageSource.getMessage("noresult", null, "Default", Locale.getDefault())),
+						new Status(0,
+								ltMastCommonMessageService.getMessageNameByCode("NO_RESULT").getMessageName()),
 						HttpStatus.OK);
 
 			}
 
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
-		status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//		status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+		try {
+			status.setCode(1);
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return new ResponseEntity<Status>(status,HttpStatus.OK);
 	}
 
@@ -200,9 +206,8 @@ public class LtMastRolesRestController implements CodeMaster {
 		try {
 
 			if (jsonInputString.length() == 0) {
-				status.setCode(INPUT_IS_EMPTY);
-				status.setMessage(messageSource.getMessage("inputempty", null, "Default", Locale.getDefault()));
-				
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());				
 				new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
 			jsonInputObject = (JSONObject) jsonparser.parse(jsonInputString);
@@ -214,18 +219,28 @@ public class LtMastRolesRestController implements CodeMaster {
 				ltMastRoleModulesRepository.delete(ltP2pRoleModulesGet.get(0).getRoleFuncId());
 
 			} else {
-				status.setCode(INVALID_ID);
-				status.setMessage(messageSource.getMessage("invalidid", null, "Default", Locale.getDefault()));
+//				status.setCode(INVALID_ID);
+//				status.setMessage(messageSource.getMessage("invalidid", null, "Default", Locale.getDefault()));
+				
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INVALID_ID").getMessageName());
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
 
 		}   catch (Exception e) {
 			e.printStackTrace();
 			logger.error("ERROR "+ e );
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 
 		}
-		status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//		status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+		try {
+			status.setCode(1);
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return new ResponseEntity<Status>(status,HttpStatus.OK);
 	}
 	
@@ -239,7 +254,7 @@ public class LtMastRolesRestController implements CodeMaster {
 		try {
 			if (bindingResult.hasErrors()) {
 				for (ObjectError objectError : bindingResult.getAllErrors()) {
-					status.setCode(VALIDATION);
+					status.setCode(0);
 					if (objectError.getCode().toString().equals("SafeHtml")) {
 
 						status.setMessage(messageSource.getMessage("UnsafeHtml", null, "Default", Locale.getDefault()));
@@ -251,7 +266,7 @@ public class LtMastRolesRestController implements CodeMaster {
 			List<LtMastRoles> ltMastRolesList = ltMastRolesService.findByRole(ltMastRoles.getRoleName(),ltMastRoles.getCompanyId());
 			if (!ltMastRolesList.isEmpty() && (ltMastRoles.getRoleId() == null ? true
 					: !ltMastRoles.getRoleId().equals(ltMastRolesList.get(0).getRoleId()))) {
-				status.setCode(ROLE_NAME_PRESENT);
+				status.setCode(1);
 				status.setMessage(messageSource.getMessage("rolenamepresent", null, "Default", Locale.getDefault()));
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 
@@ -282,10 +297,18 @@ public class LtMastRolesRestController implements CodeMaster {
 			ltMastRoleModulesRepository.save(ltMastRoleModulesList);
 
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		
-		status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//		status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+		try {
+			status.setCode(1);
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return new ResponseEntity<Status>(status,HttpStatus.OK);
 	}
 	

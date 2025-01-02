@@ -22,6 +22,7 @@ import com.lonar.vendor.vendorportal.model.LtInvoiceHeaders;
 import com.lonar.vendor.vendorportal.model.LtMastEmployeeDelegation;
 import com.lonar.vendor.vendorportal.model.LtMastEmployees;
 import com.lonar.vendor.vendorportal.model.LtMastVendors;
+import com.lonar.vendor.vendorportal.model.LtRentalAgreementHeaders;
 import com.lonar.vendor.vendorportal.model.SendBroadCastEmail;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.model.Status;
@@ -99,6 +100,7 @@ public class LtMastVendorsDaoImpl implements LtMastVendorsDao,CodeMaster
 		
 	List<LtMastVendors> list=   jdbcTemplate.query(query, new Object[]{ vendorId }, 
 			 new BeanPropertyRowMapper<LtMastVendors>(LtMastVendors.class)); 
+	System.out.println("list = "+list);
 	 if(!list.isEmpty())
 		 return list.get(0);
 	 else
@@ -404,7 +406,7 @@ public class LtMastVendorsDaoImpl implements LtMastVendorsDao,CodeMaster
 	{
 		//String query = env.getProperty("getInprocessVendorList");
 		String query = "SELECT  distinct(e.VENDOR_ID) as VENDOR_ID, e.VENDOR_CODE,e.VENDOR_NAME,e.STATUS,e.START_DATE, "
-				+ " e.VENDOR_TYPE,e.BUSINESS_NATURE_ID,e.DIVISION_ID,e.INITIATOR_ID,e.PRIMARY_EMAIL,e.COMPANY_ID,apr.APPROVAL_LEVEL "
+				+ " e.VENDOR_TYPE,e.DIVISION_ID,e.INITIATOR_ID,e.PRIMARY_EMAIL,e.COMPANY_ID,apr.APPROVAL_LEVEL "
 				+ " FROM LT_MAST_VENDORS e, LT_VENDOR_APPROVAL apr "
 				+ " WHERE apr.VENDOR_ID = e.VENDOR_ID AND e.Status= 'INPROCESS' "
 				+ " AND ((apr.APPROVAL_LEVEL = apr.CURRENT_APPROVAL_LEVEL AND apr.STATUS = 'APPROVED') "
@@ -506,7 +508,7 @@ public class LtMastVendorsDaoImpl implements LtMastVendorsDao,CodeMaster
 				+ " AND DIVISION_ID= ( SELECT DIVISION_ID FROM LT_MAST_EMPLOYEES e WHERE e.EMPLOYEE_ID = ? ) "
 				+ " AND MODULE= 'VENDOR'  "
 				+ " AND STATUS= 'DRAFT' AND b.COMPANY_ID = ? "
-				+ " AND ( a.START_DATE <= SYSDATE AND (a.END_DATE is null or a.END_DATE > SYSDATE) ) ";
+				+ " AND ( a.START_DATE <= SYSDATE() AND (a.END_DATE is null or a.END_DATE > SYSDATE()) ) ";
 		
 		List<Approval> approvalList=   jdbcTemplate.query(query, new Object[]{ list.get(0).getInitiatorId(),companyId}, 
 			 new BeanPropertyRowMapper<Approval>(Approval.class)); 
@@ -540,10 +542,10 @@ public class LtMastVendorsDaoImpl implements LtMastVendorsDao,CodeMaster
 			{
 				
 				res=jdbcTemplate.update(" INSERT INTO lt_vendor_approval "
-						+ " ( VENDOR_APPROVAL_ID,MODULE_APPROVAL_ID,APPROVAL_ID,APPROVAL_LEVEL,CURRENT_APPROVAL_LEVEL,DELEGATION_ID, "
+						+ " ( MODULE_APPROVAL_ID,APPROVAL_ID,APPROVAL_LEVEL,CURRENT_APPROVAL_LEVEL,DELEGATION_ID, "
 						+ " VENDOR_ID, STATUS,START_DATE,END_DATE, CREATED_BY,CREATION_DATE,LAST_UPDATE_LOGIN,"
 						+ " LAST_UPDATED_BY,LAST_UPDATE_DATE ,MODULE_APP_EMPLOYEES_ID)  "
-		 		+ " VALUES(LT_VENDOR_APPROVAL_S.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ",
+		 		+ " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ",
 		 		approval.getModuleApprovalId(),approval.getEmployeesId(),approval.getApprovalLevel(),
 		 		null,approval.getDelegationId(),list.get(0).getVendorId(),NO_ACTION,list.get(0).getStartDate(),
 		 		list.get(0).getEndDate(),list.get(0).getCreatedBy(),new Date(),
@@ -714,7 +716,7 @@ public class LtMastVendorsDaoImpl implements LtMastVendorsDao,CodeMaster
 				+ " AND DIVISION_ID= ? "
 				+ " AND MODULE= 'INVOICE'  "
 				+ " AND STATUS= 'DRAFT' "
-				+ " AND ( a.START_DATE <= SYSDATE AND (a.END_DATE is null or a.END_DATE > SYSDATE) ) ";
+				+ " AND ( a.START_DATE <= SYSDATE() AND (a.END_DATE is null or a.END_DATE > SYSDATE()) ) ";
 		
 		List<Approval> approvalList=   jdbcTemplate.query(query, new Object[]{ ltInvoiceHeaders.getDivisionId()}, 
 			 new BeanPropertyRowMapper<Approval>(Approval.class)); 
@@ -745,10 +747,10 @@ public class LtMastVendorsDaoImpl implements LtMastVendorsDao,CodeMaster
 			if(approval.getEmployeesId()!=null && approval.getModuleApprovalId()!=null && approval.getApprovalLevel()!=null)
 			{
 				res=jdbcTemplate.update(" INSERT INTO lt_invoice_approval "
-						+ " ( INVOICE_APPROVAL_ID,MODULE_APPROVAL_ID,APPROVAL_ID,APPROVAL_LEVEL,CURRENT_APPROVAL_LEVEL,DELEGATION_ID, "
+						+ " (MODULE_APPROVAL_ID,APPROVAL_ID,APPROVAL_LEVEL,CURRENT_APPROVAL_LEVEL,DELEGATION_ID, "
 						+ " INVOICE_HEADER_ID, STATUS,START_DATE,END_DATE, CREATED_BY,CREATION_DATE,LAST_UPDATE_LOGIN,"
 						+ " LAST_UPDATED_BY,LAST_UPDATE_DATE ,MODULE_APP_EMPLOYEES_ID)  "
-		 		+ " VALUES(LT_VENDOR_APPROVAL_S.nextval,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ",
+		 		+ " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ",
 		 		approval.getModuleApprovalId(),approval.getEmployeesId(),approval.getApprovalLevel(),
 		 		null,approval.getDelegationId(),ltInvoiceHeaders.getInvoiceHeaderId(),NO_ACTION,new Date(),
 		 		null,ltInvoiceHeaders.getCreatedBy(),new Date(),
@@ -875,6 +877,66 @@ public class LtMastVendorsDaoImpl implements LtMastVendorsDao,CodeMaster
 			 return null;
 		 else
 		return list.get(0);
+	}
+
+	@Override
+	public boolean loadRentalAgreementApprovers(LtRentalAgreementHeaders ltRentalAgreementHeaders)
+			throws ServiceException {
+		String query = " SELECT a.module_app_employees_id,a.employees_id,b.approval_level,b.module, "
+				+ " a.MODULE_APPROVAL_ID ,a.START_DATE,a.END_DATE  "
+				+ " FROM lt_mast_module_app_emp a,lt_mast_module_approvals b "
+				+ " WHERE a.MODULE_APPROVAL_ID=b.MODULE_APPROVAL_ID "
+				+ " AND DIVISION_ID= ? "
+				+ " AND MODULE= 'RENTAL_AGREEMENT'  "
+				+ " AND STATUS= 'DRAFT' "
+				+ " AND ( a.START_DATE <= SYSDATE() AND (a.END_DATE is null or a.END_DATE > SYSDATE()) ) ";
+		
+		List<Approval> approvalList=   jdbcTemplate.query(query, new Object[]{ ltRentalAgreementHeaders.getDivisionId()}, 
+			 new BeanPropertyRowMapper<Approval>(Approval.class)); 
+	 
+		List<LtMastEmployees>  empList=ltMastEmployeesDao.getByEmpId(ltRentalAgreementHeaders.getInitiatorId());
+		
+			Approval superviserApproval = new Approval();
+			superviserApproval.setEmployeesId(ltRentalAgreementHeaders.getInitiatorId());
+			superviserApproval.setApprovalLevel("00");
+			superviserApproval.setModuleApprovalId(00L);
+		
+			approvalList.add(superviserApproval);
+		
+		boolean flag=false;
+	if(approvalList.size()>0)
+	{
+		for(Approval approvalObj:approvalList)
+		{
+			Approval approval=approvalObj;
+			List<LtMastEmployeeDelegation> ltMastEmployeeDelegation = ltMastEmployeeDelegationDao
+					.findForDelegation(approvalObj.getEmployeesId());
+			if(ltMastEmployeeDelegation!= null && ltMastEmployeeDelegation.size()>0)
+			{
+				approval.setDelegationId(ltMastEmployeeDelegation.get(0).getDelegationId());
+			}
+			
+			int res=0;
+			if(approval.getEmployeesId()!=null && approval.getModuleApprovalId()!=null && approval.getApprovalLevel()!=null)
+			{
+				res=jdbcTemplate.update(" INSERT INTO lt_rental_agreement_approval "
+						+ " (MODULE_APPROVAL_ID,APPROVAL_ID,APPROVAL_LEVEL,CURRENT_APPROVAL_LEVEL,DELEGATION_ID, "
+						+ " AGREEMENT_HEADER_ID, STATUS,START_DATE,END_DATE, CREATED_BY,CREATION_DATE,LAST_UPDATE_LOGIN,"
+						+ " LAST_UPDATED_BY,LAST_UPDATE_DATE ,MODULE_APP_EMPLOYEES_ID)  "
+		 		+ " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ",
+		 		approval.getModuleApprovalId(),approval.getEmployeesId(),approval.getApprovalLevel(),
+		 		null,approval.getDelegationId(),ltRentalAgreementHeaders.getAgreementHeaderId(),NO_ACTION,new Date(),
+		 		null,ltRentalAgreementHeaders.getCreatedBy(),new Date(),
+		 		ltRentalAgreementHeaders.getLastUpdateLogin(),ltRentalAgreementHeaders.getLastUpdatedBy(),
+		 		new Date(),approval.getModuleAppEmployeesId());
+				if(res!=0)
+					flag=true;
+			}
+			
+		}
+	}
+	
+	return flag;
 	}
 
 }

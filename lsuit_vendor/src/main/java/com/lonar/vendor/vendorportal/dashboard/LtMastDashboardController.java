@@ -139,24 +139,35 @@ public class LtMastDashboardController {
 		return new ResponseEntity<List<LtMastDashboardModel>>(dashboardPOMonthBuyerList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/dashboardtotalincome/{companyId}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/dashboardtotalincome/{companyId}/{vendorId}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<LtMastDashboardModel>> getTotalIncome(@PathVariable("companyId") Long companyId,
+			@PathVariable("vendorId") Long vendorId,
 			@PathVariable("logTime") String logTime) {
 		List<LtMastDashboardModel> totalIncomeList = null;
+		
+		if(vendorId==-1) {
+			vendorId = null;
+		}
+		
 		try {
-			totalIncomeList = ltMastDashboardService.getTotalIncome(companyId);
+			totalIncomeList = ltMastDashboardService.getTotalIncome(companyId,vendorId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return new ResponseEntity<List<LtMastDashboardModel>>(totalIncomeList, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/dashboardtotalexpense/{companyId}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/dashboardtotalexpense/{companyId}/{vendorId}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<LtMastDashboardModel>> getTotalExpense(@PathVariable("companyId") Long companyId,
+			@PathVariable("vendorId") Long vendorId,
 			@PathVariable("logTime") String logTime) {
 		List<LtMastDashboardModel> totalExpenseList = null;
+		
+		if(vendorId==-1) {
+			vendorId = null;
+		}
 		try {
-			totalExpenseList = ltMastDashboardService.getTotalExpense(companyId);
+			totalExpenseList = ltMastDashboardService.getTotalExpense(companyId,vendorId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

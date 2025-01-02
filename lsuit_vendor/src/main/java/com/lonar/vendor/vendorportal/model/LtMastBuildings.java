@@ -42,7 +42,7 @@ import javax.persistence.Transient;
 	    @NamedQuery(name = "LtP2pBuildings .getAddress", query = "SELECT l FROM LtP2pBuildings l where l.buildingAddress LIKE :buildingAddress ")
 
 	 })*/
-public class LtMastBuildings extends BaseClass implements Serializable
+public class LtMastBuildings extends WhoColumns implements Serializable
 {
 
 
@@ -50,9 +50,10 @@ public class LtMastBuildings extends BaseClass implements Serializable
 
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "buildings_seq")
-	@SequenceGenerator(name = "buildings_seq", sequenceName = "LT_MAST_BUILDINGS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "buildings_seq")
+//	@SequenceGenerator(name = "buildings_seq", sequenceName = "LT_MAST_BUILDINGS_S", allocationSize = 1)
 	@Column(name = "BUILDING_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long buildingId;
 	
 	@Column(name = "BRANCH_ID")

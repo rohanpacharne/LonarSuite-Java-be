@@ -19,9 +19,10 @@ import javax.persistence.Transient;
 public class LtMastDocumentList {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "document_list_seq")
-	@SequenceGenerator(name = "document_list_seq", sequenceName = " LT_MAST_DOCUMENT_LIST_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "document_list_seq")
+//	@SequenceGenerator(name = "document_list_seq", sequenceName = " LT_MAST_DOCUMENT_LIST_S", allocationSize = 1)
 	@Column(name = "DOC_LIST_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long docListId;
 	
 	@Column(name = "FILE_NAME")

@@ -2,6 +2,7 @@ package com.lonar.vendor.vendorportal.dao;
 
 import java.util.List;
 
+import com.lonar.vendor.vendorportal.model.LtExpExpenseHeaders;
 import com.lonar.vendor.vendorportal.model.LtMastEmployees;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.model.Status;
@@ -79,6 +80,8 @@ public interface LtMastEmployeesDao {
 	public List<LtMastEmployees> companyWiseEmp(Long compId)  throws ServiceException;
 
 	public List<LtMastEmployees> getLikeNameByComId(String name, Long companyId) throws ServiceException;
+	
+	public List<LtMastEmployees> getCustomerArCollectorsLikeNameByComId(Long companyId,String name) throws ServiceException;
 
 	public List<LtMastEmployees> getDataForReport(ReportParameters reportParameters) throws ServiceException;
 

@@ -22,13 +22,13 @@ import com.fasterxml.jackson.annotation.JsonView;
 @Entity
 @Table(name = "LT_MAST_TAXES")
 
-public class LtMastTaxes extends BaseClass implements Serializable {
+public class LtMastTaxes extends WhoColumns implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "taxes_seq")
-	@SequenceGenerator(name = "taxes_seq", sequenceName = "LT_MAST_TAXES_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "taxes_seq")
+//	@SequenceGenerator(name = "taxes_seq", sequenceName = "LT_MAST_TAXES_S", allocationSize = 1)
 	@Column(name = "TAX_ID")
 	private Long taxId;
 	@Basic(optional = false)

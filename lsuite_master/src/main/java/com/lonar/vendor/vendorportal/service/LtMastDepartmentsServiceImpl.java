@@ -72,12 +72,28 @@ public class LtMastDepartmentsServiceImpl implements LtMastDepartmentsService, C
 			ltMastDepartments.setLastUpdatedBy(ltMastDepartments.getLastUpdateLogin());
 			ltMastDepartments = ltMastDepartmentsDao.save(ltMastDepartments);
 			if (ltMastDepartments.getDepartmentId() != null) {
-				status = ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//				status = ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+						
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			} else {
-				status = ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//				status = ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+						
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		} else {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage(chkDuplicate);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -112,12 +128,27 @@ public class LtMastDepartmentsServiceImpl implements LtMastDepartmentsService, C
 			ltMastDepartments.setLastUpdatedBy(ltMastDepartments.getLastUpdateLogin());
 			ltMastDepartments = ltMastDepartmentsDao.update(ltMastDepartments);
 			if (ltMastDepartments.getDepartmentId() != null) {
-				status = ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//				status = ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+					
+				try {
+					status.setCode(1);	
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			} else {
-				status = ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//				status = ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+				try {
+					status.setCode(0);	
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		} else {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage(chkDuplicate);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -128,9 +159,25 @@ public class LtMastDepartmentsServiceImpl implements LtMastDepartmentsService, C
 		Status status = new Status();
 		LtMastDepartments ltMastDepartments = ltMastDepartmentsDao.delete(id);
 		if (ltMastDepartments == null) {
-			status = ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//			status = ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else {
-			status = ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//			status = ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+			
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}

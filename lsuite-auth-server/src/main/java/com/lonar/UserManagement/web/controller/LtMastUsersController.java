@@ -44,7 +44,7 @@ public class LtMastUsersController implements CodeMaster {
 		try {
 			return ltMastUsersService.getLtMastUsersDataTable(input,companyId);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 		
 	}
@@ -58,9 +58,9 @@ public class LtMastUsersController implements CodeMaster {
 			
 		}catch(Exception e) {
 			 
-			status.setCode(INTERNAL_SERVER_ERROR);
+			status.setCode(0);
 			status.setMessage("User creation fail!! Email Id already exists");
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 				//return status;
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -75,9 +75,9 @@ public class LtMastUsersController implements CodeMaster {
 			status = ltMastUsersService.updateUser(user);
 		}catch(Exception e) {
 			e.printStackTrace();
-			status.setCode(INTERNAL_SERVER_ERROR);
+			status.setCode(0);
 			status.setMessage(e.getMessage());
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
@@ -87,7 +87,7 @@ public class LtMastUsersController implements CodeMaster {
 		try {
 			return ltMastUsersService.getLtMastUsersByID(id);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 		
 	}	
@@ -97,7 +97,7 @@ public class LtMastUsersController implements CodeMaster {
 		try {
 			return ltMastUsersService.getActiveRoles();
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 		
 	}	
@@ -107,7 +107,7 @@ public class LtMastUsersController implements CodeMaster {
 		try {
 			return ltMastUsersService.saveUserRole(user);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 		
 	}
@@ -117,7 +117,7 @@ public class LtMastUsersController implements CodeMaster {
 		try {
 			return ltMastUsersService.getUsersRoleDataTable(input);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 	
 		
@@ -131,24 +131,24 @@ public class LtMastUsersController implements CodeMaster {
 		try {
 			 status = ltMastUsersService.deleteById(id);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/getActiveLikeUserName/{userName}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<LtMastUsers>> listActiveLikeUserName(@PathVariable("userName") String userName,@PathVariable("logTime") String logTime) {
+	@RequestMapping(value = "/getActiveLikeUserName/{companyId}/{userName}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<LtMastUsers>> listActiveLikeUserName(@PathVariable("userName") String userName,@PathVariable("userName") long companyId,@PathVariable("logTime") String logTime) {
 		
 		List<LtMastUsers> ltMastUsers =new ArrayList<LtMastUsers>();
 		try {
-			ltMastUsers =  ltMastUsersService.findByActiveLikeUserName(userName);
+			ltMastUsers =  ltMastUsersService.findByActiveLikeUserName(userName,companyId);
 			if (ltMastUsers.isEmpty()) {
 				return new ResponseEntity<List<LtMastUsers>>(ltMastUsers, HttpStatus.OK);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("ERROR "+ e );
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<List<LtMastUsers>>(ltMastUsers, HttpStatus.OK);
 	}

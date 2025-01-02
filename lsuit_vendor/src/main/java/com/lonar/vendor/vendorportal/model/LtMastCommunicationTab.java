@@ -18,9 +18,10 @@ public class LtMastCommunicationTab {
 
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "communication_seq")
-	@SequenceGenerator(name = "communication_seq", sequenceName = "LT_MAST_COMMUNICATION_TAB_SEQ", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "communication_seq")
+//	@SequenceGenerator(name = "communication_seq", sequenceName = "LT_MAST_COMMUNICATION_TAB_SEQ", allocationSize = 1)
 	@Column(name = "COMMUNICATION_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long communicationId;
 	
 	@Column(name = "VENDOR_ID")

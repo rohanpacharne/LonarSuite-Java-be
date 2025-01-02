@@ -186,11 +186,12 @@ public class LtMastDivisionsDaoImpl implements LtMastDivisionsDao {
 				input.getColumnNo(),input.getColumnNo(),
 				input.getColumnNo(),input.getColumnNo(),
 				
-				input.getStart()+input.getLength(),input.getStart()+1}, 
+				input.getStart()+1,input.getStart()+input.getLength()}, 
 					 new BeanPropertyRowMapper<LtMastDivisions>(LtMastDivisions.class)); 
 		 
 		return list;
 	}
+
 
 	@Override
 	public List<DivisionSubDivision> getDataForReport(ReportParameters reportParameters) throws ServiceException {

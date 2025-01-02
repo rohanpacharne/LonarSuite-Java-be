@@ -21,9 +21,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class LtMastModules implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "module_seq")
-	@SequenceGenerator(name = "module_seq", sequenceName = "LT_MAST_MODULES_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "module_seq")
+//	@SequenceGenerator(name = "module_seq", sequenceName = "LT_MAST_MODULES_S", allocationSize = 1)
 	@Column(name = "MODULE_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long moduleId;
 	
 	@Column(name ="MODULE_CODE")

@@ -36,7 +36,7 @@ public class LtMastAuditRecordsRestController implements CodeMaster{
 		try {
 		return ltMastAuditRecordsService.update(ltMastAuditRecordsList);
 		}catch(Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 
 	}
@@ -57,7 +57,7 @@ public class LtMastAuditRecordsRestController implements CodeMaster{
 		catch (Exception e) 
 		{
 			e.printStackTrace();
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 	}

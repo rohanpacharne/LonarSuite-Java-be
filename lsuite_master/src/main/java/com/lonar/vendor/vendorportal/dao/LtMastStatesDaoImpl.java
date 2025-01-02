@@ -126,7 +126,7 @@ public class LtMastStatesDaoImpl implements LtMastStatesDao
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
-							input.getStart()+input.getLength(),input.getStart()+1},
+							input.getStart()+1,	input.getStart()+input.getLength()},
 				 new  BeanPropertyRowMapper<LtMastStates>(LtMastStates.class));
 			
 				return list;

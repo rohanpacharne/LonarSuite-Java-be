@@ -1,0 +1,7 @@
+
+Dear  ${Name} ,
+
+Cab Booking Transaction failure due to   ${Tranctionmsg}
+
+Regards,
+Support Team

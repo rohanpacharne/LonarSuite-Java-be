@@ -11,13 +11,14 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="LT_MAST_GRADE_TYPE")
-public class LtMastGradeType extends BaseClass{
+public class LtMastGradeType extends WhoColumns{
 	
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "grade_type_seq")
-	@SequenceGenerator(name = "grade_type_seq", sequenceName = "LT_MAST_GRADE_TYPE_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "grade_type_seq")
+//	@SequenceGenerator(name = "grade_type_seq", sequenceName = "LT_MAST_GRADE_TYPE_S", allocationSize = 1)
 	@Column(name = "GRADE_TYPE_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long gradeTypeId;
 	
 	@Column(name = "GRADE_TYPE_CODE")

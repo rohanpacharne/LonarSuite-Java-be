@@ -19,13 +19,14 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @Entity
 @Table(name = "lt_mast_module_approvals")
 @JsonInclude(Include.NON_NULL)
-public class LtModuleApprovals extends BaseClass implements Serializable
+public class LtModuleApprovals extends WhoColumns implements Serializable
 {
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "moduleApproval_seq")
-	@SequenceGenerator(name = "moduleApproval_seq", sequenceName = "lt_mast_module_approvals_s", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "moduleApproval_seq")
+//	@SequenceGenerator(name = "moduleApproval_seq", sequenceName = "lt_mast_module_approvals_s", allocationSize = 1)
 	@Column(name = "MODULE_APPROVAL_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long moduleApprovalId;
 	
 	@Column(name = "MODULE")

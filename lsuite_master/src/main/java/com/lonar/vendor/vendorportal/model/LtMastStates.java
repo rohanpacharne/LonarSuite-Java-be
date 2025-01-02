@@ -14,14 +14,15 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "LT_MAST_STATES")
-public class LtMastStates extends BaseClass 
+public class LtMastStates extends WhoColumns 
 {
 
 	@Id
 	@Basic(optional = false)
-	@NotNull
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "state_seq")
-	@SequenceGenerator(name = "state_seq", sequenceName = " LT_MAST_STATES_S", allocationSize = 1)
+//	@NotNull
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "state_seq")
+//	@SequenceGenerator(name = "state_seq", sequenceName = " LT_MAST_STATES_S", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "STATE_ID")
 	private Long stateId;
 	

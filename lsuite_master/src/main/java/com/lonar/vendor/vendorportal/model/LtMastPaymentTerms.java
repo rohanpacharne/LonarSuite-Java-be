@@ -18,13 +18,14 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @Entity
 @Table(name = "LT_MAST_PAYMENT_TERMS")
 @JsonInclude(Include.NON_NULL)
-public class LtMastPaymentTerms extends BaseClass {
+public class LtMastPaymentTerms extends WhoColumns {
 
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment_term_seq")
-	@SequenceGenerator(name = "payment_term_seq", sequenceName = "LT_MAST_PAYMENT_TERMS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payment_term_seq")
+//	@SequenceGenerator(name = "payment_term_seq", sequenceName = "LT_MAST_PAYMENT_TERMS_S", allocationSize = 1)
 	@Column(name = "PAYTERM_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long paytermId;
 	
 	@Column(name = "TERM_NAME")

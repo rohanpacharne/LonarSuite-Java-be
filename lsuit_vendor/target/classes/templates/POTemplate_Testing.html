@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Purchase Order - {{po_number}}</title>
+    <style>
+    @page {
+        size: A4;
+        margin: 10mm; /* Adjust margins to ensure content fits on A4 */
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        font-size: 9px; /* Smaller font size for better fit */
+        line-height: 1.4;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 800px;
+        margin: auto;
+    }
+
+    .logo {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .logo img {
+        max-width: 120px;
+        height: auto;
+    }
+
+    h1, h2 {
+        text-align: center;
+        font-size: 12px; /* Slightly smaller font size for headings */
+        margin: 5px 0;
+    }
+
+    h3 {
+        font-size: 11px;
+        margin-bottom: 5px;
+    }
+
+    .section {
+        margin-bottom: 10px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 10px;
+        font-size: 9px; /* Smaller font size for table text */
+    }
+
+    td, th {
+        border: 1px solid #ddd;
+        padding: 5px; /* Adjusted padding for smaller font */
+    }
+
+    th {
+        background-color: #f4f4f4;
+        font-size: 9px;
+        text-align: center;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .total-table td {
+        padding: 8px;
+        font-size: 10px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="logo">
+        <img src="{{logo_path}}" alt="Company Logo" />
+    </div>
+
+    <h1>Standard Purchase Order</h1>
+    <h2>{{company_name}}</h2>
+
+    <div class="section">
+        <table>
+            <tr>
+                <td><strong>Order Number:</strong> {{po_number}}</td>
+                <td><strong>Revision:</strong> {{revision_num}}</td>
+                <td><strong>Page Number:</strong> 1</td>
+            </tr>
+            <tr>
+                <td><strong>PO Date:</strong> {{po_date}}</td>
+                <td><strong>Revision Date:</strong> {{revision_date}}</td>
+                <td><strong>Company GST:</strong> {{company_gst}}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3>Supplier Information</h3>
+        <table>
+            <tr>
+                <td><strong>Supplier Name:</strong> {{vendor_name}}</td>
+            </tr>
+            <tr>
+                <td><strong>Supplier Address:</strong> {{vendor_address}}</td>
+            </tr>
+            <tr>
+                <td><strong>Supplier GST:</strong> {{vendor_gst}}</td>
+            </tr>
+            <tr>
+                <td><strong>Contact Person:</strong> {{contact_person}}</td>
+            </tr>
+            <tr>
+                <td><strong>Contact Email:</strong> {{contact_email}}</td>
+            </tr>
+            <tr>
+                <td><strong>Contact Mobile:</strong> {{contact_mobile}}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3>Order Details</h3>
+        <table>
+            <tr>
+                <td><strong>Payment Terms:</strong> {{payment_term}}</td>
+                <td><strong>Currency:</strong> {{currency_code}}</td>
+            </tr>
+            <tr>
+                <td><strong>Buyer:</strong> {{buyer}}</td>
+                <td><strong>Buyer Email:</strong> {{buyer_email}}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3>Line Items</h3>
+        <table>
+            <tr>
+                <th>Line</th>
+                <th>Type</th>
+                <th>Product Code</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>UOM</th>
+                <th>Line Amount</th>
+                <th>Tax Amount</th>
+                <th>Total Amount</th>
+            </tr>
+            {{lines_table}}
+        </table>
+    </div>
+
+    <div class="section">
+        <h3>Tax Details</h3>
+        <table>
+            <tr>
+                <th>Line</th>
+                <th>HSN/SAC Code</th>
+                <th>Tax Name</th>
+                <th>Line Amount</th>
+                <th>Tax Rate</th>
+                <th>Tax Amount</th>
+            </tr>
+            {{tax_table}}
+        </table>
+    </div>
+
+    <div class="section">
+        <h3>Total Amount</h3>
+        <table class="total-table">
+		<tr>
+                <td><strong>Total Line Amount (INR):</strong></td>
+                <td class="text-right">{{total_line_amount}}</td>
+            </tr>
+			<tr>
+                <td><strong>Total Tax Amount (INR):</strong></td>
+                <td class="text-right">{{total_tax_amount}}</td>
+            </tr>
+            <tr>
+                <td><strong>Total Amount (INR):</strong></td>
+                <td class="text-right">{{total_amount}}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3>Terms and Conditions</h3>
+        <p>The prices accepted by the supplier/service provider and confirmed in the Purchase Order are fixed for the duration and may not be modified without mutual agreement.</p>
+        <p>GST will apply on the total amount of goods/services. The supplier is responsible for ensuring timely tax payment and return filing. Any non-compliance may result in liability recovery from the supplier.</p>
+        <p>The supplier must issue a valid tax invoice with all GST-required particulars.</p>
+    </div>
+</div>
+</body>
+</html>

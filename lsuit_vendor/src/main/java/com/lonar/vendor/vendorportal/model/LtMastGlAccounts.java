@@ -35,14 +35,15 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 		@NamedQuery(name = "LtP2pGlAccounts.findByLastUpdatedBy", query = "SELECT l FROM LtP2pGlAccounts l WHERE l.lastUpdatedBy = :lastUpdatedBy"),
 		@NamedQuery(name = "LtP2pGlAccounts.findByLastUpdateDate", query = "SELECT l FROM LtP2pGlAccounts l WHERE l.lastUpdateDate = :lastUpdateDate") })*/
 @JsonInclude(Include.NON_NULL)
-public class LtMastGlAccounts extends BaseClass implements Serializable {
+public class LtMastGlAccounts extends WhoColumns implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Basic(optional = false)
-	 @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "glAccount_seq")
-	@SequenceGenerator(name = "glAccount_seq", sequenceName = "LT_MAST_GL_ACCOUNTS_S", allocationSize = 1)
+//	 @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "glAccount_seq")
+//	@SequenceGenerator(name = "glAccount_seq", sequenceName = "LT_MAST_GL_ACCOUNTS_S", allocationSize = 1)
 	@Column(name = "ACCOUNT_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long accountId;
 	@Basic(optional = false)
 	@Size(min = 1, max = 80)

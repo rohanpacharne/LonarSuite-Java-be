@@ -61,12 +61,28 @@ public class LtMastVenorManagmentDesgServiceImpl implements LtMastVenorManagment
 		ltMastVenorManagmentDesg.setLastUpdatedBy(ltMastVenorManagmentDesg.getLastUpdateLogin());
 		ltMastVenorManagmentDesg = ltMastVenorManagmentDesgDao.save(ltMastVenorManagmentDesg);
 		if(ltMastVenorManagmentDesg.getVenManDesgId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		}else {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage(chkDuplicate);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -99,12 +115,27 @@ public class LtMastVenorManagmentDesgServiceImpl implements LtMastVenorManagment
 		ltMastVenorManagmentDesg.setLastUpdatedBy(ltMastVenorManagmentDesg.getLastUpdateLogin());
 		ltMastVenorManagmentDesg = ltMastVenorManagmentDesgDao.update(ltMastVenorManagmentDesg);
 		if(ltMastVenorManagmentDesg.getVenManDesgId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		}else {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage(chkDuplicate);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -115,9 +146,24 @@ public class LtMastVenorManagmentDesgServiceImpl implements LtMastVenorManagment
 		Status status = new Status();
 		LtMastVenorManagmentDesg ltMastVenorManagmentDesg = ltMastVenorManagmentDesgDao.delete(id);
 		if(ltMastVenorManagmentDesg ==null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}

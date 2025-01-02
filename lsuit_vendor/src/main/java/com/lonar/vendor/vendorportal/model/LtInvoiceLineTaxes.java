@@ -24,9 +24,10 @@ public class LtInvoiceLineTaxes
 
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_line_tax_seq")
-	@SequenceGenerator(name = "invoice_line_tax_seq", sequenceName = "LT_INVOICE_LINE_TAXES_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoice_line_tax_seq")
+//	@SequenceGenerator(name = "invoice_line_tax_seq", sequenceName = "LT_INVOICE_LINE_TAXES_S", allocationSize = 1)
 	@Column(name = "Invoice_Line_Tax_Id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long invoiceLineTaxId;
 	
 	@Column(name = "INVOICE_HEADER_ID")

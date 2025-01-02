@@ -70,6 +70,8 @@ public interface LtMastEmployeesService {
 	public ResponseEntity companyWiseEmp(Long compId) throws ServiceException;
 
 	public ResponseEntity<List<LtMastEmployees>> getLikeNameByComId(String name, Long companyId) throws ServiceException;
+	
+	public ResponseEntity<List<LtMastEmployees>> getCustomerArCollectorsLikeNameByComId(Long companyId,String name) throws ServiceException;
 
 	public ResponseEntity getEmployeeImgByID(Long empId) throws ServiceException;
 

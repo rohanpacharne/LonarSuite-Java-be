@@ -16,14 +16,15 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @Entity
 @Table(name = "lt_mast_vendors")
 @JsonInclude(Include.NON_NULL)
-public class LtMastVendors extends BaseClass 
+public class LtMastVendors extends WhoColumns 
 {
 	
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendor_seq")
-	@SequenceGenerator(name = "vendor_seq", sequenceName = "lt_mast_vendors_s", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendor_seq")
+//	@SequenceGenerator(name = "vendor_seq", sequenceName = "lt_mast_vendors_s", allocationSize = 1)
 	@Column(name = "VENDOR_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long vendorId;
 
 	@Column(name = "VENDOR_CODE")

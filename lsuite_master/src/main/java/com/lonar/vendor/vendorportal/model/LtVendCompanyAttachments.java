@@ -20,9 +20,10 @@ public class LtVendCompanyAttachments
 {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_seq")
-	@SequenceGenerator(name = "company_seq", sequenceName = "LT_VEND_COMPANY_ATTACHMENTS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_seq")
+//	@SequenceGenerator(name = "company_seq", sequenceName = "LT_VEND_COMPANY_ATTACHMENTS_S", allocationSize = 1)
 	@Column(name = "Comp_Attachment_Id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long compAttachmentId;
 	
 	@Column(name = "Company_Id")

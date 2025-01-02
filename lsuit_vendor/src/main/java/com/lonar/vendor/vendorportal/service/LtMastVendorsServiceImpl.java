@@ -274,10 +274,18 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 			String chknull=checkNull(vendors);
 			if(chknull.equals("null"))
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if(status.getMessage()==null)
 				{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			}
@@ -297,10 +305,18 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 						if(!ltMastVendorsDao.loadApprovers(venId,vendors.getCompanyId())){
 						
 							 
-							status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//							status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+							try {
+								status.setCode(0);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
 							if( status.getMessage()==null)
 							{
-								status.setCode(SUCCESS);
+								status.setCode(0);
 								status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 							}
 							return status;
@@ -309,10 +325,17 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 						
 						if(loadCompanyDetailsForVendor(venId,vendors.getCompanyId(),vendors.getLastUpdateLogin())) {
 						
-							status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//							status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+							try {
+								status.setCode(1);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 							if( status.getMessage()==null)
 							{
-								status.setCode(SUCCESS);
+								status.setCode(1);
 								status.setMessage("Error in finding message! The action is completed successfully.");
 							}
 							status.setData(venId);
@@ -320,17 +343,24 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 					}
 					else
 					{
-						status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//						status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+						try {
+							status.setCode(0);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						if(status.getMessage()==null)
 						{
-							status.setCode(EXCEPTION);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 						}
 					}
 				}
 				else
 				{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage(chkDuplicate);
 				}
 			}
@@ -489,10 +519,17 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 				String chknull=checkNull(vendors);
 				if(chknull.equals("null"))
 				{
-					status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//					status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					if(status.getMessage()==null)
 					{
-						status.setCode(EXCEPTION);
+						status.setCode(0);
 						status.setMessage("Error in finding message! The action was unsuccessful");
 					}
 				}
@@ -507,26 +544,40 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 						}
 						if(ltMastVendorsDao.update(vendors))
 						{
-							status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//							status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+							try {
+								status.setCode(1);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 							if( status.getMessage()==null)
 							{
-							status.setCode(SUCCESS);
+							status.setCode(1);
 							status.setMessage("Error in finding message! The action is completed successfully.");
 							}
 						}
 						else
 						{
-							status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//							status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+							try {
+								status.setCode(0);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 							if(status.getMessage()==null)
 							{
-								status.setCode(EXCEPTION);
+								status.setCode(0);
 								status.setMessage("Error in finding message! The action was unsuccessful");
 							}
 						}
 					}
 					else
 					{
-						status.setCode(EXCEPTION);
+						status.setCode(0);
 						status.setMessage(chkDuplicate);
 						return status;
 					}
@@ -535,10 +586,17 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 			}
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(status.getMessage()==null)
 				{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			}
@@ -701,10 +759,18 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 			}
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if(status.getMessage()==null)
 				{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			}
@@ -726,10 +792,18 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 	public  Status returnStatus() throws ServiceException
 	{
 		Status status=new Status();
-		status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//		status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+		try {
+			status.setCode(1);
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		if( status.getMessage()==null)
 		{
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			status.setMessage("Error in finding message! The action is completed successfully.");
 		}
 		return status;
@@ -739,10 +813,18 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 	public  Status returnErrorStatus() throws ServiceException
 	{
 		Status status=new Status();
-		status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//		status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+		try {
+			status.setCode(0);
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		if(status.getMessage()==null)
 		{
-			status.setCode(EXCEPTION);
+			status.setCode(0);
 			status.setMessage("Error in finding message! The action was unsuccessful");
 		}
 		return status;
@@ -835,27 +917,48 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 		if(!ltVendorApprovalDao.chkForApprovers(vendorId)) {
 		if(!ltMastVendorsDao.loadApprovers(vendorId,vendor.getCompanyId())){
 		
-			status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		
 		 }
 		}
 		if(ltMastVendorsDao.submitForApproval(date,vendorId,state,object)) {
-			status=ltMastCommonMessageService.getCodeAndMessage(SUBMIT_FOR_APPROVAL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(SUBMIT_FOR_APPROVAL);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("SUBMIT_FOR_APPROVAL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			} 
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			} 
 		}
@@ -975,10 +1078,10 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 		Status status = new Status();
 		LtMastVendors list=ltMastVendorsDao.getVendorById(venId);
 		if(list==null) {
-			status.setCode(FAIL);
+			status.setCode(0);
 		}
 		else {
-			status.setCode(SUCCESS);
+			status.setCode(1);
 		}
 		return status;
 	}
@@ -1033,7 +1136,7 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 				vendorEmailId = ltMastVendors.getRegistrationEmail();
 			LtMastVendors vendor = ltMastVendorsDao.getByRegistrationMailId(ltMastVendors.getRegistrationEmail(),ltMastVendors.getCompanyId());
 			if(vendor!=null) {
-				status.setCode(INSERT_FAIL);
+				status.setCode(0);
 				status.setMessage("Vendor Registration Email address already exists.");
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
@@ -1044,7 +1147,10 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 			ltMastVendors.setCompanyId(ltMastEmployees.get(0).getCompanyId());
 			ltMastVendors.setDivisionId(ltMastEmployees.get(0).getDivisionId());
 			ltMastVendors.setPrimaryEmail(ltMastVendors.getRegistrationEmail());
+//			System.out.println("Above save");
+//			System.out.println("ltMastVendors = "+ltMastVendors);
 			ltMastVendors = ltMastVendorsRepository.save(ltMastVendors);
+//			System.out.println("below save");
 			
 			if(ltMastVendors.getVendorId()!=null) {
 				vendorId = ltMastVendors.getVendorId();
@@ -1057,7 +1163,7 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 				if(ltMastVendorsDao.checkDuplicateUser(ltMastVendors.getRegistrationEmail(),ltMastVendors.getCompanyId())) {
 					
 					ltMastVendorsRepository.delete(ltMastVendors.getVendorId());
-					status.setCode(INSERT_FAIL);
+					status.setCode(0);
 					status.setMessage("Vendor Registration Email address already exists.......");
 					return new ResponseEntity<Status>(status, HttpStatus.OK);
 				}else {
@@ -1088,11 +1194,11 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 				ltMastUsers = ltMastUsersRepository.save(ltMastUsers);
 				
 				LtMastModules ltP2pModules = new LtMastModules();
-				List<LtMastModules> ltP2pModulesList = ltMastModulesDao.findByModuleName("Vendor Registration");
+				List<LtMastModules> ltP2pModulesList = ltMastModulesDao.findByModuleName("Vendor Wizard",ltMastUsers.getCompanyId());
 				if (ltP2pModulesList.isEmpty()) {
-					ltP2pModules.setModuleCode("VendorRegistration");
-					ltP2pModules.setModuleName("Vendor Registration");
-					ltP2pModules.setModuleUrl("/vendor/vendordataTable");
+					ltP2pModules.setModuleCode("inviteVendor");
+					ltP2pModules.setModuleName("Vendor Wizard");
+					ltP2pModules.setModuleUrl("/vendor/vendor-tab/");
 					ltP2pModules.setModuleGroup("VENDOR");
 					ltP2pModules.setCreatedBy(ltMastUsers.getCreatedBy());
 					ltP2pModules.setLastUpdateLogin(ltMastUsers.getLastUpdateLogin());
@@ -1100,6 +1206,7 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 					ltP2pModules.setStatus("ACTIVE");
 					ltP2pModules.setCreationDate(new Date());
 					ltP2pModules.setLastUpdateDate(new Date());
+					ltP2pModules.setCompanyId(ltMastUsers.getCompanyId());
 					ltP2pModules = ltMastModulesRepository.save(ltP2pModules);
 				} else {
 					ltP2pModules = ltP2pModulesList.get(0);
@@ -1108,16 +1215,17 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 				
 				LtMastRoles ltP2pRoles = new LtMastRoles();
 				//List<LtMastRoles> ltP2pRolesList = ltMastRolesDao.findByRole("INVITE_VENDOR");
-				List<LtMastRoles> ltP2pRolesList = ltMastRolesDao.findRoleByCompany("INVITE_VENDOR",ltMastVendors.getCompanyId());
+				List<LtMastRoles> ltP2pRolesList = ltMastRolesDao.findRoleByCompany("Vendor",ltMastVendors.getCompanyId());
 				if (ltP2pRolesList.isEmpty()) {
-					ltP2pRoles.setRoleName("INVITE_VENDOR");
+					ltP2pRoles.setRoleName("Vendor");
 					ltP2pRoles.setRoleDesc("Role for vendor");
 					ltP2pRoles.setCreatedBy(ltMastUsers.getCreatedBy());
 					ltP2pRoles.setLastUpdateLogin(ltMastUsers.getLastUpdateLogin());
 					ltP2pRoles.setCreationDate(new Date());
 					ltP2pRoles.setStartDate(new Date());
 					ltP2pRoles.setLastUpdateDate(new Date());
-					ltP2pRoles.setStatus("Active");
+					ltP2pRoles.setStatus("ACTIVE");
+					ltP2pRoles.setCompanyId(ltMastUsers.getCompanyId());
 					ltP2pRoles = ltMastRolesRepository.save(ltP2pRoles);
 				} else {
 					ltP2pRoles = ltP2pRolesList.get(0);
@@ -1189,10 +1297,18 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 				if(!ltVendorApprovalDao.chkForApprovers(ltMastVendors.getVendorId())) {
 				if(!ltMastVendorsDao.loadApprovers(ltMastVendors.getVendorId(),ltMastVendors.getCompanyId())){
 				
-					status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//					status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 					if( status.getMessage()==null)
 					{
-						status.setCode(SUCCESS);
+						status.setCode(0);
 						status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 					}
 					return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -1200,13 +1316,20 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 				}
 			}
 			}else{
-				status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
 			}
 			
 			}
-			status.setCode(INSERT_SUCCESSFULLY);
+			status.setCode(1);
 			if(ltMastVendorsList.size()<2) {
 				status.setMessage(sendInvite);
 			}else {
@@ -1215,14 +1338,14 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 		} catch (NullPointerException e) {
 			e.printStackTrace();
-			status.setCode(INPUT_IS_EMPTY);
+			status.setCode(0);
 			status.setMessage("inputempty");
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 
 		} catch (Exception e) {
 			
 			delete(vendorId);
-			status.setCode(INTERNAL_SERVER_ERROR);
+			status.setCode(0);
 			if (sendInvite.length() == 0) {
 				sendInvite += " User for  " + vendorEmailId+ " already exists";
 			}else {
@@ -1263,10 +1386,17 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 			if(!dir.isDirectory())
 			{
 				 
-				status=ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+//				status=ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("NO_DIRECTIVE_EXISTS").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(status.getMessage()==null)
 				{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			}
@@ -1335,7 +1465,15 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 		Status status=new Status();
 		String chknull=checkNull(ltMastVendor);
 		if(chknull.equals("null")){
-			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
 		else{
 			String chkDuplicate=checkDuplicate(ltMastVendor);
@@ -1350,24 +1488,48 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 					if(files.length> 0){
 						Status status1 = new Status();
 						status1=imageUpload(files,ltMastVendor);
-						if(status1.getCode()== INSERT_SUCCESSFULLY){
+						if(status1.getCode()== 1){
 							if(!ltVendorApprovalDao.chkForApprovers(venId)) {
 								if(!ltMastVendorsDao.loadApprovers(venId,ltMastVendor.getCompanyId())){
 								
 									 
-									status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//									status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+									try {
+										status.setCode(0);
+										status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+									} catch (Exception e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+
 									return status;
 								 }
 								}
 								
 								if(loadCompanyDetailsForVendor(venId,ltMastVendor.getCompanyId(),ltMastVendor.getLastUpdateLogin())) {
 								
-									status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//									status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+									try {
+										status.setCode(1);
+										status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+									} catch (Exception e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+
 									status.setData(venId);
 								}
 						}
 						else{
-							status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//							status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+							try {
+								status.setCode(0);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
 						}
 						return status;
 					}else {
@@ -1375,26 +1537,56 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 							if(!ltMastVendorsDao.loadApprovers(venId,ltMastVendor.getCompanyId())){
 							
 								 
-								status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//								status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+								try {
+									status.setCode(0);
+									status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 								return status;
 							 }
 							}
 							
 							if(loadCompanyDetailsForVendor(venId,ltMastVendor.getCompanyId(),ltMastVendor.getLastUpdateLogin())) {
 							
-								status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//								status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+								try {
+									status.setCode(1);
+									status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 								status.setData(venId);
 							}
-						status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//						status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+							try {
+								status.setCode(1);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
 						status.setData(venId);
 					}
 					
 				}else{
-					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 				}
 			}
 			else{
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage(chkDuplicate);
 			}
 		}
@@ -1415,13 +1607,22 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 				saveDirectory=sysVariableWithValues.getLtMastSysVariables().getSystemValue();
 			}
 		}
+		System.out.println("saveDirectory = "+saveDirectory);
 		File dir = new File(saveDirectory);
 		if (!dir.exists())
 		{
 			dir.mkdirs();
 			if(!dir.isDirectory())
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+//				status=ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("NO_DIRECTIVE_EXISTS").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				return status;
 			}
 		}	
@@ -1434,20 +1635,37 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
             fileName = files[i].getOriginalFilename();
             byte[] bytes = files[i].getBytes();
             BufferedOutputStream buffStream = 
-                    new BufferedOutputStream(new FileOutputStream(new File(saveDirectory + fileName)));
+                    new BufferedOutputStream(new FileOutputStream(new File(saveDirectory+fileName)));
             buffStream.write(bytes);
              
             ltMastVendor.setImagePath(fileName);
+            System.out.println("fileName = "+fileName);
            if( ltMastVendorsDao.updatePath(ltMastVendor))
            {
         	   buffStream.close();
-               status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//               status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+        	   try {
+   				status.setCode(1);
+   				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+   			} catch (Exception e) {
+   				// TODO Auto-generated catch block
+   				e.printStackTrace();
+   			}
+
                status.setData(ltMastVendor.getImagePath());
            }
            else
            {
         	   buffStream.close();
-               status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//               status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+        	   try {
+   				status.setCode(0);
+   				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+   			} catch (Exception e) {
+   				// TODO Auto-generated catch block
+   				e.printStackTrace();
+   			}
+
    			  return status;
             }
         	
@@ -1455,7 +1673,14 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
         catch (Exception e)
         {
         	e.printStackTrace();
-        	 status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//        	 status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+        	try {
+   				status.setCode(0);
+   				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+   			} catch (Exception e1) {
+   				// TODO Auto-generated catch block
+   				e.printStackTrace();
+   			}
         }
 	}
 		return status;
@@ -1469,7 +1694,15 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 			String chknull=checkNull(ltMastVendor);
 			if(chknull.equals("null"))
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			}
 			else
 			{
@@ -1486,22 +1719,52 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 						{
 							Status status1 = new Status();
 							status1=imageUpload(files,ltMastVendor);
-							if(status1.getCode()== INSERT_SUCCESSFULLY)
+							if(status1.getCode()== 1)
 							{
-								status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//								status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+								try {
+									status.setCode(1);
+									status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+
 							}else {
-								status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//								status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+								try {
+									status.setCode(0);
+									status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+								} catch (Exception e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								
 							}
 						}else {
-							status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//							status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+							try {
+								status.setCode(1);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
 					}
 					else{
-						status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//						status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+						try {
+							status.setCode(0);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 				else{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage(chkDuplicate);
 					return status;
 				}
@@ -1510,7 +1773,15 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
 		
 	
@@ -1525,14 +1796,36 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 		{
 			Status status1 = new Status();
 			status1=imageUpload(files,vendor);
-			if(status1.getCode()== INSERT_SUCCESSFULLY)
+			if(status1.getCode()== 1)
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			}else {
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return status;
 	}

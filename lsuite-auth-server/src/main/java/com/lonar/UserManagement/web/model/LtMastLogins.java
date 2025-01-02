@@ -35,10 +35,11 @@ public class LtMastLogins implements Serializable {
 	@Id
 	@Basic(optional = false)
 	//@GeneratedValue(strategy = GenerationType.AUTO)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "logins_seq")
-	@SequenceGenerator(name = "logins_seq", sequenceName = "LT_MAST_LOGINS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "logins_seq")
+//	@SequenceGenerator(name = "logins_seq", sequenceName = "LT_MAST_LOGINS_S", allocationSize = 1)
 	@JsonView(DataTablesOutput.View.class)
 	@Column(name = "LOGIN_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long loginId;
 
 	@JsonView(DataTablesOutput.View.class)

@@ -63,13 +63,13 @@ public class LtModuleApprovalsController implements CodeMaster
 				customeDataTable.setRecordsTotal(count);
 			    customeDataTable.setRecordsFiltered(count);
 			    List<LtModuleApprovals> moduleApprovalList= ltExpModuleApprovalsService.getModuleApproval(companyId,input);
-				
+				System.out.println("moduleApprovalList = "+moduleApprovalList);
 			    customeDataTable.setData(moduleApprovalList);
 		} 
 		catch (Exception e) 
 		{
 			e.printStackTrace();
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 	}
@@ -85,11 +85,11 @@ public class LtModuleApprovalsController implements CodeMaster
 		} 
 		catch (NullPointerException e) 
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+			status=ltMastCommonMessageService.getCodeAndMessage(0);
 		} 
 		catch (Exception e)
 		{
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
@@ -104,7 +104,7 @@ public class LtModuleApprovalsController implements CodeMaster
 		} 
 		catch (Exception e)
 		{
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
@@ -121,7 +121,7 @@ public class LtModuleApprovalsController implements CodeMaster
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
@@ -136,7 +136,7 @@ public class LtModuleApprovalsController implements CodeMaster
 		} 
 		catch (Exception e)
 		{
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
@@ -152,13 +152,21 @@ public class LtModuleApprovalsController implements CodeMaster
 		}
 		catch (org.springframework.dao.DataIntegrityViolationException e) 
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+					
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			//throw new BusinessException(ENTITY_CANNOT_DELETE, null, e);
 			return new ResponseEntity<Status>(status,HttpStatus.OK);
 		}
 		catch(Exception e)
 		{
-			throw new BusinessException(ENTITY_CANNOT_DELETE, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -178,14 +186,22 @@ public class LtModuleApprovalsController implements CodeMaster
 		}
 		catch (org.springframework.dao.DataIntegrityViolationException e) 
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			logger.error("ERROR "+ e );
 			return new ResponseEntity<Status>(status,HttpStatus.OK);
 			//throw new BusinessException(ENTITY_CANNOT_DELETE, null, e);
 		}
 		catch(Exception e)
 		{
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -205,7 +221,7 @@ public class LtModuleApprovalsController implements CodeMaster
             }
             catch(Exception e)
             {
-            	throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+            	throw new BusinessException(0, null, e);
             }
            
             return new ResponseEntity<LtModuleApprovals>(ltExpModuleApprovals, HttpStatus.OK);
@@ -241,7 +257,7 @@ public class LtModuleApprovalsController implements CodeMaster
             }
             catch(Exception e)
             {
-            	throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+            	throw new BusinessException(0, null, e);
             }
            
             return new ResponseEntity<List<LtModuleApprovals>>(ltExpModuleApprovals, HttpStatus.OK);
@@ -261,7 +277,7 @@ public class LtModuleApprovalsController implements CodeMaster
             }
             catch(Exception e)
             {
-            	throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+            	throw new BusinessException(0, null, e);
             }
             return new ResponseEntity<LtModuleApprovals>(ltExpModuleApproval, HttpStatus.OK);
     }
@@ -277,7 +293,7 @@ public class LtModuleApprovalsController implements CodeMaster
 		}
 		catch(Exception e)
 		{
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<List<LtModuleApprovals>>(expModuleApprovals, HttpStatus.OK);
 	}

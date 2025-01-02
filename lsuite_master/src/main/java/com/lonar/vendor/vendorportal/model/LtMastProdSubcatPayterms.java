@@ -25,14 +25,15 @@ import com.fasterxml.jackson.annotation.JsonView;
 	@NamedQuery(name = "LtP2pProdSubcatPayterms .findAll", query = "SELECT l FROM LtP2pProdSubcatPayterms  l")
 		
 		 })*/
-public class LtMastProdSubcatPayterms extends BaseClass
+public class LtMastProdSubcatPayterms extends WhoColumns
 {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "prod_subcat_payterms_s")
-	@SequenceGenerator(name = "prod_subcat_payterms_s", sequenceName = "LT_MAST_PROD_SUBCAT_PAYTERMS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "prod_subcat_payterms_s")
+//	@SequenceGenerator(name = "prod_subcat_payterms_s", sequenceName = "LT_MAST_PROD_SUBCAT_PAYTERMS_S", allocationSize = 1)
 	@JsonView(DataTablesOutput.View.class)
 	@Column(name = "PAY_TERM_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long payTermId;
 	
 	@JsonView(DataTablesOutput.View.class)

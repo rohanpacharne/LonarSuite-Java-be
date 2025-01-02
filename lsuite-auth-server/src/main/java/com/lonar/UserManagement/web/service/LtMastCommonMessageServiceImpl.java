@@ -84,29 +84,29 @@ public  class LtMastCommonMessageServiceImpl implements LtMastCommonMessageServi
 		status.setMessage(ResourceServerConfiguration.messages.get(code));
 		if(status.getMessage()==null)
 		{
-			if(code==UPDATE_SUCCESSFULLY) {
-				status.setCode(UPDATE_SUCCESSFULLY);
+			if(code==1) {
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action was successful");
-			}else if(code==UPDATE_FAIL) {
-				status.setCode(UPDATE_FAIL);
+			}else if(code==0) {
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
-			}else if(code==DELETE_FAIL) {
-				status.setCode(DELETE_FAIL);
+			}else if(code==0) {
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
-			}else if(code==DELETE_SUCCESSFULLY) {
-				status.setCode(DELETE_SUCCESSFULLY);
+			}else if(code==1) {
+				status.setCode(1);
 				status.setMessage("The record has been deleted successfully");
-			}else if(code==INSERT_SUCCESSFULLY) {
-				status.setCode(INSERT_SUCCESSFULLY);
+			}else if(code==1) {
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action was successful");
-			}else if(code==INSERT_FAIL) {
-				status.setCode(INSERT_FAIL);
+			}else if(code==0) {
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 		}
 		}catch(Exception e)
 		{
-			status.setCode(EXCEPTION);
+			status.setCode(0);
 			status.setMessage("Error in finding message! The action was unsuccessful");
 			
 		}
@@ -135,11 +135,15 @@ public  class LtMastCommonMessageServiceImpl implements LtMastCommonMessageServi
 		if(ltMastCommonMessageDao.update(mastCommonMessage))
 		{
 			//AppConfig.messageList.put(Integer.parseInt(mastCommonMessage.getMessageCode()), mastCommonMessage.getMessageDesc());
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+			status.setCode(1);		
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+			status.setCode(1);		
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
 		}
 		return status;
 	}
@@ -172,7 +176,7 @@ public  class LtMastCommonMessageServiceImpl implements LtMastCommonMessageServi
 	public void saveLog(Exception e) {
 		try{
 			LtMastLogger ltMastLogger = new LtMastLogger();
-			ltMastLogger.setCode(INTERNAL_SERVER_ERROR);
+			ltMastLogger.setCode(0);
 			ltMastLogger.setExceptionCause(e.getCause().toString());
 			ltMastLogger.setMessage(e.getMessage());
 			ltMastLogger.setClassName(e.getClass().toString());
@@ -181,6 +185,10 @@ public  class LtMastCommonMessageServiceImpl implements LtMastCommonMessageServi
 		}catch(Exception e1) {
 			e1.printStackTrace();
 		}
+	}
+	
+	public LtMastCommonMessage getMessageNameByCode(String messageCode) throws Exception {
+		return ltMastCommonMessageDao.getMessageNameByCode(messageCode);
 	}
 
 }

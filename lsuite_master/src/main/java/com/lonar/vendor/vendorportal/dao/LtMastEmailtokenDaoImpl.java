@@ -1,5 +1,6 @@
 package com.lonar.vendor.vendorportal.dao;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -10,11 +11,13 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
+import com.lonar.vendor.vendorportal.model.LtExpEmailTokenlLine;
 import com.lonar.vendor.vendorportal.model.LtMastEmailtoken;
 import com.lonar.vendor.vendorportal.repository.LtMastEmailtokenRepository;
 
@@ -47,7 +50,7 @@ public class LtMastEmailtokenDaoImpl implements LtMastEmailtokenDao
 	@Override
 	public List<LtMastEmailtoken> findByEmailtokenid(Long emailtokenid)
 			throws Exception {
-		String sqlQuery = env.getProperty("findByEmailtokenid");
+		String sqlQuery = env.getProperty("findByEmailtokenid1");
 		//String sqlQuery="SELECT * FROM lt_expense_emailtoken r WHERE EMAIL_TOKEN_ID=? ";
 		  return jdbcTemplate.query(sqlQuery, new Object[]{emailtokenid}, new RowMapper<LtMastEmailtoken>(){
 				@Override
@@ -87,8 +90,10 @@ public class LtMastEmailtokenDaoImpl implements LtMastEmailtokenDao
 	public List<LtMastEmailtoken> findAllActive() throws Exception 
 	{
 		String sqlQuery = env.getProperty("findAllActive");
-				String query = "SELECT * FROM lt_expense_emailtoken e " + 
-						" WHERE (e.EMAIL_STATUS = 'SENDING' OR e.EMAIL_STATUS = 'Fail to Send') " ; 
+				String query = "SELECT * FROM lt_mast_emailtoken e " + 
+						" WHERE (e.EMAIL_STATUS = 'SENDING' OR e.EMAIL_STATUS = 'Fail to Send') " + 
+						" AND SEND_TO IS NOT NULL " +
+						"AND SEND_TO LIKE '%@%'";
 						//" AND (e.FAILURECOUNT IS NULL OR e.FAILURECOUNT <=5) ";
 				
 				List<LtMastEmailtoken> list=   jdbcTemplate.query(query, new Object[]{ }, 
@@ -175,7 +180,7 @@ public class LtMastEmailtokenDaoImpl implements LtMastEmailtokenDao
 	@Override
 	public void updateStatus(Long tokenId, String status, Long count) throws Exception {
 	
-		String sqlQuery = env.getProperty("updateStatus");
+		String sqlQuery = env.getProperty("updateStatus1");
 		int res=jdbcTemplate.update(sqlQuery,status, count , tokenId );
 	}
 
@@ -268,6 +273,41 @@ public class LtMastEmailtokenDaoImpl implements LtMastEmailtokenDao
 			return list.get(0);
 		else
 			return null;
+	}
+	
+	
+	@Override
+	public void batchInsertLine(List<LtExpEmailTokenlLine> emailTokenLines) throws Exception
+	{
+		final int batchSize = 500;
+
+	    for (int j = 0; j < emailTokenLines.size(); j += batchSize)
+	    {
+
+	        final List<LtExpEmailTokenlLine> batchList = emailTokenLines.subList(j, j + batchSize > emailTokenLines.size() ? emailTokenLines.size() : j + batchSize);
+	        String sql = env.getProperty("batchInsertLine1");
+	       /*String sql = "INSERT INTO "
+	                + " lt_exp_emailtoken_exp_line "
+	                + "(EMAIL_TOKEN_ID,Emai_Line_Object) "
+	                + "VALUES " + "(?,?)";*/
+	        
+	        getJdbcTemplate().batchUpdate(sql,
+	            new BatchPreparedStatementSetter() {
+	                @Override
+	                public void setValues(PreparedStatement ps, int i)
+	                        throws SQLException {
+	                	LtExpEmailTokenlLine ltExpEmailTokenlLine = batchList.get(i);
+	                    ps.setLong(1, ltExpEmailTokenlLine.getEmailTokenId());
+	                    ps.setString(2, ltExpEmailTokenlLine.getEmailLineObject());
+	                }
+	                @Override
+	                public int getBatchSize() {
+	                    return batchList.size();
+	                }
+	            });
+
+	    }
+		
 	}
 
 

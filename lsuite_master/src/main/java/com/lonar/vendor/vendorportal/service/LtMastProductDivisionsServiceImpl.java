@@ -80,7 +80,7 @@ public class LtMastProductDivisionsServiceImpl implements LtMastProductDivisions
 		}*/
 		if ( !ltP2pProductDivisionsList.isEmpty() && 
 			!ltP2pProductDivisionsList.get(0).getProductDivisionId().equals(ltP2pProductDivisions.getProductDivisionId())) {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Product with same division alredy exists. ");
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 
@@ -92,16 +92,32 @@ public class LtMastProductDivisionsServiceImpl implements LtMastProductDivisions
 		ltP2pProductDivisions.setLastUpdateLogin(ltP2pProductDivisions.getLastUpdateLogin());
 		ltP2pProductDivisions = ltP2pProductDivisionsRepository.save(ltP2pProductDivisions);
 		if(ltP2pProductDivisions.getProductDivisionId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if( status.getMessage()==null) {
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if( status.getMessage()==null)
 			{
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		}
@@ -113,16 +129,32 @@ public class LtMastProductDivisionsServiceImpl implements LtMastProductDivisions
 		Status status = new Status();
 			ltP2pProductDivisionsRepository.delete(id);
 			if(!ltP2pProductDivisionsRepository.exists(id)) {
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+						
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if( status.getMessage()==null) {
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			}else {
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if( status.getMessage()==null)
 				{
-					status.setCode(FAIL);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				}
 			}
@@ -137,7 +169,7 @@ public class LtMastProductDivisionsServiceImpl implements LtMastProductDivisions
 	
 		if ( ltP2pProductDivisionsList.isEmpty() &&
 			!ltP2pProductDivisionsList.get(0).getProductDivisionId().equals(ltP2pProductDivisions.getProductDivisionId())) {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("productidpresent");
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 
@@ -147,25 +179,48 @@ public class LtMastProductDivisionsServiceImpl implements LtMastProductDivisions
 		ltP2pProductDivisions.setLastUpdateLogin(ltP2pProductDivisions.getLastUpdateLogin());
 		ltP2pProductDivisions = ltP2pProductDivisionsRepository.save(ltP2pProductDivisions);
 		if(ltP2pProductDivisions.getProductDivisionId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+				
+			try {
+				status.setCode(1);	
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if( status.getMessage()==null) {
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+			try {
+				status.setCode(0);	
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if( status.getMessage()==null)
 			{
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}else {
-		status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//		status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+		try {
+			status.setCode(0);	
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if( status.getMessage()==null)
 		{
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 		}
 	}

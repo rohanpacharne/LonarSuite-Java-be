@@ -50,15 +50,15 @@ import com.fasterxml.jackson.annotation.JsonView;
     @NamedQuery(name = "LtP2pFpnMaster.findByLastUpdateLogin", query = "SELECT l FROM LtP2pFpnMaster l WHERE l.lastUpdateLogin = :lastUpdateLogin"),
     @NamedQuery(name = "LtP2pFpnMaster.findByLastUpdatedBy", query = "SELECT l FROM LtP2pFpnMaster l WHERE l.lastUpdatedBy = :lastUpdatedBy"),
     @NamedQuery(name = "LtP2pFpnMaster.findByLastUpdateDate", query = "SELECT l FROM LtP2pFpnMaster l WHERE l.lastUpdateDate = :lastUpdateDate")})*/
-public class LtMastFpnMaster extends BaseClass implements Serializable {
+public class LtMastFpnMaster extends WhoColumns implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fpnmaster_seq")
-	@SequenceGenerator(name = "fpnmaster_seq", sequenceName = "LT_MAST_FPN_MASTER_S", allocationSize = 1)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fpnmaster_seq")
+//	@SequenceGenerator(name = "fpnmaster_seq", sequenceName = "LT_MAST_FPN_MASTER_S", allocationSize = 1)
 	@JsonView(DataTablesOutput.View.class)
-    
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "FPN_ID")
     private Long fpnId;
     

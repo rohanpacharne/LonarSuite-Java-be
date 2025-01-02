@@ -27,8 +27,8 @@ public class LtMastAddFieldsColUses implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "appColumnId_seq")
-	@SequenceGenerator(name = "appColumnId_seq", sequenceName = "LT_MAST_ADDITIONAL_FIELDS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "appColumnId_seq")
+//	@SequenceGenerator(name = "appColumnId_seq", sequenceName = "LT_MAST_ADDITIONAL_FIELDS_S", allocationSize = 1)
 	@Column(name = "APP_COLUMN_ID")
 	private Long appColumnId;
 

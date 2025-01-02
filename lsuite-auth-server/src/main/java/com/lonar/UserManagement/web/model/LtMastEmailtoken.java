@@ -27,10 +27,11 @@ public class LtMastEmailtoken implements Serializable {
 	@Id
 	@Basic(optional = false)
 	// @GeneratedValue(strategy = GenerationType.AUTO)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "email_seq")
-	@SequenceGenerator(name = "email_seq", sequenceName = "lt_mast_emailtoken_s", allocationSize = 1)
-	@NotNull
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "email_seq")
+//	@SequenceGenerator(name = "email_seq", sequenceName = "lt_mast_emailtoken_s", allocationSize = 1)
+//	@NotNull
 	@Column(name = "EMAIL_TOKEN_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long emailTokenId;
 
 	@Size(max = 50)

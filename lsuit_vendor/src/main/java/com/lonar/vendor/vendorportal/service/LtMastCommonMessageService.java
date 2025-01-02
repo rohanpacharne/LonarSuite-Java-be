@@ -40,4 +40,7 @@ public interface LtMastCommonMessageService
 	public ResponseEntity<Status> updateMessage(LtMastCommonMessage mastCommonMessage) throws ServiceException;
 
 	public ResponseEntity<Status> delete(String id) throws ServiceException;
+	
+	public LtMastCommonMessage getMessageNameByCode(String messageCode) throws Exception;
+
 }

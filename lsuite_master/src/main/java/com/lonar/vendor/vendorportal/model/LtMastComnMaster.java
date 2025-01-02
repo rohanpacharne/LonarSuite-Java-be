@@ -27,9 +27,10 @@ public class LtMastComnMaster implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comnMaster_seq")
-	@SequenceGenerator(name = "comnMaster_seq", sequenceName = "LT_MAST_COMN_MASTER_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comnMaster_seq")
+//	@SequenceGenerator(name = "comnMaster_seq", sequenceName = "LT_MAST_COMN_MASTER_S", allocationSize = 1)
 	@Column(name = "MASTER_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long masterId;
 
 	@Basic(optional = false)

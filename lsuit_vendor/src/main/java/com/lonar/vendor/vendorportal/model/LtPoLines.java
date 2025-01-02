@@ -18,9 +18,10 @@ public class LtPoLines {
 
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "po_line_seq")
-	@SequenceGenerator(name = "po_line_seq", sequenceName = "LT_PO_LINES_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "po_line_seq")
+//	@SequenceGenerator(name = "po_line_seq", sequenceName = "LT_PO_LINES_S", allocationSize = 1)
 	@Column(name = "PO_LINE_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long poLineId;
 	
 	@Column(name = "PO_HEADER_ID")

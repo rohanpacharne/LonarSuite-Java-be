@@ -70,15 +70,30 @@ public class LtMastVendorAttachmentServiceImpl implements LtMastVendorAttachment
 		Status status = new Status();
 
 		if (ltMastVendorAttachmentDao.delete(expenceHeaderId)) {
-			status = ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//			status = ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if (status.getMessage() == null) {
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		} else {
-			status = ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//			status = ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if (status.getMessage() == null) {
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 		}
@@ -93,19 +108,34 @@ public class LtMastVendorAttachmentServiceImpl implements LtMastVendorAttachment
 		Status status = new Status();
 		if(ltMastVendorAttachmentDao.deleteLtMastVendorAttachment(expenseFileUploadId))
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			if( status.getMessage()==null)
 			{
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed UnSuccessfully.");
 			}
 		}
@@ -241,25 +271,54 @@ public class LtMastVendorAttachmentServiceImpl implements LtMastVendorAttachment
 					
 					ltMastVendorAttachmentRepository.save(ltMastVendorAttachmentObject);
 
-					status = ltMastCommonMessageService.getCodeAndMessage(FILE_UPLOADED_SUCESSFULLY);
+//					status = ltMastCommonMessageService.getCodeAndMessage(FILE_UPLOADED_SUCESSFULLY);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("FILE_UPLOADED_SUCESSFULLY").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 					fileUploadMsg.add(names[i] + " " + messageSource.getMessage("fileuploadedsucessfully", null,
 							"Default", Locale.getDefault()));
 					
 					// }
 				} catch (MaxUploadSizeExceededException e) {
 					e.printStackTrace();
-					status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//					status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 
 				} catch (Exception e) {
 					e.printStackTrace();
-					status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//					status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 
 				}
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//			status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		}
 		// status.setCode(INSERT_SUCCESSFULLY);
@@ -273,20 +332,35 @@ public class LtMastVendorAttachmentServiceImpl implements LtMastVendorAttachment
 		Status status = new Status();
 		if(ltMastVendorAttachmentDao.deleteLtMastVendorAttachmentFile(vendorAttachmentId))
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 			status.setMessage("The attachment has been deleted successfully.");
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if( status.getMessage()==null)
 			{
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed UnSuccessfully.");
 			}
 		}
@@ -303,11 +377,11 @@ public class LtMastVendorAttachmentServiceImpl implements LtMastVendorAttachment
 		Status status = new Status();
 		List<LtMastVendorAttachment> list=ltMastVendorAttachmentDao.getAllFilesByVendorId(venId);		
 		if(list==null) {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Please fill all the mandatory attachments");
 		}
 		else {
-			status.setCode(SUCCESS);
+			status.setCode(1);
 		}
 		return status;
 	}

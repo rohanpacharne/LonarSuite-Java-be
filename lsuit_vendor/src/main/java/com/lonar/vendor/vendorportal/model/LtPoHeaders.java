@@ -25,9 +25,10 @@ public class LtPoHeaders
 
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendor_seq")
-	@SequenceGenerator(name = "vendor_seq", sequenceName = "lt_po_headers_s", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendor_seq")
+//	@SequenceGenerator(name = "vendor_seq", sequenceName = "lt_po_headers_s", allocationSize = 1)
 	@Column(name = "PO_HEADER_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long poHeaderId;
 	
 	@Column(name = "Parent_PO_Header_Id")

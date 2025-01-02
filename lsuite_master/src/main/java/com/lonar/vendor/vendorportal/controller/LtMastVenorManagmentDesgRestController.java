@@ -41,7 +41,7 @@ public class LtMastVenorManagmentDesgRestController implements CodeMaster{
 			
 		} 
 		catch (Exception e) {		
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 	}
@@ -52,7 +52,7 @@ public class LtMastVenorManagmentDesgRestController implements CodeMaster{
 		try {
 			return ltMastVenorManagmentDesgService.save(ltMastVenorManagmentDesg);	
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 	}
 	//------------------------------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ public class LtMastVenorManagmentDesgRestController implements CodeMaster{
 		try {
 			return ltMastVenorManagmentDesgService.update(ltMastVenorManagmentDesg);	
 		}catch(Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 	}
 			
@@ -72,7 +72,7 @@ public class LtMastVenorManagmentDesgRestController implements CodeMaster{
 		try {
 			return ltMastVenorManagmentDesgService.delete(id);
 		}catch(Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 	}	
 			

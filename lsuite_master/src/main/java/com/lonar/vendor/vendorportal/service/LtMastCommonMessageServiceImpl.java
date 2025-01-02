@@ -91,30 +91,30 @@ public  class LtMastCommonMessageServiceImpl implements LtMastCommonMessageServi
 		status.setMessage(ResourceServerWebConfig.messages.get(code));
 		if(status.getMessage()==null)
 		{
-			if(code==UPDATE_SUCCESSFULLY) {
-				status.setCode(UPDATE_SUCCESSFULLY);
+			if(code==1) {
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action was successful");
-			}else if(code==UPDATE_FAIL) {
-				status.setCode(UPDATE_FAIL);
+			}else if(code==0) {
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
-			}else if(code==DELETE_FAIL) {
-				status.setCode(DELETE_FAIL);
+			}else if(code==0) {
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
-			}else if(code==DELETE_SUCCESSFULLY) {
-				status.setCode(DELETE_SUCCESSFULLY);
+			}else if(code==1) {
+				status.setCode(1);
 				status.setMessage("The record has been deleted successfully");
-			}else if(code==INSERT_SUCCESSFULLY) {
-				status.setCode(INSERT_SUCCESSFULLY);
+			}else if(code==1) {
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action was successful");
-			}else if(code==INSERT_FAIL) {
-				status.setCode(INSERT_FAIL);
+			}else if(code==0) {
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 		}
 		}catch(Exception e)
 		{
 			e.printStackTrace();
-			status.setCode(EXCEPTION);
+			status.setCode(0);
 			status.setMessage("Error in finding message! The action was unsuccessful");
 			
 		}
@@ -148,11 +148,26 @@ public  class LtMastCommonMessageServiceImpl implements LtMastCommonMessageServi
 		if(ltMastCommonMessageDao.update(mastCommonMessage))
 		{
 			ResourceServerWebConfig.messages.put(Integer.parseInt(mastCommonMessage.getMessageCode()), mastCommonMessage.getMessageDesc());
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return status;
 	}
@@ -185,7 +200,7 @@ public  class LtMastCommonMessageServiceImpl implements LtMastCommonMessageServi
 	public void saveLog(Exception e) {
 		try{
 			LtMastLogger ltMastLogger = new LtMastLogger();
-			ltMastLogger.setCode(INTERNAL_SERVER_ERROR);
+			ltMastLogger.setCode(0);
 			ltMastLogger.setExceptionCause(e.getCause().toString());
 			ltMastLogger.setMessage(e.getMessage());
 			ltMastLogger.setClassName(e.getClass().toString());
@@ -203,7 +218,7 @@ public  class LtMastCommonMessageServiceImpl implements LtMastCommonMessageServi
 			if(ltMastCommonMessage.getMessageCode()==null || ltMastCommonMessage.getMessageName()==null ||
 					ltMastCommonMessage.getStartDate()==null || ltMastCommonMessage.getCreatedBy()==null || ltMastCommonMessage.getCreationDate()==null)
 			{
-				status.setCode(INSERT_FAIL);
+				status.setCode(0);
 				status.setMessage("Please fill all the mandatory fields");
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
@@ -211,7 +226,7 @@ public  class LtMastCommonMessageServiceImpl implements LtMastCommonMessageServi
 			{
 				if(ltMastCommonMessage.getStatus()==null)
 				{
-					status.setCode(INSERT_FAIL);
+					status.setCode(0);
 					status.setMessage("Please select the Status");
 					
 				}
@@ -225,7 +240,15 @@ public  class LtMastCommonMessageServiceImpl implements LtMastCommonMessageServi
 				
 				if(mastCommonMessage != null)
 				{
-					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+						
+					try {
+						status.setCode(0);	
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					status.setMessage("Message code already exists.");
 					
 				}
@@ -234,14 +257,27 @@ public  class LtMastCommonMessageServiceImpl implements LtMastCommonMessageServi
 					LtMastCommonMessage mastCommonMessage1=ltMastCommonMessageDao.
 							getByMessageName(ltMastCommonMessage.getMessageName());
 					if(mastCommonMessage1!=null) {
-						status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+						try {
+							status.setCode(0);	
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						status.setMessage("Message name already exists.");
 					}else {
 						ltMastCommonMessage=ltMastCommonMessageRepository.save(ltMastCommonMessage);
 						if(ltMastCommonMessage!=null)
 						{
 							//P2PApplicationConfiguration.messageList.put(Integer.parseInt(ltMastCommonMessage.getMessageCode()), ltMastCommonMessage.getMessageDesc());
-							status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//							status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+							try {
+								status.setCode(1);	
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
 					}
 					
@@ -261,7 +297,15 @@ public  class LtMastCommonMessageServiceImpl implements LtMastCommonMessageServi
 			if(mastCommonMessage.getMessageId()==null || mastCommonMessage.getMessageCode()==null || mastCommonMessage.getMessageName()==null ||
 					mastCommonMessage.getStartDate()==null )
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+						
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 
 			}
@@ -274,7 +318,14 @@ public  class LtMastCommonMessageServiceImpl implements LtMastCommonMessageServi
 				}
 				else
 				{
-					status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//					status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
@@ -291,7 +342,7 @@ public  class LtMastCommonMessageServiceImpl implements LtMastCommonMessageServi
 				if(ltMastCommonMessageRepository.exists(Long.parseLong(id)))
 				{
 					ltMastCommonMessageRepository.delete(Long.parseLong(id));
-					status.setCode(DELETE_SUCCESSFULLY);
+					status.setCode(1);
 					status.setMessage("The record has been deleted successfully.");
 
 					return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -299,11 +350,15 @@ public  class LtMastCommonMessageServiceImpl implements LtMastCommonMessageServi
 			}
 			else
 			{
-				status.setCode(ENTITY_CANNOT_DELETE);
+				status.setCode(0);
 				status.setMessage("This record is already in use so cannot be deleted.");		
 			}
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 		
+	}
+	
+	public LtMastCommonMessage getMessageNameByCode(String messageCode) throws Exception {
+		return ltMastCommonMessageDao.getMessageNameByCode(messageCode);
 	}
 
 }

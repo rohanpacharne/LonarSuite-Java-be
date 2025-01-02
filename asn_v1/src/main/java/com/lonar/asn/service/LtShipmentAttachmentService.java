@@ -14,7 +14,7 @@ import com.lonar.asn.model.Status;
 public interface LtShipmentAttachmentService
 {
 
-	Status saveAsnAttachments(MultipartFile[] files, Long asnHeaderId, Long userId, Long attachmentTypeId) throws BusinessException, FileNotFoundException, IOException;
+	Status saveAsnAttachments(MultipartFile[] files, Long asnHeaderId, Long userId, Long attachmentTypeId,Long companyId) throws BusinessException, FileNotFoundException, IOException;
 
 	List<LtShipmentAttachment> getAllByHeaderId(Long id) throws BusinessException;
 

@@ -19,17 +19,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "LT_MAST_SYS_VARIABLES")
 @XmlRootElement
-public class LtMastSysVariables extends BaseClass implements Serializable 
+public class LtMastSysVariables extends WhoColumns implements Serializable 
 {
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	//@GeneratedValue(strategy = GenerationType.AUTO)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "variables_seq")
-	@SequenceGenerator(name = "variables_seq", sequenceName = "LT_MAST_SYS_VARIABLES_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "variables_seq")
+//	@SequenceGenerator(name = "variables_seq", sequenceName = "LT_MAST_SYS_VARIABLES_S", allocationSize = 1)
 	@Basic(optional = false)
 	//@NotNull
 	@Column(name = "VARIABLE_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long variableId;
 	
 	@Basic(optional = false)

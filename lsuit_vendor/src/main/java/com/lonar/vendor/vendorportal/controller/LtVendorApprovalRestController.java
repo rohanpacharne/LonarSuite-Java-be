@@ -53,7 +53,7 @@ public class LtVendorApprovalRestController implements CodeMaster
             }
             catch(Exception e)
             {
-            	throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+            	throw new BusinessException(0, null, e);
             }
           
             return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -69,7 +69,7 @@ public class LtVendorApprovalRestController implements CodeMaster
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
@@ -90,7 +90,7 @@ public class LtVendorApprovalRestController implements CodeMaster
 		}
 		catch(Exception e)
 		{
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
@@ -127,4 +127,14 @@ public class LtVendorApprovalRestController implements CodeMaster
             			ltVendorApprovalService.getInvoiceApprovalByInvoiceId(invoiceId);
             return new ResponseEntity<List<LtVendorApproval>>(ltVendorApproval, HttpStatus.OK);
     }
+	
+	@RequestMapping(value = "/getRentalAgreementApprovalByAgreementId/{id}/{logTime}", method= RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<List<LtVendorApproval>> getRentalAgreementApprovalByAgreementId(@PathVariable("id") Long agreementId,@PathVariable("logTime") String logTime) throws ServiceException
+    {
+            List<LtVendorApproval> ltVendorApproval=
+            			ltVendorApprovalService.getRentalAgreementApprovalByAgreementId(agreementId);
+            return new ResponseEntity<List<LtVendorApproval>>(ltVendorApproval, HttpStatus.OK);
+    }
+	
+	
 }

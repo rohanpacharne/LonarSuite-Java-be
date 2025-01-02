@@ -2,6 +2,7 @@ package com.lonar.vendor.vendorportal.dao;
 
 import java.util.List;
 
+import com.lonar.vendor.vendorportal.model.LtMastComnMaster;
 import com.lonar.vendor.vendorportal.model.LtMastComnMasterValues;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 
@@ -37,5 +38,11 @@ public interface LtMastComnMasterValuesDao {
 	public List<LtMastComnMasterValues> getLikeNameWithMaster(String masterName, String valueName) throws ServiceException;
 
 	public List<LtMastComnMasterValues> getMasterList(String masterName) throws ServiceException;
+	
+	public Long getCount(LtMastComnMasterValues input, Long masterId);
+	
+	public List<LtMastComnMasterValues> getDataTable(LtMastComnMasterValues input,Long masterId) throws ServiceException;
+
+
 
 }

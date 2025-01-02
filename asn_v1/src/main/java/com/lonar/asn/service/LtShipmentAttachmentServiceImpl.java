@@ -33,7 +33,7 @@ public class LtShipmentAttachmentServiceImpl implements LtShipmentAttachmentServ
 	LtShipmentAttachmentDao ltShipmentAttachmentDao;
 	
 	@Override
-	public Status saveAsnAttachments(MultipartFile[] files, Long asnHeaderId, Long userId, Long attachmentTypeId)
+	public Status saveAsnAttachments(MultipartFile[] files, Long asnHeaderId, Long userId, Long attachmentTypeId,Long companyId)
 			throws BusinessException, IOException {
 		
 		String saveDirectory=null;;
@@ -46,7 +46,7 @@ public class LtShipmentAttachmentServiceImpl implements LtShipmentAttachmentServ
 
 			if (files != null && files.length > 0) {
 				List<SysVariableWithValues> sysVariableWithValuesList=
-						ltMastSysVariablesDao.getBySysVariableName("FILE_UPLOAD_FOLDER_PATH");
+						ltMastSysVariablesDao.getBySysVariableName("GLOBAL_FILE_PATH",companyId);
 				/*SysVariableWithValues sysVariableWithValues = ltMastSysVariablesService
 						.getBySysVariableName("FILE_UPLOAD_FOLDER_PATH");*/
 
@@ -65,9 +65,17 @@ public class LtShipmentAttachmentServiceImpl implements LtShipmentAttachmentServ
 				if (!dir.exists()) {
 					dir.mkdirs();
 					if (!dir.isDirectory()) {
-						status = ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+//						status = ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+						try {
+							status.setCode(0);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("NO_DIRECTIVE_EXISTS").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 						if (status.getMessage() == null) {
-							status.setCode(EXCEPTION);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 						}
 
@@ -98,7 +106,7 @@ public class LtShipmentAttachmentServiceImpl implements LtShipmentAttachmentServ
 								
 
 								} else {
-									status.setCode(EXCEPTION);
+									status.setCode(0);
 									status.setMessage("File with same name already exists!");
 									return status;
 
@@ -121,11 +129,11 @@ public class LtShipmentAttachmentServiceImpl implements LtShipmentAttachmentServ
 						//status = ltMastCommonMessageService.getCodeAndMessage(FILE_UPLOADED_SUCESSFULLY);
 						
 						status.setMessage(msg);
-						status.setCode(200);
+						status.setCode(1);
 						//status.setData(data);
 
 						if (status.getMessage() == null) {
-							status.setCode(SUCCESS);
+							status.setCode(1);
 							status.setMessage("Error in finding message! The action is completed successfully.");
 						}
 						return status;
@@ -133,9 +141,17 @@ public class LtShipmentAttachmentServiceImpl implements LtShipmentAttachmentServ
 				}
 				
 			} else {
-				status = ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status = ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if (status.getMessage() == null) {
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			}
@@ -162,7 +178,7 @@ public class LtShipmentAttachmentServiceImpl implements LtShipmentAttachmentServ
 
 			if (files != null && files.length > 0) {
 				List<SysVariableWithValues> sysVariableWithValuesList=
-						ltMastSysVariablesDao.getBySysVariableName("FILE_UPLOAD_FOLDER_PATH");
+						ltMastSysVariablesDao.getBySysVariableName1("FILE_UPLOAD_FOLDER_PATH");
 				
 				if (sysVariableWithValuesList != null) {
 					sysVariableWithValues = sysVariableWithValuesList.get(0);
@@ -179,9 +195,17 @@ public class LtShipmentAttachmentServiceImpl implements LtShipmentAttachmentServ
 				if (!dir.exists()) {
 					dir.mkdirs();
 					if (!dir.isDirectory()) {
-						status = ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+//						status = ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+						try {
+							status.setCode(0);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("NO_DIRECTIVE_EXISTS").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 						if (status.getMessage() == null) {
-							status.setCode(EXCEPTION);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 						}
 
@@ -212,7 +236,7 @@ public class LtShipmentAttachmentServiceImpl implements LtShipmentAttachmentServ
 								
 
 								} else {
-									status.setCode(EXCEPTION);
+									status.setCode(0);
 									status.setMessage("File with same name already exists!");
 									return status;
 
@@ -235,11 +259,11 @@ public class LtShipmentAttachmentServiceImpl implements LtShipmentAttachmentServ
 						//status = ltMastCommonMessageService.getCodeAndMessage(FILE_UPLOADED_SUCESSFULLY);
 						
 						status.setMessage(msg);
-						status.setCode(200);
+						status.setCode(1);
 						//status.setData(data);
 
 						if (status.getMessage() == null) {
-							status.setCode(SUCCESS);
+							status.setCode(1);
 							status.setMessage("Error in finding message! The action is completed successfully.");
 						}
 						return status;
@@ -247,9 +271,16 @@ public class LtShipmentAttachmentServiceImpl implements LtShipmentAttachmentServ
 				}
 				
 			} else {
-				status = ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status = ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if (status.getMessage() == null) {
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			}
@@ -261,10 +292,10 @@ public class LtShipmentAttachmentServiceImpl implements LtShipmentAttachmentServ
 	public Status deleteByID(String id) throws BusinessException {
 		Status status = new Status();
 		if( ltShipmentAttachmentDao.deleteByID(id)){
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			status.setMessage("The attachment has been deleted successfully.");
 		}else {
-			status.setCode(EXCEPTION);
+			status.setCode(0);
 			status.setMessage("Error in finding message! The action was unsuccessful");
 		}
 		return status;

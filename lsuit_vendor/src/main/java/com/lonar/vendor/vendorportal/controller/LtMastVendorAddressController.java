@@ -67,7 +67,7 @@ public class LtMastVendorAddressController implements CodeMaster
 			}
 			catch(Exception e)
 			{
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 			
 			return new ResponseEntity<List<LtMastVendorAddress>>(vendorAddList, HttpStatus.OK);
@@ -83,7 +83,7 @@ public class LtMastVendorAddressController implements CodeMaster
 			}
 			catch(Exception e)
 			{
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 			return new ResponseEntity<List<LtMastVendorAddress>>(vendorAddList, HttpStatus.OK);
 	}
@@ -99,7 +99,7 @@ public class LtMastVendorAddressController implements CodeMaster
 			}
 			catch(Exception e)
 			{
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 			return new ResponseEntity<List<LtMastVendorAddress>>(vendorAddList, HttpStatus.OK);
 	}
@@ -115,7 +115,7 @@ public class LtMastVendorAddressController implements CodeMaster
 			}
 			catch(Exception e)
 			{
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 			return new ResponseEntity<List<LtMastVendorAddress>>(vendorAddList, HttpStatus.OK);
 	}
@@ -130,7 +130,7 @@ public class LtMastVendorAddressController implements CodeMaster
 			}
 			catch(Exception e)
 			{
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 		
 			return new ResponseEntity<LtMastVendorAddress>(vendorAdd, HttpStatus.OK);
@@ -145,7 +145,7 @@ public class LtMastVendorAddressController implements CodeMaster
 			}
 			catch(Exception e)
 			{
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 			
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -162,7 +162,7 @@ public class LtMastVendorAddressController implements CodeMaster
 			{
 				/*e.printStackTrace();
 				logger.error("ERROR "+ e );*/
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -179,14 +179,22 @@ public class LtMastVendorAddressController implements CodeMaster
 			{
 				logger.error("ERROR "+ e );
 				e.printStackTrace();
-				status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//				status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				return new ResponseEntity<Status>(status,HttpStatus.OK);
 			} 
 			catch(Exception e)
 			{
 				/*e.printStackTrace();
 				logger.error("ERROR "+ e );*/
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}

@@ -7,6 +7,7 @@ import com.lonar.vendor.vendorportal.model.VendorApproval;
 import com.lonar.vendor.vendorportal.reports.ReportParameters;
 import com.lonar.vendor.vendorportal.model.LtInvoiceHeaders;
 import com.lonar.vendor.vendorportal.model.LtMastVendors;
+import com.lonar.vendor.vendorportal.model.LtRentalAgreementHeaders;
 import com.lonar.vendor.vendorportal.model.SendBroadCastEmail;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.model.Status;
@@ -90,6 +91,8 @@ public interface LtMastVendorsDao
 	boolean updatePath(LtMastVendors ltMastVendor) throws ServiceException;
 
 	LtMastVendors getByRegistrationMailId(String registrationEmail, Long companyId) throws ServiceException;
+	
+	boolean loadRentalAgreementApprovers(LtRentalAgreementHeaders ltRentalAgreementHeaders) throws ServiceException;
 
 	
 

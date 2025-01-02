@@ -24,9 +24,9 @@ public class LtMastUsers implements Serializable {
 private static final long serialVersionUID = 1L;
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
-	@SequenceGenerator(name = "user_seq", sequenceName = "LT_MAST_USERS_S", allocationSize = 1)
-	
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+//	@SequenceGenerator(name = "user_seq", sequenceName = "LT_MAST_USERS_S", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "USER_ID")
 	private Long userId;
 	
@@ -153,6 +153,17 @@ private static final long serialVersionUID = 1L;
 	@Transient
 	private String companyName;
 	
+	@Transient
+	private String userType;
+	
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
+
 	public Long getUserId() {
 		return userId;
 	}
@@ -502,8 +513,11 @@ private static final long serialVersionUID = 1L;
 				+ ", columnNo=" + columnNo + ", sort=" + sort + ", divisionId=" + divisionId + ", locationId="
 				+ locationId + ", vendorName=" + vendorName + ", locationCode=" + locationCode + ", divisionName="
 				+ divisionName + ", flag=" + flag + ", roleName=" + roleName + ", statusValue=" + statusValue
-				+ ", loginCheck=" + loginCheck + ", isBuyer=" + isBuyer + ", companyName=" + companyName + "]";
+				+ ", loginCheck=" + loginCheck + ", isBuyer=" + isBuyer + ", companyName=" + companyName + ", userType="
+				+ userType + "]";
 	}
+
+	
 
 	
 

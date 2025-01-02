@@ -71,12 +71,27 @@ public class LtMastPositionMasterServiceImpl implements LtMastPositionMasterServ
 		ltMastPositionMaster.setLastUpdatedBy(ltMastPositionMaster.getLastUpdateLogin());
 		ltMastPositionMaster = ltMastPositionMasterDao.save(ltMastPositionMaster);
 		if(ltMastPositionMaster.getPositionId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		}else {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage(chkDuplicate);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -109,12 +124,27 @@ public class LtMastPositionMasterServiceImpl implements LtMastPositionMasterServ
 		ltMastPositionMaster.setLastUpdatedBy(ltMastPositionMaster.getLastUpdateLogin());
 		ltMastPositionMaster = ltMastPositionMasterDao.update(ltMastPositionMaster);
 		if(ltMastPositionMaster.getPositionId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		}else {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage(chkDuplicate);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -125,9 +155,24 @@ public class LtMastPositionMasterServiceImpl implements LtMastPositionMasterServ
 		Status status = new Status();
 		LtMastPositionMaster ltMastPositionMaster = ltMastPositionMasterDao.delete(id);
 		if(ltMastPositionMaster ==null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}

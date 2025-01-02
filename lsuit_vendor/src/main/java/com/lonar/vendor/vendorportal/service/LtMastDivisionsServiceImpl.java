@@ -182,7 +182,15 @@ public  class LtMastDivisionsServiceImpl implements LtMastDivisionsService ,Code
 			if(ltMastDivisions.getDivisionCode()==null || ltMastDivisions.getDivisionName()==null || 
 					ltMastDivisions.getStartDate()==null 	)
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
 			
@@ -212,34 +220,64 @@ public  class LtMastDivisionsServiceImpl implements LtMastDivisionsService ,Code
 						{
 							
 							ltMastSubDivisions = ltMastSubDivisionsRepository.save(ltMastSubDivisions);
-							status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//							status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+							try {
+								status.setCode(1);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 							if( status.getMessage()==null)
 							{
-								status.setCode(SUCCESS);
+								status.setCode(1);
 								status.setMessage("Error in finding message! The action is completed successfully.");
 							}
 							
 						}
 						else
 						{
-							status=ltMastCommonMessageService.getCodeAndMessage(Data_Exist);
-							status.setCode(Data_Exist);//76
+//							status=ltMastCommonMessageService.getCodeAndMessage(Data_Exist);
+							try {
+								status.setCode(0);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DATA_EXIST").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+//							status.setCode(Data_Exist);//76
 							status.setMessage(stat);
 						}
 					}//end of for
 				
 				}
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 				
 			}	
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				status.setMessage(stat);
 				status.setData(ltMastDivisions);
 		
@@ -255,7 +293,15 @@ public  class LtMastDivisionsServiceImpl implements LtMastDivisionsService ,Code
 			if(ltMastDivisions.getDivisionCode()==null && ltMastDivisions.getDivisionName()==null && 
 					ltMastDivisions.getStartDate()==null && ltMastDivisions.getDivisionId()==null	)
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
 				
@@ -266,17 +312,31 @@ public  class LtMastDivisionsServiceImpl implements LtMastDivisionsService ,Code
 				ltMastDivisions.setLastUpdatedBy(ltMastDivisions.getLastUpdateLogin());
 				ltMastDivisions.setLastUpdateDate(new Date());	
 				ltMastDivisions = ltMastDivisionsRepository.save(ltMastDivisions);
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 				status.setData(ltMastDivisions.getDivisionId());
 			}
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				status.setMessage(stat);
 				status.setData(ltMastDivisions);
 			}
@@ -315,17 +375,31 @@ public  class LtMastDivisionsServiceImpl implements LtMastDivisionsService ,Code
 					ltMastDivisionsRepository.delete(Long.parseLong(id));
 					
 				}
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 								
 			}
 			else 
 			{
-					status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//					status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
@@ -340,7 +414,14 @@ public  class LtMastDivisionsServiceImpl implements LtMastDivisionsService ,Code
 			if(ltMastDivisions.getDivisionCode()==null || ltMastDivisions.getDivisionName()==null || 
 					ltMastDivisions.getStartDate()==null 	)
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
 			
@@ -355,16 +436,32 @@ public  class LtMastDivisionsServiceImpl implements LtMastDivisionsService ,Code
 			
 				ltMastDivisions = ltMastDivisionsRepository.save(ltMastDivisions);
 				if(ltMastDivisions.getDivisionId()!=null) {
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 				status.setData(ltMastDivisions.getDivisionId());
 				}else
 				{
-					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 					status.setMessage(stat);
 					status.setData(ltMastDivisions);
 			
@@ -372,7 +469,15 @@ public  class LtMastDivisionsServiceImpl implements LtMastDivisionsService ,Code
 			}	
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				status.setMessage(stat);
 				status.setData(ltMastDivisions);
 		

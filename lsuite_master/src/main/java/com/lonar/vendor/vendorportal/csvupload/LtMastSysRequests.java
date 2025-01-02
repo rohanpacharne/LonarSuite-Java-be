@@ -26,8 +26,8 @@ public class LtMastSysRequests
 	@Id
 	@Basic(optional = false)
 	@NotNull
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sys_req_seq")
-	@SequenceGenerator(name = "sys_req_seq", sequenceName = "LT_MAST_SYS_REQUESTS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sys_req_seq")
+//	@SequenceGenerator(name = "sys_req_seq", sequenceName = "LT_MAST_SYS_REQUESTS_S", allocationSize = 1)
 	@JsonView(DataTablesOutput.View.class)
 	@Column(name = "REQUEST_ID")
 	private Long requestId;

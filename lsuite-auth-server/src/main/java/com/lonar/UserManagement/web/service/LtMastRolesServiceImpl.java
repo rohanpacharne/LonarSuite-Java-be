@@ -93,7 +93,8 @@ public class LtMastRolesServiceImpl implements LtMastRolesService,CodeMaster{
 		List<LtMastRoles> ltMastRolesList = ltMastRolesDao.findByRole(ltMastRoles.getRoleName(),ltMastRoles.getCompanyId());
 		if (!ltMastRolesList.isEmpty() && (ltMastRoles.getRoleId() == null ? true
 				: !ltMastRoles.getRoleId().equals(ltMastRolesList.get(0).getRoleId()))) {
-			status.setCode(ROLE_NAME_PRESENT);
+//			status.setCode(ROLE_NAME_PRESENT);
+			status.setCode(0);
 			status.setMessage("Role name already exists.");
 
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -108,15 +109,30 @@ public class LtMastRolesServiceImpl implements LtMastRolesService,CodeMaster{
 		
 		
 		if(ltMastRoles.getRoleId()!=null) {
-			 status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			 status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 				if( status.getMessage()==null)
 				{
-					//status.setCode(INSERT_SUCCESSFULLY);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			status.setData(ltMastRoles.getRoleId());
 		}else {
-			 status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//			 status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 				
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -128,7 +144,7 @@ public class LtMastRolesServiceImpl implements LtMastRolesService,CodeMaster{
 		ltMastRoles.setLastUpdateDate(new Date());
 		List<LtMastRoles> ltMastRolesList = ltMastRolesDao.findByRole(ltMastRoles.getRoleName(),ltMastRoles.getCompanyId());
 		if (!ltMastRolesList.isEmpty() && !(ltMastRolesList.get(0).getRoleId().equals(ltMastRoles.getRoleId()))) {
-			status.setCode(ROLE_NAME_PRESENT);
+			status.setCode(0);
 			status.setMessage("Role name already exists.");
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 		}
@@ -139,19 +155,33 @@ public class LtMastRolesServiceImpl implements LtMastRolesService,CodeMaster{
 		
 		LtMastRoles ltP2pRoles2 =  ltMastRolesRepository.findOne(ltMastRoles.getRoleId());
 		if(ltMastRoles.getRoleId()!=null) {
-			  status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//			  status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 				if( status.getMessage()==null)
 				{
-					status.setCode(UPDATE_SUCCESSFULLY);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			status.setData(ltMastRoles.getRoleId());
 		}else {
 			
-			 status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//			 status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 				if( status.getMessage()==null)
 				{
-					status.setCode(UPDATE_FAIL);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				}
 		}
@@ -171,11 +201,26 @@ public class LtMastRolesServiceImpl implements LtMastRolesService,CodeMaster{
 				ltMastRoleModules.setLastUpdatedBy(ltMastRoleModules.getLastUpdateLogin());
 				ltMastRoleModules = ltMastRoleModulesRepository.save(ltMastRoleModules);
 				if(ltMastRoleModules.getRoleFuncId()==null) {
-					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					return new ResponseEntity<Status>(status, HttpStatus.OK);
 				}
 			}
-		status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//		status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
 

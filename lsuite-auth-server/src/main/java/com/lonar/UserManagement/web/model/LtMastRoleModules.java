@@ -32,9 +32,9 @@ public class LtMastRoleModules implements Serializable {
 	@Basic(optional = false)
 	//@NotNull
 	//@GeneratedValue(strategy = GenerationType.AUTO)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roleFunc_seq")
-	@SequenceGenerator(name = "roleFunc_seq", sequenceName = "LT_MAST_ROLE_MODULES_S", allocationSize = 1)
-	
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roleFunc_seq")
+//	@SequenceGenerator(name = "roleFunc_seq", sequenceName = "LT_MAST_ROLE_MODULES_S", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ROLE_FUNC_ID")
 	private Long roleFuncId;
 	
@@ -75,9 +75,9 @@ public class LtMastRoleModules implements Serializable {
 	private Date endDate;
 	
 	@Basic(optional = false)
-	@NotNull
+//	@NotNull
 	@Column(name = "CREATED_BY")
-	private long createdBy;
+	private Long createdBy;
 	
 	@Basic(optional = false)
 	@Column(name = "CREATION_DATE")
@@ -117,7 +117,7 @@ public class LtMastRoleModules implements Serializable {
 		this.roleFuncId = roleFuncId;
 	}
 
-	public LtMastRoleModules(Long roleFuncId, Date startDate, long createdBy, Date creationDate, long lastUpdateLogin) {
+	public LtMastRoleModules(Long roleFuncId, Date startDate, Long createdBy, Date creationDate, long lastUpdateLogin) {
 		this.roleFuncId = roleFuncId;
 		this.startDate = startDate;
 		this.createdBy = createdBy;
@@ -165,11 +165,11 @@ public class LtMastRoleModules implements Serializable {
 		this.endDate = endDate;
 	}
 
-	public long getCreatedBy() {
+	public Long getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(long createdBy) {
+	public void setCreatedBy(Long createdBy) {
 		this.createdBy = createdBy;
 	}
 

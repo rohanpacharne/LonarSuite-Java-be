@@ -67,6 +67,8 @@ public interface LtInvoiceHeadersDao
 	List<DashboardDetails> getInvoiceAmtByUserId(Long userId) throws ServiceException;
 
 	Status callInvoiceValidationProc(Long invoiceHeaderId) throws ServiceException;
+	
+	Status callUpdatePoShipmentQuantitiesProc(Long companyId,Long userId,Long invoiceHeaderId) throws ServiceException;
 
 	void loadLines(LtInvoiceHeaders ltInvoiceHeaders);
 }

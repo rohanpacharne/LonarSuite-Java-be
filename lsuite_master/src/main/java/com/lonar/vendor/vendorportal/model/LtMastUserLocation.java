@@ -22,9 +22,10 @@ public class LtMastUserLocation
 {
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_location_seq")
-	@SequenceGenerator(name = "user_location_seq", sequenceName = "LT_MAST_USER_LOCATION_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_location_seq")
+//	@SequenceGenerator(name = "user_location_seq", sequenceName = "LT_MAST_USER_LOCATION_S", allocationSize = 1)
 	@Column(name = "USER_LOCATION_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long userLocationId;
 	
 	@Column(name = "USER_ID")

@@ -35,15 +35,35 @@ public class LtInvoiceAttachmentDaoImpl implements LtInvoiceAttachmentDao {
 
 	@Override
 	public List<LtInvoiceAttachment> getAllFilesByInvoiceId(Long invoiceId) throws ServiceException {
-		String query  = " SELECT  nvl2(l.FILE_NAME,svm.SYSTEM_VALUE||l.FILE_NAME,'') AS FILE_PATH,\r\n" + 
-				"l.INVOICE_ATTACHMENT_ID,l.INVOICE_ID,l.ATTACHMENT_TYPE_ID,l.FILE_NAME, atm.ATTACHMENT_NAME as ATTACHMENT_TYPE  " + 
-				"FROM LT_INVOICE_ATTACHMENT l, "+
-				"    LT_MAST_ATTACHMENT_TYPE atm  ," + 
-				"    LT_MAST_SYS_VARIABLES svm " + 
-				"     WHERE l.INVOICE_ID = ? AND svm.VARIABLE_NAME = 'FILE_OPEN_PATH'  " + 
-				"     AND svm.COMPANY_ID = ( SELECT COMPANY_ID FROM LT_MAST_EMPLOYEES WHERE EMPLOYEE_ID = " + 
-				"                            (SELECT BUYER_ID FROM LT_INVOICE_HEADERS ih WHERE ih.INVOICE_HEADER_ID = l.INVOICE_ID ) ) " + 
-				"    AND l.ATTACHMENT_TYPE_ID = atm.ATTACHMENT_TYPE_ID(+)";
+//		String query  = " SELECT  nvl2(l.FILE_NAME,svm.SYSTEM_VALUE||l.FILE_NAME,'') AS FILE_PATH,\r\n" + 
+//				"l.INVOICE_ATTACHMENT_ID,l.INVOICE_ID,l.ATTACHMENT_TYPE_ID,l.FILE_NAME, atm.ATTACHMENT_NAME as ATTACHMENT_TYPE  " + 
+//				"FROM LT_INVOICE_ATTACHMENT l, "+
+//				"    LT_MAST_ATTACHMENT_TYPE atm  ," + 
+//				"    LT_MAST_SYS_VARIABLES svm " + 
+//				"     WHERE l.INVOICE_ID = ? AND svm.VARIABLE_NAME = 'FILE_OPEN_PATH'  " + 
+//				"     AND svm.COMPANY_ID = ( SELECT COMPANY_ID FROM LT_MAST_EMPLOYEES WHERE EMPLOYEE_ID = " + 
+//				"                            (SELECT BUYER_ID FROM LT_INVOICE_HEADERS ih WHERE ih.INVOICE_HEADER_ID = l.INVOICE_ID ) ) " + 
+//				"    AND l.ATTACHMENT_TYPE_ID = atm.ATTACHMENT_TYPE_ID(+)";
+		
+		String query = "SELECT IFNULL(CONCAT(svm.SYSTEM_VALUE, l.FILE_NAME), '') AS FILE_PATH, \n" +
+	               "       l.INVOICE_ATTACHMENT_ID, \n" +
+	               "       l.INVOICE_ID, \n" +
+	               "       l.ATTACHMENT_TYPE_ID, \n" +
+	               "       l.FILE_NAME, \n" +
+	               "       atm.ATTACHMENT_NAME AS ATTACHMENT_TYPE \n" +
+	               "FROM LT_INVOICE_ATTACHMENT l \n" +
+	               "LEFT JOIN LT_MAST_ATTACHMENT_TYPE atm ON l.ATTACHMENT_TYPE_ID = atm.ATTACHMENT_TYPE_ID \n" +
+	               "JOIN LT_MAST_SYS_VARIABLES svm ON svm.VARIABLE_NAME = 'FILE_OPEN_PATH' \n" +
+	               "WHERE l.INVOICE_ID = ? \n" +
+	               "  AND svm.COMPANY_ID = ( \n" +
+	               "      SELECT COMPANY_ID \n" +
+	               "      FROM LT_MAST_EMPLOYEES \n" +
+	               "      WHERE EMPLOYEE_ID = ( \n" +
+	               "          SELECT BUYER_ID \n" +
+	               "          FROM LT_INVOICE_HEADERS ih \n" +
+	               "          WHERE ih.INVOICE_HEADER_ID = l.INVOICE_ID \n" +
+	               "      ) \n" +
+	               "  )";
 		List<LtInvoiceAttachment> list=   jdbcTemplate.query(query, new Object[]{invoiceId }, 
 				 new BeanPropertyRowMapper<LtInvoiceAttachment>(LtInvoiceAttachment.class)); 
 		

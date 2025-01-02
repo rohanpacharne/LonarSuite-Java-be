@@ -144,7 +144,7 @@ public  class LtMastComnMasterServiceImpl implements LtMastComnMasterService,Cod
 			List<LtMastComnMaster> ltMastComnMasterList = ltMastComnMasterDao.findActiveLikeName(ltMastComnMaster.getMasterName());
 			if(ltMastComnMasterList.size() > 0 )
 			{
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Master name already exists.");
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
@@ -172,7 +172,10 @@ public  class LtMastComnMasterServiceImpl implements LtMastComnMasterService,Cod
 					ltMastComnMasterValues.setLastUpdatedBy(ltMastComnMasterValues.getLastUpdateLogin());
 					if (ltMastComnMasterValues.getMasterId() == null) 
 					{
-						status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//						status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+						status.setCode(0);		
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+
 						return new ResponseEntity<Status>(status, HttpStatus.OK);
 					}
 				
@@ -182,16 +185,21 @@ public  class LtMastComnMasterServiceImpl implements LtMastComnMasterService,Cod
 				} 
 				else
 				{
-					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+					status.setCode(0);		
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
 					return new ResponseEntity<Status>(status, HttpStatus.OK);
 					
 				}
 	
 			}
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+			status.setCode(1);		
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 			
@@ -200,11 +208,11 @@ public  class LtMastComnMasterServiceImpl implements LtMastComnMasterService,Cod
 		} 
 		catch (NullPointerException e) 
 		{
-			throw new BusinessException(INPUT_IS_EMPTY, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		catch (Exception e) 
 		{
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 
 	}
@@ -235,11 +243,27 @@ public  class LtMastComnMasterServiceImpl implements LtMastComnMasterService,Cod
 			}
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//				status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+						
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				return new ResponseEntity<Status>(status,HttpStatus.OK);
 					
 			} 
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			return new ResponseEntity<Status>(status,HttpStatus.OK);
 		}
@@ -253,7 +277,16 @@ public  class LtMastComnMasterServiceImpl implements LtMastComnMasterService,Cod
 			if(ltMastComnMaster.getStartDate()==null || ltMastComnMaster.getMasterName()==null ||
 					ltMastComnMaster.getLastUpdateLogin() == null )
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+					
+				try {
+					status.setCode(0);	
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
 			
@@ -289,10 +322,17 @@ public  class LtMastComnMasterServiceImpl implements LtMastComnMasterService,Cod
 			
 				}
 			}
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+			try {
+				status.setCode(1);	
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if(status.getMessage()==null)
 			{
-				status.setCode(EXCEPTION);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -307,7 +347,7 @@ public  class LtMastComnMasterServiceImpl implements LtMastComnMasterService,Cod
 			List<LtMastComnMaster> ltMastComnMasterList = ltMastComnMasterDao.findActiveLikeName(ltMastComnMaster.getMasterName());
 			if(ltMastComnMasterList.size() > 0 )
 			{
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Master name already exists.");
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
@@ -319,17 +359,33 @@ public  class LtMastComnMasterServiceImpl implements LtMastComnMasterService,Cod
 			ltMastComnMaster = ltMastComnMasterRepository.save(ltMastComnMaster);
 			
 			if(ltMastComnMaster.getMasterId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+						
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 			status.setData(ltMastComnMaster.getMasterId());
 			}
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -343,7 +399,14 @@ public  class LtMastComnMasterServiceImpl implements LtMastComnMasterService,Cod
 			if(ltMastComnMaster.getStartDate()==null || ltMastComnMaster.getMasterName()==null ||
 					ltMastComnMaster.getLastUpdateLogin() == null || ltMastComnMaster.getMasterId() == null )
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+				try {
+					status.setCode(0);	
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
 			
@@ -354,14 +417,28 @@ public  class LtMastComnMasterServiceImpl implements LtMastComnMasterService,Cod
 			ltMastComnMaster = ltMastComnMasterRepository.save(ltMastComnMaster);
 		
 			if(ltMastComnMaster.getMasterId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+				try {
+					status.setCode(1);	
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			if(status.getMessage()==null)
 			{
-				status.setCode(EXCEPTION);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 			}else {
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+				try {
+					status.setCode(0);	
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 
@@ -373,14 +450,30 @@ public  class LtMastComnMasterServiceImpl implements LtMastComnMasterService,Cod
 		ltMastComnMasterValuesRepository.delete(id);
 				
 		if (! ltMastComnMasterValuesRepository.exists(id)) {
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 				if(status.getMessage()==null)
 				{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 		}else {
-					status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//					status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 					return new ResponseEntity<Status>(status,HttpStatus.OK);
 		}
 		return new ResponseEntity<Status>(status,HttpStatus.OK);

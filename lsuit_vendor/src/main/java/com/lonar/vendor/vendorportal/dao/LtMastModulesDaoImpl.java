@@ -29,10 +29,10 @@ public class LtMastModulesDaoImpl implements LtMastModulesDao{
 	}
 	
 	@Override
-	public List<LtMastModules> findByModuleName(String moduleName) {
+	public List<LtMastModules> findByModuleName(String moduleName,Long companyId) {
 		 String sqlQuery = " SELECT MODULE_ID,MODULE_CODE,MODULE_NAME,MODULE_URL,SEQUENCE_NUMBER "
-		 		+ " FROM Lt_Mast_Modules l WHERE UPPER(l.MODULE_NAME) like ? ";
-	     return jdbcTemplate.query(sqlQuery,new Object[]{ "%"+moduleName.toUpperCase()+"%" }, 
+		 		+ " FROM Lt_Mast_Modules l WHERE UPPER(l.MODULE_NAME) = ? AND l.COMPANY_ID = ?";
+	     return jdbcTemplate.query(sqlQuery,new Object[]{moduleName.toUpperCase(), companyId}, 
 				 new RowMapper<LtMastModules>(){
 					@Override
 					public LtMastModules mapRow(ResultSet rs, int row)

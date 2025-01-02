@@ -149,7 +149,7 @@ final String restBaseUrl = "/API/invoiceAttachment";
 						message = ", Not Deleted file " + fileName[i].toString();
 				}
 			}
-			return new Status(INSERT_SUCCESSFULLY, message);
+			return new Status(1, message);
 		}
 //==================================================================================================================================
 		@RequestMapping(value = "/deleteFile/{id}/{logTime}", method= RequestMethod.GET, produces = "application/json")
@@ -165,10 +165,18 @@ final String restBaseUrl = "/API/invoiceAttachment";
 				{
 					try
 					{
-						status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//						status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+						try {
+							status.setCode(0);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 						if(status.getMessage()==null)
 						{
-							status.setCode(EXCEPTION);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 						}
 					}
@@ -233,9 +241,17 @@ final String restBaseUrl = "/API/invoiceAttachment";
 				if (!dir.exists()) {
 					dir.mkdirs();
 					if (!dir.isDirectory()) {
-						status = ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+//						status = ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+						try {
+							status.setCode(0);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("NO_DIRECTIVE_EXISTS").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 						if (status.getMessage() == null) {
-							status.setCode(EXCEPTION);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 						}
 
@@ -260,8 +276,8 @@ final String restBaseUrl = "/API/invoiceAttachment";
 								if (!ltMastInvoiceAttachment.getFileName().equals(files[i].getOriginalFilename())) 
 								{
 									int res=jdbcTemplate.update("INSERT INTO LT_INVOICE_ATTACHMENT  "
-											+ "  (INVOICE_ATTACHMENT_ID, INVOICE_ID, FILE_NAME, FILE_PATH, LAST_UPDATED_BY,LAST_UPDATE_DATE, ATTACHMENT_TYPE_ID)  "
-											+ " VALUES (LT_INVOICE_ATTACHMENT_S.nextval, ?, ? ,?, ?, ?, ?) ",
+											+ "  (INVOICE_ID, FILE_NAME, FILE_PATH, LAST_UPDATED_BY,LAST_UPDATE_DATE, ATTACHMENT_TYPE_ID)  "
+											+ " VALUES (?, ? ,?, ?, ?, ?) ",
 											+  invoiceId,fileName,saveDirectory,userId, currDate, attachmentTypeId );		
 									
 									if(res==1)
@@ -269,7 +285,7 @@ final String restBaseUrl = "/API/invoiceAttachment";
 									break;
 
 								} else {
-									status.setCode(EXCEPTION);
+									status.setCode(0);
 									status.setMessage("File with same name already exists!");
 									return new ResponseEntity<Status>(status, HttpStatus.OK);
 
@@ -278,8 +294,8 @@ final String restBaseUrl = "/API/invoiceAttachment";
 							}
 						} else {
 							int res=jdbcTemplate.update("INSERT INTO LT_INVOICE_ATTACHMENT  "
-									+ "  (INVOICE_ATTACHMENT_ID, INVOICE_ID, FILE_NAME, FILE_PATH, LAST_UPDATED_BY,LAST_UPDATE_DATE, ATTACHMENT_TYPE_ID)  "
-									+ " VALUES (LT_INVOICE_ATTACHMENT_S.nextval, ?, ? ,?, ?, ?, ?) ",
+									+ "  (INVOICE_ID, FILE_NAME, FILE_PATH, LAST_UPDATED_BY,LAST_UPDATE_DATE, ATTACHMENT_TYPE_ID)  "
+									+ " VALUES (?, ? ,?, ?, ?, ?) ",
 									+  invoiceId,fileName,saveDirectory,userId, currDate, attachmentTypeId );
 						}
 
@@ -294,20 +310,29 @@ final String restBaseUrl = "/API/invoiceAttachment";
 						//status = ltMastCommonMessageService.getCodeAndMessage(FILE_UPLOADED_SUCESSFULLY);
 						
 						status.setMessage(msg);
-						status.setCode(200);
+						status.setCode(1);
 						//status.setData(data);
 
 						if (status.getMessage() == null) {
-							status.setCode(SUCCESS);
+							status.setCode(1);
 							status.setMessage("Error in finding message! The action is completed successfully.");
 						}
 						return new ResponseEntity<Status>(status, HttpStatus.OK);
 
 					} catch (Exception e) {
 						e.printStackTrace();
-						status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//						status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+						
+						try {
+							status.setCode(0);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 						if (status.getMessage() == null) {
-							status.setCode(EXCEPTION);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 						}
 
@@ -316,9 +341,17 @@ final String restBaseUrl = "/API/invoiceAttachment";
 
 				
 			} else {
-				status = ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status = ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if (status.getMessage() == null) {
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			}
@@ -328,9 +361,17 @@ final String restBaseUrl = "/API/invoiceAttachment";
 		catch (Exception e) {
 			e.printStackTrace();
 			try {
-				status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//				status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if (status.getMessage() == null) {
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 				status.setMessage(e.getMessage());

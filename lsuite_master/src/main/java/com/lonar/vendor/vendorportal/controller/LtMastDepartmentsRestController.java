@@ -41,7 +41,7 @@ public class LtMastDepartmentsRestController implements CodeMaster{
 			
 		} 
 		catch (Exception e) {		
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 	}
@@ -54,7 +54,7 @@ public class LtMastDepartmentsRestController implements CodeMaster{
 				try {
 					return ltMastDepartmentsService.save(ltMastDepartments);	
 				}catch(Exception e) {
-						throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+						throw new BusinessException(0, null, e);
 				}
 			}
 			//------------------------------------------------------------------------------------------------------
@@ -64,7 +64,7 @@ public class LtMastDepartmentsRestController implements CodeMaster{
 				try {
 					return ltMastDepartmentsService.update(ltMastDepartments);	
 				}catch(Exception e) {
-						throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+						throw new BusinessException(0, null, e);
 				}
 			}
 			
@@ -75,7 +75,7 @@ public class LtMastDepartmentsRestController implements CodeMaster{
 				try {
 					return ltMastDepartmentsService.delete(id);
 				}catch(Exception e) {
-						throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+						throw new BusinessException(0, null, e);
 				}
 			}	
 			

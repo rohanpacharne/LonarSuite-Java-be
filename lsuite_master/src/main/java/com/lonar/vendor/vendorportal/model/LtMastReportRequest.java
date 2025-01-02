@@ -25,9 +25,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class LtMastReportRequest {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reportRequest_seq")
-	@SequenceGenerator(name = "reportRequest_seq", sequenceName = "LT_MAST_REPORT_REQUEST_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reportRequest_seq")
+//	@SequenceGenerator(name = "reportRequest_seq", sequenceName = "LT_MAST_REPORT_REQUEST_S", allocationSize = 1)
 	@Column(name = "REQUEST_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long requestId;
 
 	@Column(name = "REQUEST_URL")

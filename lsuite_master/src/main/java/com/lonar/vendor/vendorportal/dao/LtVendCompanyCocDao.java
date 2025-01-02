@@ -3,6 +3,7 @@ package com.lonar.vendor.vendorportal.dao;
 import java.util.List;
 
 import com.lonar.vendor.vendorportal.model.LtCompanyVenMgmtCoc;
+import com.lonar.vendor.vendorportal.model.LtCompanyVenMgmtCoc1;
 import com.lonar.vendor.vendorportal.model.LtVendCompanyCoc;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 

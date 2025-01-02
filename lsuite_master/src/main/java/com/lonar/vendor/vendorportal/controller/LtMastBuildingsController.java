@@ -51,7 +51,7 @@ public class LtMastBuildingsController  implements CodeMaster
 		} 
 		catch (Exception e) 
 		{
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 	}
@@ -81,7 +81,7 @@ public class LtMastBuildingsController  implements CodeMaster
 			try {
 				return ltP2pBuildingsService.saveBuildings(ltP2pBuildings);
 				}catch(Exception e) {
-					throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+					throw new BusinessException(0, null, e);
 				}
 			
 		
@@ -93,7 +93,7 @@ public class LtMastBuildingsController  implements CodeMaster
 		try {
 			return ltP2pBuildingsService.updateBuildings(ltP2pBuildings);
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 			
 	}	
@@ -123,7 +123,7 @@ public class LtMastBuildingsController  implements CodeMaster
 			try {
 				return ltP2pBuildingsService.deleteBuildings(id);
 				}catch(Exception e) {
-					throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+					throw new BusinessException(0, null, e);
 				}
 			
 			

@@ -141,7 +141,7 @@ public class LtMastEmployeeDelegationServiceImpl implements LtMastEmployeeDelega
 					delegateeDelegation.getStartDate(),delegateeDelegation.getEndDate()))
 			{
 				status.setMessage("Delegate not available.");
-				status.setCode(FAIL);
+				status.setCode(0);
 
 				return status;
 			}
@@ -155,7 +155,7 @@ public class LtMastEmployeeDelegationServiceImpl implements LtMastEmployeeDelega
 					employeeDelegation.getStartDate(),employeeDelegation.getEndDate()))
 			{
 				status.setMessage("Employee have already delegated duties for the period");
-				status.setCode(FAIL);
+				status.setCode(0);
 				return status;
 			}
 			
@@ -169,17 +169,22 @@ public class LtMastEmployeeDelegationServiceImpl implements LtMastEmployeeDelega
 		ltMastEmployeeDelegation = ltMastEmployeeDelegationRepository.save(ltMastEmployeeDelegation);
 	
 		if(ltMastEmployeeDelegation.getEmployeeDelegationId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+			status.setCode(1);		
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+			status.setCode(0);		
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+
 			if( status.getMessage()==null)
 			{
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		}

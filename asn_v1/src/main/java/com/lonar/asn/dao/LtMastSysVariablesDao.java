@@ -12,7 +12,9 @@ import com.lonar.asn.model.SysVariableWithValues;
 
 public interface LtMastSysVariablesDao
 {
-	public List<SysVariableWithValues> getBySysVariableName(String name) throws ServiceException;
+	public List<SysVariableWithValues> getBySysVariableName(String name,Long companyId) throws ServiceException;
+
+	public List<SysVariableWithValues> getBySysVariableName1(String name) throws ServiceException;
 
 	LtMastSysVariables getByName(LtMastSysVariables ltMastSysVariables) throws ServiceException;
 

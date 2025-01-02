@@ -20,15 +20,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "LT_MAST_USER_ROLES")
 @XmlRootElement
-public class LtMastUserRoles extends BaseClass implements Serializable {
+public class LtMastUserRoles extends WhoColumns implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userRole_seq")
-	@SequenceGenerator(name = "userRole_seq", sequenceName = "LT_MAST_USER_ROLES_S", allocationSize = 1)
-	
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userRole_seq")
+//	@SequenceGenerator(name = "userRole_seq", sequenceName = "LT_MAST_USER_ROLES_S", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "USER_ROLE_ID")
 	private Long userRoleId;
 	

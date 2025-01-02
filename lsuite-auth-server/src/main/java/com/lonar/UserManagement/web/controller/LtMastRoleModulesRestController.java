@@ -64,7 +64,7 @@ public class LtMastRoleModulesRestController implements CodeMaster{
 		} catch (Exception e) {
 			/*e.printStackTrace();
 			logger.error("ERROR "+ e );*/
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<List<LtMastRoleModules>>(ltMastRoleModules, HttpStatus.OK);
 	}
@@ -91,7 +91,7 @@ public class LtMastRoleModulesRestController implements CodeMaster{
 					return new ResponseEntity<List<LtMastRoleModules>>(ltMastRoleModules, HttpStatus.OK);
 				}
 				} catch (Exception e) {
-					throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+					throw new BusinessException(0, null, e);
 	     }
 		return new ResponseEntity<List<LtMastRoleModules>>(ltMastRoleModules, HttpStatus.OK);
 	}
@@ -122,7 +122,7 @@ public class LtMastRoleModulesRestController implements CodeMaster{
 			e.printStackTrace();
 			return new ResponseEntity<LtMastRoleModules>(ltMastRoleModules, HttpStatus.OK);
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<LtMastRoleModules>(ltMastRoleModules, HttpStatus.OK);
 	}
@@ -143,7 +143,7 @@ public class LtMastRoleModulesRestController implements CodeMaster{
 				try {
 				status=ltMastRoleModulesService.save(ltMastRoleModules);
 				}catch(Exception e) {
-					throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+					throw new BusinessException(0, null, e);
 				}
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
@@ -154,7 +154,7 @@ public class LtMastRoleModulesRestController implements CodeMaster{
 				try {
 				status=ltMastRoleModulesService.update(ltMastRoleModules);
 				}catch(Exception e) {
-					throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+					throw new BusinessException(0, null, e);
 				}
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
@@ -170,13 +170,29 @@ public class LtMastRoleModulesRestController implements CodeMaster{
 			
 
 		} catch(org.springframework.dao.DataIntegrityViolationException e) {
-			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			return new ResponseEntity<Status>(status,HttpStatus.OK);
 		}
 		 catch (Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
-		status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//		status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+		
+		try {
+			status.setCode(1);
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return new ResponseEntity<Status>(status,HttpStatus.OK);
 	}
 

@@ -18,15 +18,16 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @Entity
 @Table(name = "LT_MAST_CITY")
 @JsonInclude(Include.NON_NULL)
-public class LtMastCity extends BaseClass {
+public class LtMastCity extends WhoColumns {
 	
 	@Id
 	@Basic(optional = false)
 	@NotNull
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "city_seq")
-	@SequenceGenerator(name = "city_seq", sequenceName = " LT_MAST_CITY_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "city_seq")
+//	@SequenceGenerator(name = "city_seq", sequenceName = " LT_MAST_CITY_S", allocationSize = 1)
 	@Column(name = "CITY_ID")
 	//@JsonProperty("city id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long cityId;
 	
 	@Basic(optional = false)

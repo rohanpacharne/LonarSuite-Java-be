@@ -134,6 +134,10 @@ public class LtMastTaxesDaoImpl implements LtMastTaxesDao {
 	@Override
 	public List<LtMastTaxes> getDatatableRecords(Long companyId,LtMastTaxes input) throws ServiceException {
 		String query = env.getProperty("getTaxesDatatableRecords");
+		
+		 String taxCode=null;
+		   if(input.getTaxCode()!=null)
+		   {taxCode="%"+input.getTaxCode().toUpperCase()+"%";}
 		 
 		 String taxName=null;
 		   if(input.getTaxName()!=null)
@@ -160,7 +164,7 @@ public class LtMastTaxesDaoImpl implements LtMastTaxesDao {
 		   {desc="%"+input.getTaxDesc().toUpperCase()+"%";}
 		   
 			List<LtMastTaxes> list = (List<LtMastTaxes>) 
-					jdbcTemplate.query(query , new Object[]{companyId,taxName,taxRate,desc,hsn, sourceStateCode, destinationStateCode,
+					jdbcTemplate.query(query , new Object[]{companyId,taxCode,taxName,taxRate,desc,hsn, sourceStateCode, destinationStateCode,
 						
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),

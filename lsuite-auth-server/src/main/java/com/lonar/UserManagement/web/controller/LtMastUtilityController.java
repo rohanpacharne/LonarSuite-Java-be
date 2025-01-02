@@ -25,7 +25,7 @@ public class LtMastUtilityController implements CodeMaster {
 		try {
 			return ltMastUsersService.getLtMastUsersUtilityDataTable(input);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 		
 	}

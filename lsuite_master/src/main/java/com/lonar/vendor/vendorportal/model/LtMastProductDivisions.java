@@ -32,13 +32,14 @@ import javax.validation.constraints.NotNull;
 		@NamedQuery(name = "LtP2pProductDivisions.findByLastUpdatedBy", query = "SELECT l FROM LtP2pProductDivisions l WHERE l.lastUpdatedBy = :lastUpdatedBy"),
 		@NamedQuery(name = "LtP2pProductDivisions.findByLastUpdateDate", query = "SELECT l FROM LtP2pProductDivisions l WHERE l.lastUpdateDate = :lastUpdateDate"),
 		@NamedQuery(name = "LtP2pProductDivisions.findByProductdivisionid", query = "SELECT l FROM LtP2pProductDivisions l WHERE l.productdivisionid = :productdivisionid") })*/
-public class LtMastProductDivisions extends BaseClass implements Serializable {
+public class LtMastProductDivisions extends WhoColumns implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productDivision_seq")
-	@SequenceGenerator(name = "productDivision_seq", sequenceName = " LT_MAST_PRODUCT_DIVISIONS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productDivision_seq")
+//	@SequenceGenerator(name = "productDivision_seq", sequenceName = " LT_MAST_PRODUCT_DIVISIONS_S", allocationSize = 1)
 	@Basic(optional = false)
 	@Column(name = "PRODUCT_DIVISION_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long productDivisionId;
 	
 	@Basic(optional = false)

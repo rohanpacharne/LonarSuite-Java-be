@@ -205,7 +205,7 @@ public class LtMastComnMasterValuesServiceImpl implements LtMastComnMasterValues
 
 			if (!ltMastComnMasterValuesList.isEmpty() && !ltMastComnMasterValuesList
 					.get(0).getComnMasterValuesId().equals(ltMastComnMasterValues.getComnMasterValuesId())) {
-				status.setCode(VALUE_CODE_PRESENT);
+				status.setCode(0);
 				status.setMessage(" Value code already exists.");
 
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -216,7 +216,7 @@ public class LtMastComnMasterValuesServiceImpl implements LtMastComnMasterValues
 
 			if (!ltMastComnMasterValuesList.isEmpty() && !ltMastComnMasterValuesList
 					.get(0).getComnMasterValuesId().equals(ltMastComnMasterValues.getComnMasterValuesId() )) {
-				status.setCode(VALUE_CODE_PRESENT);
+				status.setCode(0);
 				status.setMessage("Value name already exists.");
 
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -230,20 +230,36 @@ public class LtMastComnMasterValuesServiceImpl implements LtMastComnMasterValues
 			ltMastComnMasterValues = ltMastComnMasterValuesRepository.save(ltMastComnMasterValues);
 			
 			if(ltMastComnMasterValues.getComnMasterValuesId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 			status.setData(ltMastComnMasterValues.getComnMasterValuesId());
 			}
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if( status.getMessage()==null)
 				{
-					status.setCode(FAIL);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				}
 			}
@@ -269,7 +285,7 @@ public class LtMastComnMasterValuesServiceImpl implements LtMastComnMasterValues
 		
 		if (!ltMastComnMasterValuesList.isEmpty() && !ltMastComnMasterValuesList
 				.get(0).getComnMasterValuesId().equals(ltMastComnMasterValues.getComnMasterValuesId())) {
-			status.setCode(VALUE_CODE_PRESENT);
+			status.setCode(0);
 			status.setMessage(messageSource.getMessage("valuecodepresent", null, "valuecodepresent", Locale.getDefault()));
 
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -281,7 +297,7 @@ public class LtMastComnMasterValuesServiceImpl implements LtMastComnMasterValues
 	
 		if (!ltMastComnMasterValuesList.isEmpty() && !ltMastComnMasterValuesList
 				.get(0).getComnMasterValuesId().equals(ltMastComnMasterValues.getComnMasterValuesId())) {
-			status.setCode(VALUE_CODE_PRESENT);
+			status.setCode(0);
 			status.setMessage(messageSource.getMessage("valuenamepresent", null, "valuenamepresent", Locale.getDefault()));
 
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -294,20 +310,36 @@ public class LtMastComnMasterValuesServiceImpl implements LtMastComnMasterValues
 		ltMastComnMasterValues = ltMastComnMasterValuesRepository.save(ltMastComnMasterValues);
 		
 		if(ltMastComnMasterValues.getComnMasterValuesId()!=null) {
-		status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//		status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		if( status.getMessage()==null)
 		{
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			status.setMessage("Error in finding message! The action is completed successfully.");
 		}
 		status.setData(ltMastComnMasterValues.getComnMasterValuesId());
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		}

@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.lonar.vendor.vendorportal.model.LtCompanyVenMgmtCoc;
+import com.lonar.vendor.vendorportal.model.LtCompanyVenMgmtCoc1;
 import com.lonar.vendor.vendorportal.model.LtVendCompanyCoc;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.repository.LtVendCompanyCocRepository;

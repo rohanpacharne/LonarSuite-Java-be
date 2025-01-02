@@ -59,7 +59,7 @@ public class LtMastVendorSisterConcernsDaoImpl implements LtMastVendorSisterConc
 						ltMastVendorSisterConcerns.setCompanyContactDesg(rs.getString("COMPANY_CONTACT_DESG"));
 						ltMastVendorSisterConcerns.setCompanyContactNo(rs.getString("COMPANY_CONTACT_NO"));
 						ltMastVendorSisterConcerns.setCompanyContactEmail(rs.getString("COMPANY_CONTACT_EMAIL"));
-						ltMastVendorSisterConcerns.setCreatedBy(rs.getInt("CREATED_BY"));
+						ltMastVendorSisterConcerns.setCreatedBy(rs.getLong("CREATED_BY"));
 						ltMastVendorSisterConcerns.setCreationDate(rs.getDate("CREATION_DATE"));
 						ltMastVendorSisterConcerns.setLastUpdateLogin(rs.getLong("LAST_UPDATE_LOGIN"));
 						ltMastVendorSisterConcerns.setLastUpdatedBy(rs.getLong("LAST_UPDATED_BY"));
@@ -93,7 +93,7 @@ public class LtMastVendorSisterConcernsDaoImpl implements LtMastVendorSisterConc
 						ltMastVendorSisterConcerns.setCompanyContactDesg(rs.getString("COMPANY_CONTACT_DESG"));
 						ltMastVendorSisterConcerns.setCompanyContactNo(rs.getString("COMPANY_CONTACT_NO"));
 						ltMastVendorSisterConcerns.setCompanyContactEmail(rs.getString("COMPANY_CONTACT_EMAIL"));
-						ltMastVendorSisterConcerns.setCreatedBy(rs.getInt("CREATED_BY"));
+						ltMastVendorSisterConcerns.setCreatedBy(rs.getLong("CREATED_BY"));
 						ltMastVendorSisterConcerns.setCreationDate(rs.getDate("CREATION_DATE"));
 						ltMastVendorSisterConcerns.setLastUpdateLogin(rs.getLong("LAST_UPDATE_LOGIN"));
 						ltMastVendorSisterConcerns.setLastUpdatedBy(rs.getLong("LAST_UPDATED_BY"));
@@ -126,7 +126,7 @@ public class LtMastVendorSisterConcernsDaoImpl implements LtMastVendorSisterConc
 						ltMastVendorSisterConcerns.setCompanyContactDesg(rs.getString("COMPANY_CONTACT_DESG"));
 						ltMastVendorSisterConcerns.setCompanyContactNo(rs.getString("COMPANY_CONTACT_NO"));
 						ltMastVendorSisterConcerns.setCompanyContactEmail(rs.getString("COMPANY_CONTACT_EMAIL"));
-						ltMastVendorSisterConcerns.setCreatedBy(rs.getInt("CREATED_BY"));
+						ltMastVendorSisterConcerns.setCreatedBy(rs.getLong("CREATED_BY"));
 						ltMastVendorSisterConcerns.setCreationDate(rs.getDate("CREATION_DATE"));
 						ltMastVendorSisterConcerns.setLastUpdateLogin(rs.getLong("LAST_UPDATE_LOGIN"));
 						ltMastVendorSisterConcerns.setLastUpdatedBy(rs.getLong("LAST_UPDATED_BY"));
@@ -157,7 +157,8 @@ public class LtMastVendorSisterConcernsDaoImpl implements LtMastVendorSisterConc
 				ltMastVendorSisterConcerns.getCompanyContactDesg(), ltMastVendorSisterConcerns.getCompanyContactNo(),
 				ltMastVendorSisterConcerns.getCompanyContactEmail(), ltMastVendorSisterConcerns.getCreatedBy(),
 				ltMastVendorSisterConcerns.getCreationDate(), ltMastVendorSisterConcerns.getLastUpdateLogin(),
-				ltMastVendorSisterConcerns.getLastUpdatedBy(), ltMastVendorSisterConcerns.getLastUpdateDate());
+				ltMastVendorSisterConcerns.getLastUpdatedBy(), ltMastVendorSisterConcerns.getLastUpdateDate(),
+				new Date());
 
 		if (res == 1)
 			return true;

@@ -67,7 +67,7 @@ public class LtMastCostCentersRestController implements CodeMaster {
 		} 
 		catch (Exception e) 
 		{		
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 	
 		return customeDataTable;
@@ -116,7 +116,7 @@ public class LtMastCostCentersRestController implements CodeMaster {
 		try {
 			return ltMastCostCentersService.save(ltMastCostCenters);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 	}
 //=======================================================================================================================
@@ -125,7 +125,7 @@ public class LtMastCostCentersRestController implements CodeMaster {
 		try {
 			return ltMastCostCentersService.update(ltMastCostCenters);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 	}
 //========================================================================================================================
@@ -134,7 +134,7 @@ public class LtMastCostCentersRestController implements CodeMaster {
 		try {
 			return ltMastCostCentersService.delete(id);
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 	}
 //=======================================================================================================================

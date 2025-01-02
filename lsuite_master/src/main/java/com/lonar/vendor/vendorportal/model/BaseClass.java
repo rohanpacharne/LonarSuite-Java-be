@@ -1,5 +1,6 @@
 package com.lonar.vendor.vendorportal.model;
 
+
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -9,6 +10,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -23,7 +25,7 @@ public class BaseClass {
 	private Date startDate;
 	
 	@Column(name = "END_DATE")
-	@Temporal(TemporalType.TIMESTAMP)           
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date endDate;
 	
 	@Basic(optional = false)

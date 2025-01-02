@@ -113,14 +113,28 @@ public class LtMastProdSubCategoriesServiceImpl implements LtMastProdSubCategori
 		
 		ltMastProdSubCategories = ltP2pProdSubCategoriesRepository.save(ltMastProdSubCategories);
 		if(ltMastProdSubCategories.getSubCategoryId()!=null) {
-		status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//		status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		if( status.getMessage()==null)
 		{
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			status.setMessage("Error in finding message! The action is completed successfully.");
 		}
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		status.setData(ltMastProdSubCategories.getSubCategoryId());
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -139,14 +153,28 @@ public class LtMastProdSubCategoriesServiceImpl implements LtMastProdSubCategori
 		
 		ltMastProdSubCategories = ltP2pProdSubCategoriesRepository.save(ltMastProdSubCategories);
 		if(ltMastProdSubCategories.getSubCategoryId()!=null) {
-		status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//		status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		if( status.getMessage()==null)
 		{
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			status.setMessage("Error in finding message! The action is completed successfully.");
 		}
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -162,17 +190,31 @@ public class LtMastProdSubCategoriesServiceImpl implements LtMastProdSubCategori
 		if (ltP2pProdSubCategoriesRepository.exists(id)) 
 		{
 			ltP2pProdSubCategoriesRepository.delete(id);
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if(status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 							
 		}
 		else 
 		{
-				status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//				status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}

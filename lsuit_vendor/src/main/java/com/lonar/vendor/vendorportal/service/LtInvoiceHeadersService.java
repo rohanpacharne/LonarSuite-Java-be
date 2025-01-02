@@ -39,7 +39,7 @@ public interface LtInvoiceHeadersService
 	
 	String checkforApprovals(Long invoiceHeaderId) throws ServiceException;
 	
-	Status submitForApproval(Date date, Long invoiceHeaderId, String status, Object object) throws ServiceException;
+	Status submitForApproval(Date date, Long invoiceHeaderId, String status, Object object,Long userId, Long companyId) throws ServiceException;
 	
 	LtInvoiceHeaders getInvoiceStatusById(Long invoiceHeaderId) throws ServiceException;
 	

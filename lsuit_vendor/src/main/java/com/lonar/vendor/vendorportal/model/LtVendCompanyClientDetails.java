@@ -20,9 +20,10 @@ import javax.validation.constraints.NotNull;
 public class LtVendCompanyClientDetails {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_seq")
-	@SequenceGenerator(name = "company_seq", sequenceName = "LT_VEND_COMP_CLIENT_DETAILS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_seq")
+//	@SequenceGenerator(name = "company_seq", sequenceName = "LT_VEND_COMP_CLIENT_DETAILS_S", allocationSize = 1)
 	@Column(name = "Comp_Client_Id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long compClientId;
 	
 	@Column(name = "Company_Id")

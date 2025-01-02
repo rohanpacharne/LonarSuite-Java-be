@@ -84,6 +84,7 @@ public class LtInvoiceLinesRestController
 		@RequestMapping(value = "/save", method= RequestMethod.POST, consumes = "application/json")
 	    public ResponseEntity<Status> save(@RequestBody LtInvoiceLines ltInvoiceLines) throws ServiceException
 		{
+			System.out.println("ltInvoiceLines = "+ltInvoiceLines);
 				Status status=new Status();
 				status =  ltInvoiceLineService.save(ltInvoiceLines);
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -97,11 +98,11 @@ public class LtInvoiceLinesRestController
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 		}
 		
-		@RequestMapping(value = "/loadlines/{invoiceHeaderId}", method= RequestMethod.POST, consumes = "application/json")
-	    public ResponseEntity<Status> loadLines(@PathVariable("invoiceHeaderId") Long invoiceHeaderId, @RequestBody List<Long> poLinelist) throws ServiceException
+		@RequestMapping(value = "/loadlines/{invoiceHeaderId}/{companyId}", method= RequestMethod.POST, consumes = "application/json")
+	    public ResponseEntity<Status> loadLines(@PathVariable("invoiceHeaderId") Long invoiceHeaderId, @RequestBody List<Long> poLinelist,@PathVariable("companyId") Long companyId) throws ServiceException
 		{
 				Status status=new Status();
-				status =  ltInvoiceLineService.loadLines(poLinelist,invoiceHeaderId);
+				status =  ltInvoiceLineService.loadLines(poLinelist,invoiceHeaderId,companyId);
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 		}
 		

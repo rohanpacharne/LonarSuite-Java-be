@@ -59,7 +59,7 @@ public class LtMastDocumentListServiceImpl implements LtMastDocumentListService,
 		Status status = new Status();
 		
 		if(files.length<=0) {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Please upload file");
 			 return new ResponseEntity<Status>(status, HttpStatus.OK);
 		}
@@ -77,9 +77,18 @@ public class LtMastDocumentListServiceImpl implements LtMastDocumentListService,
 		{
 			if(files.length < 0 ) 
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+						
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if( status.getMessage()==null) {
-					status.setCode(FAIL);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				}
 				ltMastDocumentListRepository.delete(ltMastDocumentList.getDocListId());
@@ -88,31 +97,55 @@ public class LtMastDocumentListServiceImpl implements LtMastDocumentListService,
 			{
 				Status status1=imageUpload(files,ltMastDocumentList);
 				
-				if(status1!=null && status1.getCode()== INSERT_SUCCESSFULLY)
+				if(status1!=null && status1.getCode()== 1)
 				{
-					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 		               if( status.getMessage()==null)
 		               {
-		            	status.setCode(SUCCESS);
+		            	status.setCode(1);
 		            	status.setMessage("Error in finding message! The action is completed successfully.");
 		               }
 		               status.setData(ltMastDocumentList.getDocListId());
 				}
 				else
 				{
-						status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//						status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 						if(status.getMessage()==null)
 						{
-							status.setCode(EXCEPTION);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 						}
 				}
 			}
 		}else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if( status.getMessage()==null) {
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		}
@@ -127,7 +160,7 @@ public class LtMastDocumentListServiceImpl implements LtMastDocumentListService,
 		String fileName;
 		String saveDirectory=null;
 		SysVariableWithValues sysVariableWithValues=
-				ltMastSysVariablesService.getBySysVariableName("IMAGE_UPLOAD_FOLDER_PATH",ltMastDocumentList.getCompanyId());
+				ltMastSysVariablesService.getBySysVariableName("GLOBAL_FILE_PATH",ltMastDocumentList.getCompanyId());
 	
 		if(sysVariableWithValues!=null)
 		{
@@ -146,10 +179,19 @@ public class LtMastDocumentListServiceImpl implements LtMastDocumentListService,
 			dir.mkdirs();
 			if(!dir.isDirectory())
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+//				status=ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+					
+				try {
+					status.setCode(1);	
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("NO_DIRECTIVE_EXISTS").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if(status.getMessage()==null)
 				{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			
@@ -172,20 +214,24 @@ public class LtMastDocumentListServiceImpl implements LtMastDocumentListService,
            if( ltMastDocumentListRepository.save(ltMastDocumentList)!=null)
            {
         	   buffStream.close();
-               status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//               status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+        	   status.setCode(1);		
+        	   status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
                if( status.getMessage()==null)
                {
-            	status.setCode(SUCCESS);
+            	status.setCode(1);
             	status.setMessage("Error in finding message! The action is completed successfully.");
                }
               
            }
            else
            {
-               status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//               status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+        	   status.setCode(0);		
+        	   status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
    			   if(status.getMessage()==null)
    				{
-   					status.setCode(EXCEPTION);
+   					status.setCode(0);
    					status.setMessage("Error in finding message! The action was unsuccessful");
    				}
             }
@@ -194,10 +240,19 @@ public class LtMastDocumentListServiceImpl implements LtMastDocumentListService,
         catch (Exception e)
         {
         	e.printStackTrace();
-        	 status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//        	 status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+        			
+        	try {
+        		status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
 			if(status.getMessage()==null)
 			{
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
         }
@@ -216,13 +271,29 @@ public class LtMastDocumentListServiceImpl implements LtMastDocumentListService,
 		} 
 		else 
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(NO_RESULT);
+//			status=ltMastCommonMessageService.getCodeAndMessage(NO_RESULT);
+					
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("NO_RESULT").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			return new ResponseEntity<Status>(status,HttpStatus.OK);
 		}
-		status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//		status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+		try {
+			status.setCode(1);
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if(status.getMessage()==null)
 		{
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			status.setMessage("Error in finding message! The action is completed successfully.");
 		}
 		return new ResponseEntity<Status>(status,HttpStatus.OK);

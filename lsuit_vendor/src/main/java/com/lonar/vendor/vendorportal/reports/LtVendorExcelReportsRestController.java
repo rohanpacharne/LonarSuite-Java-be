@@ -29,21 +29,21 @@ public class LtVendorExcelReportsRestController implements CodeMaster{
 		
 	}
 	
-	/*@RequestMapping(value = "/dataTable/{companyId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public CustomeDataTable DataTable(@PathVariable("companyId") Long companyId, LtMastReportRequest input) {
-		CustomeDataTable customeDataTable = new CustomeDataTable();
-		try {
-			Long count = ltMastExcelReportsService.getCount(input,companyId);
-			customeDataTable.setRecordsTotal(count);
-			customeDataTable.setRecordsFiltered(count);
-			List<LtMastReportRequest> ltMastReportRequestList = ltMastExcelReportsService.getReportRequestDataTableRecords(input,companyId);
-			customeDataTable.setData(ltMastReportRequestList);
-
-		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
-		}
-		return customeDataTable;
-
-	}*/
+//	@RequestMapping(value = "/dataTable/{companyId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//	public CustomeDataTable DataTable(@PathVariable("companyId") Long companyId, LtMastReportRequest input) {
+//		CustomeDataTable customeDataTable = new CustomeDataTable();
+//		try {
+//			Long count = ltMastExcelReportsService.getCount(input,companyId);
+//			customeDataTable.setRecordsTotal(count);
+//			customeDataTable.setRecordsFiltered(count);
+//			List<LtMastReportRequest> ltMastReportRequestList = ltMastExcelReportsService.getReportRequestDataTableRecords(input,companyId);
+//			customeDataTable.setData(ltMastReportRequestList);
+//
+//		} catch (Exception e) {
+//			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+//		}
+//		return customeDataTable;
+//
+//	}
 
 }

@@ -18,6 +18,7 @@ import com.lonar.vendor.vendorportal.dao.LtVendCompanyCocDao;
 import com.lonar.vendor.vendorportal.dao.LtVendCompanyDao;
 import com.lonar.vendor.vendorportal.model.CodeMaster;
 import com.lonar.vendor.vendorportal.model.LtCompanyVenMgmtCoc;
+import com.lonar.vendor.vendorportal.model.LtCompanyVenMgmtCoc1;
 import com.lonar.vendor.vendorportal.model.LtVendCompanyCoc;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.model.Status;
@@ -74,6 +75,9 @@ public class LtVendCompanyCocServiceImpl implements LtVendCompanyCocService,Code
 	                + "." + FilenameUtils.getExtension(coc.getCodeConductId());
 				coc.setFileName(myFile);
 				coc.setCodeConductId(saveDirectory+myFile);
+				System.out.println("base name = "+coc.getCodeConductId());
+				System.out.println("saveDirectory = "+saveDirectory);
+				System.out.println("myFile = "+myFile);
 		}
 		return list;
 	}
@@ -98,9 +102,17 @@ public class LtVendCompanyCocServiceImpl implements LtVendCompanyCocService,Code
 		Status status = new Status();
 		if(ltVendCompanyCoc.getStartDate()==null || ltVendCompanyCoc.getLastUpdateLogin() == null )
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if( status.getMessage()==null) {
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		}
@@ -115,9 +127,16 @@ public class LtVendCompanyCocServiceImpl implements LtVendCompanyCocService,Code
 			
 			if(files.length < 0 ) 
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if( status.getMessage()==null) {
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 				status.setData(ltVendCompanyCoc.getCompConductId());
@@ -126,12 +145,20 @@ public class LtVendCompanyCocServiceImpl implements LtVendCompanyCocService,Code
 			{
 				Status status1=imageUpload(files,ltVendCompanyCoc);
 				
-				if(status1!=null && status1.getCode()== INSERT_SUCCESSFULLY)
+				if(status1!=null && status1.getCode()== 1)
 				{
-					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 		               if( status.getMessage()==null)
 		               {
-		            	status.setCode(SUCCESS);
+		            	status.setCode(1);
 		            	status.setMessage("Error in finding message! The action is completed successfully.");
 		               }
 		               status.setData(ltVendCompanyCoc.getCompConductId());
@@ -140,10 +167,18 @@ public class LtVendCompanyCocServiceImpl implements LtVendCompanyCocService,Code
 				{
 					if(ltVendCompanyCocDao.delete(ltVendCompanyCoc.getCompConductId()))
 					{
-						status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//						status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+						try {
+							status.setCode(0);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 						if(status.getMessage()==null)
 						{
-							status.setCode(EXCEPTION);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 						}
 					}
@@ -152,9 +187,17 @@ public class LtVendCompanyCocServiceImpl implements LtVendCompanyCocService,Code
 			updateVendorCompanyMgmt(ltVendCompanyCoc);
 		}else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if( status.getMessage()==null) {
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		}
@@ -165,31 +208,53 @@ public class LtVendCompanyCocServiceImpl implements LtVendCompanyCocService,Code
 	@Override
 	public ResponseEntity<Status> update(LtVendCompanyCoc ltVendCompanyCoc, MultipartFile[] files) throws ServiceException {
 		Status status = new Status();
+		System.out.println("Company conduct id = "+ltVendCompanyCoc.getCompConductId());
 		if(ltVendCompanyCoc.getCompConductId()!=null) {
-		
+		System.out.println("in if condition");
 			ltVendCompanyCoc.setLastUpdateDate(new Date());
 			ltVendCompanyCoc.setLastUpdateLogin(ltVendCompanyCoc.getLastUpdateLogin());
 			ltVendCompanyCoc.setLastUpdatedBy(ltVendCompanyCoc.getLastUpdateLogin()); 
 			ltVendCompanyCoc = ltVendCompanyCocRepository.save(ltVendCompanyCoc);
+			System.out.println("saved...");
 			if(ltVendCompanyCoc.getCompConductId()!=null)
 			{
-				
+				System.out.println("in above files");
 				if(files.length <= 0) {
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+					System.out.println("in  files <= 0");
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				System.out.println("182. status = "+status);
 				if( status.getMessage()==null) {
-					status.setCode(SUCCESS);
+					System.out.println("status.getMessage()==null");
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			 }
 			else {
 					Status status1=imageUpload(files,ltVendCompanyCoc);
-					
-					if(status1.getCode()== INSERT_SUCCESSFULLY)
+					System.out.println("status1 = "+status1);
+					if(status1.getCode()== 1)
 					{
-						status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//						status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+						
+						try {
+							status.setCode(1);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						System.out.println("status == "+status);
 			               if( status.getMessage()==null)
 			               {
-			            	status.setCode(SUCCESS);
+			            	status.setCode(1);
 			            	status.setMessage("Error in finding message! The action is completed successfully.");
 			               }
 					}
@@ -197,30 +262,56 @@ public class LtVendCompanyCocServiceImpl implements LtVendCompanyCocService,Code
 					{
 						if(ltVendCompanyCocDao.delete(ltVendCompanyCoc.getCompConductId()))
 						{
-							status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//							status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+							try {
+								status.setCode(0);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							System.out.println("status === "+status);
 							if(status.getMessage()==null)
 							{
-								status.setCode(EXCEPTION);
+								status.setCode(0);
 								status.setMessage("Error in finding message! The action was unsuccessful");
 							}
 						}
 					}
 				}
+				System.out.println("above update");
 				updateVendorCompanyMgmt(ltVendCompanyCoc);
+				System.out.println("below update");
 			}
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if( status.getMessage()==null) {
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				}
 			}
 			
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if( status.getMessage()==null) {
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		}
@@ -228,8 +319,13 @@ public class LtVendCompanyCocServiceImpl implements LtVendCompanyCocService,Code
 	}
 
 	private void updateVendorCompanyMgmt(LtVendCompanyCoc ltVendCompanyCoc) throws ServiceException {
+		System.out.println("in update method = "+ltVendCompanyCoc);
+		System.out.println("company id = "+ltVendCompanyCoc.getCompanyId());
 		List<LtCompanyVenMgmtCoc> ltCompanyVenMgmtCocList = ltVendCompanyCocDao.getManagementBycompanyId(ltVendCompanyCoc.getCompanyId());
+		System.out.println("ltCompanyVenMgmtCocList = "+ltCompanyVenMgmtCocList);
+		System.out.println("size = "+ltCompanyVenMgmtCocList.size());
 		if(!ltCompanyVenMgmtCocList.isEmpty()) {
+			System.out.println("in for loop");
 			for(LtCompanyVenMgmtCoc ltCompanyVenMgmtCoc : ltCompanyVenMgmtCocList) {
 
 				ltCompanyVenMgmtCoc.setCompConductId(ltVendCompanyCoc.getCompConductId());
@@ -252,14 +348,18 @@ public class LtVendCompanyCocServiceImpl implements LtVendCompanyCocService,Code
 						ltCompanyVenMgmtCoc.setMandatoryTab(ltVendCompanyCoc.getMandatoryTab());
 					}
 				}
+				System.out.println("start date is = "+ltVendCompanyCoc.getStartDate());
 				ltCompanyVenMgmtCoc.setStartDate(ltVendCompanyCoc.getStartDate());
+				System.out.println("end date is = "+ltVendCompanyCoc.getEndDate());
 				ltCompanyVenMgmtCoc.setEndDate(ltVendCompanyCoc.getEndDate());
 				ltCompanyVenMgmtCoc.setCreatedBy(ltVendCompanyCoc.getCreatedBy());
 				ltCompanyVenMgmtCoc.setCreationDate(new Date());
 				ltCompanyVenMgmtCoc.setLastUpdateDate(new Date());
 				ltCompanyVenMgmtCoc.setLastUpdatedBy(ltVendCompanyCoc.getLastUpdatedBy());
 				ltCompanyVenMgmtCoc.setLastUpdateLogin(ltVendCompanyCoc.getLastUpdateLogin());
+				System.out.println("above save");
 				ltCompanyVenMgmtCocRepository.save(ltCompanyVenMgmtCoc);
+				System.out.println("below save");
 			}
 		}
 			
@@ -273,17 +373,32 @@ public class LtVendCompanyCocServiceImpl implements LtVendCompanyCocService,Code
 		if (!ltVendCompanyCocRepository.exists(id))
 		{
 			ltVendCompanyCocDao.updateCompanyVendCoc(companyId);
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if( status.getMessage()==null) {
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		} 
 		else 
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if( status.getMessage()==null) {
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		} 
@@ -299,7 +414,9 @@ public class LtVendCompanyCocServiceImpl implements LtVendCompanyCocService,Code
 		String fileName;
 		String saveDirectory=null;
 		SysVariableWithValues sysVariableWithValues=
-				ltMastSysVariablesService.getBySysVariableName("IMAGE_UPLOAD_FOLDER_PATH",ltVendCompanyCoc.getCompanyId());
+				ltMastSysVariablesService.getBySysVariableName("COC_FOLDER_PATH",ltVendCompanyCoc.getCompanyId());
+		
+		System.out.println("sysVariableWithValues = "+sysVariableWithValues);
 	
 		if(sysVariableWithValues!=null)
 		{
@@ -312,23 +429,31 @@ public class LtVendCompanyCocServiceImpl implements LtVendCompanyCocService,Code
 				saveDirectory=sysVariableWithValues.getLtMastSysVariables().getSystemValue();
 			}
 		}	
+		System.out.println("saveDirectory = "+saveDirectory);
 		File dir = new File(saveDirectory);
 		if (!dir.exists())
 		{
 			dir.mkdirs();
 			if(!dir.isDirectory())
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+//				status=ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("NO_DIRECTIVE_EXISTS").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if(status.getMessage()==null)
 				{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			
 				return status;
 			}
 		}	
-	
 		for(int i =0 ;i< files.length; i++)
 		{
         try 
@@ -339,24 +464,40 @@ public class LtVendCompanyCocServiceImpl implements LtVendCompanyCocService,Code
                     new BufferedOutputStream(new FileOutputStream(new File(saveDirectory + fileName)));
             buffStream.write(bytes);
              
-            ltVendCompanyCoc.setCodeConductId(saveDirectory + fileName);
+            ltVendCompanyCoc.setCodeConductId(saveDirectory + "/" +fileName);
            if( ltVendCompanyCocDao.update(ltVendCompanyCoc))
            {
         	   buffStream.close();
-               status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//               status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+        	   try {
+   				status.setCode(1);
+   				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+   			} catch (Exception e) {
+   				// TODO Auto-generated catch block
+   				e.printStackTrace();
+   			}
+
                if( status.getMessage()==null)
                {
-            	status.setCode(SUCCESS);
+            	status.setCode(1);
             	status.setMessage("Error in finding message! The action is completed successfully.");
                }
               
            }
            else
            {
-               status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//               status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+        	   try {
+   				status.setCode(0);
+   				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+   			} catch (Exception e) {
+   				// TODO Auto-generated catch block
+   				e.printStackTrace();
+   			}
+
    			   if(status.getMessage()==null)
    				{
-   					status.setCode(EXCEPTION);
+   					status.setCode(0);
    					status.setMessage("Error in finding message! The action was unsuccessful");
    				}
             }
@@ -365,10 +506,17 @@ public class LtVendCompanyCocServiceImpl implements LtVendCompanyCocService,Code
         catch (Exception e)
         {
         	e.printStackTrace();
-        	 status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//        	 status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+        	try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if(status.getMessage()==null)
 			{
-				status.setCode(EXCEPTION);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
         }

@@ -36,9 +36,10 @@ public class LtMastRoles implements Serializable {
 	@Basic(optional = false)
 	//@NotNull
 	//@GeneratedValue(strategy = GenerationType.AUTO)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq")
-	@SequenceGenerator(name = "role_seq", sequenceName = "LT_MAST_ROLES_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq")
+//	@SequenceGenerator(name = "role_seq", sequenceName = "LT_MAST_ROLES_S", allocationSize = 1)
 	@Column(name = "ROLE_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long roleId;
 	
 	@Basic(optional = false)
@@ -87,6 +88,9 @@ public class LtMastRoles implements Serializable {
 	@Column(name = "STATUS")
 	private String status;
 	
+	@Column(name = "COMPANY_ID")
+	private Long companyId;
+	
 	
 	@Transient
 	private Long draw;
@@ -115,8 +119,16 @@ public class LtMastRoles implements Serializable {
 	}
 
 	
-
 	
+	
+
+	public Long getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(Long companyId) {
+		this.companyId = companyId;
+	}
 
 	public Long getRoleId() {
 		return roleId;
@@ -295,9 +307,12 @@ public class LtMastRoles implements Serializable {
 		return "LtMastRoles [roleId=" + roleId + ", roleName=" + roleName + ", roleDesc=" + roleDesc + ", startDate="
 				+ startDate + ", endDate=" + endDate + ", createdBy=" + createdBy + ", creationDate=" + creationDate
 				+ ", lastUpdateLogin=" + lastUpdateLogin + ", lastUpdatedBy=" + lastUpdatedBy + ", lastUpdateDate="
-				+ lastUpdateDate + ", status=" + status + ", draw=" + draw + ", start=" + start + ", length=" + length
-				+ ", stDate=" + stDate + ", enDate=" + enDate + ", columnNo=" + columnNo + ", sort=" + sort + "]";
+				+ lastUpdateDate + ", status=" + status + ", companyId=" + companyId + ", draw=" + draw + ", start="
+				+ start + ", length=" + length + ", stDate=" + stDate + ", enDate=" + enDate + ", columnNo=" + columnNo
+				+ ", sort=" + sort + "]";
 	}
+
+	
 
 	
 }

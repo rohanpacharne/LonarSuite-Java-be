@@ -78,7 +78,7 @@ public  class LtMastGlAccountsServiceImpl implements LtMastGlAccountsService,Cod
 
 		if (!ltP2pGlAccountsList.isEmpty() && (
 				 !ltP2pGlAccountsList.get(0).getGlAccountId().equals(ltMastGlAccounts.getGlAccountId()))) {
-			status.setCode(ACC_CODE_PRESENT);
+			status.setCode(0);
 			status.setMessage("Account name already exists.");
 			return status;
 
@@ -90,18 +90,33 @@ public  class LtMastGlAccountsServiceImpl implements LtMastGlAccountsService,Cod
 		ltMastGlAccounts.setLastUpdateLogin(ltMastGlAccounts.getLastUpdateLogin());
 		ltMastGlAccounts = ltMastGlAccountsRepository.save(ltMastGlAccounts);
 		if(ltMastGlAccounts.getGlAccountId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if(status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action was successful");
 			}
 			return status;
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if(status.getMessage()==null)
 			{
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 			return status;
@@ -118,7 +133,7 @@ public  class LtMastGlAccountsServiceImpl implements LtMastGlAccountsService,Cod
 
 		if (!ltP2pGlAccountsList.isEmpty() && (ltMastGlAccounts.getGlAccountId() == null ? true
 				: !ltMastGlAccounts.getGlAccountId().equals(ltP2pGlAccountsList.get(0).getGlAccountId()))) {
-			//status.setCode(ACC_CODE_PRESENT);
+			status.setCode(0);
 			status.setMessage("Account code already exists.");
 
 			return status;
@@ -128,7 +143,7 @@ public  class LtMastGlAccountsServiceImpl implements LtMastGlAccountsService,Cod
 
 		if (!ltP2pGlAccountsList.isEmpty() && (ltMastGlAccounts.getGlAccountId() == null ? true
 				: !ltMastGlAccounts.getGlAccountId().equals(ltP2pGlAccountsList.get(0).getGlAccountId()))) {
-			status.setCode(ACC_CODE_PRESENT);
+			status.setCode(0);
 			status.setMessage("Account name already exists.");
 			return status;
 
@@ -138,27 +153,49 @@ public  class LtMastGlAccountsServiceImpl implements LtMastGlAccountsService,Cod
 		ltMastGlAccounts.setLastUpdateLogin(ltMastGlAccounts.getLastUpdateLogin());
 		ltMastGlAccounts = ltMastGlAccountsRepository.save(ltMastGlAccounts);
 		if(ltMastGlAccounts.getGlAccountId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if(status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action was successful");
 			}
 			return status;
 		}else {
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if(status.getMessage()==null)
 			{
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 			return status;
 		}
 	}else {
-		status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//		status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+		try {
+			status.setCode(0);
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if(status.getMessage()==null)
 		{
-			status.setCode(EXCEPTION);
+			status.setCode(0);
 			status.setMessage("Error in finding message! The action was unsuccessful");
 		}
 		return status;
@@ -224,17 +261,32 @@ public  class LtMastGlAccountsServiceImpl implements LtMastGlAccountsService,Cod
 		ltMastGlAccountsRepository.delete(id);
 		if (!ltMastGlAccountsRepository.exists(id))
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if( status.getMessage()==null) {
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		} 
 		else 
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if( status.getMessage()==null) {
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		} 

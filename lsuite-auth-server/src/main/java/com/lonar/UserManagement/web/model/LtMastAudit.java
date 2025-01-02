@@ -18,9 +18,10 @@ public class LtMastAudit {
 
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "audit_seq")
-	@SequenceGenerator(name = "audit_seq", sequenceName = "LT_MAST_AUDIT_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "audit_seq")
+//	@SequenceGenerator(name = "audit_seq", sequenceName = "LT_MAST_AUDIT_S", allocationSize = 1)
 	@Column(name = "AUDIT_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long auditId;
 	
 	@Basic(optional = false)

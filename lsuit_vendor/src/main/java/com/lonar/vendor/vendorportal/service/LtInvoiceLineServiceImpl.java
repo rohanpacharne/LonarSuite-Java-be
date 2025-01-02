@@ -68,14 +68,23 @@ public class LtInvoiceLineServiceImpl implements LtInvoiceLineService, CodeMaste
 
 	@Override
 	public Status save(LtInvoiceLines ltInvoiceLines) throws ServiceException {
+		System.out.println("invoice line save called");
 		Status status=new Status();
 		String chknull=checkNull(ltInvoiceLines);
 		if(chknull.equals("null"))
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if(status.getMessage()==null)
 			{
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 		}
@@ -85,10 +94,19 @@ public class LtInvoiceLineServiceImpl implements LtInvoiceLineService, CodeMaste
 				if(invoiceLineId!=null)
 				{
 					if(ltInvoiceLinesDao.updateAmount(ltInvoiceLines)) {
-						status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//						ltInvoiceLinesDao.callCreateInvoiceLineTaxes(ltInvoiceLines);
+//						status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+						try {
+							status.setCode(1);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 						if( status.getMessage()==null)
 						{
-							status.setCode(SUCCESS);
+							status.setCode(1);
 							status.setMessage("Error in finding message! The action is completed successfully.");
 						}
 						status.setData(invoiceLineId);
@@ -96,10 +114,18 @@ public class LtInvoiceLineServiceImpl implements LtInvoiceLineService, CodeMaste
 				}
 				else
 				{
-					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 					if(status.getMessage()==null)
 					{
-						status.setCode(EXCEPTION);
+						status.setCode(0);
 						status.setMessage("Error in finding message! The action was unsuccessful");
 					}
 				}
@@ -124,10 +150,18 @@ public class LtInvoiceLineServiceImpl implements LtInvoiceLineService, CodeMaste
 		String chknull=checkNull(ltInvoiceLines);
 		if(chknull.equals("null") || ltInvoiceLines.getInvoiceHeaderId()==null || ltInvoiceLines.getInvoiceLineId() == null)
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if(status.getMessage()==null)
 			{
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 		}
@@ -138,10 +172,18 @@ public class LtInvoiceLineServiceImpl implements LtInvoiceLineService, CodeMaste
 				if(ltInvoiceLines.getInvoiceLineId()!=null)
 				{
 					if(ltInvoiceLinesDao.updateAmount(ltInvoiceLines)) {
-						status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//						status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+						try {
+							status.setCode(1);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 						if( status.getMessage()==null)
 						{
-							status.setCode(SUCCESS);
+							status.setCode(1);
 							status.setMessage("Error in finding message! The action is completed successfully.");
 						}
 						status.setData(ltInvoiceLines.getInvoiceLineId());
@@ -149,10 +191,19 @@ public class LtInvoiceLineServiceImpl implements LtInvoiceLineService, CodeMaste
 				}
 				else
 				{
-					status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//					status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+					
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 					if(status.getMessage()==null)
 					{
-						status.setCode(EXCEPTION);
+						status.setCode(0);
 						status.setMessage("Error in finding message! The action was unsuccessful");
 					}
 				}
@@ -179,15 +230,37 @@ public class LtInvoiceLineServiceImpl implements LtInvoiceLineService, CodeMaste
 		}
 		if(!ltInvoiceLinesRepository.exists(id)) {
 			if(ltInvoiceLinesDao.updateAmount(ltInvoiceLines)) {
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				status.setData(ltInvoiceLines.getInvoiceLineId());
 			}else {
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		}catch(Exception e) {
 			e.printStackTrace();
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return status;
 	}
@@ -220,9 +293,12 @@ public class LtInvoiceLineServiceImpl implements LtInvoiceLineService, CodeMaste
 	}
 
 	@Override
-	public Status loadLines(List<Long> poShipmentlist, Long invoiceHeaderId) throws ServiceException {
+	public Status loadLines(List<Long> poShipmentlist, Long invoiceHeaderId,Long companyId) throws ServiceException {
 		Status status = new Status();
 		LtInvoiceHeaders ltInvoiceHeaders = ltInvoiceHeadersRepository.findOne(invoiceHeaderId);
+		System.out.println("lt invoice heasers = "+ltInvoiceHeaders);
+		System.out.println("poShipmentlist = "+poShipmentlist);
+		System.out.println("size is "+poShipmentlist);
 		for(Long ltPoShipmentId : poShipmentlist) {
 			//LtPoLines ltPoLine = ltPoLinesDao.getPoLinesByPolineId(ltPoLineId);
 			LtPoShipment ltPoShipment = ltPoShipmentDao.getByPoShipmentId(ltPoShipmentId);
@@ -241,6 +317,7 @@ public class LtInvoiceLineServiceImpl implements LtInvoiceLineService, CodeMaste
 			ltInvoiceLines.setDescription(ltPoShipment.getProductDescription());
 			ltInvoiceLines.setDeliveryDate(ltPoShipment.getDueDate());
 			ltInvoiceLines.setInvoiceRate(ltPoShipment.getUnitPrice());
+			ltInvoiceLines.setInvLineType("ITEM");
 			
 			ltInvoiceLines.setHsnSacNo(ltPoShipment.getHsnSacCode());
 			ltInvoiceLines.setUom(ltPoShipment.getUom());
@@ -250,17 +327,42 @@ public class LtInvoiceLineServiceImpl implements LtInvoiceLineService, CodeMaste
 			ltInvoiceLines.setLastUpdatedBy(ltInvoiceHeaders.getLastUpdateLogin());
 			ltInvoiceLines.setLastUpdatedBy(ltInvoiceHeaders.getLastUpdateLogin());
 			ltInvoiceLines.setLastUpdateLogin(ltInvoiceHeaders.getLastUpdateLogin());
-			
+			System.out.println("ltPoShipment.... = "+ltPoShipment);
 			Long invoiceLineId = ltInvoiceLinesDao.save(ltInvoiceLines);
+			System.out.println("invoice line id is "+invoiceLineId);
 			if(invoiceLineId==null) {
-				status.setCode(FAIL);
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				System.out.println("in if");
+				status.setCode(0);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				System.out.println("status = "+status);
 				return status;
 			}
 			ltPoShipmentDao.updateFlag(ltPoShipmentId);
 			//ltPoLinesDao.updateFlage(ltPoLineId);
+			if(ltInvoiceLinesDao.callCreateInvoiceLineTaxes(ltInvoiceLines,companyId).getCode()==0) {
+				status.setCode(0);
+				status.setMessage("Error ocurred while adding tax");
+				return status;
+			};
 		}
-		status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//		status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+		try {
+			status.setCode(1);
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("status outside if "+status);
 		return status;
 		
 	}

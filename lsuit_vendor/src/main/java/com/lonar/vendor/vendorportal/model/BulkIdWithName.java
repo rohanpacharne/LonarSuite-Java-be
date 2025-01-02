@@ -6,7 +6,7 @@ public class BulkIdWithName {
 	private Long vendorApprovalId;
 	private String approvalLevel;
 	private String headerStatus;
-	private Long invoiceId;
+	private Long invoiceHeaderId;
 	private Long invoiceApprovalId;
 	
 	
@@ -40,11 +40,12 @@ public class BulkIdWithName {
 	public void setHeaderStatus(String headerStatus) {
 		this.headerStatus = headerStatus;
 	}
-	public Long getInvoiceId() {
-		return invoiceId;
+	
+	public Long getInvoiceHeaderId() {
+		return invoiceHeaderId;
 	}
-	public void setInvoiceId(Long invoiceId) {
-		this.invoiceId = invoiceId;
+	public void setInvoiceHeaderId(Long invoiceHeaderId) {
+		this.invoiceHeaderId = invoiceHeaderId;
 	}
 	public Long getInvoiceApprovalId() {
 		return invoiceApprovalId;
@@ -55,7 +56,7 @@ public class BulkIdWithName {
 	@Override
 	public String toString() {
 		return "BulkIdWithName [name=" + name + ", vendorId=" + vendorId + ", vendorApprovalId=" + vendorApprovalId
-				+ ", approvalLevel=" + approvalLevel + ", headerStatus=" + headerStatus + ", invoiceId=" + invoiceId
+				+ ", approvalLevel=" + approvalLevel + ", headerStatus=" + headerStatus + ", invoiceId=" + invoiceHeaderId
 				+ ", invoiceApprovalId=" + invoiceApprovalId + "]";
 	}
 	

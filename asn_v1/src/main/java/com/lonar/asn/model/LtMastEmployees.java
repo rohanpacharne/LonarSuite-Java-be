@@ -28,13 +28,14 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @Table(name = "LT_MAST_EMPLOYEES")
 @XmlRootElement
 @JsonInclude(Include.NON_NULL)
-public class LtMastEmployees extends BaseClass {
+public class LtMastEmployees extends WhoColumns {
 
 	@Id
 	// @GeneratedValue(strategy = GenerationType.AUTO)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employeeId_seq")
-	@SequenceGenerator(name = "employeeId_seq", sequenceName = "LT_MAST_EMPLOYEES_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employeeId_seq")
+//	@SequenceGenerator(name = "employeeId_seq", sequenceName = "LT_MAST_EMPLOYEES_S", allocationSize = 1)
 	@Column(name = "EMPLOYEE_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long employeeId;
 
 	@Basic(optional = false)

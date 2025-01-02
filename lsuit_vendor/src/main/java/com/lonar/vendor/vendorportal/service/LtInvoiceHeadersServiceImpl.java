@@ -162,10 +162,18 @@ public class LtInvoiceHeadersServiceImpl implements LtInvoiceHeadersService,Code
 		String chknull=checkNull(ltInvoiceHeaders);
 		if(chknull.equals("null"))
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if(status.getMessage()==null)
 			{
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 		}
@@ -191,36 +199,60 @@ public class LtInvoiceHeadersServiceImpl implements LtInvoiceHeadersService,Code
 					//if(!ltVendorApprovalDao.chkForApprovers(invoiceHeaderId)) {
 					if(!ltInvoiceHeadersDao.loadApprovers(ltInvoiceHeaders)){
 					
-						status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//						status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+						try {
+							status.setCode(0);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 						if( status.getMessage()==null)
 						{
-							status.setCode(SUCCESS);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 						}
 						return status;
 					 }
 					//}
 					
-					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 					if( status.getMessage()==null)
 					{
-						status.setCode(SUCCESS);
+						status.setCode(1);
 						status.setMessage("Error in finding message! The action is completed successfully.");
 					}
 					status.setData(invoiceHeaderId);
 				}
 				else
 				{
-					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 					if(status.getMessage()==null)
 					{
-						status.setCode(EXCEPTION);
+						status.setCode(0);
 						status.setMessage("Error in finding message! The action was unsuccessful");
 					}
 				}
 			}
 			else {
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage(chkDuplicate);
 			}
 			
@@ -264,10 +296,18 @@ public class LtInvoiceHeadersServiceImpl implements LtInvoiceHeadersService,Code
 			String chknull=checkNull(ltInvoiceHeaders);
 			if(chknull.equals("null"))
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if(status.getMessage()==null)
 				{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			}
@@ -283,33 +323,56 @@ public class LtInvoiceHeadersServiceImpl implements LtInvoiceHeadersService,Code
 					{
 						if(!ltInvoiceHeadersDao.loadApprovers(ltInvoiceHeaders)){
 							
-							status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//							status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+							try {
+								status.setCode(0);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 							if( status.getMessage()==null)
 							{
-								status.setCode(FAIL);
+								status.setCode(0);
 								status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 							}
 							return status;
 						 }
-						status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//						status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+						try {
+							status.setCode(1);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 						if( status.getMessage()==null)
 						{
-						status.setCode(SUCCESS);
+						status.setCode(1);
 						status.setMessage("Error in finding message! The action is completed successfully.");
 						}
 					}
 					else
 					{
-						status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//						status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+						try {
+							status.setCode(0);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 						if(status.getMessage()==null)
 						{
-							status.setCode(EXCEPTION);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 						}
 					}
 				}
 				else {
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage(chkDuplicate);
 				}
 				
@@ -318,10 +381,18 @@ public class LtInvoiceHeadersServiceImpl implements LtInvoiceHeadersService,Code
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if(status.getMessage()==null)
 			{
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 		}
@@ -336,42 +407,78 @@ public class LtInvoiceHeadersServiceImpl implements LtInvoiceHeadersService,Code
 		List<LtInvoiceLines> list = ltInvoiceLinesDao.getAllInvoiceLinesByHeaderId(invoiceHeaderId);
 		if(list.isEmpty()) {
 			if(ltInvoiceHeadersDao.delete(invoiceHeaderId)) {
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			}else {
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if( status.getMessage()==null)
 				{
-					status.setCode(FAIL);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			}
 		}else{
 			if(ltInvoiceLinesDao.deleteByHeaderId(invoiceHeaderId)) {
 				if(ltInvoiceHeadersDao.delete(invoiceHeaderId)) {
-					status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//					status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					if( status.getMessage()==null)
 					{
-						status.setCode(SUCCESS);
+						status.setCode(1);
 						status.setMessage("Error in finding message! The action is completed successfully.");
 					}
 				}else {
-					status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//					status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					if( status.getMessage()==null)
 					{
-						status.setCode(FAIL);
+						status.setCode(0);
 						status.setMessage("Error in finding message! The action is completed successfully.");
 					}
 				}
 			}else {
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if( status.getMessage()==null)
 				{
-					status.setCode(FAIL);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			}
@@ -385,12 +492,13 @@ public class LtInvoiceHeadersServiceImpl implements LtInvoiceHeadersService,Code
 	}
 
 	@Override
-	public Status submitForApproval(Date date, Long invoiceHeaderId, String statusStr, Object object)
+	public Status submitForApproval(Date date, Long invoiceHeaderId, String statusStr, Object object,Long userId, Long companyId)
 			throws ServiceException {
 		Status status = new Status();
 		LtInvoiceHeaders invoiceHeaders = ltInvoiceHeadersDao.getInvoiceById(invoiceHeaderId);
-		
+		System.out.println("invoiceHeaders = "+invoiceHeaders);
 		status = checkInvoiceMandatory(invoiceHeaders);
+		System.out.println("in submit for approval = "+status);
 		if(status.getCode() !=null) {
 			return status;
 		}
@@ -400,18 +508,27 @@ public class LtInvoiceHeadersServiceImpl implements LtInvoiceHeadersService,Code
 			ltInvoiceHeadersDao.upDateStatus(invoiceHeaderId, NO_ACTION, null);
 		}
 		if(invoiceHeaders.getInvoiceAmount()== null || invoiceHeaders.getInvoiceAmount()<=0) {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Invoice with 0 amount can not be sent for approval.");
 		}
 		
 		
 		if(!ltInvoiceHeadersDao.chkForApprovers(invoiceHeaderId)) {
+			System.out.println(!ltInvoiceHeadersDao.chkForApprovers(invoiceHeaderId));
 		if(!ltMastVendorsDao.loadInvoiceApprovers(invoiceHeaders)){
-		
-			status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+		System.out.println(!ltMastVendorsDao.loadInvoiceApprovers(invoiceHeaders));
+//			status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+		try {
+			status.setCode(0);
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		
@@ -419,20 +536,56 @@ public class LtInvoiceHeadersServiceImpl implements LtInvoiceHeadersService,Code
 		}
 		//----------------------------call proc here --------------------
 		status = ltInvoiceHeadersDao.callInvoiceValidationProc(invoiceHeaderId);
-		if(status.getCode().equals(SUCCESS)) {
+		System.out.println("prcedure status code = "+status.getCode());
+		if(status.getCode().equals(1)) {
 			if(ltInvoiceHeadersDao.submitForApproval(date,invoiceHeaderId,statusStr,object)) {
-				status=ltMastCommonMessageService.getCodeAndMessage(INVOICE_SUBMIT_FOR_APPROVAL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INVOICE_SUBMIT_FOR_APPROVAL);
+//				Status updatePoShipmentQuantitiesProcstatus = ltInvoiceHeadersDao.callUpdatePoShipmentQuantitiesProc(companyId, userId, invoiceHeaderId);
+//				if(updatePoShipmentQuantitiesProcstatus.getCode().equals(1)) {
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INVOICE_SUBMIT_FOR_APPROVAL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				System.out.println("in if procedure");
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
-				} 
+				}
+//			}else {
+//				try {
+//					status.setCode(0);
+//					status.setMessage(updatePoShipmentQuantitiesProcstatus.getMessage());
+//				} catch (Exception e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//
+//				if( status.getMessage()==null)
+//				{
+//					status.setCode(0);
+//					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
+//				} 
+//			}
 			}
 			else {
-				status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+				System.out.println("in else procedure");
+//				status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				} 
 			}
@@ -443,22 +596,22 @@ public class LtInvoiceHeadersServiceImpl implements LtInvoiceHeadersService,Code
 	private Status checkInvoiceMandatory(LtInvoiceHeaders invoiceHeaders) {
 		Status status = new Status();
 		if(invoiceHeaders.getInvoiceNum()==null) {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Please insert Invoice Number");
 		}else if(invoiceHeaders.getInvoiceDate() == null) {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Please insert Invoice Date");
 		}else if(invoiceHeaders.getBuyerId() == null) {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Please select Buyer");
 		}else if(invoiceHeaders.getVendorAddId() == null) {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Please select Vendor Address");
 		}else if(invoiceHeaders.getBillingAddId() == null) {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Please select Billing Address");
 		}else if(invoiceHeaders.getDescription() == null) {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Please insert Description");
 		}
 		return status;
@@ -493,6 +646,7 @@ public class LtInvoiceHeadersServiceImpl implements LtInvoiceHeadersService,Code
 	@Override
 	public List<LtInvoiceHeaders> getLtInvoiceHeadersDataTableById(LtInvoiceHeaders input, Long id)
 			throws ServiceException {
+		System.out.println("input.sort = "+input.getSort());
 		String role  = ltMastEmployeesDao.getRoleByEmpId(id);
 		if(!role.toUpperCase().equals("ADMIN")) {
 			input.setBuyerId(id);

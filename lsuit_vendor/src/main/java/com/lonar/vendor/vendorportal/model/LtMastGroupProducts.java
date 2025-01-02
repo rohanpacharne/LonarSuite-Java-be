@@ -36,13 +36,13 @@ import com.fasterxml.jackson.annotation.JsonView;
 		@NamedQuery(name = "LtP2pGroupProducts.findByLastUpdateLogin", query = "SELECT l FROM LtP2pGroupProducts l WHERE l.lastUpdateLogin = :lastUpdateLogin"),
 		@NamedQuery(name = "LtP2pGroupProducts.findByLastUpdatedBy", query = "SELECT l FROM LtP2pGroupProducts l WHERE l.lastUpdatedBy = :lastUpdatedBy"),
 		@NamedQuery(name = "LtP2pGroupProducts.findByLastUpdateDate", query = "SELECT l FROM LtP2pGroupProducts l WHERE l.lastUpdateDate = :lastUpdateDate") })*/
-public class LtMastGroupProducts extends BaseClass implements Serializable {
+public class LtMastGroupProducts extends WhoColumns implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "groupProduct_seq")
-	@SequenceGenerator(name = "groupProduct_seq", sequenceName = "LT_MAST_GROUP_PRODUCTS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "groupProduct_seq")
+//	@SequenceGenerator(name = "groupProduct_seq", sequenceName = "LT_MAST_GROUP_PRODUCTS_S", allocationSize = 1)
 	@JsonView(DataTablesOutput.View.class)
 	@NotNull
 	@Column(name = "GROUP_PRODUCTS_ID")

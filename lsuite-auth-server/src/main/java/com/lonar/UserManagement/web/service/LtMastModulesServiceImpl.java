@@ -83,25 +83,29 @@ public class LtMastModulesServiceImpl implements LtMastModulesService,CodeMaster
 		{
 			 ltMastModules =ltMastModulesRepository.save(ltMastModules);
 			if(ltMastModules.getModuleId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
 			if( status.getMessage()==null)
 			{
-				status.setCode(INSERT_SUCCESSFULLY);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 			status.setData(ltMastModules.getModuleId());
 		   }else {
-			   status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//			   status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
 				if( status.getMessage()==null)
 				{
-					status.setCode(INSERT_FAIL);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				}
 		   }
 		}
 		else {
 			status.setMessage(stat);
-			status.setCode(EXCEPTION);
+			status.setCode(0);
 		}
 		return status;
 	}
@@ -113,6 +117,8 @@ public class LtMastModulesServiceImpl implements LtMastModulesService,CodeMaster
 	}
 	
 	public String checkDuplicate(LtMastModules ltMastModules) throws Exception {
+//		System.out.println("in checkDuplicate");
+//		System.out.println("ltMastModules = "+ltMastModules);
 		List<LtMastModules> ltMastModulesList; 
 		ltMastModulesList = ltMastModuleDao.findByModuleCode(ltMastModules.getModuleCode(),ltMastModules.getCompanyId());
 		if (ltMastModulesList.size()>0)  {
@@ -123,6 +129,7 @@ public class LtMastModulesServiceImpl implements LtMastModulesService,CodeMaster
 		}
 		
 		ltMastModulesList =ltMastModuleDao.findByModuleName(ltMastModules.getModuleName(),ltMastModules.getCompanyId());
+//		System.out.println("ltMastModulesList = "+ltMastModulesList);
 		if (ltMastModulesList.size()>0) {
 			if(	ltMastModulesList.get(0).getModuleId().toString()!=null
 					&& !ltMastModulesList.get(0).getModuleId().equals(ltMastModules.getModuleId())) {
@@ -172,6 +179,7 @@ public class LtMastModulesServiceImpl implements LtMastModulesService,CodeMaster
 		customeDataTable.setRecordsTotal(count);
 	    customeDataTable.setRecordsFiltered(count);
 	    List<LtMastModules> modulelList= ltMastModuleDao.getModuleData(input,companyId);
+//	    System.out.println("modulelList = "+modulelList);
 	    customeDataTable.setData(modulelList);
 	    return customeDataTable;
 	}
@@ -184,25 +192,29 @@ public class LtMastModulesServiceImpl implements LtMastModulesService,CodeMaster
 		{
 			 ltMastModules =ltMastModulesRepository.save(ltMastModules);
 			if(ltMastModules.getModuleId()!=null) {
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 				status.setData(ltMastModules.getModuleId());
 			   }else {
-				   status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//				   status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+				   status.setCode(0);
+				   status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
 					if( status.getMessage()==null)
 					{
-						status.setCode(FAIL);
+						status.setCode(0);
 						status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 					}
 			   }
 		}
 		else {
 			status.setMessage(stat);
-			status.setCode(EXCEPTION);
+			status.setCode(0);
 		}
 		return status;
 	}

@@ -40,19 +40,35 @@ public class LtMastVendorMiscQuestionsServiceImpl implements LtMastVendorMiscQue
 			ltMastVendorMiscQuestions.setLastUpdatedBy(ltMastVendorMiscQuestions.getLastUpdateLogin());
 			if(ltMastVendorMiscQuestionsRepository.save(ltMastVendorMiscQuestions)!=null)
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			}
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if(status.getMessage()==null)
 				{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 				return status;
@@ -73,19 +89,34 @@ public class LtMastVendorMiscQuestionsServiceImpl implements LtMastVendorMiscQue
 			}
 			if(ltMastVendorMiscQuestionsRepository.save(ltMastVendorMiscQuestions)!=null)
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			}
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(status.getMessage()==null)
 				{
-					status.setCode(FAIL);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			}
@@ -109,11 +140,11 @@ public class LtMastVendorMiscQuestionsServiceImpl implements LtMastVendorMiscQue
 		Status status = new Status();
 		List<LtMastVendorMiscQuestions> list =ltMastVendorMiscQuestionsDao.getVendorMiscQuestionByVenId(venId);
 		if(list.isEmpty()) {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Please fill mandatory MISC questions answer");
 		}
 		else {
-			status.setCode(SUCCESS);
+			status.setCode(1);
 		}
 		return status;
 	}

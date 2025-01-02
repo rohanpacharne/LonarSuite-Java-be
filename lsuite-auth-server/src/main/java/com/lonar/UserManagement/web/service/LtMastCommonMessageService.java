@@ -31,4 +31,7 @@ public interface LtMastCommonMessageService
 	public Long getCount(LtMastCommonMessage input) throws Exception;
 
 	public void saveLog(Exception e);
+	
+	public LtMastCommonMessage getMessageNameByCode(String messageCode) throws Exception;
+
 }

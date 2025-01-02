@@ -206,17 +206,29 @@ public  class LtMastCostCentersServiceImpl implements LtMastCostCentersService,C
 				ltMastCostCenters.setLastUpdateDate(new Date());
 				ltMastCostCenters = ltMastCostCentersRepository.save(ltMastCostCenters);
 		
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+				}
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+				}
 				status.setMessage(stat);
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 				
@@ -241,23 +253,43 @@ public  class LtMastCostCentersServiceImpl implements LtMastCostCentersService,C
 					ltMastCostCenters.setLastUpdateDate(new Date());
 					ltMastCostCenters = ltMastCostCentersRepository.save(ltMastCostCenters);
 				
-					status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//					status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+					}
 					if(status.getMessage()==null)
 					{
-						status.setCode(SUCCESS);
+						status.setCode(1);
 						status.setMessage("Error in finding message! The action is completed successfully.");
 					}
 					
 				}
 				else
 				{
-					status=ltMastCommonMessageService.getCodeAndMessage(Data_Exist);
+//					status=ltMastCommonMessageService.getCodeAndMessage(Data_Exist);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DATA_EXIST").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+					}
 					status.setMessage(stat);					
 				}
 			}
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 			}
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 			
@@ -273,13 +305,29 @@ public  class LtMastCostCentersServiceImpl implements LtMastCostCentersService,C
 			} 
 			else 
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(NO_RESULT);
+//				status=ltMastCommonMessageService.getCodeAndMessage(NO_RESULT);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("NO_RESULT").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				return new ResponseEntity<Status>(status,HttpStatus.OK);
 			}
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if(status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 			return new ResponseEntity<Status>(status,HttpStatus.OK);

@@ -90,29 +90,29 @@ import com.lonar.vendor.vendorportal.repository.LtMastCommonMessageRepository;
 		status.setMessage(ResourceServerWebConfig.messages.get(code));
 		if(status.getMessage()==null)
 		{
-			if(code==UPDATE_SUCCESSFULLY) {
-				status.setCode(UPDATE_SUCCESSFULLY);
+			if(code==1) {
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action was successful");
-			}else if(code==UPDATE_FAIL) {
-				status.setCode(UPDATE_FAIL);
+			}else if(code==0) {
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
-			}else if(code==DELETE_FAIL) {
-				status.setCode(DELETE_FAIL);
+			}else if(code==0) {
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
-			}else if(code==DELETE_SUCCESSFULLY) {
-				status.setCode(DELETE_SUCCESSFULLY);
+			}else if(code==1) {
+				status.setCode(1);
 				status.setMessage("The record has been deleted successfully");
-			}else if(code==INSERT_SUCCESSFULLY) {
-				status.setCode(INSERT_SUCCESSFULLY);
+			}else if(code==1) {
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action was successful");
-			}else if(code==INSERT_FAIL) {
-				status.setCode(INSERT_FAIL);
+			}else if(code==0) {
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 		}
 		}catch(Exception e)
 		{
-			status.setCode(EXCEPTION);
+			status.setCode(0);
 			status.setMessage("Error in finding message! The action was unsuccessful");
 			
 		}
@@ -148,11 +148,27 @@ import com.lonar.vendor.vendorportal.repository.LtMastCommonMessageRepository;
 		if(ltMastCommonMessageDao.update(mastCommonMessage))
 		{
 			ResourceServerWebConfig.messages.put(Integer.parseInt(mastCommonMessage.getMessageCode()), mastCommonMessage.getMessageDesc());
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
 		return status;
 	}
@@ -185,7 +201,7 @@ import com.lonar.vendor.vendorportal.repository.LtMastCommonMessageRepository;
 	public void saveLog(Exception e) {
 		try{
 			LtMastLogger ltMastLogger = new LtMastLogger();
-			ltMastLogger.setCode(INTERNAL_SERVER_ERROR);
+			ltMastLogger.setCode(0);
 			ltMastLogger.setExceptionCause(e.getCause().toString());
 			ltMastLogger.setMessage(e.getMessage());
 			ltMastLogger.setClassName(e.getClass().toString());
@@ -203,7 +219,7 @@ import com.lonar.vendor.vendorportal.repository.LtMastCommonMessageRepository;
 			if(ltMastCommonMessage.getMessageCode()==null || ltMastCommonMessage.getMessageName()==null ||
 					ltMastCommonMessage.getStartDate()==null || ltMastCommonMessage.getCreatedBy()==null || ltMastCommonMessage.getCreationDate()==null)
 			{
-				status.setCode(INSERT_FAIL);
+				status.setCode(0);
 				status.setMessage("Please fill all the mandatory fields");
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
@@ -211,7 +227,7 @@ import com.lonar.vendor.vendorportal.repository.LtMastCommonMessageRepository;
 			{
 				if(ltMastCommonMessage.getStatus()==null)
 				{
-					status.setCode(INSERT_FAIL);
+					status.setCode(0);
 					status.setMessage("Please select the Status");
 					
 				}
@@ -230,12 +246,28 @@ import com.lonar.vendor.vendorportal.repository.LtMastCommonMessageRepository;
 					if(ltMastCommonMessage!=null)
 					{
 						//P2PApplicationConfiguration.messageList.put(Integer.parseInt(ltMastCommonMessage.getMessageCode()), ltMastCommonMessage.getMessageDesc());
-						status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//						status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+						try {
+							status.setCode(1);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 					}
 				}
 				else
 				{
-					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 					status.setMessage("Message code already exists.");
 				}
 			
@@ -252,7 +284,15 @@ import com.lonar.vendor.vendorportal.repository.LtMastCommonMessageRepository;
 			if(mastCommonMessage.getMessageId()==null || mastCommonMessage.getMessageCode()==null || mastCommonMessage.getMessageName()==null ||
 					mastCommonMessage.getStartDate()==null )
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 
 			}
@@ -265,7 +305,15 @@ import com.lonar.vendor.vendorportal.repository.LtMastCommonMessageRepository;
 				}
 				else
 				{
-					status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//					status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 				}
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
@@ -282,7 +330,7 @@ import com.lonar.vendor.vendorportal.repository.LtMastCommonMessageRepository;
 				if(ltMastCommonMessageRepository.exists(Long.parseLong(id)))
 				{
 					ltMastCommonMessageRepository.delete(Long.parseLong(id));
-					status.setCode(DELETE_SUCCESSFULLY);
+					status.setCode(1);
 					status.setMessage("Record Deleted Successfully");
 
 					return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -290,11 +338,16 @@ import com.lonar.vendor.vendorportal.repository.LtMastCommonMessageRepository;
 			}
 			else
 			{
-				status.setCode(ENTITY_CANNOT_DELETE);
+				status.setCode(0);
 				status.setMessage(" Cannot Delete");		
 			}
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 		
 	}
+	
+	public LtMastCommonMessage getMessageNameByCode(String messageCode) throws Exception {
+		return ltMastCommonMessageDao.getMessageNameByCode(messageCode);
+	}
+
 
 }

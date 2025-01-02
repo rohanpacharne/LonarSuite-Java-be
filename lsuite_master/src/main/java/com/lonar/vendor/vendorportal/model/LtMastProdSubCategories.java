@@ -17,12 +17,13 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "LT_MAST_PROD_SUB_CATEGORIES")
-public class LtMastProdSubCategories extends BaseClass implements Serializable {
+public class LtMastProdSubCategories extends WhoColumns implements Serializable {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pro_sub_cat_seq")
-	@SequenceGenerator(name = "pro_sub_cat_seq", sequenceName = "LT_MAST_PROD_SUB_CATEGORIES_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pro_sub_cat_seq")
+//	@SequenceGenerator(name = "pro_sub_cat_seq", sequenceName = "LT_MAST_PROD_SUB_CATEGORIES_S", allocationSize = 1)
 	@Column(name = "SUB_CATEGORY_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long subCategoryId;
 
 	@NotNull

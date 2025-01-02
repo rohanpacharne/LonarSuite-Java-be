@@ -19,16 +19,17 @@ import com.fasterxml.jackson.annotation.JsonView;
 @Entity
 @Table(name = "LT_MAST_VENDOR_CONTACTS")
 @JsonInclude(Include.NON_NULL)
-public class LtMastVendorContacts extends BaseClass
+public class LtMastVendorContacts extends WhoColumns
 {
 	
 	
 	@Id
 	@Basic(optional = false)
 	@JsonView(DataTablesOutput.View.class)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendorContacts_seq")
-	@SequenceGenerator(name = "vendorContacts_seq", sequenceName = "LT_MAST_VENDOR_CONTACTS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendorContacts_seq")
+//	@SequenceGenerator(name = "vendorContacts_seq", sequenceName = "LT_MAST_VENDOR_CONTACTS_S", allocationSize = 1)
 	@Column(name = "VENDOR_CONTACT_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long vendorContactId;
 	
 	

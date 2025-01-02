@@ -21,14 +21,15 @@ import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 @Table(name = "LT_MAST_PRODUCT_PAYTERMS")
-public class LtP2pProductPayterms extends BaseClass implements Serializable {
+public class LtP2pProductPayterms extends WhoColumns implements Serializable {
 
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payterms_seq")
-	@SequenceGenerator(name = "payterms_seq", sequenceName = "LT_MAST_PRODUCT_PAYTERMS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "payterms_seq")
+//	@SequenceGenerator(name = "payterms_seq", sequenceName = "LT_MAST_PRODUCT_PAYTERMS_S", allocationSize = 1)
 	@JsonView(DataTablesOutput.View.class)
 	@Column(name = "PAY_TERM_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long payTermId;
 	
 	@Column(name = "PRODUCT_ID")

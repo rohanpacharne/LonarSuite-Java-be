@@ -28,7 +28,7 @@ public class LtModulesController implements CodeMaster {
 		try {
 			status = ltMastModulesService.save(ltMastModules);
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}

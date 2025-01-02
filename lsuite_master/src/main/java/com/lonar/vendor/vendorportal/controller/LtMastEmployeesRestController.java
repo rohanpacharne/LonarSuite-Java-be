@@ -55,7 +55,7 @@ public class LtMastEmployeesRestController implements CodeMaster {
 		} 
 		catch (Exception e) 
 		{
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 	}
@@ -105,7 +105,7 @@ public class LtMastEmployeesRestController implements CodeMaster {
 			try {
 				status=ltMastEmployeesService.save(ltMastEmployees,files);
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 		}
@@ -165,6 +165,12 @@ public class LtMastEmployeesRestController implements CodeMaster {
 			return ltMastEmployeesService.getLikeNameByComId(name, companyId);
 		}
 		
+		//------------------------------------------------------------------------------------------------------------------	
+				@RequestMapping(value = "/getCustomerArCollectorsLikeNameByComId/{companyId}/{name}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+				public ResponseEntity<List<LtMastEmployees>> getCustomerArCollectorsLikeNameByComId(@PathVariable("name") String name,@PathVariable("companyId") Long companyId,@PathVariable("logTime") String logTime) throws ServiceException {
+					return ltMastEmployeesService.getCustomerArCollectorsLikeNameByComId(companyId,name);
+				}
+		
 	//===============================================================================================================
 		@RequestMapping(value = "/getBuyerByDivId/{divisionId}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<List<LtMastEmployees>> getAllBuyerByDivId(@PathVariable("divisionId") String divisionId,@PathVariable("logTime") String logTime) throws ServiceException {	
@@ -194,7 +200,7 @@ public class LtMastEmployeesRestController implements CodeMaster {
 				}
 			}
 			catch (Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 

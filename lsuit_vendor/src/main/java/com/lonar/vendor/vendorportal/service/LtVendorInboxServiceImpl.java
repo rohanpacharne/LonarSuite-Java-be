@@ -95,6 +95,14 @@ public class LtVendorInboxServiceImpl implements LtVendorInboxService{
 			input.setColumnNo(4);
 		}
 		List<InvoiceApproval> list= ltVendorInboxDao.getInvoiceByStatus(status1,approvalId,input);
+		System.out.println("InvoiceApproval list = "+list);
+		
+		for(InvoiceApproval obj : list) {
+			if(obj.getStatus()==null) {
+				obj.setStatus("");
+			}
+		}
+		
 		for(InvoiceApproval obj : list) {
 			if(obj.getStatus().toUpperCase().equals("PENDING")) {
 				obj.setAction("Approve/Reject");

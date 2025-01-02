@@ -55,17 +55,33 @@ public class LtMastSysVariableValuesServiceImpl implements LtMastSysVariableValu
 			ltMastSysVariableValues.setLastUpdateDate(new Date());
 			ltMastSysVariableValues = ltMastSysVariableValuesRepository.save(ltMastSysVariableValues);
 			if(ltMastSysVariableValues.getVariableValuesId()!=null) {
-				status = ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//				status = ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+						
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if (status.getMessage() == null) {
-					status.setCode(EXCEPTION);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			}else {
-				status = ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//				status = ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}else {
 			status.setMessage(stat);
-			status.setCode(EXCEPTION);
+			status.setCode(0);
 		}
 		return new ResponseEntity(status, HttpStatus.OK);
 		
@@ -97,13 +113,29 @@ public class LtMastSysVariableValuesServiceImpl implements LtMastSysVariableValu
 		ltMastSysVariableValues.setLastUpdateDate(new Date());
 		ltMastSysVariableValues = ltMastSysVariableValuesRepository.save(ltMastSysVariableValues);
 		if(ltMastSysVariableValues.getVariableValuesId()!=null) {
-		status = ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//		status = ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		if (status.getMessage() == null) {
-			status.setCode(EXCEPTION);
+			status.setCode(1);
 			status.setMessage("Error in finding message! The action was unsuccessful");
 		}
 		}else {
-			status = ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//			status = ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return new ResponseEntity(status, HttpStatus.OK);
 	}

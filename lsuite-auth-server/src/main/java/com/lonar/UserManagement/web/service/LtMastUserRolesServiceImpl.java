@@ -114,25 +114,29 @@ public class LtMastUserRolesServiceImpl implements LtMastUserRolesService,CodeMa
 		if(ltMastUserRolesDao.chkDuplicate(userRole)) {
 		LtMastUserRoles usersRoles = ltMastUserRolesRepository.save(userRole);
 		if(usersRoles.getUserRoleId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+			status.setCode(1);
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+			status.setCode(0);
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
 			if( status.getMessage()==null)
 			{
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 			return status;
 		}
 		}else {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Same role exists for the user.");
 		}
 		
@@ -151,20 +155,24 @@ public class LtMastUserRolesServiceImpl implements LtMastUserRolesService,CodeMa
 		userRole.setLastUpdatedBy(userRole.getLastUpdateLogin());
 		LtMastUserRoles usersRoles = ltMastUserRolesRepository.save(userRole);
 		if(usersRoles.getUserRoleId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+			status.setCode(1);
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+			status.setCode(0);
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
-				status.setMessage("Error in finding message! The action is completed successfully.");
+				status.setCode(0);
+				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 			return status;
 		}

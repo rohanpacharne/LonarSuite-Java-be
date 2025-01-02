@@ -14,9 +14,9 @@ public interface LtMastDashboardDao {
 
 	List<LtMastDashboardModel> getDashboardMonthlySummaryByVender(Long comapnyId) throws SerialException;
 
-	List<LtMastDashboardModel> getTotalIncome(Long comapnyId) throws SerialException;
+	List<LtMastDashboardModel> getTotalIncome(Long comapnyId, Long vendorId) throws SerialException;
 
-	List<LtMastDashboardModel> getTotalExpense(Long comapnyId) throws SerialException;
+	List<LtMastDashboardModel> getTotalExpense(Long comapnyId,Long vendorId) throws SerialException;
 
 	List<LtMastDashboardModel> getPOInvoiveYearBuyer(Long comapnyId) throws SerialException;
 

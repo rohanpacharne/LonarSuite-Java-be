@@ -35,9 +35,10 @@ public class LtMastVendorAttachment implements Serializable {
 	@Id
 	@Basic(optional = false)
 	@JsonView(DataTablesOutput.View.class)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendorAttachment_seq")
-	@SequenceGenerator(name = "vendorAttachment_seq", sequenceName = "lt_mast_vendor_file_attach_s", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendorAttachment_seq")
+//	@SequenceGenerator(name = "vendorAttachment_seq", sequenceName = "lt_mast_vendor_file_attach_s", allocationSize = 1)
 	@Column(name = "VENDOR_ATTACHMENT_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long vendorAttachmentId;
 
 	/*

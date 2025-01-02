@@ -11,12 +11,13 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "LT_COMPANY_VEN_MGMT_COC" )
-public class LtCompanyVenMgmtCoc extends BaseClass{
+public class LtCompanyVenMgmtCoc extends WhoColumns{
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_ven_seq")
-	@SequenceGenerator(name = "company_ven_seq", sequenceName = "LT_COMPANY_VEN_MGMT_COC_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_ven_seq")
+//	@SequenceGenerator(name = "company_ven_seq", sequenceName = "LT_COMPANY_VEN_MGMT_COC_S", allocationSize = 1)
 	@Column(name = "COMPANY_VEN_MGMT_COC_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long companyVenMgmtCocId;
 	
 	@Column(name = "Comp_Conduct_Id")

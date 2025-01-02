@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 
+import com.lonar.vendor.vendorportal.model.LtMastComnMaster;
 import com.lonar.vendor.vendorportal.model.LtMastComnMasterValues;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.model.Status;
@@ -47,4 +48,10 @@ public interface LtMastComnMasterValuesService {
 	public ResponseEntity<Status> update(LtMastComnMasterValues ltMastComnMasterValues) throws ServiceException;
 
 	public ResponseEntity<List<LtMastComnMasterValues>> getMasterList(String masterName) throws ServiceException;
+	
+	public Long getCount(LtMastComnMasterValues input,Long masterId) throws ServiceException;
+	
+	public List<LtMastComnMasterValues>  getDataTable(LtMastComnMasterValues input,Long masterId) throws ServiceException;
+
+
 }

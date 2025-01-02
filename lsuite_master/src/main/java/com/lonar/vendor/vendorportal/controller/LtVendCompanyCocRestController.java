@@ -94,6 +94,7 @@ public class LtVendCompanyCocRestController implements CodeMaster{
 		jsonInputObject =  (JSONObject) jsonparser.parse(strltVendCompanyCoc);
 		LtVendCompanyCoc ltVendCompanyCoc = new ObjectMapper().readValue(strltVendCompanyCoc,
 				LtVendCompanyCoc.class);
+		System.out.println("in controller = "+ltVendCompanyCoc);
 		return  ltVendCompanyCocService.update(ltVendCompanyCoc,files);
 	}
 	

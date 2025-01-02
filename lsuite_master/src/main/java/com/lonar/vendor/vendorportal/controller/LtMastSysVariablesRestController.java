@@ -70,7 +70,7 @@ public class LtMastSysVariablesRestController implements CodeMaster
 		} 
 		catch (Exception e) 
 		{
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 	}
@@ -116,7 +116,7 @@ public class LtMastSysVariablesRestController implements CodeMaster
 			} 
 			catch (Exception e)
 			{
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 			return new ResponseEntity<SysVariableWithValues>(sysVariableWithValues, HttpStatus.OK);
 		}
@@ -132,7 +132,7 @@ public class LtMastSysVariablesRestController implements CodeMaster
 			} 
 			catch (Exception e)
 			{
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 			return new ResponseEntity<SysVariableWithValues>(sysVariableWithValues, HttpStatus.OK);
 		}

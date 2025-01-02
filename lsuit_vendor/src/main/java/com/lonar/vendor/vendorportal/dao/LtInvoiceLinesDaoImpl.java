@@ -3,6 +3,10 @@ package com.lonar.vendor.vendorportal.dao;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
+import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureQuery;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,9 @@ import com.lonar.vendor.vendorportal.service.LtMastCommonMessageService;
 @Repository
 @PropertySource(value = "classpath:queries/invoiceLinesQueries.properties", ignoreResourceNotFound = true)
 public class LtInvoiceLinesDaoImpl implements LtInvoiceLinesDao,CodeMaster{
+	
+	@PersistenceContext(name = "em")
+	private EntityManager em;
 
 	@Autowired
 	LtInvoiceLinesRepository ltInvoiceLinesRepository;
@@ -178,9 +185,14 @@ public class LtInvoiceLinesDaoImpl implements LtInvoiceLinesDao,CodeMaster{
 				query,ltInvoiceLines.getInvoiceHeaderId(),ltInvoiceLines.getInvoiceHeaderId());
 		
 		if(res!=0) {
+//			 query = " UPDATE LT_INVOICE_HEADERS SET INVOICE_AMOUNT = "
+//					+ " ( SELECT BASE_AMOUNT*EXCHANGE_RATE FROM LT_INVOICE_HEADERS WHERE INVOICE_HEADER_ID = ? ) "
+//					+ " WHERE INVOICE_HEADER_ID = ?  ";
+			 
 			 query = " UPDATE LT_INVOICE_HEADERS SET INVOICE_AMOUNT = "
-					+ " ( SELECT BASE_AMOUNT*EXCHANGE_RATE FROM LT_INVOICE_HEADERS WHERE INVOICE_HEADER_ID = ? ) "
-					+ " WHERE INVOICE_HEADER_ID = ?  ";
+//						+ " ( SELECT BASE_AMOUNT*EXCHANGE_RATE FROM LT_INVOICE_HEADERS WHERE INVOICE_HEADER_ID = ? ) "
+					+ " ( SELECT ROUND(SUM( TOTAL_AMOUNT),2) FROM LT_INVOICE_LINES WHERE INVOICE_HEADER_ID = ? ) * EXCHANGE_RATE  "
+						+ " WHERE INVOICE_HEADER_ID = ?  ";
 			
 			int res1=jdbcTemplate.update(
 					query,ltInvoiceLines.getInvoiceHeaderId(),ltInvoiceLines.getInvoiceHeaderId());
@@ -255,7 +267,7 @@ public class LtInvoiceLinesDaoImpl implements LtInvoiceLinesDao,CodeMaster{
 	public List<LtInvoiceLines> getLtInvoiceLinesDataTableByHeader(LtInvoiceLines input, Long id)
 			throws ServiceException {
 		String query = env.getProperty("getLtInvoiceLinesDataTableByHeader");
-		
+		System.out.println("getLtInvoiceLinesDataTableByHeader called");
 		String linetype=null;
 		   if(input.getLineType()!=null && !input.getLineType().equals(""))
 		   {linetype="%"+input.getLineType().trim().toUpperCase() + "%";}
@@ -335,7 +347,7 @@ public class LtInvoiceLinesDaoImpl implements LtInvoiceLinesDao,CodeMaster{
 	}
 
 	@Override
-	public Status loadLines(List<LtPoLines> poLinelist, Long invoiceHeaderId) throws ServiceException{
+	public Status loadLines(List<LtPoLines> poLinelist, Long invoiceHeaderId,Long companyId) throws ServiceException{
 		Status status = new Status();
 		LtInvoiceHeaders ltInvoiceHeaders = ltInvoiceHeadersRepository.findOne(invoiceHeaderId);
 		for(LtPoLines ltPoLine : poLinelist) {
@@ -358,12 +370,27 @@ public class LtInvoiceLinesDaoImpl implements LtInvoiceLinesDao,CodeMaster{
 		
 			ltInvoiceLines = ltInvoiceLinesRepository.save(ltInvoiceLines);
 			if(ltInvoiceLines.getInvoiceLineId()==null) {
-				status.setCode(FAIL);
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				status.setCode(0);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				return status;
 			}
 		}
-		status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//		status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+		try {
+			status.setCode(1);
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return status;
 	}
 
@@ -377,5 +404,44 @@ public class LtInvoiceLinesDaoImpl implements LtInvoiceLinesDao,CodeMaster{
 			}else
 				return false;
 	}
+
+	@Override
+	public Status callCreateInvoiceLineTaxes(LtInvoiceLines ltInvoiceLines,Long companyId) throws ServiceException {
+	    Status status = new Status();
+	    StoredProcedureQuery query = em
+	            .createStoredProcedureQuery("create_invoice_line_taxes")
+	            .registerStoredProcedureParameter("x_status", String.class, ParameterMode.OUT)
+	            .registerStoredProcedureParameter("x_message", String.class, ParameterMode.OUT)
+	            .registerStoredProcedureParameter("p_invoice_header_id", Long.class, ParameterMode.IN)
+	            .registerStoredProcedureParameter("p_invoice_line_id", Long.class, ParameterMode.IN)
+	            .registerStoredProcedureParameter("p_po_header_id", Long.class, ParameterMode.IN)
+	            .registerStoredProcedureParameter("p_po_line_id", Long.class, ParameterMode.IN)
+	            .registerStoredProcedureParameter("p_user_id", Long.class, ParameterMode.IN)
+	            .registerStoredProcedureParameter("p_company_id", Long.class, ParameterMode.IN)
+	            .setParameter("p_invoice_header_id", ltInvoiceLines.getInvoiceHeaderId())
+	            .setParameter("p_invoice_line_id", ltInvoiceLines.getInvoiceLineId())
+	            .setParameter("p_po_header_id", ltInvoiceLines.getPoHeaderId())
+	            .setParameter("p_po_line_id", ltInvoiceLines.getPoLineId())
+	            .setParameter("p_user_id", ltInvoiceLines.getCreatedBy())
+	            .setParameter("p_company_id", companyId);
+
+	    query.execute();
+
+	    // Retrieve output parameters
+	    String statusCode = query.getOutputParameterValue("x_status").toString().trim();
+	    String statusMessage = query.getOutputParameterValue("x_message").toString().trim();
+
+	    // Set status object based on procedure output
+	    if ("ERROR".equalsIgnoreCase(statusCode)) {
+	        status.setCode(0);
+	        status.setMessage(statusMessage);
+	    } else if ("SUCCESS".equalsIgnoreCase(statusCode)) {
+	        status.setCode(1);
+	        status.setMessage(statusMessage);
+	    }
+	    System.out.println("Procedure status = "+status);
+	    return status;
+	}
+
 
 }

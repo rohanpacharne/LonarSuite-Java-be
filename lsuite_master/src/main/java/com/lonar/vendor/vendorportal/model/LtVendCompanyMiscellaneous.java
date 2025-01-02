@@ -12,12 +12,13 @@ import com.lonar.vendor.vendorportal.model.BaseClass;
 
 @Entity
 @Table(name = "LT_VEND_COMPANY_MISCELLANEOUS")
-public class LtVendCompanyMiscellaneous extends BaseClass {
+public class LtVendCompanyMiscellaneous extends WhoColumns {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_seq")
-	@SequenceGenerator(name = "company_seq", sequenceName = "LT_VEND_COMP_MISCELLANEOUS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_seq")
+//	@SequenceGenerator(name = "company_seq", sequenceName = "LT_VEND_COMP_MISCELLANEOUS_S", allocationSize = 1)
 	@Column(name = "COMP_MISCELLANEOUS_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long compMiscellaneousId;
 	
 	@Column(name = "Company_Id")

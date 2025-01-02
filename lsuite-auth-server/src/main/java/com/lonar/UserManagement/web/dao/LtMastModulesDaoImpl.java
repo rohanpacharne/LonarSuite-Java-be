@@ -51,7 +51,7 @@ public class LtMastModulesDaoImpl implements LtMastModulesDao {
 	public List<LtMastModules> findByModuleName(String moduleName,Long companyId)
 			throws Exception {
 		     String sqlQuery = env.getProperty("findByModuleName");
-		     return jdbcTemplate.query(sqlQuery,new Object[]{ "%"+moduleName.toUpperCase()+"%", companyId}, 
+		     return jdbcTemplate.query(sqlQuery,new Object[]{moduleName.toUpperCase(), companyId}, 
 					 new RowMapper<LtMastModules>(){
 						@Override
 						public LtMastModules mapRow(ResultSet rs, int row)

@@ -49,6 +49,7 @@ public class ResourceServerFilter implements  javax.servlet.Filter{
 	    	if(!requestUri.equals(projectName+"/oauth/token") 
 	    			&& !requestUri.equals(projectName+"/oauth/check_token") 
 	    			&& !requestUri.equals(projectName+"/oauth/dologin")
+	    			&& !requestUri.equals(projectName+"/oauth/mobileLogin")
 	    			&& !requestUri.equals(projectName+"/oauth/changePassword")
 	    			&& !requestUri.equals(projectName+"/oauth/changePasswordUtility")
 	    			&& !requestUri.equals(projectName+"/oauth/resetPassword")

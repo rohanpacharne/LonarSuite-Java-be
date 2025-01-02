@@ -47,7 +47,7 @@ public interface LtMastUsersService {
 	
 	
 
-	public List<LtMastUsers> findByActiveLikeUserName(String userName) throws Exception;
+	public List<LtMastUsers> findByActiveLikeUserName(String userName,long companyId) throws Exception;
 	public void SendUsersByID(Environment env, String id) throws Exception;
 	
 	Status saveUser(LtMastUsers user);

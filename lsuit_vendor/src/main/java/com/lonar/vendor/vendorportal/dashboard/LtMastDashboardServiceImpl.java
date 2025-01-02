@@ -35,13 +35,13 @@ public class LtMastDashboardServiceImpl implements LtMastDashboardService {
 	}
 
 	@Override
-	public List<LtMastDashboardModel> getTotalIncome(Long comapnyId) throws SerialException {
-		return ltMastDashboardDao.getTotalIncome(comapnyId);
+	public List<LtMastDashboardModel> getTotalIncome(Long comapnyId, Long vendorId) throws SerialException {
+		return ltMastDashboardDao.getTotalIncome(comapnyId,vendorId);
 	}
 
 	@Override
-	public List<LtMastDashboardModel> getTotalExpense(Long comapnyId) throws SerialException {
-		return ltMastDashboardDao.getTotalExpense(comapnyId);
+	public List<LtMastDashboardModel> getTotalExpense(Long comapnyId, Long vendorId) throws SerialException {
+		return ltMastDashboardDao.getTotalExpense(comapnyId,vendorId);
 	}
 
 	@Override

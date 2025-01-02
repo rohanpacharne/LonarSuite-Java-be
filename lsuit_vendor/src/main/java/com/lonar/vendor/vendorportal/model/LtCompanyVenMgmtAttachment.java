@@ -17,9 +17,10 @@ import javax.persistence.TemporalType;
 public class LtCompanyVenMgmtAttachment {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_seq")
-	@SequenceGenerator(name = "company_seq", sequenceName = "LT_COMPANY_VEN_MGMT_ATTACH_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_seq")
+//	@SequenceGenerator(name = "company_seq", sequenceName = "LT_COMPANY_VEN_MGMT_ATTACH_S", allocationSize = 1)
 	@Column(name = "COMPANY_VEN_ATTACHMENT_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long companyVenAttachmentId;
 	
 	@Column(name = "Comp_Attachment_Id")

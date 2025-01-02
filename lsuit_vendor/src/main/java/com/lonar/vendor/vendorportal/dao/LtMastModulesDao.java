@@ -6,6 +6,6 @@ import com.lonar.vendor.vendorportal.model.LtMastModules;
 
 public interface LtMastModulesDao {
 
-	List<LtMastModules> findByModuleName(String string);
+	List<LtMastModules> findByModuleName(String string,Long companyId);
 
 }

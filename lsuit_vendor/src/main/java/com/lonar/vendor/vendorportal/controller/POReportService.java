@@ -52,7 +52,7 @@ public class POReportService extends PdfPageEventHelper {
 		try {
 			
 			String fileName= "POInvoice" + System.currentTimeMillis() + ".pdf";
-			String filePath = poReport.getReportGeneratedPath() + fileName;
+			String filePath = poReport.getReportGeneratedPath() + "/"+ fileName;
 			
 			poReport.setFileName(fileName);
 			poReport.setPdfPath(filePath);
@@ -252,11 +252,13 @@ public class POReportService extends PdfPageEventHelper {
 			outerTableCell.setColspan(2);
 			outerTableCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
 			outerTable.addCell(outerTableCell);
+			
 			outerTableCell = new PdfPCell(new Phrase("Shipment", outerTableColHeadFont));
 			outerTableCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			outerTableCell.setColspan(2);
 			outerTableCell.setBackgroundColor(BaseColor.LIGHT_GRAY);
 			outerTable.addCell(outerTableCell);
+			
 			outerTableCell = new PdfPCell(new Phrase("Item/ Description", outerTableColHeadFont));
 			outerTableCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			outerTableCell.setColspan(4);

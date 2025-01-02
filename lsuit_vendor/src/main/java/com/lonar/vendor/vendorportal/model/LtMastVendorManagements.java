@@ -18,13 +18,14 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @Entity
 @Table(name = "LT_MAST_VENDOR_MANAGEMENTS")
 @JsonInclude(Include.NON_NULL)
-public class LtMastVendorManagements extends BaseClass
+public class LtMastVendorManagements extends WhoColumns
 {	
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendorManagements_seq")
-	@SequenceGenerator(name = "vendorManagements_seq", sequenceName = "LT_MAST_VENDOR_MANAGEMENTS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendorManagements_seq")
+//	@SequenceGenerator(name = "vendorManagements_seq", sequenceName = "LT_MAST_VENDOR_MANAGEMENTS_S", allocationSize = 1)
 	@Column(name = "VENDOR_MANAGEMENT_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer vendorManagementId;
 	
 	@Column(name = "VENDOR_ID")
@@ -33,8 +34,8 @@ public class LtMastVendorManagements extends BaseClass
 	@Column(name = "NAME")
 	private String name;
 	
-	@Column(name = "VEN_MAN_DESG_ID")
-	private String venManDesgId;
+//	@Column(name = "VEN_MAN_DESG_ID")
+//	private String venManDesgId;
 	
 	@Column(name = "MOBILE_NO")
 	private String mobileNo;
@@ -44,9 +45,22 @@ public class LtMastVendorManagements extends BaseClass
 	
 	@Column(name = "EMAIL_ADD")
 	private String emailAdd;
+	
+	@Column(name = "VEN_MAN_DESG_CODE")
+	private String venManDesgCode;
 
 	@Transient
 	private String designationValueName;
+	
+	
+
+	public String getVenManDesgCode() {
+		return venManDesgCode;
+	}
+
+	public void setVenManDesgCode(String venManDesgCode) {
+		this.venManDesgCode = venManDesgCode;
+	}
 
 	public Integer getVendorManagementId() {
 		return vendorManagementId;
@@ -72,13 +86,13 @@ public class LtMastVendorManagements extends BaseClass
 		this.name = name;
 	}
 
-	public String getVenManDesgId() {
-		return venManDesgId;
-	}
-
-	public void setVenManDesgId(String venManDesgId) {
-		this.venManDesgId = venManDesgId;
-	}
+//	public String getVenManDesgId() {
+//		return venManDesgId;
+//	}
+//
+//	public void setVenManDesgId(String venManDesgId) {
+//		this.venManDesgId = venManDesgId;
+//	}
 
 	public String getMobileNo() {
 		return mobileNo;
@@ -115,9 +129,12 @@ public class LtMastVendorManagements extends BaseClass
 	@Override
 	public String toString() {
 		return "LtMastVendorManagements [vendorManagementId=" + vendorManagementId + ", vendorId=" + vendorId
-				+ ", name=" + name + ", venManDesgId=" + venManDesgId + ", mobileNo=" + mobileNo + ", phoneNo="
-				+ phoneNo + ", emailAdd=" + emailAdd + ", designationValueName=" + designationValueName + "]";
+				+ ", name=" + name + ", mobileNo=" + mobileNo + ", phoneNo="
+				+ phoneNo + ", emailAdd=" + emailAdd + ", venManDesgCode=" + venManDesgCode + ", designationValueName="
+				+ designationValueName + "]";
 	}
+
+	
 	
 
 }

@@ -17,14 +17,14 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "LT_MAST_PRODUCTS")
-public class LtMastProducts extends BaseClass implements Serializable {
+public class LtMastProducts extends WhoColumns implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
 	@Basic(optional = false)
 	@NotNull
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_seq")
-	@SequenceGenerator(name = "product_seq", sequenceName = " LT_MAST_PRODUCTS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_seq")
+//	@SequenceGenerator(name = "product_seq", sequenceName = " LT_MAST_PRODUCTS_S", allocationSize = 1)
 	@Column(name = "PRODUCT_ID")
 	private Long productId;
 	

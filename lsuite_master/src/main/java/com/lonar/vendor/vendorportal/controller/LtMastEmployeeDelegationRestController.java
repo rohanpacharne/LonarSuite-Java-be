@@ -70,7 +70,7 @@ public class LtMastEmployeeDelegationRestController implements CodeMaster{
 		} 
 		catch (Exception e) 
 		{
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 	}
@@ -105,7 +105,7 @@ public class LtMastEmployeeDelegationRestController implements CodeMaster{
 			}
 			catch (Exception e)
 			{
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 			return new ResponseEntity<List<LtMastEmployeeDelegation>>(ltMastEmployeeDelegation, HttpStatus.OK);
 		}
@@ -128,7 +128,7 @@ public class LtMastEmployeeDelegationRestController implements CodeMaster{
 			} 
 			catch (Exception e)
 			{
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 		
 			return new ResponseEntity<List<LtMastEmployeeDelegation>>(ltMastEmployeeDelegation, HttpStatus.OK);
@@ -151,7 +151,7 @@ public class LtMastEmployeeDelegationRestController implements CodeMaster{
 			} 
 			catch (Exception e) 
 			{
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 			return new ResponseEntity<List<LtMastEmployeeDelegation>>(ltMastEmployeeDelegation, HttpStatus.OK);
 		}
@@ -187,11 +187,11 @@ public class LtMastEmployeeDelegationRestController implements CodeMaster{
 			} 
 			catch (NumberFormatException e) 
 			{
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			} 
 			catch (Exception e)
 			{
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 			return new ResponseEntity<LtMastEmployeeDelegation>(ltMastEmployeeDelegation, HttpStatus.OK);
 		}
@@ -205,7 +205,7 @@ public class LtMastEmployeeDelegationRestController implements CodeMaster{
 			try {
 				status = ltMastEmployeeDelegationService.save(ltMastEmployeeDelegation);
 			}catch(Exception e) {
-					throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+					throw new BusinessException(0, null, e);
 			}
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 			
@@ -222,14 +222,18 @@ public class LtMastEmployeeDelegationRestController implements CodeMaster{
 					ltMastEmployeeDelegationRepository.delete(id);
 				} else {
 					
-					status=ltMastCommonMessageService.getCodeAndMessage(NO_RESULT);
+//					status=ltMastCommonMessageService.getCodeAndMessage(NO_RESULT);
+					status.setCode(0);		
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("NO_RESULT").getMessageName());
 					return new ResponseEntity<Status>(status, HttpStatus.OK);
 					
 				}
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+				status.setCode(1);		
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
 				if(status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -239,12 +243,20 @@ public class LtMastEmployeeDelegationRestController implements CodeMaster{
 			catch (org.springframework.dao.DataIntegrityViolationException e) {
 				e.printStackTrace();
 				logger.error("ERROR "+ e );
-				status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//				status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+					
+				try {
+					status.setCode(0);	
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				return new ResponseEntity<Status>(status,HttpStatus.OK);
 			}
 			catch (Exception e) 
 			{
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 		}
 	//-------------------------------------------------------------------------------------------------	
@@ -260,7 +272,7 @@ public class LtMastEmployeeDelegationRestController implements CodeMaster{
 			} 
 			catch (Exception e)
 			{
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 		
 			return new ResponseEntity<List<LtMastEmployeeDelegation>>(ltMastEmployeeDelegation, HttpStatus.OK);
@@ -284,7 +296,7 @@ public class LtMastEmployeeDelegationRestController implements CodeMaster{
 			} 
 			catch (Exception e) 
 			{	
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 			return customeDataTable;
 			

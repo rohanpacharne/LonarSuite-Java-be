@@ -109,7 +109,7 @@ public class LtMastPersonTypeDaoImpl implements LtMastPersonTypeDao{
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							
-							input.getStart()+input.getLength(),input.getStart()+1},
+							input.getStart()+input.getLength(),input.getStart()},
 				 new  BeanPropertyRowMapper<LtMastPersonType>(LtMastPersonType.class));
 				return list;
 	}

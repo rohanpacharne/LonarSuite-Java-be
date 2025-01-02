@@ -147,9 +147,17 @@ final String restBaseUrl = "/API/vendorAttachment";
 					if (!dir.exists()) {
 						dir.mkdirs();
 						if (!dir.isDirectory()) {
-							status = ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+//							status = ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+							try {
+								status.setCode(0);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("NO_DIRECTIVE_EXISTS").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
 							if (status.getMessage() == null) {
-								status.setCode(EXCEPTION);
+								status.setCode(0);
 								status.setMessage("Error in finding message! The action was unsuccessful");
 							}
 
@@ -182,7 +190,7 @@ final String restBaseUrl = "/API/vendorAttachment";
 										break;
 
 									} else {
-										status.setCode(EXCEPTION);
+										status.setCode(0);
 										status.setMessage("Attachment by the same name already exists!");
 										return new ResponseEntity<Status>(status, HttpStatus.OK);
 
@@ -209,18 +217,35 @@ final String restBaseUrl = "/API/vendorAttachment";
 
 							buffStream.close();
 							msg += "You have successfully uploaded " + fileName + "<br/>";
-							status = ltMastCommonMessageService.getCodeAndMessage(FILE_UPLOADED_SUCESSFULLY);
+//							status = ltMastCommonMessageService.getCodeAndMessage(FILE_UPLOADED_SUCESSFULLY);
+							
+							try {
+								status.setCode(1);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("FILE_UPLOADED_SUCESSFULLY").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
 
 							if (status.getMessage() == null) {
-								status.setCode(SUCCESS);
+								status.setCode(1);
 								status.setMessage("Error in finding message! The action is completed successfully.");
 							}
 
 						} catch (Exception e) {
 							e.printStackTrace();
-							status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//							status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+							try {
+								status.setCode(0);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+							} catch (Exception e1) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
 							if (status.getMessage() == null) {
-								status.setCode(EXCEPTION);
+								status.setCode(0);
 								status.setMessage("Error in finding message! The action was unsuccessful");
 							}
 
@@ -229,9 +254,17 @@ final String restBaseUrl = "/API/vendorAttachment";
 
 					
 				} else {
-					status = ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//					status = ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 					if (status.getMessage() == null) {
-						status.setCode(EXCEPTION);
+						status.setCode(0);
 						status.setMessage("Error in finding message! The action was unsuccessful");
 					}
 				}
@@ -241,9 +274,16 @@ final String restBaseUrl = "/API/vendorAttachment";
 			catch (Exception e) {
 				e.printStackTrace();
 				try {
-					status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//					status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					if (status.getMessage() == null) {
-						status.setCode(EXCEPTION);
+						status.setCode(0);
 						status.setMessage("Error in finding message! The action was unsuccessful");
 					}
 					status.setMessage(e.getMessage());
@@ -294,7 +334,7 @@ final String restBaseUrl = "/API/vendorAttachment";
 						message = ", Not Deleted file " + fileName[i].toString();
 				}
 			}
-			return new Status(INSERT_SUCCESSFULLY, message);
+			return new Status(1, message);
 		}
 //==================================================================================================================================
 		@RequestMapping(value = "/deleteFile/{id}/{logTime}", method= RequestMethod.GET, produces = "application/json")
@@ -309,10 +349,18 @@ final String restBaseUrl = "/API/vendorAttachment";
 				{
 					try
 					{
-						status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//						status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+						try {
+							status.setCode(0);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 						if(status.getMessage()==null)
 						{
-							status.setCode(EXCEPTION);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 						}
 					}
@@ -376,9 +424,17 @@ final String restBaseUrl = "/API/vendorAttachment";
 				if (!dir.exists()) {
 					dir.mkdirs();
 					if (!dir.isDirectory()) {
-						status = ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+//						status = ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+						try {
+							status.setCode(0);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("NO_DIRECTIVE_EXISTS").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 						if (status.getMessage() == null) {
-							status.setCode(EXCEPTION);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 						}
 
@@ -404,8 +460,8 @@ final String restBaseUrl = "/API/vendorAttachment";
 								{
 									
 									int res=jdbcTemplate.update("INSERT INTO LT_MAST_VENDOR_FILE_ATTACHMENT  "
-											+ " (VENDOR_ATTACHMENT_ID, VENDOR_ID, FILE_NAME, FILE_PATH, LAST_UPDATED_BY,LAST_UPDATE_DATE, VENDOR_ATTACHMENT_TYPE)  "
-											+ " VALUES (LT_MAST_VENDOR_FILE_ATTACH_S.nextval, ?, ? ,?, ?, ?, ?)",
+											+ " (VENDOR_ID, FILE_NAME, FILE_PATH, LAST_UPDATED_BY,LAST_UPDATE_DATE, VENDOR_ATTACHMENT_TYPE)  "
+											+ " VALUES (?, ? ,?, ?, ?, ?)",
 											+ vendorId,fileName,saveDirectory,userId, currDate, attachmentType );
 											
 											
@@ -414,7 +470,7 @@ final String restBaseUrl = "/API/vendorAttachment";
 									break;
 
 								} else {
-									status.setCode(EXCEPTION);
+									status.setCode(0);
 									status.setMessage("File with same name already exists!");
 									return new ResponseEntity<Status>(status, HttpStatus.OK);
 
@@ -431,8 +487,8 @@ final String restBaseUrl = "/API/vendorAttachment";
 					        		vendorId,fileName,saveDirectory );*/
 
 							int res=jdbcTemplate.update("INSERT INTO LT_MAST_VENDOR_FILE_ATTACHMENT  "
-									+ " (VENDOR_ATTACHMENT_ID, VENDOR_ID, FILE_NAME, FILE_PATH, LAST_UPDATED_BY,LAST_UPDATE_DATE, VENDOR_ATTACHMENT_TYPE)  "
-									+ " VALUES (LT_MAST_VENDOR_FILE_ATTACH_S.nextval, ?, ? ,?, ?, ?, ?)",
+									+ " (VENDOR_ID, FILE_NAME, FILE_PATH, LAST_UPDATED_BY,LAST_UPDATE_DATE, VENDOR_ATTACHMENT_TYPE)  "
+									+ " VALUES (?, ? ,?, ?, ?, ?)",
 									+ vendorId,fileName,saveDirectory,userId, currDate, attachmentType );
 							
 
@@ -450,20 +506,28 @@ final String restBaseUrl = "/API/vendorAttachment";
 						//status = ltMastCommonMessageService.getCodeAndMessage(FILE_UPLOADED_SUCESSFULLY);
 						
 						status.setMessage(msg);
-						status.setCode(200);
+						status.setCode(1);
 						//status.setData(data);
 
 						if (status.getMessage() == null) {
-							status.setCode(SUCCESS);
+							status.setCode(1);
 							status.setMessage("Error in finding message! The action is completed successfully.");
 						}
 						return new ResponseEntity<Status>(status, HttpStatus.OK);
 
 					} catch (Exception e) {
 						e.printStackTrace();
-						status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//						status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+						try {
+							status.setCode(0);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 						if (status.getMessage() == null) {
-							status.setCode(EXCEPTION);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 						}
 
@@ -472,9 +536,17 @@ final String restBaseUrl = "/API/vendorAttachment";
 
 				
 			} else {
-				status = ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status = ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if (status.getMessage() == null) {
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			}
@@ -484,9 +556,17 @@ final String restBaseUrl = "/API/vendorAttachment";
 		catch (Exception e) {
 			e.printStackTrace();
 			try {
-				status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//				status = ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if (status.getMessage() == null) {
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 				status.setMessage(e.getMessage());

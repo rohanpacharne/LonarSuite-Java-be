@@ -25,9 +25,9 @@ public class LtMastVendorAgreementAttachmentDaoImpl implements LtMastVendorAgree
 	@Override
 	public boolean multipleSave(Long vendorId,Long vendorAgreementtId, String fileName, String saveAttachmentDirectory) throws ServiceException
 	{
-		int res=jdbcTemplate.update("INSERT INTO LT_MAST_VENDOR_FILE_ATTACHMENT (VENDOR_ATTACHMENT_ID,VENDOR_ID,VENDOR_AGREEMENT_ID,FILE_NAME, "
+		int res=jdbcTemplate.update("INSERT INTO LT_MAST_VENDOR_FILE_ATTACHMENT (VENDOR_ID,VENDOR_AGREEMENT_ID,FILE_NAME, "
 				+ " FILE_PATH,LAST_UPDATE_DATE,CREATION_DATE)"
-        		+ " VALUES(LT_MAST_VENDOR_FILE_ATTACH_S.nextval,?,?,?,?,?,?)", 
+        		+ " VALUES(?,?,?,?,?,?)", 
         		vendorId,vendorAgreementtId,fileName,saveAttachmentDirectory,new Date(),new Date() );
 		if(res!=0)
 		 return true;

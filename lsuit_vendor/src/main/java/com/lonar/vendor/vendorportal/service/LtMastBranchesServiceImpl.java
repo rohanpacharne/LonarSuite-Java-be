@@ -251,7 +251,7 @@ public class LtMastBranchesServiceImpl implements LtMastBranchesService,CodeMast
 		Status status = new Status();
 		if (bindingResult.hasErrors()) {
 			for(ObjectError objectError : bindingResult.getAllErrors()){
-				status.setCode(VALIDATION);
+				status.setCode(0);
 				if(objectError.getCode().toString().equals("notnull")) {
 					status.setMessage(messageSource.getMessage(objectError.getDefaultMessage().toString(), null, "Default", Locale.getDefault()));
 					return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -270,9 +270,17 @@ public class LtMastBranchesServiceImpl implements LtMastBranchesService,CodeMast
 
 			if (branchObj == null) {
 				ltMastBranches = ltMastBranchesRepository.save(ltMastBranches);
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if( status.getMessage()==null) {
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			} else {
@@ -292,10 +300,18 @@ public class LtMastBranchesServiceImpl implements LtMastBranchesService,CodeMast
 		String stat = null;
 		
 			if (ltMastBranches.getBranchId() == null) {
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if(status.getMessage()==null)
 				{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -308,17 +324,32 @@ public class LtMastBranchesServiceImpl implements LtMastBranchesService,CodeMast
 
 					ltMastBranches.setLastUpdatedBy(ltMastBranches.getLastUpdateLogin());
 					ltMastBranches = ltMastBranchesRepository.save(ltMastBranches);
-					status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//					status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 					if(status.getMessage()==null)
 					{
-						status.setCode(SUCCESS);
+						status.setCode(1);
 						status.setMessage("Error in finding message! The action is completed successfully.");
 					}
 				}
 				else 
 				{
 					stat = isFeildsExists(ltMastBranches);
-					status=ltMastCommonMessageService.getCodeAndMessage(Data_Exist);
+//					status=ltMastCommonMessageService.getCodeAndMessage(Data_Exist);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DATA_EXIST").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					status.setMessage(stat);
 
 				}
@@ -339,22 +370,44 @@ public class LtMastBranchesServiceImpl implements LtMastBranchesService,CodeMast
 				if(ltMastBranchesList.isEmpty())
 				{
 					ltMastBranchesRepository.delete(Long.parseLong(id));
-					status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//					status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					if(status.getMessage()==null)
 					{
-						status.setCode(SUCCESS);
+						status.setCode(1);
 						status.setMessage("Error in finding message! The action is completed successfully.");
 					}
 				}
 				else
 				{
-					status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//					status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					return new ResponseEntity<Status>(status,HttpStatus.OK);
 				}
 			} 
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(NO_RESULT);
+//				status=ltMastCommonMessageService.getCodeAndMessage(NO_RESULT);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("NO_RESULT").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				return new ResponseEntity<Status>(status,HttpStatus.OK);
 			}
 

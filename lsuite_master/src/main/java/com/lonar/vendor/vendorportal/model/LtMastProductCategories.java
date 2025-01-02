@@ -16,13 +16,14 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "LT_MAST_PRODUCT_CATEGORIES")
-public class LtMastProductCategories extends BaseClass  {
+public class LtMastProductCategories extends WhoColumns  {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productCategory_seq")
-	@SequenceGenerator(name = "productCategory_seq", sequenceName = "LT_MAST_PRODUCT_CATEGORIES_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "productCategory_seq")
+//	@SequenceGenerator(name = "productCategory_seq", sequenceName = "LT_MAST_PRODUCT_CATEGORIES_S", allocationSize = 1)
 	@Basic(optional = false)
 	@Column(name = "CATEGORY_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long categoryId;
 	
 	@Size(min = 2, max = 80)

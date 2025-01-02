@@ -73,7 +73,7 @@ public class LtMastUserRolesRestController implements CodeMaster{
 			return new ResponseEntity<List<LtMastUserRoles>>(ltMastUserRoles, HttpStatus.OK);
 		}
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 	
 		return new ResponseEntity<List<LtMastUserRoles>>(ltMastUserRoles, HttpStatus.OK);
@@ -133,7 +133,7 @@ public class LtMastUserRolesRestController implements CodeMaster{
 				return new ResponseEntity<LtMastUserRoles>(ltMastUserRoles, HttpStatus.OK);
 			}
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 	
 		return new ResponseEntity<LtMastUserRoles>(ltMastUserRoles, HttpStatus.OK);
@@ -145,7 +145,7 @@ public class LtMastUserRolesRestController implements CodeMaster{
 		try {
 			return ltMastUserRolesService.saveUserRole(ltMastUserRoles);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 		
 	}
@@ -155,7 +155,7 @@ public class LtMastUserRolesRestController implements CodeMaster{
 		try {
 			return ltMastUserRolesService.updateUserRole(ltMastUserRoles);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 		
 	}
@@ -165,7 +165,7 @@ public class LtMastUserRolesRestController implements CodeMaster{
 		try {
 			return ltMastUserRolesService.getRoleByUserId(id);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 		
 	}	
@@ -175,7 +175,7 @@ public class LtMastUserRolesRestController implements CodeMaster{
 		try {
 			return ltMastUserRolesService.getUserRoleById(id);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 		
 	}	
@@ -189,19 +189,24 @@ public class LtMastUserRolesRestController implements CodeMaster{
 		try {
 			if (ltMastUserRolesRepository.exists(Long.parseLong(id))) {
 				ltMastUserRolesRepository.delete(Long.parseLong(id));
-				 status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//				 status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+
 					if( status.getMessage()==null)
 					{
-						status.setCode(SUCCESS);
+						status.setCode(1);
 						status.setMessage("Error in finding message! The action is completed successfully.");
 					}
 			}
 			else
 			{
-				 status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+				status.setCode(0);		
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
 					if( status.getMessage()==null)
 					{
-						status.setCode(FAIL);
+						status.setCode(0);
 						status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 					}
 				return new ResponseEntity<Status>(status,HttpStatus.OK);
@@ -212,11 +217,19 @@ public class LtMastUserRolesRestController implements CodeMaster{
 		{
 			
 			e.printStackTrace();
-			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 		}
 		catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		
 		return new ResponseEntity<Status>(status,HttpStatus.OK);	}

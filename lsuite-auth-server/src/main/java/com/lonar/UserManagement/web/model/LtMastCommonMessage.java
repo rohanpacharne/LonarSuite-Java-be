@@ -16,13 +16,13 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @Entity
 @Table(name = "LT_MAST_COMMON_MESSAGES")
 @JsonInclude(Include.NON_NULL)
-public class LtMastCommonMessage extends BaseClass {
+public class LtMastCommonMessage extends WhoColumns {
 
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "message_seq")
-	@SequenceGenerator(name = "message_seq", sequenceName = "lt_mast_common_messages_s", allocationSize = 1)
-	
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "message_seq")
+//	@SequenceGenerator(name = "message_seq", sequenceName = "lt_mast_common_messages_s", allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "MESSAGE_ID")
 	private Long messageId;
 

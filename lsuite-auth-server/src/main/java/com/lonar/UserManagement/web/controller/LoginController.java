@@ -43,7 +43,7 @@ public class LoginController implements CodeMaster{
 	
 	 @Autowired
 	 private LoginService loginService ;
-		
+	 
 	 @Autowired
 	 LtMastPasswordsRepository ltMastPasswordsRepository;
 	 
@@ -83,11 +83,17 @@ public class LoginController implements CodeMaster{
 		return loginService.loginUser(user, response);
 	}
 	
-
+	@RequestMapping(value="/mobileLogin", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE )
+	@ResponseBody
+	public ResponceEntity loginUserForMobile(@RequestBody LtMastUsers user,  HttpServletResponse response) throws ServiceException {
+		
+		return loginService.loginUserForMobile(user, response);
+	}
+	
 	@RequestMapping(value="/tokenexpired/{logTime}", method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE )
 	public ResponceEntity handleInvalidTokan(@PathVariable("logTime") String logTime) {
 		ResponceEntity entity = new ResponceEntity();
-		entity.setCode(501);
+		entity.setCode(1);
 		entity.setMessage("Tokan Expired");
 		return entity;
 	}
@@ -96,7 +102,7 @@ public class LoginController implements CodeMaster{
 	public ResponceEntity getTokenTimeDifferance(@RequestParam("token") String token,@PathVariable("logTime") String logTime) {
 		ResponceEntity entity = new ResponceEntity();
 		entity.setData(loginService.getTokenTimeDifferance(token));
-		entity.setCode(200);
+		entity.setCode(1);
 		entity.setMessage("OK");
 		return entity ;
 	}
@@ -118,7 +124,7 @@ public class LoginController implements CodeMaster{
 		LtMastUsers ltMastUsers = new LtMastUsers();
 		try {
 			if (jsonInputString.length() == 0) {
-				status.setCode(INPUT_IS_EMPTY);
+				status.setCode(0);
 				status.setMessage("Please fill all mandatory fields.");
 			
 				new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -129,7 +135,7 @@ public class LoginController implements CodeMaster{
 			if (ltMastUsersRepository.exists(Long.parseLong(newJObject.get("userid").toString()))) {
 				ltMastUsers = ltMastUsersRepository.findOne(Long.parseLong(newJObject.get("userid").toString()));
 			} else {
-				status.setCode(NO_RESULT);
+				status.setCode(0);
 				status.setMessage("login.NO_RESULT");
 				
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -141,7 +147,7 @@ public class LoginController implements CodeMaster{
 				
 				if (ltMastPasswords.getPassword().equals(newJObject.get("changepassword").toString())) {
 
-					status.setCode(PASS_USED_PREV);
+					status.setCode(1);
 					status.setMessage("Password is already used.");
 					
 					return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -181,32 +187,34 @@ public class LoginController implements CodeMaster{
 				ltMastPasswords.setCreationDate(new Date());
 			//ltMastPasswords = ltMastPasswordsRepository.save(ltMastPasswords);
 
-			status.setCode(PASS_CHANGE_SUCCESSFULLY);
-			status.setMessage("Password changed successfully.");
+//			status.setCode(PASS_CHANGE_SUCCESSFULLY);
+//			status.setMessage("Password changed successfully.");
+				status.setCode(1);		
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("PASS_CHANGE_SUCCESSFULLY").getMessageName());
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}else {
-				status.setCode(INTERNAL_SERVER_ERROR);
+				status.setCode(0);
 				status.setMessage("Internal server error.");
 				
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
-			status.setCode(INPUT_IS_EMPTY);
+			status.setCode(0);
 			status.setMessage("Please fill all mandatory fields.");
 		
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 
 		} catch (NullPointerException e) {
 			e.printStackTrace();
-			status.setCode(INPUT_IS_EMPTY);
+			status.setCode(0);
 			status.setMessage("Please fill all mandatory fields.");
 			
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			status.setCode(INTERNAL_SERVER_ERROR);
+			status.setCode(0);
 			status.setMessage("Internal server error.");
 			
 			return new ResponseEntity<Status>(status, HttpStatus.OK);

@@ -23,9 +23,10 @@ public class LtInvoiceLines
 {
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendor_seq")
-	@SequenceGenerator(name = "vendor_seq", sequenceName = "LT_INVOICE_LINES_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendor_seq")
+//	@SequenceGenerator(name = "vendor_seq", sequenceName = "LT_INVOICE_LINES_S", allocationSize = 1)
 	@Column(name = "Invoice_Line_Id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long invoiceLineId;
 	
 	@Column(name = "Invoice_Header_Id")

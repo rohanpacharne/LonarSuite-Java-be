@@ -33,6 +33,8 @@ public interface LtVendorApprovalDao
 	boolean updateVendorStatusApproval(LtVendorApprovalHistory approvalHistory) throws ServiceException;
 
 	List<LtVendorApproval> getInvoiceApprovalByInvoiceId(Long invoiceId) throws ServiceException;
+	
+	List<LtVendorApproval> getRentalAgreementApprovalByAgreementId(Long agreementId) throws ServiceException;
 
 	List<LtVendorApprovalSummary> getDataForReport(ReportParameters reportParameters) throws ServiceException;
 

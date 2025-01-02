@@ -63,7 +63,7 @@ public class LtMastComnMasterRestController implements CodeMaster
 		} 
 		catch (Exception e) 
 		{
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 	}
@@ -103,7 +103,7 @@ public class LtMastComnMasterRestController implements CodeMaster
 		try {
 			return ltMastComnMasterService.saveMasterWithValue(commonMasterWithValue,bindingResult);
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 		
 	}
@@ -116,7 +116,7 @@ public class LtMastComnMasterRestController implements CodeMaster
 			try {
 				return ltMastComnMasterService.save(LtMastComnMaster);
 				}catch(Exception e) {
-					throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+					throw new BusinessException(0, null, e);
 				}
 			
 		}
@@ -127,7 +127,7 @@ public class LtMastComnMasterRestController implements CodeMaster
 		try {
 			return ltMastComnMasterService.deleteLtMastComnMasterByID(id);
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 		
 		
@@ -139,7 +139,7 @@ public class LtMastComnMasterRestController implements CodeMaster
 		try {
 			return ltMastComnMasterService.delete(id);
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 	}
 		
@@ -161,7 +161,7 @@ public class LtMastComnMasterRestController implements CodeMaster
 		try {
 			return ltMastComnMasterService.updateMasterWithValue(commonMasterWithValue);
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 	}
 	
@@ -171,7 +171,7 @@ public class LtMastComnMasterRestController implements CodeMaster
 		try {
 			return ltMastComnMasterService.update(ltMastComnMaster);
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 	}
 		

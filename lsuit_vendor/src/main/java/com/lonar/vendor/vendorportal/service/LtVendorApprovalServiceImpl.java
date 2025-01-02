@@ -66,19 +66,34 @@ public class LtVendorApprovalServiceImpl implements LtVendorApprovalService,Code
 				{
 					if(ltVendorApprovalDao.updateAllStatusApproval(approvalHistory))
 					{
-						status=ltMastCommonMessageService.getCodeAndMessage(VENDOR_APPROVED);
+//						status=ltMastCommonMessageService.getCodeAndMessage(VENDOR_APPROVED);
+						try {
+							status.setCode(1);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("VENDOR_APPROVED").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
 						if(status.getMessage()==null)
 						{
-							status.setCode(SUCCESS);
+							status.setCode(1);
 							status.setMessage("Error in finding message! The action was successful");
 						}
 					}
 					else
 					{
-						status=ltMastCommonMessageService.getCodeAndMessage(VENDOR_APPROVAL_FAIL);
+//						status=ltMastCommonMessageService.getCodeAndMessage(VENDOR_APPROVAL_FAIL);
+						try {
+							status.setCode(1);
+							status.setMessage(ltMastCommonMessageService.getMessageNameByCode("VENDOR_APPROVAL_FAIL").getMessageName());
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						if(status.getMessage()==null)
 						{
-							status.setCode(SUCCESS);
+							status.setCode(1);
 							status.setMessage("Error in finding message! The action was successful");
 						}
 					}
@@ -86,18 +101,32 @@ public class LtVendorApprovalServiceImpl implements LtVendorApprovalService,Code
 				}
 			}else 
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(VENDOR_APPROVAL_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(VENDOR_APPROVAL_FAIL);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("VENDOR_APPROVAL_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if(status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action was successful");
 				}
 			}
 				
-			status=ltMastCommonMessageService.getCodeAndMessage(VENDOR_APPROVED);
+//			status=ltMastCommonMessageService.getCodeAndMessage(VENDOR_APPROVED);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("VENDOR_APPROVED").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if(status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 			}
 		}
 		else if(approvalHistory.getStatus().equals(FEEDBACK_AWAITED) )
@@ -136,10 +165,18 @@ public class LtVendorApprovalServiceImpl implements LtVendorApprovalService,Code
 					ltMastEmailtoken.setSendCc(ltMastEmployees.get(0).getOfficialEmail());
 					ltMastEmailtokenDao.makeEntryInEmailToken(ltMastEmailtoken);
 					
-					status=ltMastCommonMessageService.getCodeAndMessage(VENDOR_SENT_FOR_FEEDBACK);
+//					status=ltMastCommonMessageService.getCodeAndMessage(VENDOR_SENT_FOR_FEEDBACK);
+					try {
+						status.setCode(1);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("VENDOR_SENT_FOR_FEEDBACK").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 					if(status.getMessage()==null) 
 					{
-						status.setCode(SUCCESS);
+						status.setCode(1);
 						status.setMessage("Error in finding message! The action was successful");
 					}
 					
@@ -182,10 +219,18 @@ public class LtVendorApprovalServiceImpl implements LtVendorApprovalService,Code
 							ltMastEmailtoken.setSendCc(ltMastEmployees.get(0).getOfficialEmail());
 							ltMastEmailtokenDao.makeEntryInEmailToken(ltMastEmailtoken);
 		
-							status=ltMastCommonMessageService.getCodeAndMessage(VENDOR_REJECTED);
+//							status=ltMastCommonMessageService.getCodeAndMessage(VENDOR_REJECTED);
+							try {
+								status.setCode(1);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("VENDOR_REJECTED").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
 							if(status.getMessage()==null)
 							{
-								status.setCode(SUCCESS);
+								status.setCode(1);
 								status.setMessage("Error in finding message! The action was successful");
 							}
 					}
@@ -243,10 +288,18 @@ public class LtVendorApprovalServiceImpl implements LtVendorApprovalService,Code
 									ltMastEmailtokenDao.makeEntryInEmailToken(ltMastEmailtoken);
 								}
 							}
-					status=ltMastCommonMessageService.getCodeAndMessage(VENDOR_WITHDRAW);
+//					status=ltMastCommonMessageService.getCodeAndMessage(VENDOR_WITHDRAW);
+							try {
+								status.setCode(1);
+								status.setMessage(ltMastCommonMessageService.getMessageNameByCode("VENDOR_WITHDRAW").getMessageName());
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
 					if(status.getMessage()==null)
 					{
-						status.setCode(SUCCESS);
+						status.setCode(1);
 						status.setMessage("Error in finding message! The action was successful");
 					}
 					ltMastVendorsDao.upDateStatus(approvalHistory.getVendorId(), NO_ACTION, null);
@@ -275,6 +328,12 @@ public class LtVendorApprovalServiceImpl implements LtVendorApprovalService,Code
 	public List<LtVendorApproval> getInvoiceApprovalByInvoiceId(Long invoiceId) throws ServiceException {
 		// TODO Auto-generated method stub
 		return ltVendorApprovalDao.getInvoiceApprovalByInvoiceId(invoiceId);
+	}
+
+	@Override
+	public List<LtVendorApproval> getRentalAgreementApprovalByAgreementId(Long agreementId) throws ServiceException {
+		// TODO Auto-generated method stub
+		return ltVendorApprovalDao.getRentalAgreementApprovalByAgreementId(agreementId);
 	}
 
 	/*//@Transactional

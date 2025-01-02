@@ -49,7 +49,7 @@ public class LtMastFpnMasterRestController implements CodeMaster {
 			} 
 			catch (Exception e) 
 			{
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 			return customeDataTable;
 		}
@@ -86,7 +86,7 @@ public class LtMastFpnMasterRestController implements CodeMaster {
 		try {
 			return ltP2pFpnMasterService.save(ltP2pFpnMaster);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 		
 	}
@@ -97,7 +97,7 @@ public class LtMastFpnMasterRestController implements CodeMaster {
 		try {
 			return ltP2pFpnMasterService.update(ltP2pFpnMaster);
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 			
 	}
@@ -109,7 +109,7 @@ public class LtMastFpnMasterRestController implements CodeMaster {
 		try {
 			return ltP2pFpnMasterService.delete(id);	
 		}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 		}
 		
 	}

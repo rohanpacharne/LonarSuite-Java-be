@@ -2,6 +2,7 @@
 package com.lonar.vendor.vendorportal.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,15 +16,19 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "LT_MAST_TAX_MASTER")
-public class LtMastTaxes extends BaseClass implements Serializable {
+public class LtMastTaxes extends WhoColumns implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "taxes_seq")
-	@SequenceGenerator(name = "taxes_seq", sequenceName = "LT_MAST_TAXES_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "taxes_seq")
+//	@SequenceGenerator(name = "taxes_seq", sequenceName = "LT_MAST_TAXES_S", allocationSize = 1)
 	@Column(name = "TAX_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long taxId;
+	
+	@Column(name = "TAX_CODE")
+	private String taxCode;
 	
 	@Column(name = "TAX_NAME")
 	private String taxName;
@@ -49,6 +54,12 @@ public class LtMastTaxes extends BaseClass implements Serializable {
 	@Column(name = "COMPANY_ID")
 	private Long companyId;
 	
+//	@Column(name = "START_DATE")
+//	private Date startDate;
+	
+//	@Column(name = "END_DATE")
+//	private Date endDate;
+	
 	@Transient
 	private String statusValue;
 	
@@ -58,6 +69,32 @@ public class LtMastTaxes extends BaseClass implements Serializable {
 	
 	@Transient
 	private String sourceStateCodeValue;
+	
+	
+
+	public String getTaxCode() {
+		return taxCode;
+	}
+
+	public void setTaxCode(String taxCode) {
+		this.taxCode = taxCode;
+	}
+
+//	public Date getStartDate() {
+//		return startDate;
+//	}
+//
+//	public void setStartDate(Date startDate) {
+//		this.startDate = startDate;
+//	}
+
+//	public Date getEndDate() {
+//		return endDate;
+//	}
+//
+//	public void setEndDate(Date endDate) {
+//		this.endDate = endDate;
+//	}
 
 	public Long getTaxId() {
 		return taxId;
@@ -157,12 +194,15 @@ public class LtMastTaxes extends BaseClass implements Serializable {
 
 	@Override
 	public String toString() {
-		return "LtMastTaxes [taxId=" + taxId + ", taxName=" + taxName + ", taxRate=" + taxRate + ", taxDesc=" + taxDesc
-				+ ", hsnSacCode=" + hsnSacCode + ", sourceStateCode=" + sourceStateCode + ", destinationStateCode="
-				+ destinationStateCode + ", status=" + status + ", companyId=" + companyId + ", statusValue="
-				+ statusValue + ", destinationStateCodeValue=" + destinationStateCodeValue + ", sourceStateCodeValue="
+		return "LtMastTaxes [taxId=" + taxId + ", taxCode=" + taxCode + ", taxName=" + taxName + ", taxRate=" + taxRate
+				+ ", taxDesc=" + taxDesc + ", hsnSacCode=" + hsnSacCode + ", sourceStateCode=" + sourceStateCode
+				+ ", destinationStateCode=" + destinationStateCode + ", status=" + status + ", companyId=" + companyId
+				+ ", startDate=" + ", endDate="  + ", statusValue=" + statusValue
+				+ ", destinationStateCodeValue=" + destinationStateCodeValue + ", sourceStateCodeValue="
 				+ sourceStateCodeValue + "]";
 	}
+
+	
 
 	
 	

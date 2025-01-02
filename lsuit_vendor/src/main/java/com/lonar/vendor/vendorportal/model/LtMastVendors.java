@@ -16,14 +16,15 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @Entity
 @Table(name = "LT_MAST_VENDORS")
 @JsonInclude(Include.NON_NULL)
-public class LtMastVendors extends BaseClass 
+public class LtMastVendors extends WhoColumns 
 {
 	
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendor_seq")
-	@SequenceGenerator(name = "vendor_seq", sequenceName = "lt_mast_vendors_s", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendor_seq")
+//	@SequenceGenerator(name = "vendor_seq", sequenceName = "lt_mast_vendors_s", allocationSize = 1)
 	@Column(name = "VENDOR_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long vendorId;
 
 	@Column(name = "VENDOR_CODE")
@@ -34,6 +35,9 @@ public class LtMastVendors extends BaseClass
 
 	@Column(name = "STATUS")
 	private String status;
+	
+//	@Column(name = "VALUE_NAME")
+//	private String valueName;
 
 	@Column(name = "PAN_NO")
 	private String panNo;
@@ -44,8 +48,8 @@ public class LtMastVendors extends BaseClass
 	@Column(name = "PROPRIETOR_NAME")
 	private String proprietorName;
 
-	@Column(name = "BUSINESS_NATURE_ID")
-	private Long businessNatureId;
+//	@Column(name = "BUSINESS_NATURE_ID")
+//	private Long businessNatureId;
 
 	@Column(name = "DIVISION_ID")
 	private Long divisionId;
@@ -86,6 +90,9 @@ public class LtMastVendors extends BaseClass
 	@Column(name = "IMAGE_PATH")
 	private String imagePath;
 	
+	@Column(name = "BUSINESS_NATURE_CODE")
+	private String businessNatureCode;
+	
 	@Transient
 	private String divisionName;
 
@@ -102,11 +109,32 @@ public class LtMastVendors extends BaseClass
 	private String vendorStatus;
 	
 	@Transient
+	private String vendorStatusCode;
+	
+	@Transient
 	private String businessNature;
 	
 	@Transient
 	private String msmeCategoryValue;
 	
+	
+	
+	public String getVendorStatusCode() {
+		return vendorStatusCode;
+	}
+
+	public void setVendorStatusCode(String vendorStatusCode) {
+		this.vendorStatusCode = vendorStatusCode;
+	}
+
+	public String getBusinessNatureCode() {
+		return businessNatureCode;
+	}
+
+	public void setBusinessNatureCode(String businessNatureCode) {
+		this.businessNatureCode = businessNatureCode;
+	}
+
 	public Long getVendorId() {
 		return vendorId;
 	}
@@ -163,13 +191,13 @@ public class LtMastVendors extends BaseClass
 		this.proprietorName = proprietorName;
 	}
 
-	public Long getBusinessNatureId() {
-		return businessNatureId;
-	}
-
-	public void setBusinessNatureId(Long businessNatureId) {
-		this.businessNatureId = businessNatureId;
-	}
+//	public Long getBusinessNatureId() {
+//		return businessNatureId;
+//	}
+//
+//	public void setBusinessNatureId(Long businessNatureId) {
+//		this.businessNatureId = businessNatureId;
+//	}
 
 	public Long getDivisionId() {
 		return divisionId;
@@ -332,6 +360,23 @@ public class LtMastVendors extends BaseClass
 	public void setRegistrationEmail(String registrationEmail) {
 		this.registrationEmail = registrationEmail;
 	}
+
+	@Override
+	public String toString() {
+		return "LtMastVendors [vendorId=" + vendorId + ", vendorCode=" + vendorCode + ", vendorName=" + vendorName
+				+ ", status=" + status + ", panNo=" + panNo + ", vendorType=" + vendorType + ", proprietorName="
+				+ proprietorName + ", divisionId=" + divisionId + ", initiatorId=" + initiatorId + ", remark=" + remark
+				+ ", primaryEmail=" + primaryEmail + ", registrationEmail=" + registrationEmail + ", msmSupplier="
+				+ msmSupplier + ", asnApprovalRequired=" + asnApprovalRequired + ", msmRegisterationNo="
+				+ msmRegisterationNo + ", msmeCategory=" + msmeCategory + ", vendorLocationType=" + vendorLocationType
+				+ ", companyId=" + companyId + ", companyCategory=" + companyCategory + ", imagePath=" + imagePath
+				+ ", businessNatureCode=" + businessNatureCode + ", divisionName=" + divisionName + ", initiatorName="
+				+ initiatorName + ", message=" + message + ", CompanyName=" + CompanyName + ", vendorStatus="
+				+ vendorStatus + ", vendorStatusCode=" + vendorStatusCode + ", businessNature=" + businessNature
+				+ ", msmeCategoryValue=" + msmeCategoryValue + "]";
+	}
+
+	
 
 	
 

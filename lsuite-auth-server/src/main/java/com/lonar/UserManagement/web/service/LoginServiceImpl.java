@@ -32,6 +32,7 @@ import com.lonar.UserManagement.common.CommonMethod;
 import com.lonar.UserManagement.common.ServiceException;
 import com.lonar.UserManagement.web.controller.Oath2Request;
 import com.lonar.UserManagement.web.dao.LtMastEmailtokenDao;
+import com.lonar.UserManagement.web.dao.LtMastSysVariablesDao;
 import com.lonar.UserManagement.web.dao.LtMastUserRolesDao;
 import com.lonar.UserManagement.web.dao.LtMastUsersDao;
 import com.lonar.UserManagement.web.dao.UserDao;
@@ -43,6 +44,7 @@ import com.lonar.UserManagement.web.model.LtMastUsers;
 import com.lonar.UserManagement.web.model.Menu;
 import com.lonar.UserManagement.web.model.ResponceEntity;
 import com.lonar.UserManagement.web.model.Status;
+import com.lonar.UserManagement.web.model.SysVariableWithValues;
 import com.lonar.UserManagement.web.repository.LtMastEmailtokenRepository;
 import com.lonar.UserManagement.web.repository.LtMastPasswordsRepository;
 import com.lonar.UserManagement.web.repository.LtMastUsersRepository;
@@ -87,6 +89,9 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 	@Autowired
 	LtMastEmailtokenDao ltMastEmailtokenDao;
 	
+	@Autowired
+	LtMastSysVariablesService ltMastSysVariablesService;
+	
 	private static final String HEADER_AUTHORIZATION = "Authorization";
 	
 	@Override
@@ -94,7 +99,8 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 		try{
 			ResponceEntity entity = null;
 		List<LtMastUsers> ltP2pUsers = ltMastUsersDao.findByUserName(user.getUserName());
-		System.out.println(ltP2pUsers);
+		System.out.println("line no 97 = "+ltP2pUsers);
+		System.out.println("size is "+ltP2pUsers.size());
 		if(!ltP2pUsers.isEmpty()) {
 			if(ltP2pUsers.get(0).getStatus().equals("DRAFTCODE") || 
 					ltP2pUsers.get(0).getStatus().toUpperCase().equals("INACTIVE")) {
@@ -135,6 +141,39 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 						//response.setHeader("access_token", tokenInfo.getAccess_token());
 						response.setHeader("access_token","c2FtcGxlQ2xpZW50SWQ6c2VjcmV0");
 						
+						SysVariableWithValues sysVariableWithValues = new SysVariableWithValues();
+						if(ltP2pUsers.get(0).getCompanyId()!=null) {
+							sysVariableWithValues=
+									ltMastSysVariablesService.getBySysVariableName1("GLOBAL_FILE_PATH", ltP2pUsers.get(0).getCompanyId());
+						}else {
+							sysVariableWithValues=
+									ltMastSysVariablesService.getBySysVariableName1("GLOBAL_FILE_PATH", 1L);
+						}
+						
+						
+						System.out.println("sysVariableWithValues 1 = "+sysVariableWithValues);
+						
+						String globalFilePath = "";
+						if(sysVariableWithValues!=null)
+						{
+							if(sysVariableWithValues.getLtMastSysVariableValues().get(0)!=null)
+							{
+								System.out.println("Above file path");
+								globalFilePath=sysVariableWithValues.getLtMastSysVariableValues().get(0).getUserValue();
+								System.out.println("file path = "+globalFilePath);
+							}
+							else
+							{
+								globalFilePath=sysVariableWithValues.getLtMastSysVariables().getSystemValue();
+							}
+						}
+						
+						String entries = ltMastUsersDao.paginationEntries("PEGINATION_ENTRIES", ltP2pUsers.get(0).getUserId(), ltP2pUsers.get(0).getCompanyId());
+						System.out.println("userId = "+ltP2pUsers.get(0).getUserId());
+						System.out.println("Company id = "+ltP2pUsers.get(0).getCompanyId());
+						
+						entity.setPaginationEntries(entries);
+						entity.setGlobalFilePath(globalFilePath);
 						entity.setMessage("Login Success " + user.getUserName());
 						entity.setUserId(ltP2pUsers.get(0).getUserId());
 						entity.setEmployeeId(ltP2pUsers.get(0).getEmployeeId());
@@ -149,6 +188,7 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 						if (ltP2pUsers.get(0).getVendorId() != null && !ltP2pUsers.get(0).getVendorId().equals(0)) {
 							List<LtMastUsers> ltP2pUsers1 = ltMastUsersDao
 									.findVendorByUserName(user.getUserName().toUpperCase());
+							System.out.println("list p2pUser1 = "+ltP2pUsers1);
 							// authTokenInfo.setEmpName(ltP2pUsers1.get(0).getEmpName());
 							entity.setEmployeeName(ltP2pUsers1.get(0).getEmployeeName());
 							entity.setVendorId(ltP2pUsers.get(0).getVendorId());
@@ -166,26 +206,172 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 						List<Menu> menuList = ltMastUsersDao.findMenu(ltP2pUsers.get(0).getUserId(),entity.getCompanyId());
 						System.out.println(menuList.toString()+ltP2pUsers.get(0).getUserId()+entity.getCompanyId());
 						entity.setData(menuList);
-						entity.setCode(200);
+						entity.setCode(1);
+						System.out.println("Menu = "+menuList);
 						userDao.saveLoginToken(tokenInfo);
 						//entity.setData(tokenInfo);
 						//userDao.setPackageVariables(ltP2pUsers.get(0).getUserId(), entity.getCompanyId());
 
 					} else {
+						System.out.println("Password is wrong");
 						entity = new ResponceEntity();
+						entity.setCode(0);
 						entity.setMessage("Invalid Username or Password");
 					}
 				}
 		}else {
+			System.out.println("in second else");
 			entity = new ResponceEntity();
+			entity.setCode(0);
 			entity.setMessage("Invalid Username or Password");
 		}
 		return  entity;
 		}catch (Exception e) {
+			System.out.println("in exception");
 			e.printStackTrace();
 			ResponceEntity entity = new ResponceEntity();
+			entity.setCode(0);
+			entity.setMessage("Exception occured while login into the app, please contact system administrator");
+			throw new BusinessException(0,"Invalid Username or Password",e);
+		}
+		
+		//final LtMastUsers user1 = userDao.findByUserName(user.getUserName());
+	}
+	
+	@Override
+	public ResponceEntity loginUserForMobile(LtMastUsers user, HttpServletResponse response) {
+		try{
+			ResponceEntity entity = null;
+		List<LtMastUsers> ltP2pUsers = ltMastUsersDao.findByUserName(user.getUserName());
+		System.out.println("line no 97 = "+ltP2pUsers);
+		System.out.println("size is "+ltP2pUsers.size());
+		if(!ltP2pUsers.isEmpty()) {
+			if(ltP2pUsers.get(0).getStatus().equals("DRAFTCODE") || 
+					ltP2pUsers.get(0).getStatus().toUpperCase().equals("INACTIVE")) {
+				entity = new ResponceEntity();
+				entity.setMessage("User is inactive");
+				return  entity;
+			}else if(ltP2pUsers.get(0).getStatus().equals("UNVERIFYEMAIL")){
+				entity = new ResponceEntity();
+				entity.setMessage("User status is unverifyemail, Please set the password!");
+				} else {
+                       System.out.println(user);
+					if ((user.getLoginCheck() != null) && (!user.getLoginCheck().trim().isEmpty())
+							&& (user.getLoginCheck().equals("SHA-256"))) {
+						
+						System.out.println(" GRN login ");
+						String password = user.getPassword().substring(0, user.getPassword().length() - 5);
+						String salt = BCrypt.gensalt(12);
+						String serverBcryptedPwd = BCrypt.hashpw(password, salt);
+						user.setPassword(serverBcryptedPwd);
+						System.out.println(serverBcryptedPwd);
+						user.setPassword(password);
+						System.out.println(serverBcryptedPwd);
+						
+					}else{
+						System.out.println(" vpal login "+user.getPassword()+"\t");
+					}
+							//if (BCrypt.checkpw(ltP2pUsers.get(0).getPassword().trim(), user.getPassword().trim())) {
+					//if (BCrypt.checkpw(ltP2pUsers.get(0).getP, user.getPassword().trim())) {
+
+					
+					if (ltP2pUsers.get(0).getPassword().trim().equalsIgnoreCase(user.getPassword().trim())){
+						entity = new ResponceEntity();
+						response.setHeader("userId", ltP2pUsers.get(0).getUserId() + "");
+						response.setHeader("employeeId", ltP2pUsers.get(0).getEmployeeId() + "");
+						response.setHeader("employeeName", ltP2pUsers.get(0).getEmployeeName());
+						response.setHeader("companyId", ltP2pUsers.get(0).getCompanyId() + "");
+						AuthTokenInfo tokenInfo = oath2Request.sendTokenRequest(user.getUserName(), user.getPassword());
+						//response.setHeader("access_token", tokenInfo.getAccess_token());
+						response.setHeader("access_token","c2FtcGxlQ2xpZW50SWQ6c2VjcmV0");
+						
+						SysVariableWithValues sysVariableWithValues = new SysVariableWithValues();
+						if(ltP2pUsers.get(0).getCompanyId()!=null) {
+							sysVariableWithValues=
+									ltMastSysVariablesService.getBySysVariableName1("GLOBAL_FILE_PATH", ltP2pUsers.get(0).getCompanyId());
+						}else {
+							sysVariableWithValues=
+									ltMastSysVariablesService.getBySysVariableName1("GLOBAL_FILE_PATH", 1L);
+						}
+						
+						
+						System.out.println("sysVariableWithValues 1 = "+sysVariableWithValues);
+						
+						String globalFilePath = "";
+						if(sysVariableWithValues!=null)
+						{
+							if(sysVariableWithValues.getLtMastSysVariableValues().get(0)!=null)
+							{
+								System.out.println("Above file path");
+								globalFilePath=sysVariableWithValues.getLtMastSysVariableValues().get(0).getUserValue();
+								System.out.println("file path = "+globalFilePath);
+							}
+							else
+							{
+								globalFilePath=sysVariableWithValues.getLtMastSysVariables().getSystemValue();
+							}
+						}
+						
+						entity.setGlobalFilePath(globalFilePath);
+						entity.setMessage("Login Success " + user.getUserName());
+						entity.setUserId(ltP2pUsers.get(0).getUserId());
+						entity.setEmployeeId(ltP2pUsers.get(0).getEmployeeId());
+						entity.setEmployeeName(ltP2pUsers.get(0).getEmployeeName());
+						entity.setDivisionId(ltP2pUsers.get(0).getDivisionId());
+						entity.setLocationId(ltP2pUsers.get(0).getLocationId());
+						entity.setLocationCode(ltP2pUsers.get(0).getLocationCode());
+						entity.setDivisionName(ltP2pUsers.get(0).getDivisionName());
+						entity.setCompanyId(ltP2pUsers.get(0).getCompanyId());
+						entity.setIsBuyer(ltP2pUsers.get(0).getIsBuyer());
+						entity.setCompanyName(ltP2pUsers.get(0).getCompanyName());
+						if (ltP2pUsers.get(0).getVendorId() != null && !ltP2pUsers.get(0).getVendorId().equals(0)) {
+							List<LtMastUsers> ltP2pUsers1 = ltMastUsersDao
+									.findVendorByUserName(user.getUserName().toUpperCase());
+							System.out.println("list p2pUser1 = "+ltP2pUsers1);
+							// authTokenInfo.setEmpName(ltP2pUsers1.get(0).getEmpName());
+							entity.setEmployeeName(ltP2pUsers1.get(0).getEmployeeName());
+							entity.setVendorId(ltP2pUsers.get(0).getVendorId());
+							entity.setDivisionId(ltP2pUsers1.get(0).getDivisionId());
+							entity.setDivisionName(ltP2pUsers1.get(0).getDivisionName());
+							entity.setCompanyId(ltP2pUsers1.get(0).getCompanyId());
+							entity.setCompanyName(ltP2pUsers1.get(0).getCompanyName());
+						}
+
+						List<String> roles = ltMastUserRolesDao.findAllActiveRoleName(ltP2pUsers.get(0).getUserId());
+						if (!roles.isEmpty()) {
+							entity.setRole(roles.get(0));
+						}
+
+//						List<Menu> menuList = ltMastUsersDao.findMenu(ltP2pUsers.get(0).getUserId(),entity.getCompanyId());
+//						System.out.println(menuList.toString()+ltP2pUsers.get(0).getUserId()+entity.getCompanyId());
+						entity.setData(null);
+						entity.setCode(1);
+//						System.out.println("Menu = "+menuList);
+						userDao.saveLoginToken(tokenInfo);
+						//entity.setData(tokenInfo);
+						//userDao.setPackageVariables(ltP2pUsers.get(0).getUserId(), entity.getCompanyId());
+
+					} else {
+						System.out.println("Password is wrong");
+						entity = new ResponceEntity();
+						entity.setCode(0);
+						entity.setMessage("Invalid Username or Password");
+					}
+				}
+		}else {
+			System.out.println("in second else");
+			entity = new ResponceEntity();
+			entity.setCode(0);
 			entity.setMessage("Invalid Username or Password");
-			throw new BusinessException(INTERNAL_SERVER_ERROR,"Invalid Username or Password",e);
+		}
+		return  entity;
+		}catch (Exception e) {
+			System.out.println("in exception");
+			e.printStackTrace();
+			ResponceEntity entity = new ResponceEntity();
+			entity.setCode(0);
+			entity.setMessage("Exception occured while login into the app, please contact system administrator");
+			throw new BusinessException(0,"Invalid Username or Password",e);
 		}
 		
 		//final LtMastUsers user1 = userDao.findByUserName(user.getUserName());
@@ -235,7 +421,7 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 		LtMastUsers dbUser = null;
 		
 			if (jsonInputString.length() == 0) {
-				status.setCode(INPUT_IS_EMPTY);
+				status.setCode(0);
 				status.setMessage("Input empty.");
 				new ResponseEntity<Status>(status, HttpStatus.OK);
 			}
@@ -248,22 +434,29 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 			else
 			{
 				status.setMessage("no result");
-				status.setCode(FAIL);
+				status.setCode(0);
 				return status;
 			}
 			//ltMastUsers = ltMastUsersList.get(0);
 			if(dbUser.getChangePwd().equals("N")) {
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("You can not change the password.");
 				return status;
 			}
 			
 			//if (!BCrypt.checkpw(dbUser.getPassword(), newJObject.get("password").toString())) {
 			if (!(dbUser.getPassword().equalsIgnoreCase(newJObject.get("password").toString()))) {
-				status = ltMastCommonMessageService.getCodeAndMessage(OLD_PASS_NOT_MATCHED);
+//				status = ltMastCommonMessageService.getCodeAndMessage(OLD_PASS_NOT_MATCHED);
+				status.setCode(0);		
+				try {
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("OLD_PASS_NOT_MATCHED").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				
 				if( status.getMessage()==null) {
-					status.setCode(FAIL);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				}
 				return status;
@@ -273,7 +466,7 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 //					BCrypt.hashpw(newJObject.get("changepassword").toString(), BCrypt.gensalt(12)))) {				
 			if(dbUser.getPassword().equalsIgnoreCase(newJObject.get("changepassword").toString())) {	
 			status.setMessage("Old password and new password are same.");
-				status.setCode(FAIL);
+				status.setCode(0);
 				return status;
 			}
 
@@ -298,9 +491,11 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 				dbUser = ltMastUsersRepository.save(dbUser);
 				
 				if(dbUser !=null){
-					status=ltMastCommonMessageService.getCodeAndMessage(PASS_CHANGE_SUCCESSFULLY);
+//					status=ltMastCommonMessageService.getCodeAndMessage(PASS_CHANGE_SUCCESSFULLY);
+					status.setCode(1);		
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("PASS_CHANGE_SUCCESSFULLY").getMessageName());
 					if( status.getMessage()==null){
-						status.setCode(SUCCESS);
+						status.setCode(1);
 						status.setMessage("Error in finding message! The action is completed successfully.");
 					}
 				}
@@ -334,7 +529,7 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 		LtMastUsers ltMastUsers;
 		if (id == null || id.length() == 0) {
 			status.setMessage("Invalid token");
-			status.setCode(FAIL);
+			status.setCode(0);
 			return status;
 		}
 		try {
@@ -345,7 +540,7 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 		if (ltMastEmailtokenList.isEmpty()) {
 			
 			status.setMessage("Invalid token");
-			status.setCode(FAIL);
+			status.setCode(0);
 			return status;
 		}
 		
@@ -354,14 +549,14 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 		try {
 			if (!new CommonMethod().linkExpiredChecker(tokenTime, (long) ltMastEmailtoken.getExpiredWithin())) {
 				status.setMessage("Link expired");
-				status.setCode(FAIL);
+				status.setCode(0);
 				return status;
 			}
 			Long userid = ltMastEmailtoken.getEmailUserId();
 			if (!ltMastUsersRepository.exists(userid)) {
 				
 				status.setMessage("No result");
-				status.setCode(FAIL);
+				status.setCode(0);
 				return status;
 			}
 			ltMastUsers = ltMastUsersRepository.findOne(userid);
@@ -380,10 +575,12 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 						new CommonMethod().convertStringtoSqlDateTime(new CommonMethod().getTodayDate()));
 				ltMastUsers = ltMastUsersRepository.save(ltMastUsers);
 				if(ltMastUsers.getUserId()!=null) {
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+					status.setCode(1);		
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 				status.setData(ltMastUsers.getUserId());
@@ -395,11 +592,19 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+					
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
-				status.setMessage("Error in finding message! The action is completed successfully.");
+				status.setCode(0);
+				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 			return status;
 
@@ -418,10 +623,12 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 		LtMastUsers ltMastUsers = new LtMastUsers();
 		try {
 			if (jsonInputString.length() == 0) {
-				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+				status.setCode(0);		
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
 				if( status.getMessage()==null)
 				{
-					status.setCode(FAIL);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				}
 				return status;
@@ -435,7 +642,7 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 			
 			if (ltMastUsersList.isEmpty()) {
 				
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("Invalid username or emailId.");
 				return status;
 
@@ -445,17 +652,17 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 			/*newJObject = (JSONObject) parser.parse(jsonInputString);
 			ltMastUsers = userDao.getUserById(Long.parseLong(newJObject.get("userid").toString()));*/
 			if(ltMastUsers.getChangePwd().equals("N")) {
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("You can not change the password.");
 				return status;
 			}
 			if ( (!ltMastUsers.getStatus().toUpperCase().equals("INVITED")) && ltMastUsers.getVendorId()!=null) {
 				
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("User record is not active.");
 				return status;
 			}else if(!ltMastUsers.getStatus().toUpperCase().equals("ACTIVE") && ltMastUsers.getVendorId()==null){
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("User record is not active.");
 				return status;
 			}
@@ -485,19 +692,29 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 			ltMastEmailtoken.setEmailUserId(Long.parseLong(userID));
 			ltMastEmailtoken = ltMastEmailtokenRepository.save(ltMastEmailtoken);
 
-			status=ltMastCommonMessageService.getCodeAndMessage(PASS_LINK_SEND);
+//			status=ltMastCommonMessageService.getCodeAndMessage(PASS_LINK_SEND);
+			status.setCode(1);		
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("PASS_LINK_SEND").getMessageName());
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+					
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			if( status.getMessage()==null)
 			{
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 			return status;
@@ -515,10 +732,12 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 		LtMastUsers ltMastUsers = null;
 		try {
 			if (jsonInputString.length() == 0) {
-				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+				status.setCode(0);		
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
 				if( status.getMessage()==null)
 				{
-					status.setCode(FAIL);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				}
 				return status;
@@ -576,9 +795,11 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 				ltMastEmailtoken.setExpiredWithin(1296000L);
 				ltMastEmailtoken = ltMastEmailtokenRepository.save(ltMastEmailtoken);
 				
-				status=ltMastCommonMessageService.getCodeAndMessage(PASS_CHANGE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(PASS_CHANGE_SUCCESSFULLY);
+				status.setCode(1);		
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("PASS_CHANGE_SUCCESSFULLY").getMessageName());
 				if( status.getMessage()==null){
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			}
@@ -586,10 +807,18 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INTERNAL_SERVER_ERROR);
+				
+			try {
+				status.setCode(0);	
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			if( status.getMessage()==null)
 			{
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 			return status;

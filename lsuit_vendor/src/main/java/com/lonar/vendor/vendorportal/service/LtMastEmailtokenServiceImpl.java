@@ -336,7 +336,7 @@ public class LtMastEmailtokenServiceImpl implements LtMastEmailtokenService, Cod
 	public Status sendBroadCastMessage(SendBroadCastEmail emailList) throws ServiceException {
 		Status status = new Status();
 		if (emailList.getSubject() == null || emailList.getMessage().equals(null)) {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Please enter subject and message for the broadcast");
 			return status;
 		}
@@ -351,16 +351,16 @@ public class LtMastEmailtokenServiceImpl implements LtMastEmailtokenService, Cod
 						ltMastCommunicationTabDetRepository,env);
 				ltMastEmailtokenThread.start();
 				
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Broadcast message sent successfully");
 			} else {
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("No vendors found for the company");
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Something went wrong!!!!");
 		}
 		 
@@ -388,7 +388,7 @@ public class LtMastEmailtokenServiceImpl implements LtMastEmailtokenService, Cod
 			sendBroadCastEmail.setAttachmentPath(attachmentPath);
 		}
 		if (sendBroadCastEmail.getSubject() == null || sendBroadCastEmail.getMessage().equals(null)) {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Please enter subject and message for the broadcast");
 			return status;
 		}
@@ -402,16 +402,16 @@ public class LtMastEmailtokenServiceImpl implements LtMastEmailtokenService, Cod
 						ltMastCommunicationTabDetRepository,env);
 				ltMastEmailtokenThread.start();
 				
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Broadcast message sent successfully");
 			} else {
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("No vendors found for the company");
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Something went wrong!!!!");
 		}
 		 
@@ -445,10 +445,18 @@ public class LtMastEmailtokenServiceImpl implements LtMastEmailtokenService, Cod
 			if(!dir.isDirectory())
 			{
 				 
-				status=ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+//				status=ltMastCommonMessageService.getCodeAndMessage(NO_DIRECTIVE_EXISTS);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("NO_DIRECTIVE_EXISTS").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				if(status.getMessage()==null)
 				{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 			}

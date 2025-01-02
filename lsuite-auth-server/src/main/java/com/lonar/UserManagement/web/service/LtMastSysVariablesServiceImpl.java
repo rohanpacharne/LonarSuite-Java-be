@@ -90,7 +90,19 @@ public class LtMastSysVariablesServiceImpl implements LtMastSysVariablesService,
 		return null;
 	}
 
-	
+	@Transactional
+	@Override
+	public SysVariableWithValues getBySysVariableName1(String name,Long companyId) throws Exception
+	{
+		List<SysVariableWithValues> sysVariableWithValuesList=
+				ltMastSysVariablesDao.getBySysVariableName1(name,companyId);
+		
+		//System.out.println(sysVariableWithValuesList);
+		if(sysVariableWithValuesList.isEmpty())
+			return new SysVariableWithValues();
+		else
+			return sysVariableWithValuesList.get(0);
+	}
 	
 	
 	

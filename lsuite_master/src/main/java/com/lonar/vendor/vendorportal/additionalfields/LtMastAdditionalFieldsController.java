@@ -31,7 +31,7 @@ public class LtMastAdditionalFieldsController implements CodeMaster {
 		try {
 			return additionalFieldsService.saveAdditionalFieldsDef(additionalFields);
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 	}
 
@@ -47,7 +47,7 @@ public class LtMastAdditionalFieldsController implements CodeMaster {
 					.getAddFieldsDefiSummaryDataTableData(companyId, input);
 			customeDataTable.setData(ltMastAdditionalFieldsList);
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 	}
@@ -70,7 +70,7 @@ public class LtMastAdditionalFieldsController implements CodeMaster {
 		try {
 			return additionalFieldsService.saveAdditionalFieldsColumnUses(addFieldsColUses);
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 	}
 
@@ -86,7 +86,7 @@ public class LtMastAdditionalFieldsController implements CodeMaster {
 					.getAddFieldsDataTableData(fieldDefId, input);
 			customeDataTable.setData(ltMastAdditionalFieldsList);
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 	}

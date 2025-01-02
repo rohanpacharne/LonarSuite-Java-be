@@ -53,7 +53,7 @@ public class LtMastAttachmentTypeRestController implements CodeMaster{
 		} 
 		catch (Exception e) 
 		{
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 		
@@ -104,7 +104,7 @@ public class LtMastAttachmentTypeRestController implements CodeMaster{
 		try {
 			return ltMastAttachmentTypeService.save(ltMastAttachmentType,bindingResult);	
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 	}
 
@@ -115,7 +115,7 @@ public class LtMastAttachmentTypeRestController implements CodeMaster{
 		try {
 			return ltMastAttachmentTypeService.update(ltMastAttachmentType);	
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 	}
 
@@ -125,7 +125,7 @@ public class LtMastAttachmentTypeRestController implements CodeMaster{
 		try {
 			return ltMastAttachmentTypeService.delete(id);	
 			}catch(Exception e) {
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 	}
 

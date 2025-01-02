@@ -34,9 +34,10 @@ public class LtMastEmployeeDelegation implements Serializable {
 	@Id
 	@Basic(optional = false)
 	// @GeneratedValue(strategy=GenerationType.IDENTITY)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employeeDelegation_seq")
-	@SequenceGenerator(name = "employeeDelegation_seq", sequenceName = "LT_MAST_EMP_DELEGATIONS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employeeDelegation_seq")
+//	@SequenceGenerator(name = "employeeDelegation_seq", sequenceName = "LT_MAST_EMP_DELEGATIONS_S", allocationSize = 1)
 	@Column(name = "EMPLOYEE_DELEGATION_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long employeeDelegationId;
 
 	@Basic(optional = false)

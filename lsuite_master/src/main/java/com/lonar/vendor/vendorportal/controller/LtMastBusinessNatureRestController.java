@@ -39,7 +39,7 @@ public class LtMastBusinessNatureRestController implements CodeMaster{
 				customeDataTable.setData(ltMastBusinessNatureList);
 		} 
 		catch (Exception e) {		
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 	}
@@ -51,7 +51,7 @@ public class LtMastBusinessNatureRestController implements CodeMaster{
 		try {
 			return ltMastBusinessNatureService.save(ltMastBusinessNature);	
 		}catch(Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 	}
 	//------------------------------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ public class LtMastBusinessNatureRestController implements CodeMaster{
 		try {
 			return ltMastBusinessNatureService.update(ltMastBusinessNature);	
 		}catch(Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 	}
 			
@@ -72,7 +72,7 @@ public class LtMastBusinessNatureRestController implements CodeMaster{
 		try {
 			return ltMastBusinessNatureService.delete(id);
 		}catch(Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 	}	
 			

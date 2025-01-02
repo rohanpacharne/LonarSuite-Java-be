@@ -92,12 +92,12 @@ public class UserDaoImpl implements UserDao ,CodeMaster{
 	@Transactional
 	public void saveLoginToken(AuthTokenInfo tokenInfo) {
 		try {
-		jdbcTemplate.update("delete from my_token_details where refresh_token = ? ", 
+		jdbcTemplate.update("delete from lt_token_details where refresh_token = ? ", 
 				new Object[] {tokenInfo.getRefresh_token()});
 		
-		String query = " insert into my_token_details " + 
+		String query = " insert into lt_token_details " + 
 				"	(access_token , refresh_token , access_token_date, refresh_token_date, access_token_expire_in) " + 
-				"	values ( ?, ?, sysdate , sysdate , ? ) ";
+				"	values ( ?, ?, now() , now() , ? ) ";
 		
 		jdbcTemplate.update(query, new Object[]{ tokenInfo.getAccess_token(), tokenInfo.getRefresh_token(),
 				 tokenInfo.getExpires_in() } );
@@ -109,7 +109,7 @@ public class UserDaoImpl implements UserDao ,CodeMaster{
 	@Override
 	@Transactional
 	public void updateLoginToken(AuthTokenInfo tokenInfo, String token) throws BusinessException{
-		String query = " update my_token_details " + 
+		String query = " update lt_token_details " + 
 				" set access_token = ? , " + 
 				" old_access_token = ?, access_token_date = sysdate " + 
 				" where refresh_token  = ?  ";
@@ -120,8 +120,10 @@ public class UserDaoImpl implements UserDao ,CodeMaster{
 	@Override
 	@Transactional
 	public AuthTokenInfo getTokenTimeDifferance(String accessToken) throws BusinessException{
-		String query = "Select (sysdate - access_token_date)*60*60*24 as differance_time, refresh_token from my_token_details where access_token = ? ";
-		//String query = "Select timestampdiff(second, access_token_date, ? ) as differance_time, refresh_token from my_token_details where access_token = ? "; 
+		//String query = "Select (sysdate - access_token_date)*60*60*24 as differance_time, refresh_token from my_token_details where access_token = ? ";
+		//String query = "Select timestampdiff(second, access_token_date, ? ) as differance_time, refresh_token from my_token_details where access_token = ? ";
+		String query = "Select TIMESTAMPDIFF(SECOND, NOW(),access_token_date)  as differance_time, refresh_token from lt_token_details where access_token = ? ";
+
 		List<AuthTokenInfo>  infos = jdbcTemplate.query(query, new Object[]{ accessToken }, new RowMapper(){
 		  		@Override
 		  		public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -140,8 +142,9 @@ public class UserDaoImpl implements UserDao ,CodeMaster{
 	@Override
 	@Transactional
 	public AuthTokenInfo getOldTokenTimeDifferance(String oldToken) throws BusinessException{
-		String query = "Select (sysdate - access_token_date)*60*60*24 as differance_time, access_token from my_token_details where old_access_token = ?";
-		//String query = "Select timestampdiff(second, access_token_date, ? ) as differance_time, access_token from my_token_details where old_access_token = ? "; 
+		//String query = "Select (sysdate - access_token_date)*60*60*24 as differance_time, access_token from lt_token_details where old_access_token = ?";
+		//String query = "Select timestampdiff(second, access_token_date, ? ) as differance_time, access_token from my_token_details where old_access_token = ? ";
+		String query = "Select TIMESTAMPDIFF(SECOND, NOW(),access_token_date) as differance_time, refresh_token from lt_token_details where access_token = ? ";
 		List<AuthTokenInfo>  infos = jdbcTemplate.query(query, new Object[]{ oldToken }, new RowMapper(){
 		  		@Override
 		  		public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -198,10 +201,10 @@ public class UserDaoImpl implements UserDao ,CodeMaster{
 				query.execute();
 
 				if(query.getOutputParameterValue(3).toString().trim().equals("ERROR")){
-					status.setCode(FAIL);
+					status.setCode(0);
 				}
 				else if(query.getOutputParameterValue(3).toString().trim().equals("SUCCESS")){
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					if(query.getOutputParameterValue(4)!=null) {
 					status.setMessage(query.getOutputParameterValue(4).toString());
 					}

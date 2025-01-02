@@ -28,9 +28,9 @@ public class LtVendorApprovalHistoryDaoImpl implements LtVendorApprovalHistoryDa
 		
 		int res = jdbcTemplate
 		.update(" INSERT INTO lt_vendor_approval_history "
-				+ " (VENDOR_APPROVAL_HISTORY_ID,VENDOR_APPROVAL_ID,EMPLOYEE_ID, "
+				+ " (VENDOR_APPROVAL_ID,EMPLOYEE_ID, "
 				+ " STATUS,NOTE,LAST_UPDATE_DATE,VENDOR_ID,REMARK,USER_TYPE ) "
-				+ " VALUES(LT_VENDOR_APPROVAL_HISTORY_S.NEXTVAL,?,?,?,?,?,?,?,?)  ",
+				+ " VALUES(?,?,?,?,?,?,?,?)  ",
 
 				//ltExpenseApprovalHistory.getVendorApprovalHistoryId(),
 				ltExpenseApprovalHistory.getVendorApprovalId(),
@@ -51,20 +51,34 @@ else
 	@Override
 	public List<LtVendorApprovalHistory> getVendorApprovalHistoryByVendorId(Long vendorId) throws ServiceException
 	{
-		String query = " SELECT v.VENDOR_APPROVAL_HISTORY_ID, v.VENDOR_APPROVAL_ID,v.NOTE,v.LAST_UPDATE_DATE,v.VENDOR_ID,v.EMPLOYEE_ID,  \r\n" + 
-				"      v.REMARK,cmvs.value_name as status, " + 
-				"  (CASE WHEN v.user_type = 'VENDOR' then ven.VENDOR_NAME " + 
-				"   ELSE  ( cmv.value_name||' ' || em.first_name || ' '|| em.LAST_NAME||' ' || '(' ||em.EMPLOYEE_NUMBER||')' )  " + 
-				"   END ) AS approval_Name,  " + 
-				"  v.USER_TYPE, v.VENDOR_ID " + 
-				"   FROM lt_vendor_approval_history v,LT_MAST_EMPLOYEES em,LT_MAST_COMN_MASTER_VALUES cmv ,  " + 
-				" LT_MAST_COMN_MASTER_VALUES cmvs  , LT_MAST_VENDORS ven  ,LT_MAST_COMN_MASTER cm   " + 
-				" WHERE v.VENDOR_ID = ? " + 
-				"    AND ven.VENDOR_ID(+) = v.VENDOR_ID      " + 
-				" and em.employee_id(+) = v.employee_id   " + 
-				" and em.title = cmv.value_code(+)  " + 
-				" and  v.status = cmvs.value_code(+) AND cmvs.master_Id(+) = cm.MASTER_ID AND cm.MASTER_NAME = 'VENDOR_STATUS'  " + 
-				" order by v.VENDOR_APPROVAL_HISTORY_ID desc  ";
+//		String query = " SELECT v.VENDOR_APPROVAL_HISTORY_ID, v.VENDOR_APPROVAL_ID,v.NOTE,v.LAST_UPDATE_DATE,v.VENDOR_ID,v.EMPLOYEE_ID,  \r\n" + 
+//				"      v.REMARK,cmvs.value_name as status, " + 
+//				"  (CASE WHEN v.user_type = 'VENDOR' then ven.VENDOR_NAME " + 
+//				"   ELSE  ( cmv.value_name||' ' || em.first_name || ' '|| em.LAST_NAME||' ' || '(' ||em.EMPLOYEE_NUMBER||')' )  " + 
+//				"   END ) AS approval_Name,  " + 
+//				"  v.USER_TYPE, v.VENDOR_ID " + 
+//				"   FROM lt_vendor_approval_history v,LT_MAST_EMPLOYEES em,LT_MAST_COMN_MASTER_VALUES cmv ,  " + 
+//				" LT_MAST_COMN_MASTER_VALUES cmvs  , LT_MAST_VENDORS ven  ,LT_MAST_COMN_MASTER cm   " + 
+//				" WHERE v.VENDOR_ID = ? " + 
+//				"    AND ven.VENDOR_ID(+) = v.VENDOR_ID      " + 
+//				" and em.employee_id(+) = v.employee_id   " + 
+//				" and em.title = cmv.value_code(+)  " + 
+//				" and  v.status = cmvs.value_code(+) AND cmvs.master_Id(+) = cm.MASTER_ID AND cm.MASTER_NAME = 'VENDOR_STATUS'  " + 
+//				" order by v.VENDOR_APPROVAL_HISTORY_ID desc  ";
+		
+		String query = "SELECT v.VENDOR_APPROVAL_HISTORY_ID, v.VENDOR_APPROVAL_ID, v.NOTE, v.LAST_UPDATE_DATE, v.VENDOR_ID, v.EMPLOYEE_ID, " + 
+	               "v.REMARK, cmvs.value_name AS status, " + 
+	               "(CASE WHEN v.user_type = 'VENDOR' THEN ven.VENDOR_NAME " + 
+	               "ELSE CONCAT(em.first_name, ' ', em.LAST_NAME, ' (', em.EMPLOYEE_NUMBER, ')') " + 
+	               "END) AS approval_Name, " + 
+	               "v.USER_TYPE, v.VENDOR_ID " + 
+	               "FROM lt_vendor_approval_history v " + 
+	               "LEFT JOIN LT_MAST_EMPLOYEES em ON em.employee_id = v.employee_id " + 
+	               "LEFT JOIN LT_MAST_COMN_MASTER_VALUES cmvs ON v.status = cmvs.value_code " + 
+	               "and cmvs.MASTER_ID  = (select MASTER_ID from lt_mast_comn_master lmcm where MASTER_NAME = 'VENDOR_STATUS')" +
+	               "LEFT JOIN LT_MAST_VENDORS ven ON ven.VENDOR_ID = v.VENDOR_ID " + 
+	               "WHERE v.VENDOR_ID = ? " + 
+	               "ORDER BY v.VENDOR_APPROVAL_HISTORY_ID DESC;";
 		
 		List<LtVendorApprovalHistory> list=   jdbcTemplate.query(query, new Object[]{ vendorId }, 
 				 new BeanPropertyRowMapper<LtVendorApprovalHistory>(LtVendorApprovalHistory.class)); 

@@ -36,13 +36,14 @@ import javax.validation.constraints.NotNull;
 		@NamedQuery(name = "LtP2pDivisionEmployeeGrade.findByLastUpdateLogin", query = "SELECT l FROM LtP2pDivisionEmployeeGrade l WHERE l.lastUpdateLogin = :lastUpdateLogin"),
 		@NamedQuery(name = "LtP2pDivisionEmployeeGrade.findByLastUpdatedBy", query = "SELECT l FROM LtP2pDivisionEmployeeGrade l WHERE l.lastUpdatedBy = :lastUpdatedBy"),
 		@NamedQuery(name = "LtP2pDivisionEmployeeGrade.findByLastUpdateDate", query = "SELECT l FROM LtP2pDivisionEmployeeGrade l WHERE l.lastUpdateDate = :lastUpdateDate") })*/
-public class LtMastDivisionEmployeeGrade extends BaseClass implements Serializable {
+public class LtMastDivisionEmployeeGrade extends WhoColumns implements Serializable {
 
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "divisionGrade_seq")
-	@SequenceGenerator(name = "divisionGrade_seq", sequenceName = "LT_MAST_DIV_EMPLOYEE_GRADE_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "divisionGrade_seq")
+//	@SequenceGenerator(name = "divisionGrade_seq", sequenceName = "LT_MAST_DIV_EMPLOYEE_GRADE_S", allocationSize = 1)
 	@Column(name = "DIV_EMPLOYEE_GRADE_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long divEmployeeGradeId;
 	@Basic(optional = false)
 	@NotNull

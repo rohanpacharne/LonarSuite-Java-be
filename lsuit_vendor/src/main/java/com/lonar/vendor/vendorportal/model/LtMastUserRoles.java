@@ -36,9 +36,10 @@ public class LtMastUserRoles implements Serializable {
 	@Basic(optional = false)
 	//@NotNull
 	//@GeneratedValue(strategy = GenerationType.AUTO)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userRole_seq")
-	@SequenceGenerator(name = "userRole_seq", sequenceName = "LT_MAST_USER_ROLES_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userRole_seq")
+//	@SequenceGenerator(name = "userRole_seq", sequenceName = "LT_MAST_USER_ROLES_S", allocationSize = 1)
 	@Column(name = "USER_ROLE_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long userRoleId;
 	
 	@Column(name = "USER_ID")

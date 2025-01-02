@@ -18,5 +18,8 @@ public interface LtMastSysVariablesService
 	public Long getCount(LtMastSysVariables input) throws Exception;
 
 	public List<LtMastSysVariables> getDatatableRecords(LtMastSysVariables input) throws Exception;
+	
+	public SysVariableWithValues getBySysVariableName1(String name,Long companyId) throws Exception;
+
 
 }

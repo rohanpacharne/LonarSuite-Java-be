@@ -21,8 +21,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class LtInvoiceAttachment implements Serializable {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoiceAttachment_seq")
-	@SequenceGenerator(name = "invoiceAttachment_seq", sequenceName = "LT_INVOICE_ATTACHMENT_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "invoiceAttachment_seq")
+//	@SequenceGenerator(name = "invoiceAttachment_seq", sequenceName = "LT_INVOICE_ATTACHMENT_S", allocationSize = 1)
 	@Column(name = "INVOICE_ATTACHMENT_ID")
 	private Long invoiceAttachmentId;
 

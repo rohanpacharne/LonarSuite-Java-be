@@ -70,7 +70,7 @@ public class LtMastModulesRestController implements CodeMaster {
 			}
 		} catch (Exception e) {
 			
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<List<LtMastModules>>(ltMastModules, HttpStatus.OK);
 	}
@@ -85,7 +85,7 @@ public class LtMastModulesRestController implements CodeMaster {
 				return new ResponseEntity<List<LtMastModules>>(ltMastModules, HttpStatus.OK);
 			}
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<List<LtMastModules>>(ltMastModules, HttpStatus.OK);
 	}
@@ -100,7 +100,7 @@ public class LtMastModulesRestController implements CodeMaster {
 				return new ResponseEntity<List<LtMastModules>>(ltMastModules, HttpStatus.OK);
 			}
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<List<LtMastModules>>(ltMastModules, HttpStatus.OK);
 	}
@@ -117,7 +117,7 @@ public class LtMastModulesRestController implements CodeMaster {
 				return new ResponseEntity<List<LtMastModules>>(ltMastModules, HttpStatus.OK);
 			}
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 	
 		return new ResponseEntity<List<LtMastModules>>(ltMastModules, HttpStatus.OK);
@@ -130,7 +130,7 @@ public class LtMastModulesRestController implements CodeMaster {
 			try {
 			 ltMastModules =  ltMastModulesService.getLikeModuleNameAndUser(userId,moduleName);
 			}catch(Exception e)	{
-				throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+				throw new BusinessException(0, null, e);
 			}
 			return new ResponseEntity<List<LtMastModules>>(ltMastModules, HttpStatus.OK);
 		}
@@ -145,10 +145,10 @@ public class LtMastModulesRestController implements CodeMaster {
 		
 		} catch (NumberFormatException e) {
 			
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		} catch (Exception e) {
 			
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 	
 	}
@@ -159,7 +159,7 @@ public class LtMastModulesRestController implements CodeMaster {
 		try {
 			status = ltMastModulesService.save(ltMastModules);
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
@@ -170,7 +170,7 @@ public class LtMastModulesRestController implements CodeMaster {
 		try {
 				status = ltMastModulesService.update(ltMastModules);
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
@@ -183,51 +183,64 @@ public class LtMastModulesRestController implements CodeMaster {
 		try {
 			if (ltMastModulesRepository.exists(Long.parseLong(id))) {
 				List<LtMastRoleModules> list = ltMastRoleModulesService.getByModuleId(Long.parseLong(id));
-			
+//			System.out.println("list = "+list);
+//			System.out.println("list size is " +list.size());
 				if(list.size()<1)
 				{
 					ltMastModulesRepository.delete(Long.parseLong(id));
 					if(! ltMastModulesRepository.exists(Long.parseLong(id))){
-					status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//					status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
 					if( status.getMessage()==null)
 					{
-						status.setCode(SUCCESS);
+						status.setCode(1);
 						status.setMessage("Error in finding message! The action is completed successfully.");
 					}
 					}else {
-						 status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//						 status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
 							if( status.getMessage()==null)
 							{
-								status.setCode(FAIL);
+								status.setCode(0);
 								status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 							}
 					}
 				}
 				else {
-					 status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//					 status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+					 	status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
 						if( status.getMessage()==null)
 						{
-							status.setCode(FAIL);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 						}
 				}
 			} else {
-
 				return new ResponseEntity<Status>(
-						new Status(NO_RESULT,
-								messageSource.getMessage("noresult", null, "Default", Locale.getDefault())),
+						new Status(0,
+								ltMastCommonMessageService.getMessageNameByCode("NO_RESULT").getMessageName()),
 						HttpStatus.OK);
 
 			}
 
 		} catch (org.springframework.dao.DataIntegrityViolationException e) {
-			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//			status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+			status.setCode(0);
+			try {
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			e.printStackTrace();
 			logger.error("ERROR "+ e );
 		} catch (NumberFormatException e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		
 		return new ResponseEntity<Status>(status,HttpStatus.OK);

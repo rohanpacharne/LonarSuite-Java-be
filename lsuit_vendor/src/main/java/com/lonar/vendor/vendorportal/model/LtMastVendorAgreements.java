@@ -20,13 +20,14 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @Entity
 @Table(name = "LT_MAST_VENDOR_AGREEMENTS")
 @JsonInclude(Include.NON_NULL)
-public class LtMastVendorAgreements extends BaseClass
+public class LtMastVendorAgreements extends WhoColumns
 {
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendorAgreement_seq")
-	@SequenceGenerator(name = "vendorAgreement_seq", sequenceName = "lt_mast_vendor_agreements_s", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendorAgreement_seq")
+//	@SequenceGenerator(name = "vendorAgreement_seq", sequenceName = "lt_mast_vendor_agreements_s", allocationSize = 1)
 	@Column(name = "AGREEMENT_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long agreementId;
 	
 	

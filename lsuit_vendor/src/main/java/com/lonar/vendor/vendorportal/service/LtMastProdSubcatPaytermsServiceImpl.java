@@ -33,7 +33,15 @@ public class LtMastProdSubcatPaytermsServiceImpl implements LtMastProdSubcatPayt
 		Status status = new Status();
 		if(prodSubcatPayterms.getSubCategoryId()==null || prodSubcatPayterms.getStartDate()==null 
 				|| prodSubcatPayterms.getLastUpdateLogin() == null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			return new ResponseEntity<Status>(status,HttpStatus.OK);
 		}
 			/*if (bindingResult.hasErrors()) {
@@ -53,13 +61,27 @@ public class LtMastProdSubcatPaytermsServiceImpl implements LtMastProdSubcatPayt
 			prodSubcatPayterms.setCreationDate(new Date());
 			prodSubcatPayterms = ltP2pProdSubcatPaytermsRepository.save(prodSubcatPayterms);
 			if(prodSubcatPayterms.getPayTermId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if( status.getMessage()==null) {
-						status.setCode(SUCCESS);
+						status.setCode(1);
 						status.setMessage("Error in finding message! The action is completed successfully.");
 					}
 			}else {
-					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 					return new ResponseEntity<Status>(status,HttpStatus.OK);
 			}
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -70,7 +92,14 @@ public class LtMastProdSubcatPaytermsServiceImpl implements LtMastProdSubcatPayt
 		Status status = new Status();
 		if(prodSubcatPayterms.getSubCategoryId()==null || prodSubcatPayterms.getStartDate()==null 
 				|| prodSubcatPayterms.getLastUpdateLogin() == null || prodSubcatPayterms.getPayTermId() == null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return new ResponseEntity<Status>(status,HttpStatus.OK);
 		}
 			/*if (bindingResult.hasErrors()) {
@@ -88,13 +117,27 @@ public class LtMastProdSubcatPaytermsServiceImpl implements LtMastProdSubcatPayt
 			
 			prodSubcatPayterms = ltP2pProdSubcatPaytermsRepository.save(prodSubcatPayterms);
 			if(prodSubcatPayterms.getPayTermId()!=null) {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+				try {
+					status.setCode(1);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				if( status.getMessage()==null) {
-						status.setCode(SUCCESS);
+						status.setCode(1);
 						status.setMessage("Error in finding message! The action is completed successfully.");
 					}
 			}else {
-					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//					status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 					return new ResponseEntity<Status>(status,HttpStatus.OK);
 			}
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -135,13 +178,27 @@ public class LtMastProdSubcatPaytermsServiceImpl implements LtMastProdSubcatPayt
 		Status status = new Status();
 		 ltP2pProdSubcatPaytermsRepository.delete(id);
 		if(!ltP2pProdSubcatPaytermsRepository.exists(id)) {
-		status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//		status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			if( status.getMessage()==null) {
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 		}else {
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+			try {
+				status.setCode(0);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 				return new ResponseEntity<Status>(status,HttpStatus.OK);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);

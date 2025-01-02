@@ -152,7 +152,7 @@ public class LtMastComnMasterDaoImpl implements LtMastComnMasterDao
 						input.getColumnNo(),input.getColumnNo(),
 						input.getColumnNo(),input.getColumnNo(),
 						input.getColumnNo(),input.getColumnNo(),
-						input.getLength() +input.getStart(),input.getStart()+1
+						input.getStart()+1,input.getLength() +input.getStart()
 						},
 			 new  BeanPropertyRowMapper<LtMastComnMaster>(LtMastComnMaster.class));
 	}

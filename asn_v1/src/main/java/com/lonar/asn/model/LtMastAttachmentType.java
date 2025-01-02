@@ -11,12 +11,13 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "LT_MAST_ATTACHMENT_TYPE")
-public class LtMastAttachmentType extends BaseClass{
+public class LtMastAttachmentType extends WhoColumns{
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "attachment_seq")
-	@SequenceGenerator(name = "attachment_seq", sequenceName = "LT_MAST_ATTACHMENT_TYPE_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "attachment_seq")
+//	@SequenceGenerator(name = "attachment_seq", sequenceName = "LT_MAST_ATTACHMENT_TYPE_S", allocationSize = 1)
 	@Column(name = "ATTACHMENT_TYPE_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long attachmentTypeId;
 	
 	@Column(name = "MODULE_CODE")

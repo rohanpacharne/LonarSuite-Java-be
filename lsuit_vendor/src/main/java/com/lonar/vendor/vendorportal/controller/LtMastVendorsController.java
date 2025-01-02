@@ -311,7 +311,15 @@ public class LtMastVendorsController implements CodeMaster
 			{
 				logger.error("ERROR "+ e );
 				e.printStackTrace();
-				status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//				status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+				try {
+					status.setCode(0);
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				return new ResponseEntity<Status>(status,HttpStatus.OK);
 			} 
 			catch(Exception e)
@@ -329,14 +337,22 @@ public class LtMastVendorsController implements CodeMaster
 		//LtMastVendors vendor = ltMastVendorsService.getByEMailId(ltMastVendors.getRegistrationEmail(),ltMastVendors.getCompanyId());
 		LtMastVendors vendor = ltMastVendorsService.getByRegistrationMailId(ltMastVendors.getRegistrationEmail(),ltMastVendors.getCompanyId());
 		if(vendor!=null) {
-			status.setCode(INSERT_FAIL);
+			status.setCode(0);
 			status.setMessage("Vendor Registration email address already exists.");
 		}
 		else {
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		}
@@ -353,7 +369,7 @@ public class LtMastVendorsController implements CodeMaster
 		}catch(Exception e) {
 			e.printStackTrace();
 			
-			status.setCode(INTERNAL_SERVER_ERROR);
+			status.setCode(0);
 			status.setMessage("Vendor Email Id already exists!");
 			e.printStackTrace();
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
@@ -415,7 +431,7 @@ public class LtMastVendorsController implements CodeMaster
 			String stat =checkforApprovals(vendorId);
 			if(stat.equals("null"))
 			{
-				status.setCode(FAIL);
+				status.setCode(0);
 				status.setMessage("No approvers found for employee's division.");
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 			}else {
@@ -427,7 +443,7 @@ public class LtMastVendorsController implements CodeMaster
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}

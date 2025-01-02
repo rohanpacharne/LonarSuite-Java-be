@@ -78,8 +78,8 @@ public class LtMastUsersServiceImpl implements LtMastUsersService,CodeMaster {
 
 
 	@Override
-	public List<LtMastUsers> findByActiveLikeUserName(String userName) throws Exception {
-		return ltMastUsersDao.findByActiveLikeUserName(userName);
+	public List<LtMastUsers> findByActiveLikeUserName(String userName,long companyId) throws Exception {
+		return ltMastUsersDao.findByActiveLikeUserName(userName,companyId);
 	}
 
 	@Override
@@ -133,17 +133,17 @@ public class LtMastUsersServiceImpl implements LtMastUsersService,CodeMaster {
 	public Status saveUser(LtMastUsers user) {
 		Status status = new Status();
 		try {
-			List<LtMastUsers> list =ltMastUsersDao.findActiveLikeEmail(user.getEmail());
+			List<LtMastUsers> list =ltMastUsersDao.findActiveLikeEmail(user.getEmail(),user.getCompanyId());
 			if(!list.isEmpty()) {
 				status.setMessage("User for email address already exists.");
-				status.setCode(FAIL);
+				status.setCode(0);
 				 return status;
 			}
 			
-		   list =ltMastUsersDao.findByActiveLikeUserName(user.getUserName());
+		   list =ltMastUsersDao.findByActiveLikeUserName(user.getUserName(),user.getCompanyId());
 			if(!list.isEmpty()) {
 				status.setMessage("Username already exists.");
-				status.setCode(FAIL);
+				status.setCode(0);
 				 return status;
 			}
 			
@@ -173,21 +173,25 @@ public class LtMastUsersServiceImpl implements LtMastUsersService,CodeMaster {
 					catch(Exception e)
 					{
 						e.printStackTrace();
-						throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+						throw new BusinessException(0, null, e);
 					}
 				   
-			   status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			   status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+					status.setCode(1);		
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 				status.setData(users.getUserId());
 			   }else {
-				   status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//				   status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				   status.setCode(0);		
+				   status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
 					if( status.getMessage()==null)
 					{
-						status.setCode(FAIL);
+						status.setCode(0);
 						status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 					}
 			   }
@@ -252,17 +256,32 @@ public class LtMastUsersServiceImpl implements LtMastUsersService,CodeMaster {
 		// }
 		// }
 		if(user.getUserId()!=null) {					
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+			try {
+				status.setCode(1);
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 				status.setData(user.getUserId());
 		}else {
-					 status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//					 status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+							
+					try {
+						status.setCode(0);
+						status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					if( status.getMessage()==null){
-							status.setCode(FAIL);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 					}
 		}
@@ -298,7 +317,9 @@ public class LtMastUsersServiceImpl implements LtMastUsersService,CodeMaster {
 						|| ltMastUserRolesDao.findByUserId(id)!=null) {
 					
 			
-					status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+//					status=ltMastCommonMessageService.getCodeAndMessage(ENTITY_CANNOT_DELETE);
+					status.setCode(0);		
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("ENTITY_CANNOT_DELETE").getMessageName());
 					return status;
 					
 				}
@@ -308,13 +329,21 @@ public class LtMastUsersServiceImpl implements LtMastUsersService,CodeMaster {
 		}  catch (Exception e) {
 			e.printStackTrace();
 			
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 
-		status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//		status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+				
+		try {
+			status.setCode(1);
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if(status.getMessage()==null)
 		{
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			status.setMessage("Error in finding message! The action is completed successfully.");
 		}
 		return status;

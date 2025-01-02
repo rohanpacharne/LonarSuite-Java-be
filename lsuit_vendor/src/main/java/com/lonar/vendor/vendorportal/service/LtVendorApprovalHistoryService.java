@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 
 import com.lonar.vendor.vendorportal.model.LtInvoiceApprovalHistory;
+import com.lonar.vendor.vendorportal.model.LtRentalAgrApprovalHistory;
 import com.lonar.vendor.vendorportal.model.LtVendorApprovalHistory;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.model.Status;
@@ -22,6 +23,9 @@ public interface LtVendorApprovalHistoryService
 	void saveInvoiceApprovalHistory(LtInvoiceApprovalHistory ltInvoiceApprovalHistory) throws ServiceException;
 	
 	List<LtInvoiceApprovalHistory> getInvoiceApprovalHistoryByInvoiceId(Long invoiceHeaderId) throws ServiceException;
+	
+	void saveAgreementApprovalHistory(LtRentalAgrApprovalHistory ltRentalAgrApprovalHistory) throws ServiceException;
+
 
 }
 

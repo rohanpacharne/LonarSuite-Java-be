@@ -100,10 +100,11 @@ public class LtMastComnMasterValues implements Serializable {
 	private Date lastUpdateDate;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comnMasterValues_seq")
-	@SequenceGenerator(name = "comnMasterValues_seq", sequenceName = "lt_mast_comn_master_values_s", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comnMasterValues_seq")
+//	@SequenceGenerator(name = "comnMasterValues_seq", sequenceName = "lt_mast_comn_master_values_s", allocationSize = 1)
 	@Basic(optional = false)
 	@Column(name = "COMN_MASTER_VALUES_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long comnMasterValuesId;
 
 	@Transient

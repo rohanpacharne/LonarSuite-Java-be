@@ -25,10 +25,11 @@ public class LtVendorApproval {
 	
 	@Id
 	@Basic(optional = false)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendorApproval_seq")
-	@SequenceGenerator(name = "vendorApproval_seq", sequenceName = "LT_VENDOR_APPROVAL_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "vendorApproval_seq")
+//	@SequenceGenerator(name = "vendorApproval_seq", sequenceName = "LT_VENDOR_APPROVAL_S", allocationSize = 1)
 	@JsonView(DataTablesOutput.View.class)
 	@Column(name = "VENDOR_APPROVAL_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long vendorApprovalId;
 	
 	@JsonView(DataTablesOutput.View.class)

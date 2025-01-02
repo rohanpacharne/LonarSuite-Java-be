@@ -20,9 +20,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class LtMastAsnAttachment {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "asnAttachment_seq")
-	@SequenceGenerator(name = "asnAttachment_seq", sequenceName = "LT_MAST_ASN_ATTACHMENT_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "asnAttachment_seq")
+//	@SequenceGenerator(name = "asnAttachment_seq", sequenceName = "LT_MAST_ASN_ATTACHMENT_S", allocationSize = 1)
 	@Column(name = "ASN_ATTACHMENT_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long asnAttachmentId;
 
 	@Column(name = "ASN_HEADER_ID")

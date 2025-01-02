@@ -49,10 +49,12 @@ public class LtModuleApprovalsServiceImpl implements LtModuleApprovalsService
 			if(ltModuleApprovals.getLastUpdateLogin()==null || ltModuleApprovals.getStartDate()==null  
 					|| ltModuleApprovals.getStatus()==null )
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+				status.setCode(0);		
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
 				if(status.getMessage()==null)
 				{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 						
@@ -68,28 +70,32 @@ public class LtModuleApprovalsServiceImpl implements LtModuleApprovalsService
 			{
 			Long moduleApprovalId=ltExpModuleApprovalsDao.save(ltModuleApprovals);
 			if(moduleApprovalId!=null) {
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+				status.setCode(1);		
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 				status.setData(moduleApprovalId);
 				
 			}	else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+				status.setCode(0);		
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
-					status.setMessage("Error in finding message! The action is completed successfully.");
+					status.setCode(0);
+					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				}
 				return status;
 			}
 		}
 		else
 		{
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Record for same division and level already exists.");
 		}
 		return status;
@@ -114,21 +120,25 @@ public class LtModuleApprovalsServiceImpl implements LtModuleApprovalsService
 				if( ltExpModuleApprovalsDao.delete(moduleApprovalId))
 				{
 					
-					status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//					status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+					status.setCode(1);		
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
 							
 					if( status.getMessage()==null)
 					{
-						status.setCode(SUCCESS);
-						status.setMessage("The action was completed successfully.");
+						status.setCode(1);
+						status.setMessage("Error in finding message! The action is completed successfully.");
 					}
 				}
 				else
 				{
 					
-					status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//					status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+					status.setCode(0);		
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
 					if( status.getMessage()==null)
 					{
-						status.setCode(SUCCESS);
+						status.setCode(0);
 						status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 					}
 					return status;
@@ -138,10 +148,12 @@ public class LtModuleApprovalsServiceImpl implements LtModuleApprovalsService
 			else
 			{
 				
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+				status.setCode(0);		
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(0);
 					status.setMessage("The Approval Employee has some pending expenses for approval.");
 				}
 				return status;
@@ -153,20 +165,24 @@ public class LtModuleApprovalsServiceImpl implements LtModuleApprovalsService
 			
 			if( ltExpModuleApprovalsDao.delete(moduleApprovalId))
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+				status.setCode(1);		
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
-					status.setMessage("The action was completed successfully.");
+					status.setCode(1);
+					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 			}
 			else
 			{
 				
-				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+				status.setCode(0);		
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				}
 				return status;
@@ -228,10 +244,12 @@ public class LtModuleApprovalsServiceImpl implements LtModuleApprovalsService
 			if(ltModuleApprovals.getLastUpdateLogin()==null || ltModuleApprovals.getStartDate()==null  
 					|| ltModuleApprovals.getStatus()==null || ltModuleApprovals.getModuleApprovalId()==null)
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+				status.setCode(0);		
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
 				if(status.getMessage()==null)
 				{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action was unsuccessful");
 				}
 						
@@ -245,10 +263,12 @@ public class LtModuleApprovalsServiceImpl implements LtModuleApprovalsService
 			{
 			if(ltExpModuleApprovalsDao.update(ltModuleApprovals))
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+				status.setCode(1);		
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Error in finding message! The action is completed successfully.");
 				}
 				
@@ -256,10 +276,12 @@ public class LtModuleApprovalsServiceImpl implements LtModuleApprovalsService
 			}
 			else
 			{
-				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//				status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+				status.setCode(0);		
+				status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
 				if( status.getMessage()==null)
 				{
-					status.setCode(SUCCESS);
+					status.setCode(0);
 					status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 				}
 				return status;
@@ -267,7 +289,7 @@ public class LtModuleApprovalsServiceImpl implements LtModuleApprovalsService
 		}
 		else
 		{
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Record for same division and level is already exists.");
 		}
 		
@@ -337,20 +359,24 @@ public class LtModuleApprovalsServiceImpl implements LtModuleApprovalsService
 		Status status=new Status();
 		if( ltExpenseModuleAppEmployeesDao.deleteEmployee(moduleAppEmployeesId,moduleId))
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_SUCCESSFULLY);
+			status.setCode(1);		
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_SUCCESSFULLY").getMessageName());
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 			return status;
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(DELETE_FAIL);
+			status.setCode(0);		
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("DELETE_FAIL").getMessageName());
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 		}
@@ -377,10 +403,12 @@ public class LtModuleApprovalsServiceImpl implements LtModuleApprovalsService
 		if(ltMastModuleAppEmployees.getLastUpdateLogin()==null || ltMastModuleAppEmployees.getStartDate()==null  
 							||  ltMastModuleAppEmployees.getCreationDate()==null)
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+			status.setCode(0);		
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
 						if(status.getMessage()==null)
 						{
-							status.setCode(EXCEPTION);
+							status.setCode(0);
 							status.setMessage("Error in finding message! The action was unsuccessful");
 						}
 		}
@@ -391,25 +419,29 @@ public class LtModuleApprovalsServiceImpl implements LtModuleApprovalsService
 				
 		if(ltExpenseModuleAppEmployeesDao.save(ltMastModuleAppEmployees))
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_SUCCESSFULLY);
+			status.setCode(1);		
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INSERT_FAIL);
+			status.setCode(0);		
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
 			if( status.getMessage()==null)
 			{
-				status.setCode(FAIL);
-				status.setMessage("Error in finding message! The action is completed successfully.");
+				status.setCode(0);
+				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 			return status;
 		}
 		}else {
-			status.setCode(FAIL);
+			status.setCode(0);
 			status.setMessage("Employee already exists for level.");
 		}
 		return status;
@@ -423,30 +455,36 @@ public class LtModuleApprovalsServiceImpl implements LtModuleApprovalsService
 		if(ltMastModuleAppEmployees.getLastUpdateLogin()==null && ltMastModuleAppEmployees.getStartDate()==null  
 						&&  ltMastModuleAppEmployees.getLastUpdateDate()==null &&  ltMastModuleAppEmployees.getModuleApprovalId()==null)
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(INPUT_IS_EMPTY);
+			status.setCode(0);		
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
 			if(status.getMessage()==null)
 			{
-				status.setCode(EXCEPTION);
+				status.setCode(0);
 				status.setMessage("Error in finding message! The action was unsuccessful");
 			}
 		}
 		
 		if(ltExpenseModuleAppEmployeesDao.update(ltMastModuleAppEmployees))
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_SUCCESSFULLY);
+			status.setCode(1);		
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
+				status.setCode(1);
 				status.setMessage("Error in finding message! The action is completed successfully.");
 			}
 		}
 		else
 		{
-			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+//			status=ltMastCommonMessageService.getCodeAndMessage(UPDATE_FAIL);
+			status.setCode(0);		
+			status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_FAIL").getMessageName());
 			if( status.getMessage()==null)
 			{
-				status.setCode(SUCCESS);
-				status.setMessage("Error in finding message! The action is completed successfully.");
+				status.setCode(0);
+				status.setMessage("Error in finding message! The action is completed unsuccessfully.");
 			}
 			return status;
 		}

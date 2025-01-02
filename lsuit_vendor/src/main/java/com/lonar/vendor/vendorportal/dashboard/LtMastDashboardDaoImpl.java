@@ -50,16 +50,16 @@ public class LtMastDashboardDaoImpl implements LtMastDashboardDao {
 
 	@Override
 	public List<LtMastDashboardModel> getDashboardMonthlySummaryByBuyer(Long comapnyId) throws SerialException {
-		String query = env.getProperty("dashboardMonthSummaryByBuyer");
+		String query = env.getProperty("dashboardMonthSummaryByBuyer1");
 		List<LtMastDashboardModel> list = jdbcTemplate.query(query, new Object[] { comapnyId },
 				new BeanPropertyRowMapper<LtMastDashboardModel>(LtMastDashboardModel.class));
-
+		System.out.println("list is = "+list);
 		return list;
 	}
 
 	@Override
 	public List<LtMastDashboardModel> getDashboardMonthlySummaryByVender(Long comapnyId) throws SerialException {
-		String query = env.getProperty("dashboardMonthSummaryByVendor");
+		String query = env.getProperty("dashboardMonthSummaryByVendor_23_09_24");
 		List<LtMastDashboardModel> list = jdbcTemplate.query(query, new Object[] { comapnyId },
 				new BeanPropertyRowMapper<LtMastDashboardModel>(LtMastDashboardModel.class));
 
@@ -77,7 +77,7 @@ public class LtMastDashboardDaoImpl implements LtMastDashboardDao {
 
 	@Override
 	public List<LtMastDashboardModel> getPurachaseOrderYearBuyer(Long comapnyId) throws SerialException {
-		String query = env.getProperty("dasboardPOMonthByBuyer");
+		String query = env.getProperty("dasboardPOMonthByBuyer1");
 		List<LtMastDashboardModel> list = jdbcTemplate.query(query, new Object[] { comapnyId },
 				new BeanPropertyRowMapper<LtMastDashboardModel>(LtMastDashboardModel.class));
 
@@ -103,17 +103,17 @@ public class LtMastDashboardDaoImpl implements LtMastDashboardDao {
 	}
 
 	@Override
-	public List<LtMastDashboardModel> getTotalIncome(Long comapnyId) throws SerialException {
-		String query = env.getProperty("dashboardTotalIncome");
-		List<LtMastDashboardModel> list = jdbcTemplate.query(query, new Object[] { comapnyId },
+	public List<LtMastDashboardModel> getTotalIncome(Long comapnyId,Long vendorId) throws SerialException {
+		String query = env.getProperty("dashboardTotalIncome1");
+		List<LtMastDashboardModel> list = jdbcTemplate.query(query, new Object[] { comapnyId,vendorId},
 				new BeanPropertyRowMapper<LtMastDashboardModel>(LtMastDashboardModel.class));
 		return list;
 	}
 
 	@Override
-	public List<LtMastDashboardModel> getTotalExpense(Long comapnyId) throws SerialException {
+	public List<LtMastDashboardModel> getTotalExpense(Long comapnyId,Long vendorId) throws SerialException {
 		String query = env.getProperty("dashboardTotalExpenses");
-		List<LtMastDashboardModel> list = jdbcTemplate.query(query, new Object[] { comapnyId },
+		List<LtMastDashboardModel> list = jdbcTemplate.query(query, new Object[] { comapnyId,vendorId },
 				new BeanPropertyRowMapper<LtMastDashboardModel>(LtMastDashboardModel.class));
 		return list;
 	}

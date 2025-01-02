@@ -5,9 +5,11 @@ import java.util.List;
 import com.lonar.UserManagement.common.BusinessException;
 import com.lonar.UserManagement.web.model.LtMastAuditRecords;
 import com.lonar.UserManagement.web.model.LtMastRoles;
+import com.lonar.UserManagement.web.model.LtMastSysVariables;
 import com.lonar.UserManagement.web.model.LtMastUserRoles;
 import com.lonar.UserManagement.web.model.LtMastUsers;
 import com.lonar.UserManagement.web.model.Menu;
+import com.lonar.UserManagement.web.model.SysVariableWithValues;
 
 public interface LtMastUsersDao {
 
@@ -23,7 +25,8 @@ public interface LtMastUsersDao {
 	
 	Long getLtMastUsersCount(LtMastUsers input, Long companyId);
 	List<LtMastUsers> getLtMastUsersDatatableRecords(LtMastUsers input, Long companyId);
-	List<LtMastUsers> findByActiveLikeUserName(String userName);
+	List<LtMastUsers> findByActiveLikeUserName(String userName,long companyId);
+	List<LtMastUsers> findByActiveLikeUserName1(String userName);
 	LtMastUsers getLtMastUsersByID(Long id);
 	List<LtMastRoles> getActiveRoles();
 	List<LtMastUsers> findByAdId(String userName);
@@ -37,7 +40,7 @@ public interface LtMastUsersDao {
 
 	List<LtMastUsers> findVendorByUserName(String upperCase);
 
-	List<LtMastUsers> findActiveLikeEmail(String email) throws Exception;
+	List<LtMastUsers> findActiveLikeEmail(String email,long companyId) throws Exception;
 
 	LtMastUsers getForAuditByID(Long userId) throws BusinessException;
 
@@ -52,4 +55,7 @@ public interface LtMastUsersDao {
 	Long getLtMastUsersUtilityCount(LtMastUsers input) throws BusinessException;
 
 	List<LtMastUsers> getLtMastUsersUtilityDataTable(LtMastUsers input) throws BusinessException;
+	
+	String paginationEntries(String sysVar,Long userId,Long companyId);
+	
 }

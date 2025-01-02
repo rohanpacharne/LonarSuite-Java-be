@@ -74,7 +74,7 @@ public class LtVendorExcelReportsServiceImpl implements LtVendorExcelReportsServ
 			Thread t1 =new Thread(vendorSummaryThread);  
 			t1.start(); 
 			status.setMessage("Report exctracting! Request ID is "+requestId);
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			return status;
 			
 		}else if(reportParameters.getReportName().equals("VENDOR_ADDRESS")) {
@@ -87,7 +87,7 @@ public class LtVendorExcelReportsServiceImpl implements LtVendorExcelReportsServ
 			Thread t1 =new Thread(vendorSummaryThread);  
 			t1.start(); 
 			status.setMessage("Report exctracting! Request ID is "+requestId);
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			return status;
 			
 		}else if(reportParameters.getReportName().equals("VENDOR_BANK")) {
@@ -100,7 +100,7 @@ public class LtVendorExcelReportsServiceImpl implements LtVendorExcelReportsServ
 			Thread t1 =new Thread(vendorSummaryThread);  
 			t1.start(); 
 			status.setMessage("Report exctracting! Request ID is "+requestId);
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			return status;
 		}else if(reportParameters.getReportName().equals("VENDOR_APPROVAL_SUMMARY")) {
 			List<LtVendorApprovalSummary> excelData=new ArrayList<LtVendorApprovalSummary>();
@@ -112,7 +112,7 @@ public class LtVendorExcelReportsServiceImpl implements LtVendorExcelReportsServ
 			Thread t1 =new Thread(vendorSummaryThread);  
 			t1.start(); 
 			status.setMessage("Report exctracting! Request ID is "+requestId);
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			return status;
 		}
 		

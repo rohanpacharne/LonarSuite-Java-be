@@ -17,5 +17,8 @@ public interface LtVendorApprovalService
 	List<LtVendorApproval> getVendorApprovalByVendorId(Long vendorId) throws ServiceException;
 
 	List<LtVendorApproval> getInvoiceApprovalByInvoiceId(Long invoiceId) throws ServiceException;
+	
+	List<LtVendorApproval> getRentalAgreementApprovalByAgreementId(Long agreementId) throws ServiceException;
+
 
 }

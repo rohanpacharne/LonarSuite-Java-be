@@ -25,13 +25,14 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 @Table(name = "LT_MAST_EMPLOYEES")
 @XmlRootElement
 @JsonInclude(Include.NON_NULL)
-public class LtMastEmployees extends BaseClass {
+public class LtMastEmployees extends WhoColumns {
 
 	@Id
 	// @GeneratedValue(strategy = GenerationType.AUTO)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employeeId_seq")
-	@SequenceGenerator(name = "employeeId_seq", sequenceName = "LT_MAST_EMPLOYEES_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employeeId_seq")
+//	@SequenceGenerator(name = "employeeId_seq", sequenceName = "LT_MAST_EMPLOYEES_S", allocationSize = 1)
 	@Column(name = "EMPLOYEE_ID")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long employeeId;
 
 	@Basic(optional = false)
@@ -73,7 +74,7 @@ public class LtMastEmployees extends BaseClass {
 	private String gender;
 
 	@Column(name = "PERSON_TYPE")
-	private Long personType;
+	private String personType;
 
 	@Column(name = "DOB")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -192,6 +193,17 @@ public class LtMastEmployees extends BaseClass {
 	
 	@Transient
 	private String statusValue;
+	
+	@Transient
+	private Long userId;
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 
 	public Long getEmployeeId() {
 		return employeeId;
@@ -273,11 +285,11 @@ public class LtMastEmployees extends BaseClass {
 		this.gender = gender;
 	}
 
-	public Long getPersonType() {
+	public String getPersonType() {
 		return personType;
 	}
 
-	public void setPersonType(Long personType) {
+	public void setPersonType(String personType) {
 		this.personType = personType;
 	}
 
@@ -610,8 +622,10 @@ public class LtMastEmployees extends BaseClass {
 				+ length + ", stDate=" + stDate + ", enDate=" + enDate + ", columnNo=" + columnNo + ", sort=" + sort
 				+ ", titleValue=" + titleValue + ", maritalStatusValue=" + maritalStatusValue + ", genderValue="
 				+ genderValue + ", positionValue=" + positionValue + ", personTypeValue=" + personTypeValue
-				+ ", gradeTypeName=" + gradeTypeName + ", statusValue=" + statusValue + "]";
+				+ ", gradeTypeName=" + gradeTypeName + ", statusValue=" + statusValue + ", userId=" + userId + "]";
 	}
+
+	
 
 	
 	

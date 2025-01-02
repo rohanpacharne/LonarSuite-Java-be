@@ -27,8 +27,8 @@ public class LtMastAdditionalFields implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fieldDefinitionId_seq")
-	@SequenceGenerator(name = "fieldDefinitionId_seq", sequenceName = "LT_MAST_ADDITIONAL_FIELDS_S", allocationSize = 1)
+//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fieldDefinitionId_seq")
+//	@SequenceGenerator(name = "fieldDefinitionId_seq", sequenceName = "LT_MAST_ADDITIONAL_FIELDS_S", allocationSize = 1)
 	@Column(name = "FIELD_DEFINITION_ID")
 	private Long fieldDefinitionId;
 

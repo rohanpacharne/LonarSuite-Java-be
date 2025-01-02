@@ -61,8 +61,8 @@ public class LtMastAuditRecordsDaoImpl implements LtMastAuditRecordsDao{
 	public void save(LtMastAuditRecords ltMastAuditRecords) throws ServiceException {
 		int res=0;
 		res=jdbcTemplate.update(" INSERT INTO  LT_MAST_AUDIT_RECORDS"
-				+ " (AUDIT_RECORD_ID,AUDIT_ID,CREATED_BY,CREATION_DATE,VALUE_NAME,OLD_VALUE,NEW_VALUE,REASON) "
-				+ " VALUES (LT_MAST_AUDIT_REC_S.NEXTVAL,?,?,?,?,?,?,?) ",
+				+ " (AUDIT_ID,CREATED_BY,CREATION_DATE,VALUE_NAME,OLD_VALUE,NEW_VALUE,REASON) "
+				+ " VALUES (?,?,?,?,?,?,?) ",
 				ltMastAuditRecords.getAuditId(),ltMastAuditRecords.getCreatedBy(),new Date(),ltMastAuditRecords.getValueName(),
 				ltMastAuditRecords.getOldValue(),ltMastAuditRecords.getNewValue(),ltMastAuditRecords.getReason());
 	

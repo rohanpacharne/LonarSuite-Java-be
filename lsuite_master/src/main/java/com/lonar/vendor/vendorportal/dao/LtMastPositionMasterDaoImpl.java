@@ -112,7 +112,7 @@ public class LtMastPositionMasterDaoImpl implements LtMastPositionMasterDao {
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							
-							input.getStart()+input.getLength(),input.getStart()+1},
+							input.getStart()+1,input.getStart()+input.getLength()},
 				 new  BeanPropertyRowMapper<LtMastPositionMaster>(LtMastPositionMaster.class));
 				return list;
 	}

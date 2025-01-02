@@ -109,7 +109,7 @@ public class LtMastGradeTypeDaoImpl implements LtMastGradeTypeDao {
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							
-							input.getStart()+input.getLength(),input.getStart()+1},
+							input.getStart()+input.getLength(),input.getStart()},
 				 new  BeanPropertyRowMapper<LtMastGradeType>(LtMastGradeType.class));
 				return list;
 	}

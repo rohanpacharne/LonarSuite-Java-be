@@ -58,7 +58,7 @@ public class LtVendorInboxRestController implements CodeMaster {
 			customeDataTable.setData(expenseApprovalList);
 
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 	}
@@ -98,7 +98,7 @@ public class LtVendorInboxRestController implements CodeMaster {
 			status.setData(responseMessage);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
@@ -113,7 +113,7 @@ public class LtVendorInboxRestController implements CodeMaster {
 					empId);
 			return expenseApprovalList;
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 	}
 
@@ -133,7 +133,7 @@ public class LtVendorInboxRestController implements CodeMaster {
 			customeDataTable.setData(invoiceApprovalList);
 
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 	}

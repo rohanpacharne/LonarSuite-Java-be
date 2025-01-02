@@ -17,6 +17,7 @@ import com.lonar.vendor.vendorportal.model.BusinessException;
 import com.lonar.vendor.vendorportal.model.CodeMaster;
 import com.lonar.vendor.vendorportal.model.CustomeDataTable;
 import com.lonar.vendor.vendorportal.model.LtMastReportRequest;
+import com.lonar.vendor.vendorportal.model.LtMastSysRequests;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.model.Status;
 
@@ -34,18 +35,35 @@ public class LtMastExcelReportsRestController implements CodeMaster{
 		
 	}
 	
+//	@RequestMapping(value = "/dataTable/{companyId}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//	public CustomeDataTable DataTable(@PathVariable("companyId") Long companyId, LtMastReportRequest input,@PathVariable("logTime") String logTime) {
+//		CustomeDataTable customeDataTable = new CustomeDataTable();
+//		try {
+//			Long count = ltMastExcelReportsService.getCount(input,companyId);
+//			customeDataTable.setRecordsTotal(count);
+//			customeDataTable.setRecordsFiltered(count);
+//			List<LtMastReportRequest> ltMastReportRequestList = ltMastExcelReportsService.getReportRequestDataTableRecords(input,companyId);
+//			customeDataTable.setData(ltMastReportRequestList);
+//
+//		} catch (Exception e) {
+//			throw new BusinessException(0, null, e);
+//		}
+//		return customeDataTable;
+//
+//	}
+	
 	@RequestMapping(value = "/dataTable/{companyId}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public CustomeDataTable DataTable(@PathVariable("companyId") Long companyId, LtMastReportRequest input,@PathVariable("logTime") String logTime) {
+	public CustomeDataTable DataTable(@PathVariable("companyId") Long companyId, LtMastSysRequests input,@PathVariable("logTime") String logTime) {
 		CustomeDataTable customeDataTable = new CustomeDataTable();
 		try {
 			Long count = ltMastExcelReportsService.getCount(input,companyId);
 			customeDataTable.setRecordsTotal(count);
 			customeDataTable.setRecordsFiltered(count);
-			List<LtMastReportRequest> ltMastReportRequestList = ltMastExcelReportsService.getReportRequestDataTableRecords(input,companyId);
-			customeDataTable.setData(ltMastReportRequestList);
+			List<LtMastSysRequests> LtMastSysRequestsList = ltMastExcelReportsService.getReportRequestDataTableRecords(input,companyId);
+			customeDataTable.setData(LtMastSysRequestsList);
 
 		} catch (Exception e) {
-			throw new BusinessException(INTERNAL_SERVER_ERROR, null, e);
+			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
 

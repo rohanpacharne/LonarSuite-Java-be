@@ -56,14 +56,14 @@ public class LtMastCommunicationTabServiceImpl implements LtMastCommunicationTab
 			ltMastCommunicationTabDetRepository.save(ltMastCommunicationTabDet);
 			if(ltMastCommunicationTabDet.getMessageId()!=null)
 			{
-					status.setCode(SUCCESS);
+					status.setCode(1);
 					status.setMessage("Message sent successfully.");
 					status.setData(communicationTab.getCommunicationId());
 				
 			}
 			else
 			{
-					status.setCode(EXCEPTION);
+					status.setCode(0);
 					status.setMessage("Message sending failed.");
 				
 			}
@@ -90,10 +90,10 @@ public class LtMastCommunicationTabServiceImpl implements LtMastCommunicationTab
 		Status status = new Status();
 		LtMastCommunicationTab communicationTab = ltMastCommunicationTabDao.getByVendorBuyer(vendorId,companyId);
 		if(communicationTab!=null) {
-			status.setCode(SUCCESS);
+			status.setCode(1);
 			status.setData(communicationTab.getCommunicationId());
 		}else {
-			status.setCode(FAIL);
+			status.setCode(0);
 		}
 		return status;
 	}
