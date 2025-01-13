@@ -45,10 +45,10 @@ public class LtMastSysVariableValuesDaoImpl implements  LtMastSysVariableValuesD
 
 
 	@Override
-	public LtMastSysVariableValues getBySysVariableValuesId(Long id) throws ServiceException {
+	public LtMastSysVariableValues getBySysVariableValuesId(Long id,Long userId) throws ServiceException {
 		String query = env.getProperty("getBySysVariableValuesId");
 		
-		List<LtMastSysVariableValues> list=   jdbcTemplate.query(query, new Object[]{ id }, 
+		List<LtMastSysVariableValues> list=   jdbcTemplate.query(query, new Object[]{ userId,id }, 
 				 new BeanPropertyRowMapper<LtMastSysVariableValues>(LtMastSysVariableValues.class)); 
 		 if(!list.isEmpty())
 		return list.get(0);

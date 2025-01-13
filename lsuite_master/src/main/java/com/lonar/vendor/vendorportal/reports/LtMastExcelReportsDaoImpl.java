@@ -156,7 +156,7 @@ public class LtMastExcelReportsDaoImpl implements LtMastExcelReportsDao{
 	}
 
 	@Override
-	public List<LtMastSysRequests> getReportRequestDataTableRecords(LtMastSysRequests input, Long companyId)
+	public List<LtMastSysRequests> getReportRequestDataTableRecords(LtMastSysRequests input, Long companyId, Long userId)
 			throws ServiceException {
 		// TODO Auto-generated method stub
 		String query = env.getProperty("getLtMastSysRequestsDatatableRecords");
@@ -193,7 +193,7 @@ public class LtMastExcelReportsDaoImpl implements LtMastExcelReportsDao{
 //	   }
 	   
 			List<LtMastSysRequests> list = (List<LtMastSysRequests>) 
-					jdbcTemplate.query(query , new Object[]{companyId,reqId,input.getRequestDate(),
+					jdbcTemplate.query(query , new Object[]{companyId,userId,reqId,input.getRequestDate(),
 							input.getCompletedDate(),status,empName,requestName,
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
@@ -209,7 +209,7 @@ public class LtMastExcelReportsDaoImpl implements LtMastExcelReportsDao{
 	}
 
 	@Override
-	public Long getCount(LtMastSysRequests input, Long companyId) throws ServiceException {
+	public Long getCount(LtMastSysRequests input, Long companyId,Long userId) throws ServiceException {
 		String query = env.getProperty("getCountOfSysRequest");
 		
 		String reqId=null;
@@ -240,8 +240,92 @@ public class LtMastExcelReportsDaoImpl implements LtMastExcelReportsDao{
 	   
 	   
 	   String count  = (String)getJdbcTemplate().queryForObject(
-				query, new Object[] {companyId,reqId,input.getRequestDate(),
+				query, new Object[] {companyId,userId,reqId,input.getRequestDate(),
 						input.getCompletedDate(),status,empName,requestName }, String.class);
+
+			
+			return Long.parseLong(count);
+	}
+
+	@Override
+	public List<LtMastReportRequest> getLtMastReportRequestDataTable(LtMastReportRequest input, Long companyId,Long userId)
+			throws ServiceException {
+		String query = env.getProperty("getLtMastReportRequestDatatable");
+		
+		String reqId=null;
+		if(input.getRequestId()!=null && !input.getRequestIdStr().equals(" ") )
+		{reqId="%"+input.getRequestIdStr()+"%";}
+	   
+	   String requestName=null;
+	   if(input.getRequestName()!=null && !input.getRequestName().equals(" ") && !input.getRequestName().isEmpty())
+	   {requestName="%"+input.getRequestName().toUpperCase()+"%";}
+	   
+	   if(input.getReqDate() == null || input.getReqDate().trim().equals(""))
+		{
+			input.setReqDate(null);
+		}
+	   
+	   if(input.getCompDate() == null || input.getCompDate().trim().equals(""))
+		{
+			input.setCompDate(null);
+		}
+	   
+	   String status=null;
+	   if(input.getStatus()!=null && !input.getStatus().equals(" ") && !input.getStatus().isEmpty()) 
+	   {status="%"+input.getStatus().toUpperCase()+"%";}
+		
+	   if(input.getColumnNo()==0) {
+		   input.setColumnNo(12);
+	   }
+	   
+			List<LtMastReportRequest> list = (List<LtMastReportRequest>) 
+					jdbcTemplate.query(query , new Object[]{companyId,userId,reqId,requestName,input.getReqDate(),input.getCompDate(),
+							status,
+							input.getColumnNo(),input.getColumnNo(),
+							input.getColumnNo(),input.getColumnNo(),
+							input.getColumnNo(),input.getColumnNo(),
+							input.getColumnNo(),input.getColumnNo(),
+							input.getColumnNo(),input.getColumnNo(),
+							input.getStart()+input.getLength(),input.getStart()+1},
+				 new  BeanPropertyRowMapper<LtMastReportRequest>(LtMastReportRequest.class));
+			
+				return list;
+	}
+
+	@Override
+	public Long getCountForLtMastReportRequestDataTable(LtMastReportRequest input, Long companyId,Long userId)
+			throws ServiceException {
+		String query = env.getProperty("getCountForLtMastReportRequestDataTable");
+		
+		String reqId=null;
+		if(input.getRequestId()!=null && !input.getRequestIdStr().equals(" ") )
+		{reqId="%"+input.getRequestIdStr()+"%";}
+	   
+	   String requestName=null;
+	   if(input.getRequestName()!=null && !input.getRequestName().equals(" ") && !input.getRequestName().isEmpty())
+	   {requestName="%"+input.getRequestName().toUpperCase()+"%";}
+	   
+	   if(input.getReqDate() == null || input.getReqDate().trim().equals(""))
+		{
+			input.setReqDate(null);
+		}
+	   
+	   if(input.getCompDate() == null || input.getCompDate().trim().equals(""))
+		{
+			input.setCompDate(null);
+		}
+	   
+	   String status=null;
+	   if(input.getStatus()!=null && !input.getStatus().equals(" ") && !input.getStatus().isEmpty()) 
+	   {status="%"+input.getStatus().toUpperCase()+"%";}
+		
+	   if(input.getColumnNo()==0) {
+		   input.setColumnNo(12);
+	   }
+	   
+	   String count  = (String)getJdbcTemplate().queryForObject(
+				query, new Object[] {companyId,userId,reqId,requestName,input.getRequestDate(),
+						input.getCompletedDate(),status }, String.class);
 
 			
 			return Long.parseLong(count);

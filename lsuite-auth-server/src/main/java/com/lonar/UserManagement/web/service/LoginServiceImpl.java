@@ -196,6 +196,7 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 							entity.setDivisionName(ltP2pUsers1.get(0).getDivisionName());
 							entity.setCompanyId(ltP2pUsers1.get(0).getCompanyId());
 							entity.setCompanyName(ltP2pUsers1.get(0).getCompanyName());
+							entity.setPaginationEntries(ltMastUsersDao.paginationEntries("PEGINATION_ENTRIES", ltP2pUsers.get(0).getUserId(), ltP2pUsers1.get(0).getCompanyId()));
 						}
 
 						List<String> roles = ltMastUserRolesDao.findAllActiveRoleName(ltP2pUsers.get(0).getUserId());

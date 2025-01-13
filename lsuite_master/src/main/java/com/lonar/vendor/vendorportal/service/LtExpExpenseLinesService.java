@@ -12,7 +12,7 @@ public interface LtExpExpenseLinesService extends CodeMaster{
 	
 	public Status updateV1(LtExpExpenseLines ltExpExpenseLine, MultipartFile[] files, int cpmpanyId) throws Exception ;
 	
-	public Long getCount(Long headerId, LtExpExpenseLines input) throws Exception;
+	public Long getCount(Long headerId,Long userId, LtExpExpenseLines input) throws Exception;
 	
 	public List<LtExpExpenseLines> getDatatableByExpenseHeaderId(Long headerId, Long userId, LtExpExpenseLines input) throws Exception;
 	

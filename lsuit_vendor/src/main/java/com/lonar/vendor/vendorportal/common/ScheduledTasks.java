@@ -602,6 +602,8 @@ public class ScheduledTasks implements CodeMaster{
 						
 						//--------------------------chk for delegation here
 						LtRentalAgreementApproval obj = new LtRentalAgreementApproval();
+						System.out.println("agreementApprovalsList for debugging = "+agreementApprovalsList);
+
 						for(LtRentalAgreementApproval agreementApproval : agreementApprovalsList)
 						{
 							if(agreementApproval.getDelegationId()!=null)
@@ -619,9 +621,17 @@ public class ScheduledTasks implements CodeMaster{
 						
 						if(obj!=null && obj.getAgreementHeaderId()!=null)
 						{ agreementApprovals1.add(obj); }
-						
+						System.out.println("agreementApprovals1 for debugging = "+agreementApprovals1);
 						//---------------------SAVE HISTORY-----------------------------
-						saveAgreementApprovalHistoryData(agreementApprovals1, PENDING);
+//						saveAgreementApprovalHistoryData(agreementApprovals1, PENDING);
+						List<LtRentalAgreementApproval> list = new ArrayList<>();
+						for(LtRentalAgreementApproval ltRentalAgreementApproval:agreementApprovals1) {
+							if(!ltRentalAgreementHeaders.getInitiatorId().equals(ltRentalAgreementApproval.getApprovalId())
+								&& currentApprovalLavel != null) {
+								list.add(ltRentalAgreementApproval);
+							}
+						}
+						saveAgreementApprovalHistoryData(list, PENDING);
 //						saveInvoiceEmailTokan(invoiceApprovalsList,"invoiceApprovalNotification",ltInvoiceHeaders); 
 						
 					}
@@ -640,7 +650,7 @@ public class ScheduledTasks implements CodeMaster{
 							approvalHistory.setLastUpdateDate(new Date());
 							approvalHistory.setAgreementHeaderId(ltRentalAgreementHeaders.getAgreementHeaderId());
 							approvalHistory.setEmployeeId(ltRentalAgreementHeaders.getInitiatorId());
-							approvalHistory.setStatus(APPROVED);
+							approvalHistory.setStatus(RA_APPROVED);
 							ltRentalAgreementApprovalService.updateStatusApproval(approvalHistory);	
 						}
 					}

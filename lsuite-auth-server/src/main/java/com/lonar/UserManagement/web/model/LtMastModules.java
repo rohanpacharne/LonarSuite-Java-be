@@ -72,6 +72,9 @@ public class LtMastModules implements Serializable {
 	@Column(name = "COMPANY_ID")
 	private Long companyId;
 	
+	@Column(name = "MODULE_TYPE")
+	private String moduleType;
+	
 	@Transient
 	private Long draw;
 	
@@ -98,6 +101,9 @@ public class LtMastModules implements Serializable {
 	
 	@Transient
 	private String moduleGroupValue;
+	
+	@Transient
+	private String moduleTypeName;
 	
 	public LtMastModules() {
 	}
@@ -241,6 +247,26 @@ public class LtMastModules implements Serializable {
 		this.sequenceNumber = sequenceNumber;
 	}
 
+	public String getModuleType() {
+		return moduleType;
+	}
+
+
+	public void setModuleType(String moduleType) {
+		this.moduleType = moduleType;
+	}
+
+
+	public String getModuleTypeName() {
+		return moduleTypeName;
+	}
+
+
+	public void setModuleTypeName(String moduleTypeName) {
+		this.moduleTypeName = moduleTypeName;
+	}
+
+
 	@Override
 	public int hashCode() {
 		int hash = 0;
@@ -357,10 +383,17 @@ public class LtMastModules implements Serializable {
 				+ ", status=" + status + ", startDate=" + startDate + ", endDate=" + endDate + ", createdBy="
 				+ createdBy + ", creationDate=" + creationDate + ", lastUpdateLogin=" + lastUpdateLogin
 				+ ", lastUpdatedBy=" + lastUpdatedBy + ", sequenceNumber=" + sequenceNumber + ", lastUpdateDate="
-				+ lastUpdateDate + ", companyId=" + companyId + ", draw=" + draw + ", start=" + start + ", length="
-				+ length + ", stDate=" + stDate + ", enDate=" + enDate + ", columnNo=" + columnNo + ", sort=" + sort
-				+ ", statusValue=" + statusValue + ", moduleGroupValue=" + moduleGroupValue + "]";
+				+ lastUpdateDate + ", companyId=" + companyId + ", moduleType=" + moduleType + ", draw=" + draw
+				+ ", start=" + start + ", length=" + length + ", stDate=" + stDate + ", enDate=" + enDate
+				+ ", columnNo=" + columnNo + ", sort=" + sort + ", statusValue=" + statusValue + ", moduleGroupValue="
+				+ moduleGroupValue + ", moduleTypeName=" + moduleTypeName + "]";
 	}
+
+
+	
+
+
+	
 
 
 	

@@ -10,7 +10,7 @@ public interface LtMastSysVariableValuesDao
 
 	public List<LtMastSysVariableValues> getByVariableId(Long parseLong) throws ServiceException;
 
-	public LtMastSysVariableValues getBySysVariableValuesId(Long id) throws ServiceException;
+	public LtMastSysVariableValues getBySysVariableValuesId(Long id,Long userId) throws ServiceException;
 
 	public LtMastSysVariableValues getByUserValue(LtMastSysVariableValues ltMastSysVariableValues) throws ServiceException;
 }

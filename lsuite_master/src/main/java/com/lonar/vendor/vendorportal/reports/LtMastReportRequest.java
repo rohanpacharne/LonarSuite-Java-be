@@ -1,253 +1,191 @@
-/*package com.lonar.vendor.vendorportal.reports;
+package com.lonar.vendor.vendorportal.reports;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
-
-import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
-@Entity
-@JsonInclude(Include.NON_NULL)
-@Table(name = "LT_MAST_REPORT_REQUEST")
-@XmlRootElement
 public class LtMastReportRequest {
 	
-	@JsonView(DataTablesOutput.View.class)
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reportRequest_seq")
-	@SequenceGenerator(name = "reportRequest_seq", sequenceName = "LT_MAST_REPORT_REQUEST_S", allocationSize = 1)
-	@Column(name = "REQUEST_ID")
 	private Long requestId;
-	 
-	private String requestURL;
-	
-	private String filterData;
-	
-	private String filePath;
-	
-	private String fileStatus;
-	
-	private Long userId;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date requestDate;
-	
-	private String fileName;
-	
-	private String requestName;
-	private Date completedDate;
-	private String strCompletedDate;
-	private Date submittedDate;
-	private String strSubmittedDate;
-	private String phase;
-	private String logDetails;
-	 
-	private long start;
-	 
-	private long length;
-	 
-	private long totalCount;
-	
-	private Integer columnNo;
-	
-    private String columnSort;
-	
-	private String userName;
-	
-	private String strRequestDate; 
-	
-	
-	public Long getRequestId() {
-		return requestId;
-	}
+    private String requestUrl;
+    private Date startDate;
+    private Date endDate;
+    private String filterData;
+    private String filePath;
+    private String status;
+    private Long userId;
+    private Date requestDate;
+    private String fileName;
+    private Date completedDate;
+    private Date submittedDate;
+    private String requestName;
+    private String phase;
+    private String logDetails;
 
-	public void setRequestId(Long requestId) {
-		this.requestId = requestId;
-	}
+    // Default Constructor
+    public LtMastReportRequest() {}
 
-	public String getRequestURL() {
-		return requestURL;
-	}
+    // Constructor with parameters for easier instantiation
+    public LtMastReportRequest(Long requestId, String requestUrl, Date startDate, Date endDate, String filterData,
+                         String filePath, String status, Long userId, Date requestDate, String fileName,
+                         Date completedDate, Date submittedDate, String requestName, String phase, String logDetails) {
+        this.requestId = requestId;
+        this.requestUrl = requestUrl;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.filterData = filterData;
+        this.filePath = filePath;
+        this.status = status;
+        this.userId = userId;
+        this.requestDate = requestDate;
+        this.fileName = fileName;
+        this.completedDate = completedDate;
+        this.submittedDate = submittedDate;
+        this.requestName = requestName;
+        this.phase = phase;
+        this.logDetails = logDetails;
+    }
 
-	public void setRequestURL(String requestURL) {
-		this.requestURL = requestURL;
-	}
+    // Getters and Setters
 
-	public String getFilterData() {
-		return filterData;
-	}
+    public Long getRequestId() {
+        return requestId;
+    }
 
-	public void setFilterData(String filterData) {
-		this.filterData = filterData;
-	}
+    public void setRequestId(Long requestId) {
+        this.requestId = requestId;
+    }
 
-	public String getFilePath() {
-		return filePath;
-	}
+    public String getRequestUrl() {
+        return requestUrl;
+    }
 
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
-	}
+    public void setRequestUrl(String requestUrl) {
+        this.requestUrl = requestUrl;
+    }
 
-	public Long getUserId() {
-		return userId;
-	}
+    public Date getStartDate() {
+        return startDate;
+    }
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
 
-	public Date getRequestDate() {
-		return requestDate;
-	}
+    public Date getEndDate() {
+        return endDate;
+    }
 
-	public void setRequestDate(Date requestDate) {
-		this.requestDate = requestDate;
-	}
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 
-	
-	public long getStart() {
-		return start;
-	}
+    public String getFilterData() {
+        return filterData;
+    }
 
-	public void setStart(long start) {
-		this.start = start;
-	}
+    public void setFilterData(String filterData) {
+        this.filterData = filterData;
+    }
 
-	public long getLength() {
-		return length;
-	}
+    public String getFilePath() {
+        return filePath;
+    }
 
-	public void setLength(long length) {
-		this.length = length;
-	}
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
 
-	public long getTotalCount() {
-		return totalCount;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public void setTotalCount(long totalCount) {
-		this.totalCount = totalCount;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public String getFileName() {
-		return fileName;
-	}
+    public Long getUserId() {
+        return userId;
+    }
 
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
-	public Integer getColumnNo() {
-		return columnNo;
-	}
+    public Date getRequestDate() {
+        return requestDate;
+    }
 
-	public void setColumnNo(Integer columnNo) {
-		this.columnNo = columnNo;
-	}
+    public void setRequestDate(Date requestDate) {
+        this.requestDate = requestDate;
+    }
 
-	public String getColumnSort() {
-		return columnSort;
-	}
+    public String getFileName() {
+        return fileName;
+    }
 
-	public void setColumnSort(String columnSort) {
-		this.columnSort = columnSort;
-	}
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
-	public String getUserName() {
-		return userName;
-	}
+    public Date getCompletedDate() {
+        return completedDate;
+    }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    public void setCompletedDate(Date completedDate) {
+        this.completedDate = completedDate;
+    }
 
-	public String getFileStatus() {
-		return fileStatus;
-	}
+    public Date getSubmittedDate() {
+        return submittedDate;
+    }
 
-	public void setFileStatus(String fileStatus) {
-		this.fileStatus = fileStatus;
-	}
+    public void setSubmittedDate(Date submittedDate) {
+        this.submittedDate = submittedDate;
+    }
 
-	
-	public String getStrRequestDate() {
-		return strRequestDate;
-	}
+    public String getRequestName() {
+        return requestName;
+    }
 
-	public void setStrRequestDate(String strRequestDate) {
-		this.strRequestDate = strRequestDate;
-	}
+    public void setRequestName(String requestName) {
+        this.requestName = requestName;
+    }
 
-	public String getRequestName() {
-		return requestName;
-	}
+    public String getPhase() {
+        return phase;
+    }
 
-	public void setRequestName(String requestName) {
-		this.requestName = requestName;
-	}
+    public void setPhase(String phase) {
+        this.phase = phase;
+    }
 
-	public Date getCompletedDate() {
-		return completedDate;
-	}
+    public String getLogDetails() {
+        return logDetails;
+    }
 
-	public void setCompletedDate(Date completedDate) {
-		this.completedDate = completedDate;
-	}
+    public void setLogDetails(String logDetails) {
+        this.logDetails = logDetails;
+    }
 
-	public Date getSubmittedDate() {
-		return submittedDate;
-	}
-
-	public void setSubmittedDate(Date submittedDate) {
-		this.submittedDate = submittedDate;
-	}
-
-	public String getStrCompletedDate() {
-		return strCompletedDate;
-	}
-
-	public void setStrCompletedDate(String strCompletedDate) {
-		this.strCompletedDate = strCompletedDate;
-	}
-
-	public String getStrSubmittedDate() {
-		return strSubmittedDate;
-	}
-
-	public void setStrSubmittedDate(String strSubmittedDate) {
-		this.strSubmittedDate = strSubmittedDate;
-	}
-
-	public String getPhase() {
-		return phase;
-	}
-
-	public void setPhase(String phase) {
-		this.phase = phase;
-	}
-
-	public String getLogDetails() {
-		return logDetails;
-	}
-
-	public void setLogDetails(String logDetails) {
-		this.logDetails = logDetails;
-	}
+    @Override
+    public String toString() {
+        return "ReportRequest{" +
+                "requestId=" + requestId +
+                ", requestUrl='" + requestUrl + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", filterData='" + filterData + '\'' +
+                ", filePath='" + filePath + '\'' +
+                ", status='" + status + '\'' +
+                ", userId=" + userId +
+                ", requestDate=" + requestDate +
+                ", fileName='" + fileName + '\'' +
+                ", completedDate=" + completedDate +
+                ", submittedDate=" + submittedDate +
+                ", requestName='" + requestName + '\'' +
+                ", phase='" + phase + '\'' +
+                ", logDetails='" + logDetails + '\'' +
+                '}';
+    }
 
 
 }
-*/

@@ -148,8 +148,8 @@ public class LtMastSysVariableValuesServiceImpl implements LtMastSysVariableValu
 	}
 
 	@Override
-	public ResponseEntity<LtMastSysVariableValues> getBySysVariableValuesId(Long id) throws ServiceException {
-		LtMastSysVariableValues list = ltMastSysVariableValuesDao.getBySysVariableValuesId(id);
+	public ResponseEntity<LtMastSysVariableValues> getBySysVariableValuesId(Long id,Long userId) throws ServiceException {
+		LtMastSysVariableValues list = ltMastSysVariableValuesDao.getBySysVariableValuesId(id,userId);
 		return new ResponseEntity<LtMastSysVariableValues>(list, HttpStatus.OK) ;
 	}
 

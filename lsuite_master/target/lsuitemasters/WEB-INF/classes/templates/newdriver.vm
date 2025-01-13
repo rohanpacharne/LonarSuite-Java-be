@@ -39,7 +39,7 @@ Your User name is:<strong> ${Username}</strong>.</p>
 					
 							<tr>
 								<td style=" padding: 10px;">
-									<p style="margin-top: 0; color: #74787E; font-size: 16px; line-height: 1.5em; text-align: left;">Thanks,<br> <strong>The P2PApplication Team</strong></p>
+									<p style="margin-top: 0; color: #74787E; font-size: 16px; line-height: 1.5em; text-align: left;">Thanks,<br> <strong>LonarSuite Team</strong></p>
 									
 									<!-- Sub copy -->
 								</td>
@@ -71,7 +71,7 @@ Your User name is:<strong> ${Username}</strong>.</p>
           </tr>
           <tr style=" background-color: #515151 !important;">
             <td>
-<p id="footerMsgId" style="padding: 10px 10px;color: #ffffff;vertical-align: middle;">&copy; P2P Application</p><p></p>
+<p id="footerMsgId" style="padding: 10px 10px;color: #ffffff;vertical-align: middle;">&copy; LonarSuite Team</p><p></p>
             </td>
           </tr>
         </tbody></table>

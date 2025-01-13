@@ -212,7 +212,7 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 			status.setMessage("Report exctracting! Request ID is "+requestId);
 			status.setCode(1);
 			return status;
-		}else if(reportParameters.getMasterName().trim().equals("DIVISION")) {
+		}else if(reportParameters.getMasterName().trim().equals("DIVISIONS")) {
 			List<DivisionSubDivision> excelData=new ArrayList<DivisionSubDivision>();
 			excelData =  ltMastDivisionsDao.getDataForReport(reportParameters);
 			Long requestId = makeEntryForReport(saveDirectory,reportParameters);
@@ -377,7 +377,7 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 
 
 	@Override
-	public List<LtMastSysRequests> getReportRequestDataTableRecords(LtMastSysRequests input, Long companyId)
+	public List<LtMastSysRequests> getReportRequestDataTableRecords(LtMastSysRequests input, Long companyId,Long userId)
 			throws ServiceException {
 		if(input.getColumnNo()==1 && input.getSort().equals("desc"))
 		{
@@ -407,16 +407,63 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 		{
 			input.setColumnNo(17);
 		}
-		return ltMastExcelReportsDao.getReportRequestDataTableRecords(input,companyId);
+		return ltMastExcelReportsDao.getReportRequestDataTableRecords(input,companyId,userId);
 	}
 
 
 
 
 	@Override
-	public Long getCount(LtMastSysRequests input, Long companyId) throws ServiceException {
+	public Long getCount(LtMastSysRequests input, Long companyId,Long userId) throws ServiceException {
 		// TODO Auto-generated method stub
-		return ltMastExcelReportsDao.getCount(input,companyId);
+		return ltMastExcelReportsDao.getCount(input,companyId,userId);
+	}
+
+
+
+
+	@Override
+	public List<LtMastReportRequest> getLtMastReportRequestDataTable(LtMastReportRequest input, Long companyId,Long userId)
+			throws ServiceException {
+		if(input.getColumnNo()==1 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(11);
+		}
+		if(input.getColumnNo()==2 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(12);
+		}
+		if(input.getColumnNo()==3 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(13);
+		}
+		if(input.getColumnNo()==4 && input.getSort().equals("asc"))
+		{
+			input.setColumnNo(14);
+		}
+		if(input.getColumnNo()==5 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(15);
+		}
+		if(input.getColumnNo()==6 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(16);
+		}
+		if(input.getColumnNo()==7 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(17);
+		}
+		return ltMastExcelReportsDao.getLtMastReportRequestDataTable(input,companyId,userId);
+	}
+
+
+
+
+	@Override
+	public Long getCountForLtMastReportRequestDataTable(LtMastReportRequest input, Long companyId,Long userId)
+			throws ServiceException {
+		// TODO Auto-generated method stub
+		return ltMastExcelReportsDao.getCountForLtMastReportRequestDataTable(input,companyId,userId);
 	}
 
 	

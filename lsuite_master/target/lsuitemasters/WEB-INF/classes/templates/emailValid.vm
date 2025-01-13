@@ -48,7 +48,7 @@
                     <p style="margin-top: 0; color: #74787E; font-size: 16px; line-height: 1.5em; text-align: left;">If you did not register to LEXA APP,please contact us @ info@LEXA.com or call us on  0207 254 3849. This validation link  is only valid for the next 24 hours.</p>
                     <p style="margin-top: 0; color: #74787E; font-size: 14px; line-height: 1.5em; text-align: left;">Note: If button is not working click on below link to reset your password.</p>
                     <p style="margin-top: 0; color: blue; font-size: 12px; line-height: 1.5em; text-align: left;"><u>${action_url}</u></p>
-                    <p style="margin-top: 0; color: #74787E; font-size: 16px; line-height: 1.5em; text-align: left;">Thanks,<br> <strong>LEXA Application Team</strong></p>
+                    <p style="margin-top: 0; color: #74787E; font-size: 16px; line-height: 1.5em; text-align: left;">Thanks,<br> <strong>LonarSuite Team</strong></p>
                    
                   </td>
                 </tr>
@@ -57,7 +57,7 @@
           </tr>
           <tr style=" background-color: #515151 !important;">
             <td>
-               <p id="footerMsgId" style="padding: 10px 10px;color: #ffffff;vertical-align: middle;">&copy; LEXA Application </p><p></p>
+               <p id="footerMsgId" style="padding: 10px 10px;color: #ffffff;vertical-align: middle;">&copy; LonarSuite Team </p><p></p>
             </td>
           </tr>
         </tbody></table>

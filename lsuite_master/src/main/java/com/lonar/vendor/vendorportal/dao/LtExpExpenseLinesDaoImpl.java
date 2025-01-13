@@ -40,7 +40,7 @@ public class LtExpExpenseLinesDaoImpl implements LtExpExpenseLinesDao{
 	}
 	
 	@Override
-	public Long getCount(Long headerId, LtExpExpenseLines input) throws Exception
+	public Long getCount(Long headerId,Long userId, LtExpExpenseLines input) throws Exception
 	{
 		
 		
@@ -70,7 +70,7 @@ public class LtExpExpenseLinesDaoImpl implements LtExpExpenseLinesDao{
 			
 				
 				String count  = getJdbcTemplate().queryForObject(
-						query, new Object[] { headerId
+						query, new Object[] { headerId,userId,
 								}, String.class);
  
 				return Long.parseLong(count);

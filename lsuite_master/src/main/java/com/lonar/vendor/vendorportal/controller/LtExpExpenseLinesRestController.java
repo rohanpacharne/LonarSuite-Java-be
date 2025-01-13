@@ -50,14 +50,14 @@ public class LtExpExpenseLinesRestController implements CodeMaster {
 		{
 			if(headerId != null)
 			{
-				Long count=ltExpExpenseLinesService.getCount(headerId,input);
+				Long count=ltExpExpenseLinesService.getCount(headerId,userId,input);
 				customeDataTable.setRecordsTotal(count);
 			    customeDataTable.setRecordsFiltered(count);
 				List<LtExpExpenseLines> ltExpExpenseLinesList=ltExpExpenseLinesService.getDatatableByExpenseHeaderId(headerId,userId,input);
 				customeDataTable.setData(ltExpExpenseLinesList);
 			
 			}else {
-				Long count=ltExpExpenseLinesService.getCount(headerId,input);
+				Long count=ltExpExpenseLinesService.getCount(headerId,userId,input);
 				customeDataTable.setRecordsTotal(count);
 			    customeDataTable.setRecordsFiltered(count);
 				List<LtExpExpenseLines> ltExpExpenseLinesList=ltExpExpenseLinesService.getDatatableByExpenseHeaderId(headerId,userId,input);

@@ -15,7 +15,7 @@ public interface LtExpExpenseLinesDao {
 	
 	public LtExpExpenseLines saveV1(LtExpExpenseLines ltExpExpenseLines) throws Exception;
 	
-	public Long getCount(Long headerId, LtExpExpenseLines input) throws Exception;
+	public Long getCount(Long headerId,Long userId, LtExpExpenseLines input) throws Exception;
 	
 	public List<LtExpExpenseLines> getDatatableByExpenseHeaderId(Long headerId, Long userId,LtExpExpenseLines input) throws Exception;
 	

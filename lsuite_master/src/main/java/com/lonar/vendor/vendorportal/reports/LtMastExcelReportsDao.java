@@ -12,11 +12,17 @@ public interface LtMastExcelReportsDao {
 
 	Long getCount(LtMastReportRequest input, Long companyId) throws ServiceException;
 	
-	Long getCount(LtMastSysRequests input, Long companyId) throws ServiceException;
+	Long getCount(LtMastSysRequests input, Long companyId,Long count) throws ServiceException;
 
 	List<LtMastReportRequest> getReportRequestDataTableRecords(LtMastReportRequest input, Long companyId) throws ServiceException;
 	
-	List<LtMastSysRequests> getReportRequestDataTableRecords(LtMastSysRequests input, Long companyId) throws ServiceException;
+	List<LtMastSysRequests> getReportRequestDataTableRecords(LtMastSysRequests input, Long companyId, Long userId) throws ServiceException;
+	
+	List<LtMastReportRequest> getLtMastReportRequestDataTable(LtMastReportRequest input, Long companyId,Long userId) throws ServiceException;
+	
+	Long getCountForLtMastReportRequestDataTable(LtMastReportRequest input, Long companyId,Long userId) throws ServiceException;
+
+
 
 
 }

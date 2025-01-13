@@ -21,6 +21,6 @@ public interface LtMastSysVariableValuesService
 
 	public ResponseEntity<List<LtMastSysVariableValues>> getAllValuesBySysVariableId(Long id) throws ServiceException;
 
-	public ResponseEntity<LtMastSysVariableValues> getBySysVariableValuesId(Long id) throws ServiceException;
+	public ResponseEntity<LtMastSysVariableValues> getBySysVariableValuesId(Long id,Long userId) throws ServiceException;
 
 }

@@ -463,7 +463,6 @@ com\lonar\vendor\vendorportal\dao\LtMastGlAccountsDaoImpl.class
 com\lonar\vendor\vendorportal\model\Employee.class
 com\lonar\vendor\vendorportal\dao\LtMastGlAccountsDao.class
 com\lonar\vendor\vendorportal\repository\LtP2pProductPaytermsRepository.class
-com\lonar\vendor\vendorportal\model\LtMastFileUpload.class
 com\lonar\vendor\vendorportal\model\LtMastFpnMaster.class
 com\lonar\vendor\vendorportal\controller\LtMastComnMasterValuesRestController.class
 com\lonar\vendor\vendorportal\model\LtMastSysVariableValues.class

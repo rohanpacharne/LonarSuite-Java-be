@@ -133,10 +133,10 @@ SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/YYYY HH:mm:ss");
         c = row.createCell(2);  row.getCell(2).setCellStyle(style);if (divisionSubDivision.getStatus() != null){ c.setCellValue(divisionSubDivision.getStatus()); }
         c = row.createCell(3);  row.getCell(3).setCellStyle(style); if (divisionSubDivision.getDivisionStartDate() != null) { c.setCellValue(simpleDateFormat.format(divisionSubDivision.getDivisionStartDate())); }
         c = row.createCell(4);  row.getCell(4).setCellStyle(style); if (divisionSubDivision.getDivisionEndDate()!= null) { c.setCellValue(simpleDateFormat.format(divisionSubDivision.getDivisionEndDate())); }
-        c = row.createCell(5);  row.getCell(5).setCellStyle(style);if (divisionSubDivision.getSubDivisionCode() != null){ c.setCellValue(divisionSubDivision.getSubDivisionCode()); }
-        c = row.createCell(6);  row.getCell(6).setCellStyle(style);if (divisionSubDivision.getSubDivisionName() != null){ c.setCellValue(divisionSubDivision.getSubDivisionName()); }
-        c = row.createCell(7);  row.getCell(7).setCellStyle(style); if (divisionSubDivision.getSubDivisionStartDate() != null) { c.setCellValue(simpleDateFormat.format(divisionSubDivision.getSubDivisionStartDate())); }
-        c = row.createCell(8);  row.getCell(8).setCellStyle(style); if (divisionSubDivision.getSubDivisionEndDate()!= null) { c.setCellValue(simpleDateFormat.format(divisionSubDivision.getSubDivisionEndDate())); }
+//        c = row.createCell(5);  row.getCell(5).setCellStyle(style);if (divisionSubDivision.getSubDivisionCode() != null){ c.setCellValue(divisionSubDivision.getSubDivisionCode()); }
+//        c = row.createCell(6);  row.getCell(6).setCellStyle(style);if (divisionSubDivision.getSubDivisionName() != null){ c.setCellValue(divisionSubDivision.getSubDivisionName()); }
+//        c = row.createCell(7);  row.getCell(7).setCellStyle(style); if (divisionSubDivision.getSubDivisionStartDate() != null) { c.setCellValue(simpleDateFormat.format(divisionSubDivision.getSubDivisionStartDate())); }
+//        c = row.createCell(8);  row.getCell(8).setCellStyle(style); if (divisionSubDivision.getSubDivisionEndDate()!= null) { c.setCellValue(simpleDateFormat.format(divisionSubDivision.getSubDivisionEndDate())); }
       
 	}
 

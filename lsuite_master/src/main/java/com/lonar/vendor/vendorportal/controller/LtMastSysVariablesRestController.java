@@ -93,10 +93,10 @@ public class LtMastSysVariablesRestController implements CodeMaster
 		}
 		
 		// -------------------Retrieve All system variable values details-----------------------------
-		@RequestMapping(value = "/getBySysVariableValuesId/{id}/{logTime}", method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
-		public ResponseEntity<LtMastSysVariableValues> getBySysVariableValuesId(@PathVariable("id") Long id,@PathVariable("logTime") String logTime) throws ServiceException
+		@RequestMapping(value = "/getBySysVariableValuesId/{id}/{userId}/{logTime}", method = RequestMethod.GET,produces=MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<LtMastSysVariableValues> getBySysVariableValuesId(@PathVariable("id") Long id,@PathVariable("userId") Long userId,@PathVariable("logTime") String logTime) throws ServiceException
 		{
-			return ltMastSysVariableValuesService.getBySysVariableValuesId(id);
+			return ltMastSysVariableValuesService.getBySysVariableValuesId(id,userId);
 		}
 				
 		// -------------------Retrieve All system variable values details-----------------------------

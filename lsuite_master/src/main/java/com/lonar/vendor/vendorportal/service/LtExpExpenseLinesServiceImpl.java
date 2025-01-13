@@ -50,9 +50,9 @@ public class LtExpExpenseLinesServiceImpl implements LtExpExpenseLinesService{
 	
 	@Transactional
 	@Override
-	public Long getCount(Long headerId, LtExpExpenseLines input) throws Exception
+	public Long getCount(Long headerId,Long userId, LtExpExpenseLines input) throws Exception
 	{
-		return ltExpExpenseLinesDao.getCount(headerId,input);
+		return ltExpExpenseLinesDao.getCount(headerId,userId,input);
 	}
 	
 	@Transactional
@@ -213,6 +213,7 @@ public class LtExpExpenseLinesServiceImpl implements LtExpExpenseLinesService{
 				ltExpExpenseLines = ltExpExpenseLinesDao.updateV1(ltExpExpenseLines);
 				if(ltExpExpenseLines.getExpLineId()!=null)
 				{
+					System.out.println("in if");
 					if(ltExpExpenseLines.getExpHeaderId()!=null){
 					if(ltExpExpenseHeadersDao.updateExpenseAmount(ltExpExpenseLines.getExpHeaderId()))
 					{
@@ -274,13 +275,14 @@ public class LtExpExpenseLinesServiceImpl implements LtExpExpenseLinesService{
 						return status;
 					}
 			  }else {
+				  System.out.println("in else....");
 //				  status.setCode(1);		
 //				  status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
 //				  status.setData(ltExpExpenseLines.getExpLineId());
 				  if(files.length>0)
 					{
 						Status status1=imageUpload(files,ltExpExpenseLines,companyId);
-						
+						System.out.println("status1 = "+status1);
 						if(status1.getCode()== 1)
 						{
 //							LtMastFileUpload ltMastFileUpload = (LtMastFileUpload) status1.getData();
@@ -310,6 +312,13 @@ public class LtExpExpenseLinesServiceImpl implements LtExpExpenseLinesService{
 						}
 						return status;
 					}
+				  status.setCode(1);		
+					status.setMessage(ltMastCommonMessageService.getMessageNameByCode("UPDATE_SUCCESSFULLY").getMessageName());
+				 if( status.getMessage()==null)
+				 {
+					status.setCode(1);
+					status.setMessage("Error in finding message! The action is completed successfully.");
+				 }
 			  }
 		  }
 		}
