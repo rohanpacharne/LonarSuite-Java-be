@@ -139,6 +139,19 @@ public class LtMastBranches extends WhoColumns implements Serializable {
 	
 	@Transient
 	private String stateName;
+	
+	@Transient
+	private Long poheaderid;
+	
+	
+
+	public Long getPoheaderid() {
+		return poheaderid;
+	}
+
+	public void setPoheaderid(Long poheaderid) {
+		this.poheaderid = poheaderid;
+	}
 
 	public String getBranchAddress() {
 		return branchAddress;
@@ -377,7 +390,8 @@ public class LtMastBranches extends WhoColumns implements Serializable {
 				+ ", managerCode=" + managerCode + ", managerOfficalEmailId=" + managerOfficalEmailId
 				+ ", reportingBranchName=" + reportingBranchName + ", reportingBranchCode=" + reportingBranchCode
 				+ ", companyName=" + companyName + ", statusValue=" + statusValue + ", countryValue=" + countryValue
-				+ ", branchTypeValue=" + branchTypeValue + ", stateName=" + stateName + "]";
+				+ ", branchTypeValue=" + branchTypeValue + ", stateName=" + stateName + ", poheaderid=" + poheaderid
+				+ "]";
 	}
 
 	

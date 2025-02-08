@@ -345,10 +345,10 @@ public class LtMastBranchesDaoImpl implements LtMastBranchesDao
 	}
 
 	@Override
-	public List<LtMastBranches> getAllActiveShippingAddrByBuyer(Long id) throws ServiceException {
+	public List<LtMastBranches> getAllActiveShippingAddrByBuyer(Long companyId,Long poheaderid) throws ServiceException {
 		String query = env.getProperty("getAllActiveShippingAddrByBuyer");
 
-		List<LtMastBranches> list=   jdbcTemplate.query(query, new Object[]{ id}, 
+		List<LtMastBranches> list=   jdbcTemplate.query(query, new Object[]{ companyId,poheaderid}, 
 		 new BeanPropertyRowMapper<LtMastBranches>(LtMastBranches.class)); 
 		return list;
 	}

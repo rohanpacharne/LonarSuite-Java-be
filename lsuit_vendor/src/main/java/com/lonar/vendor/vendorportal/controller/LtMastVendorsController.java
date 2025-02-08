@@ -471,4 +471,10 @@ public class LtMastVendorsController implements CodeMaster
 			 status =  ltMastVendorsService.getCompanyByVendor(venId);
 			return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/checkStatusIsPending/{vendorId}/{approvalId}/{logTime}", method= RequestMethod.GET, produces = "application/json")
+    public boolean checkStatusIsPending(@PathVariable("vendorId") Long vendorId, @PathVariable("approvalId") Long approvalId,@PathVariable("logTime") String logTime) throws ServiceException
+	{
+		return  ltMastVendorsService.checkStatusIsPending(vendorId, approvalId);
+	}
 }

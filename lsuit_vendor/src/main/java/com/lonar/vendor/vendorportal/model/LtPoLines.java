@@ -39,7 +39,7 @@ public class LtPoLines {
 	@Column(name = "PRODUCT_DESCRIPTION")
 	private String productDescription;
 	
-	@Column(name = "QUNATITY")
+	@Column(name = "QUANTITY")
 	private Long quantity;
 	
 	@Column(name = "NOTE_TO_VENDOR")
@@ -94,8 +94,58 @@ public class LtPoLines {
 	private String sort;
 	
 	@Transient
+	private Long subcategoryId;
+	
+	@Transient
+	private String uom;
+	
+	@Transient
+	private String poNumber ;
+	
+	@Transient
+	private String taxName;
+	
+	@Transient
+	private String productName;
+	
+	@Transient
+	private String categoryName;
+	
+	@Transient 	
+	private Float taxAmount;
+	
+	@Transient 	
+	private Float totalAmount;
+	
+	@Transient
 	private String productCategory;
 	
+	
+	
+	public Long getSubcategoryId() {
+		return subcategoryId;
+	}
+
+	public void setSubcategoryId(Long subcategoryId) {
+		this.subcategoryId = subcategoryId;
+	}
+
+	public String getUom() {
+		return uom;
+	}
+
+	public void setUom(String uom) {
+		this.uom = uom;
+	}
+
+	public String getPoNumber() {
+		return poNumber;
+	}
+
+	public void setPoNumber(String poNumber) {
+		this.poNumber = poNumber;
+	}
+
 	public Long getPoLineId() {
 		return poLineId;
 	}
@@ -296,6 +346,46 @@ public class LtPoLines {
 		this.productCategory = productCategory;
 	}
 
+	public String getTaxName() {
+		return taxName;
+	}
+
+	public void setTaxName(String taxName) {
+		this.taxName = taxName;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+
+	public Float getTaxAmount() {
+		return taxAmount;
+	}
+
+	public void setTaxAmount(Float taxAmount) {
+		this.taxAmount = taxAmount;
+	}
+
+	public Float getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(Float totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
 	@Override
 	public String toString() {
 		return "LtPoLines [poLineId=" + poLineId + ", poHeaderId=" + poHeaderId + ", lineNum=" + lineNum
@@ -305,8 +395,27 @@ public class LtPoLines {
 				+ lastUpdateLogin + ", lastUpdatedBy=" + lastUpdatedBy + ", lastUpdateDate=" + lastUpdateDate
 				+ ", unitPrice=" + unitPrice + ", lineType=" + lineType + ", lineAmount=" + lineAmount + ", draw="
 				+ draw + ", start=" + start + ", length=" + length + ", pDate=" + pDate + ", revDate=" + revDate
-				+ ", columnNo=" + columnNo + ", sort=" + sort + ", productCategory=" + productCategory + "]";
+				+ ", columnNo=" + columnNo + ", sort=" + sort + ", subcategoryId=" + subcategoryId + ", uom=" + uom
+				+ ", poNumber=" + poNumber + ", taxName=" + taxName + ", productName=" + productName + ", categoryName="
+				+ categoryName + ", taxAmount=" + taxAmount + ", totalAmount=" + totalAmount + ", productCategory="
+				+ productCategory + ", getSubcategoryId()=" + getSubcategoryId() + ", getUom()=" + getUom()
+				+ ", getPoNumber()=" + getPoNumber() + ", getPoLineId()=" + getPoLineId() + ", getPoHeaderId()="
+				+ getPoHeaderId() + ", getLineNum()=" + getLineNum() + ", getProductId()=" + getProductId()
+				+ ", getProductCode()=" + getProductCode() + ", getProductDescription()=" + getProductDescription()
+				+ ", getQuantity()=" + getQuantity() + ", getNoteToVendor()=" + getNoteToVendor() + ", getCategoryId()="
+				+ getCategoryId() + ", getCreatedBy()=" + getCreatedBy() + ", getCreationDate()=" + getCreationDate()
+				+ ", getLastUpdateLogin()=" + getLastUpdateLogin() + ", getLastUpdatedBy()=" + getLastUpdatedBy()
+				+ ", getLastUpdateDate()=" + getLastUpdateDate() + ", getUnitPrice()=" + getUnitPrice()
+				+ ", getLineType()=" + getLineType() + ", getLineAmount()=" + getLineAmount() + ", getDraw()="
+				+ getDraw() + ", getStart()=" + getStart() + ", getLength()=" + getLength() + ", getpDate()="
+				+ getpDate() + ", getRevDate()=" + getRevDate() + ", getColumnNo()=" + getColumnNo() + ", getSort()="
+				+ getSort() + ", getProductCategory()=" + getProductCategory() + ", getTaxName()=" + getTaxName()
+				+ ", getProductName()=" + getProductName() + ", getCategoryName()=" + getCategoryName()
+				+ ", getTaxAmount()=" + getTaxAmount() + ", getTotalAmount()=" + getTotalAmount() + ", getClass()="
+				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}
+
+	
 
 	
 	

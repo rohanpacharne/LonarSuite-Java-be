@@ -86,5 +86,7 @@ public interface LtMastEmployeesDao {
 	public List<LtMastEmployees> getDataForReport(ReportParameters reportParameters) throws ServiceException;
 
 	public Status getCompanyByBuyer(Long buyerId) throws ServiceException;
+	
+	public List<LtMastEmployees> getAllBuyer()throws ServiceException;
 
 }

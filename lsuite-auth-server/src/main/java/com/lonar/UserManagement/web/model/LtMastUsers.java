@@ -87,6 +87,9 @@ private static final long serialVersionUID = 1L;
 	@Column(name = "COMPANY_ID")
 	private Long companyId;
 	
+	@Column(name = "MFA")
+	private String mfa;
+	
 	@Transient
 	private Long auditId;
 	
@@ -156,6 +159,25 @@ private static final long serialVersionUID = 1L;
 	@Transient
 	private String userType;
 	
+	@Transient
+	private String otp;
+	
+	public String getOtp() {
+		return otp;
+	}
+
+	public void setOtp(String otp) {
+		this.otp = otp;
+	}
+
+	public String getMfa() {
+		return mfa;
+	}
+
+	public void setMfa(String mfa) {
+		this.mfa = mfa;
+	}
+
 	public String getUserType() {
 		return userType;
 	}
@@ -507,14 +529,14 @@ private static final long serialVersionUID = 1L;
 				+ ", employeeId=" + employeeId + ", vendorId=" + vendorId + ", loginFailureAttempt="
 				+ loginFailureAttempt + ", createdBy=" + createdBy + ", creationDate=" + creationDate
 				+ ", lastUpdateLogin=" + lastUpdateLogin + ", lastUpdatedBy=" + lastUpdatedBy + ", lastUpdateDate="
-				+ lastUpdateDate + ", companyId=" + companyId + ", auditId=" + auditId + ", employeeName="
-				+ employeeName + ", costCenterName=" + costCenterName + ", locationName=" + locationName + ", draw="
-				+ draw + ", start=" + start + ", length=" + length + ", stDate=" + stDate + ", enDate=" + enDate
-				+ ", columnNo=" + columnNo + ", sort=" + sort + ", divisionId=" + divisionId + ", locationId="
-				+ locationId + ", vendorName=" + vendorName + ", locationCode=" + locationCode + ", divisionName="
-				+ divisionName + ", flag=" + flag + ", roleName=" + roleName + ", statusValue=" + statusValue
-				+ ", loginCheck=" + loginCheck + ", isBuyer=" + isBuyer + ", companyName=" + companyName + ", userType="
-				+ userType + "]";
+				+ lastUpdateDate + ", companyId=" + companyId + ", mfa=" + mfa + ", auditId=" + auditId
+				+ ", employeeName=" + employeeName + ", costCenterName=" + costCenterName + ", locationName="
+				+ locationName + ", draw=" + draw + ", start=" + start + ", length=" + length + ", stDate=" + stDate
+				+ ", enDate=" + enDate + ", columnNo=" + columnNo + ", sort=" + sort + ", divisionId=" + divisionId
+				+ ", locationId=" + locationId + ", vendorName=" + vendorName + ", locationCode=" + locationCode
+				+ ", divisionName=" + divisionName + ", flag=" + flag + ", roleName=" + roleName + ", statusValue="
+				+ statusValue + ", loginCheck=" + loginCheck + ", isBuyer=" + isBuyer + ", companyName=" + companyName
+				+ ", userType=" + userType + "]";
 	}
 
 	

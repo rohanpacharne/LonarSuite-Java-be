@@ -74,6 +74,9 @@ public interface LtMastVendorsService extends CodeMaster
 	Status updateAttachment(Long vendorId, MultipartFile[] files) throws ServiceException;
 
 	LtMastVendors getByRegistrationMailId(String registrationEmail, Long companyId) throws ServiceException;
+	
+	boolean checkStatusIsPending(Long vendorId, Long approvalId) throws ServiceException;
+
 
 
 

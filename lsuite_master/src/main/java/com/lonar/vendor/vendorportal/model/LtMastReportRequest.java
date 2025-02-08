@@ -74,6 +74,9 @@ public class LtMastReportRequest {
 
 	@Column(name = "END_DATE")
 	private Date endDate;
+	
+	@Column(name = "TYPE")
+	private String type;
 
 	@Transient
 	private String userName;
@@ -103,6 +106,14 @@ public class LtMastReportRequest {
 	@Transient
 	private String requestIdStr;
 	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public Long getRequestId() {
 		return requestId;
 	}
@@ -309,9 +320,10 @@ public class LtMastReportRequest {
 				+ filterData + ", filePath=" + filePath + ", status=" + status + ", userId=" + userId + ", requestDate="
 				+ requestDate + ", completedDate=" + completedDate + ", submittedDate=" + submittedDate + ", fileName="
 				+ fileName + ", requestName=" + requestName + ", phase=" + phase + ", logDetails=" + logDetails
-				+ ", startDate=" + startDate + ", endDate=" + endDate + ", userName=" + userName + ", requestorName="
-				+ requestorName + ", draw=" + draw + ", start=" + start + ", length=" + length + ", reqDate=" + reqDate
-				+ ", compDate=" + compDate + ", columnNo=" + columnNo + ", sort=" + sort + "]";
+				+ ", startDate=" + startDate + ", endDate=" + endDate + ", type=" + type + ", userName=" + userName
+				+ ", requestorName=" + requestorName + ", draw=" + draw + ", start=" + start + ", length=" + length
+				+ ", reqDate=" + reqDate + ", compDate=" + compDate + ", columnNo=" + columnNo + ", sort=" + sort
+				+ ", requestIdStr=" + requestIdStr + "]";
 	}
 
 }

@@ -212,10 +212,20 @@ public int sendEmail(Mail mail, VelocityContext velocityContext){
                 // Subject field
                 addFormField(writer, boundary, "Subject", mail.getMailSubject());
 
-				Template template = velocityEngine.getTemplate("./templates/" + mail.getTemplateName());
-				StringWriter stringWriter = new StringWriter();
-
-				template.merge(velocityContext, stringWriter);
+//				Template template = velocityEngine.getTemplate("./templates/" + mail.getTemplateName());
+//				StringWriter stringWriter = new StringWriter();
+//
+//				template.merge(velocityContext, stringWriter);
+				// Try to load the template, but catch the exception if it's not found
+                StringWriter stringWriter = new StringWriter();
+                try {
+                    Template template = velocityEngine.getTemplate("./templates/" + mail.getTemplateName());
+                    template.merge(velocityContext, stringWriter);
+                } catch (Exception e) {
+                    // Log the error and use a fallback message if the template is not found
+                    System.err.println("Template not found: " + mail.getTemplateName());
+                    stringWriter.write("Error: Email template not found.");
+                }
 				//message.setText(stringWriter.toString(), true);
                 addFormField(writer, boundary, "Body", stringWriter.toString());
                 addFormField(writer, boundary, "To", mail.getMailTo());

@@ -93,6 +93,9 @@ public interface LtMastVendorsDao
 	LtMastVendors getByRegistrationMailId(String registrationEmail, Long companyId) throws ServiceException;
 	
 	boolean loadRentalAgreementApprovers(LtRentalAgreementHeaders ltRentalAgreementHeaders) throws ServiceException;
+	
+	boolean checkStatusIsPending(Long vendorId, Long approvalId) throws ServiceException;
+
 
 	
 

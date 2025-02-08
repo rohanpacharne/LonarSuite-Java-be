@@ -37,6 +37,8 @@ public interface LtMastUsersDao {
 	//List<LtMastUsers> findByUserNameForOauth(String userName);
 	
 	public List<Menu> findMenu(Long userId, Long companyId);
+	
+	public List<Menu> findReport(Long userId, Long companyId);
 
 	List<LtMastUsers> findVendorByUserName(String upperCase);
 
@@ -57,5 +59,10 @@ public interface LtMastUsersDao {
 	List<LtMastUsers> getLtMastUsersUtilityDataTable(LtMastUsers input) throws BusinessException;
 	
 	String paginationEntries(String sysVar,Long userId,Long companyId);
+	
+	String mfaCheck(LtMastUsers ltMastUsers);
+	
+	List<Menu> getModulesByUserId(Long userId, Long companyId, String moduleType, String searchTerm);
+	 
 	
 }

@@ -5,6 +5,7 @@ public class ResponceEntity {
 	private Integer code;
 	private  String message;
 	private Object data;
+	private Object report;
 	private Long userId;
 	private Long employeeId;
 	private Long vendorId;
@@ -122,14 +123,20 @@ public class ResponceEntity {
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
+	public Object getReport() {
+		return report;
+	}
+	public void setReport(Object report) {
+		this.report = report;
+	}
 	@Override
 	public String toString() {
-		return "ResponceEntity [code=" + code + ", message=" + message + ", data=" + data + ", userId=" + userId
-				+ ", employeeId=" + employeeId + ", vendorId=" + vendorId + ", employeeName=" + employeeName + ", role="
-				+ role + ", divisionId=" + divisionId + ", locationId=" + locationId + ", locationCode=" + locationCode
-				+ ", divisionName=" + divisionName + ", companyId=" + companyId + ", isBuyer=" + isBuyer
-				+ ", companyName=" + companyName + ", globalFilePath=" + globalFilePath + ", paginationEntries="
-				+ paginationEntries + "]";
+		return "ResponceEntity [code=" + code + ", message=" + message + ", data=" + data + ", report=" + report
+				+ ", userId=" + userId + ", employeeId=" + employeeId + ", vendorId=" + vendorId + ", employeeName="
+				+ employeeName + ", role=" + role + ", divisionId=" + divisionId + ", locationId=" + locationId
+				+ ", locationCode=" + locationCode + ", divisionName=" + divisionName + ", companyId=" + companyId
+				+ ", isBuyer=" + isBuyer + ", companyName=" + companyName + ", globalFilePath=" + globalFilePath
+				+ ", paginationEntries=" + paginationEntries + "]";
 	}
 	
 	

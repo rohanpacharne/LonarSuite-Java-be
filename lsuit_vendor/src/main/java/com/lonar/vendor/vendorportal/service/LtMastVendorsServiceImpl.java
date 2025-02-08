@@ -1835,4 +1835,10 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 		return ltMastVendorsDao.getByRegistrationMailId(registrationEmail,companyId);
 	}
 
+	@Override
+	public boolean checkStatusIsPending(Long vendorId, Long approvalId) throws ServiceException {
+		// TODO Auto-generated method stub
+		return ltMastVendorsDao.checkStatusIsPending(vendorId, approvalId);
+	}
+
 }

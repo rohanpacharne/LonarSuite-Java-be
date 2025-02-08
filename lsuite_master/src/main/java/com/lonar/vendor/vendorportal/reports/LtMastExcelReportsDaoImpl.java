@@ -1,5 +1,7 @@
 package com.lonar.vendor.vendorportal.reports;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -9,6 +11,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.lonar.vendor.vendorportal.model.LtMastReportRequest;
@@ -286,6 +289,8 @@ public class LtMastExcelReportsDaoImpl implements LtMastExcelReportsDao{
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
+							input.getColumnNo(),input.getColumnNo(),
+							input.getColumnNo(),input.getColumnNo(),
 							input.getStart()+input.getLength(),input.getStart()+1},
 				 new  BeanPropertyRowMapper<LtMastReportRequest>(LtMastReportRequest.class));
 			
@@ -330,5 +335,111 @@ public class LtMastExcelReportsDaoImpl implements LtMastExcelReportsDao{
 			
 			return Long.parseLong(count);
 	}
+	
+	@Override
+	public List<ReportField> getExpenseReportData(ReportParameter reportParameter) throws ServiceException {
+		 String query = env.getProperty("expenseReportQuery");
+		    
+		    List<ReportField> list = (List<ReportField>)
+		            jdbcTemplate.query(query, new Object[]{reportParameter.getCompanyId(),
+		                    reportParameter.getStartDate(), reportParameter.getEndDate(),reportParameter.getDivisionId(),reportParameter.getEmployeeId()},
+		            new BeanPropertyRowMapper<ReportField>(ReportField.class));
+		    return list;}
+	
+	@Override
+	public List<ReportField> getTravelReportData(ReportParameter reportParameter) throws ServiceException {
+			  String query = env.getProperty("travelReportQuery");
+			    
+			    List<ReportField> list = (List<ReportField>)
+			            jdbcTemplate.query(query, new Object[]{reportParameter.getCompanyId(),
+			                    reportParameter.getStartDate(), reportParameter.getEndDate(),reportParameter.getDivisionId(),reportParameter.getEmployeeId()},
+			            new BeanPropertyRowMapper<ReportField>(ReportField.class));
+			    return list;
+			    }
+	
+	@Override
+	public List<ReportField> getpurchaseReportData(ReportParameter reportParameter)
+				throws ServiceException {
+			String query = env.getProperty("purchaseReportQuery");
+			    
+			    List<ReportField> list = (List<ReportField>)
+			            jdbcTemplate.query(query, new Object[] {
+			            		reportParameter.getCompanyId(),
+			            		reportParameter.getStartDate(),
+			            		reportParameter.getEndDate(),
+			            		reportParameter.getVendorId(),
+			            		reportParameter.getAddress(),
+			            		reportParameter.getStatus(),
+			            		reportParameter.getBuyerId(),
+			            		reportParameter.getPoNumberFrom(),
+			            		reportParameter.getPoNumberTo()},    
+				new BeanPropertyRowMapper<ReportField>(ReportField.class));
+			    return list;
+			    }
+	
+	@Override
+	public List<ReportField> getinvoiceReportData(ReportParameter reportParameter) throws ServiceException {
+		String query = env.getProperty("invoicevspaymentReportQuery");
+		  List<ReportField> list = (List<ReportField>)
+		            jdbcTemplate.query(query, new Object[] {
+		            		reportParameter.getCompanyId(),
+		            		reportParameter.getStartDate(),
+		            		reportParameter.getEndDate(),
+		            		reportParameter.getVendorId(),
+		            		reportParameter.getAddress(),
+		            		reportParameter.getStatus(),
+		            		reportParameter.getBuyerId(),
+		            		reportParameter.getInvoiceNumberFrom(),
+		            		reportParameter.getInvoiceNumberTo()},    
+			new BeanPropertyRowMapper<ReportField>(ReportField.class));
+		    return list;}
+	
+	@Override
+	public List<ReportField> getVendorRegisterData(ReportParameter reportParameter) throws ServiceException {
+		String query = env.getProperty("vendorRegisterReportQuery");
+		  List<ReportField> list = (List<ReportField>)
+		            jdbcTemplate.query(query, new Object[] {
+		            		reportParameter.getCompanyId(),
+		            		reportParameter.getStartDate(),
+		            		reportParameter.getEndDate(),
+		            		reportParameter.getVendorId(),
+		            		reportParameter.getAddress(),
+		            		reportParameter.getStatus()
+		            	},    
+			new BeanPropertyRowMapper<ReportField>(ReportField.class));
+		    return list;
+	}
+	
+	@Override
+	public List<ReportField> getVendorProgressData(ReportParameter reportParameter) throws ServiceException {
+		String query = env.getProperty("vendorProgressReportQuery");
+		  List<ReportField> list = (List<ReportField>)
+		            jdbcTemplate.query(query, new Object[] {
+		            		reportParameter.getCompanyId(),
+		            		reportParameter.getStartDate(),
+		            		reportParameter.getEndDate(),
+		            		reportParameter.getVendorId(),
+		            		reportParameter.getAddress(),
+		            		reportParameter.getStatus()
+		            	},    
+			new BeanPropertyRowMapper<ReportField>(ReportField.class));
+		    return list;
+	}
+	
+	@Override
+	public LtMastReportRequest findById(Long requestId) throws ServiceException {
+		  String query = env.getProperty("getParameterQuery");
+ 
+		    List< LtMastReportRequest> list = jdbcTemplate.query(
+		        query,
+		        new Object[]{requestId},
+		        new BeanPropertyRowMapper<>( LtMastReportRequest.class)
+		    );
+		    if (list.isEmpty()) {
+		        return null;
+		    }
+		    return list.get(0);
+		}
+	
 
 }

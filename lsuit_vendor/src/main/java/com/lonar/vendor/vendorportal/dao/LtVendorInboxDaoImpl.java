@@ -106,7 +106,8 @@ public class LtVendorInboxDaoImpl implements LtVendorInboxDao,CodeMaster {
 	String query = env.getProperty("getNotification");
 		
 		return (List<VendorApproval>) 
-				jdbcTemplate.query(query , new Object[]{ status,  empId ,empId,status,  empId ,empId,status,  empId ,empId},
+				jdbcTemplate.query(query , new Object[]{ status,  empId ,empId,status,  empId ,empId,status,  empId ,empId,
+						status,  empId ,empId},
 			 new  BeanPropertyRowMapper<VendorApproval>(VendorApproval.class));
 	}
 

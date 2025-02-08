@@ -939,4 +939,21 @@ public class LtMastVendorsDaoImpl implements LtMastVendorsDao,CodeMaster
 	return flag;
 	}
 
+	@Override
+	public boolean checkStatusIsPending(Long vendorId, Long approvalId) throws ServiceException {
+		String query = " select * from lt_vendor_approval "
+		 		+" where vendor_id = ? "
+				 +" AND (APPROVAL_ID = ? OR DELEGATION_ID = ? ) "
+				 +" AND APPROVAL_LEVEL = CURRENT_APPROVAL_LEVEL "
+				 +" AND STATUS = 'PENDING' ";
+		 
+		List<VendorApproval> list=   jdbcTemplate.query(query, new Object[]{vendorId, approvalId,approvalId}, 
+			 new BeanPropertyRowMapper<VendorApproval>(VendorApproval.class)); 
+
+		if(list.size() > 0)
+			return true;
+		else
+			return false;
+	}
+
 }

@@ -107,11 +107,16 @@ public class LtMastBranchesRestController implements CodeMaster
 		return new ResponseEntity<List<LtMastBranches>>(list, HttpStatus.OK);
 	}	
 //====================================================================================================================
-	@RequestMapping(value = "/getAllActiveShippingAddressByBuyer/{id}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<LtMastBranches>> getAllActiveShippingAddrByBuyer(@PathVariable("id") Long id,@PathVariable("logTime") String logTime) throws ServiceException {
-		List<LtMastBranches> list =   ltMastBranchesService.getAllActiveShippingAddrByBuyer(id);
+//	@RequestMapping(value = "/getAllActiveShippingAddressByBuyer/{id}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+//	public ResponseEntity<List<LtMastBranches>> getAllActiveShippingAddrByBuyer(@PathVariable("id") Long id,@PathVariable("logTime") String logTime) throws ServiceException {
+//		List<LtMastBranches> list =   ltMastBranchesService.getAllActiveShippingAddrByBuyer(id);
+//		return new ResponseEntity<List<LtMastBranches>>(list, HttpStatus.OK);
+//	}	
+	@RequestMapping(value = "/getAllActiveShippingAddressByBuyer/{companyId}/{poheaderid}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<LtMastBranches>> getAllActiveShippingAddrByBuyer(@PathVariable("companyId") Long companyId,@PathVariable("poheaderid") Long poheaderid,@PathVariable("logTime") String logTime) throws ServiceException {
+		List<LtMastBranches> list =   ltMastBranchesService.getAllActiveShippingAddrByBuyer(companyId,poheaderid);
 		return new ResponseEntity<List<LtMastBranches>>(list, HttpStatus.OK);
-	}	
+	}
 //====================================================================================================================
 	@RequestMapping(value = "/getByID/{id}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<LtMastBranches> getLtMastBranchesByID(@PathVariable("id") Long id,@PathVariable("logTime") String logTime) throws ServiceException {

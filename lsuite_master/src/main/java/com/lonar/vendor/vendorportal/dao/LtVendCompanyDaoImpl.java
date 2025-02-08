@@ -190,12 +190,13 @@ public class LtVendCompanyDaoImpl implements LtVendCompanyDao{
 		        + "  COMPANY_NAME =? ,REGD_ADDRESS=? , CITY=? ,STATE_ID=? ,"
 		        + " PIN_CODE=? ,PAN_NUMBER=? , ORG_ID=? ,LOGO_PATH=?,"
 		        + " STATUS=? ,START_DATE=? ,END_DATE=?, LAST_UPDATE_LOGIN=? ,LAST_UPDATED_BY=?,"
-		        + "  LAST_UPDATE_DATE=?  WHERE COMPANY_ID = ? ",
+		        + "  LAST_UPDATE_DATE=?, SUPPORT_EMAIL=? ,SUPPORT_CONTACT_NO=? WHERE COMPANY_ID = ? ",
 		        ltMastCompany.getCompanyName(),ltMastCompany.getRegdAddress(),ltMastCompany.getCity(),ltMastCompany.getStateId()
 		        ,ltMastCompany.getPinCode(),ltMastCompany.getPanNumber(),
 		        ltMastCompany.getOrgId(),ltMastCompany.getLogoPath(),
 		        ltMastCompany.getStatus(),ltMastCompany.getStartDate(),ltMastCompany.getEndDate(),
 		        ltMastCompany.getLastUpdateLogin(),ltMastCompany.getLastUpdatedBy(),ltMastCompany.getLastUpdateDate(),
+		        ltMastCompany.getSupportEmail(),ltMastCompany.getSupportContactNo(),
 		        ltMastCompany.getCompanyId());
 		 
 		

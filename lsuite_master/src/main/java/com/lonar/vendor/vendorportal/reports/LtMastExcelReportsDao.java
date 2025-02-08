@@ -21,6 +21,24 @@ public interface LtMastExcelReportsDao {
 	List<LtMastReportRequest> getLtMastReportRequestDataTable(LtMastReportRequest input, Long companyId,Long userId) throws ServiceException;
 	
 	Long getCountForLtMastReportRequestDataTable(LtMastReportRequest input, Long companyId,Long userId) throws ServiceException;
+	
+	List<ReportField> getExpenseReportData(ReportParameter reportParameter) throws ServiceException;
+	
+	List<ReportField> getTravelReportData(ReportParameter reportParameter) throws ServiceException;
+	
+	List<ReportField> getpurchaseReportData(ReportParameter reportParameter)throws ServiceException;
+	
+	List<ReportField> getinvoiceReportData(ReportParameter reportParameter)throws ServiceException;
+	
+	List<ReportField> getVendorRegisterData(ReportParameter reportParameter)throws ServiceException;
+	
+	List<ReportField> getVendorProgressData(ReportParameter reportParameter)throws ServiceException;
+	
+	LtMastReportRequest findById(Long requestId)throws ServiceException;
+	 
+	 
+
+
 
 
 

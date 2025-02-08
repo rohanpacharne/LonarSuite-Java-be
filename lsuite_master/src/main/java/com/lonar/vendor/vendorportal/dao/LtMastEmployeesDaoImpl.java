@@ -655,4 +655,13 @@ public class LtMastEmployeesDaoImpl implements LtMastEmployeesDao
 		return status;
 	}
 	
+	@Override
+	public List<LtMastEmployees> getAllBuyer() throws ServiceException {
+		String query = env.getProperty("getAllBuyer");
+		List<LtMastEmployees> list=   jdbcTemplate.query(query, new Object[]{},
+				 new BeanPropertyRowMapper<LtMastEmployees>(LtMastEmployees.class));
+		
+		return list;
+	}
+	
 }

@@ -8,6 +8,8 @@ import com.lonar.vendor.vendorportal.model.LtMastSysRequests;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.model.Status;
 
+import java.io.ByteArrayOutputStream;
+
 public interface LtMastExcelReportsService {
 
 	Status createExcelReport(ReportParameters reportParameters) throws ServiceException,IOException;
@@ -25,7 +27,22 @@ public interface LtMastExcelReportsService {
 	List<LtMastReportRequest> getLtMastReportRequestDataTable(LtMastReportRequest input, Long companyId,Long userId) throws ServiceException;
 
 	Long getCountForLtMastReportRequestDataTable(LtMastReportRequest input, Long companyId,Long userId) throws ServiceException;
-
-
+	
+	ByteArrayOutputStream generateExcelReport(ReportParameter reportParameter) throws ServiceException;
+	
+	Status generateTravelExcelReport(ReportParameter reportParameter) throws ServiceException;
+	
+	Status generateExpenseExcelReport(ReportParameter reportParameter)throws ServiceException;
+	
+	Status generatePurchaseExcelReport(ReportParameter reportParameter)throws ServiceException;
+	
+	Status generateInvoicevspaymentExcelReport(ReportParameter reportParameter)throws ServiceException;
+	 
+	Status generateVendorRegisterReport(ReportParameter reportParameter)throws ServiceException;
+	
+	Status generateVendorProgressReport(ReportParameter reportParameter)throws ServiceException;
+	 
+	LtMastReportRequest getAllParameters(Long requestId)throws Exception;
+	 
 
 }

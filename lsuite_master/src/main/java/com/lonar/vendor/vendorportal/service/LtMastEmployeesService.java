@@ -77,4 +77,7 @@ public interface LtMastEmployeesService {
 
 	public Status getCompanyByBuyer(Long buyerId) throws ServiceException;
 	
+	public ResponseEntity<List<LtMastEmployees>> getAllBuyer() throws ServiceException;
+
+	
 }

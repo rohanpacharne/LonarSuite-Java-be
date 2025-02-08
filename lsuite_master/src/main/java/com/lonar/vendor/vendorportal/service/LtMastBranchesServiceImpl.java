@@ -509,8 +509,8 @@ public class LtMastBranchesServiceImpl implements LtMastBranchesService,CodeMast
 	}
 
 	@Override
-	public List<LtMastBranches> getAllActiveShippingAddrByBuyer(Long id) throws ServiceException {
-		return ltMastBranchesDao.getAllActiveShippingAddrByBuyer(id);
+	public List<LtMastBranches> getAllActiveShippingAddrByBuyer(Long companyId,Long poheaderid) throws ServiceException {
+		return ltMastBranchesDao.getAllActiveShippingAddrByBuyer(companyId,poheaderid);
 	}
 
 	@Override

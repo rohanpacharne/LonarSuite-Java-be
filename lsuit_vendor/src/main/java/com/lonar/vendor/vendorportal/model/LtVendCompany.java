@@ -60,10 +60,32 @@ public class LtVendCompany extends WhoColumns
 	
 	@Column(name = "LOGO_PATH")
 	private String logoPath;
+	
+	@Column(name ="SUPPORT_EMAIL")
+	private String supportEmail;
+	
+	@Column(name = "SUPPORT_CONTACT_NO")
+	private String supportContactNo;
 
 	@Transient
 	private String fileName;
 	
+	public String getSupportEmail() {
+		return supportEmail;
+	}
+
+	public void setSupportEmail(String supportEmail) {
+		this.supportEmail = supportEmail;
+	}
+
+	public String getSupportContactNo() {
+		return supportContactNo;
+	}
+
+	public void setSupportContactNo(String supportContactNo) {
+		this.supportContactNo = supportContactNo;
+	}
+
 	public Long getCompanyId() {
 		return companyId;
 	}
@@ -159,7 +181,8 @@ public class LtVendCompany extends WhoColumns
 	public String toString() {
 		return "LtVendCompany [companyId=" + companyId + ", companyName=" + companyName + ", regdAddress=" + regdAddress
 				+ ", city=" + city + ", state=" + state + ", status=" + status + ", pinCode=" + pinCode + ", panNumber="
-				+ panNumber + ", orgId=" + orgId + ", logoPath=" + logoPath + ", fileName=" + fileName + "]";
+				+ panNumber + ", orgId=" + orgId + ", logoPath=" + logoPath + ", supportEmail=" + supportEmail
+				+ ", supportContactNo=" + supportContactNo + ", fileName=" + fileName + "]";
 	}
 
 	

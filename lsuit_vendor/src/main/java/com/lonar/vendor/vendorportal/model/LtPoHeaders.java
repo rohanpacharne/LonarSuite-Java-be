@@ -163,6 +163,70 @@ public class LtPoHeaders
 	@Transient
 	private String buyer;
 	
+	@Transient
+	private String contactPerson;
+	@Transient
+	private String firstName;
+	@Transient
+	private String lastName;
+	@Transient
+	private String employeeNumber;
+ 
+	@Transient
+	private String venderContact;
+	@Transient
+	private String buyerName;
+	
+	
+	
+	public String getContactPerson() {
+		return contactPerson;
+	}
+
+	public void setContactPerson(String contactPerson) {
+		this.contactPerson = contactPerson;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getEmployeeNumber() {
+		return employeeNumber;
+	}
+
+	public void setEmployeeNumber(String employeeNumber) {
+		this.employeeNumber = employeeNumber;
+	}
+
+	public String getVenderContact() {
+		return venderContact;
+	}
+
+	public void setVenderContact(String venderContact) {
+		this.venderContact = venderContact;
+	}
+
+	public String getBuyerName() {
+		return buyerName;
+	}
+
+	public void setBuyerName(String buyerName) {
+		this.buyerName = buyerName;
+	}
+
 	public Long getPoHeaderId() {
 		return poHeaderId;
 	}
@@ -535,7 +599,11 @@ public class LtPoHeaders
 				+ ", ackMsg=" + ackMsg + ", draw=" + draw + ", start=" + start + ", length=" + length + ", pDate="
 				+ pDate + ", revDate=" + revDate + ", columnNo=" + columnNo + ", sort=" + sort + ", vendorName="
 				+ vendorName + ", vendorAddress=" + vendorAddress + ", billingAddress=" + billingAddress + ", agent="
-				+ agent + ", buyer=" + buyer + "]";
+				+ agent + ", buyer=" + buyer + ", contactPerson=" + contactPerson + ", firstName=" + firstName
+				+ ", lastName=" + lastName + ", employeeNumber=" + employeeNumber + ", venderContact=" + venderContact
+				+ ", buyerName=" + buyerName + "]";
 	}
+
+	
 	
 }

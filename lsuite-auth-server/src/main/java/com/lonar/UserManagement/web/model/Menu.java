@@ -12,13 +12,21 @@ public class Menu {
 	private String read;
 	private String delete;
 	private String update;
+	private String moduleDesc;
 	
 	public Menu() {
 
 	}
 
 
+	public String getModuleDesc() {
+		return moduleDesc;
+	}
 
+	public void setModuleDesc(String moduleDesc) {
+		this.moduleDesc = moduleDesc;
+	}
+	
 	public Long getModuleId() {
 		return moduleId;
 	}
@@ -156,12 +164,11 @@ public class Menu {
 	}
 
 
-
 	@Override
 	public String toString() {
 		return "Menu [moduleId=" + moduleId + ", moduleGroup=" + moduleGroup + ", moduleName=" + moduleName
 				+ ", moduleCode=" + moduleCode + ", moduleUrl=" + moduleUrl + ", create=" + create + ", edit=" + edit
-				+ ", read=" + read + ", delete=" + delete + "]";
+				+ ", read=" + read + ", delete=" + delete + ", update=" + update + ", moduleDesc=" + moduleDesc + "]";
 	}
 
 	

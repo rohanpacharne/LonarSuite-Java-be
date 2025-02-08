@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import com.lonar.vendor.vendorportal.model.LtMastReportRequest;
 import com.lonar.vendor.vendorportal.model.LtMastSysRequests;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.model.Status;
+import java.io.ByteArrayOutputStream;
 
 @RestController
 @RequestMapping("/API/reports")
@@ -85,5 +87,54 @@ public class LtMastExcelReportsRestController implements CodeMaster{
 		return customeDataTable;
 
 	}
+	
+	@RequestMapping(value = "/travelReport", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Status> exportTravelToExcel(@RequestBody ReportParameter reportParameter) throws ServiceException, IOException {
+	    Status status = ltMastExcelReportsService.generateTravelExcelReport(reportParameter);
+        return new ResponseEntity<Status>(status,HttpStatus.OK);
+	}
+        
+    @RequestMapping(value = "/expenseReport", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+   	public ResponseEntity<Status> exportExpenseToExcel(@RequestBody ReportParameter reportParameter) throws ServiceException, IOException {
+   	    Status status = ltMastExcelReportsService.generateExpenseExcelReport(reportParameter);
+           return new ResponseEntity<Status>(status,HttpStatus.OK);
+   }
+    
+    @RequestMapping(value = "/purchaseReport", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+   	public ResponseEntity<Status> exportPurchaseToExcel(@RequestBody  ReportParameter  reportParameter) throws ServiceException, IOException {
+   	    Status status = ltMastExcelReportsService.generatePurchaseExcelReport(reportParameter);
+           return new ResponseEntity<Status>(status,HttpStatus.OK);
+   }
+    
+    @RequestMapping(value = "/invoicevspaymentReport", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+   	public ResponseEntity<Status> exportInvoiceToExcel(@RequestBody  ReportParameter  reportParameter) throws ServiceException, IOException {
+   	    Status status = ltMastExcelReportsService.generateInvoicevspaymentExcelReport(reportParameter);
+           return new ResponseEntity<Status>(status,HttpStatus.OK);
+   }
+    
+    @RequestMapping(value = "/vendorRegisterReport", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Status> exportVendorRegisterToExcel(@RequestBody  ReportParameter  reportParameter) throws ServiceException, IOException {
+	    Status status = ltMastExcelReportsService.generateVendorRegisterReport(reportParameter);
+        return new ResponseEntity<Status>(status,HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "/vendorProgressReport", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+   	public ResponseEntity<Status> exportVendorProgressToExcel(@RequestBody  ReportParameter  reportParameter) throws ServiceException, IOException {
+   	    Status status = ltMastExcelReportsService.generateVendorProgressReport(reportParameter);
+           return new ResponseEntity<Status>(status,HttpStatus.OK);
+   }
+    
+    @RequestMapping(value = "/getAllParameter/{requestId}/{logTime}", method = RequestMethod.GET)
+    public String getAllParameters(@PathVariable Long requestId,@PathVariable String logTime) throws Exception {
+        LtMastReportRequest reportRequest = ltMastExcelReportsService.getAllParameters(requestId);
+ 
+        if (reportRequest != null && reportRequest.getFilterData() != null) {
+            return reportRequest.getFilterData();// ✅ Return string
+        } else {
+            return null;
+        }
+    }
+	
+	
 
 }

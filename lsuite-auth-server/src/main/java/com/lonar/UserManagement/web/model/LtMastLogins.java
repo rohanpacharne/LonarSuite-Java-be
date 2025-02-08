@@ -1,162 +1,167 @@
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.lonar.UserManagement.web.model;
 
-import java.io.Serializable;
+import javax.persistence.*;
 import java.util.Date;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
-
-import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
-
-import com.fasterxml.jackson.annotation.JsonView;
-
 @Entity
-@Table(name = "LT_MAST_LOGINS")
-@XmlRootElement
-public class LtMastLogins implements Serializable {
+@Table(name = "LT_MAST_LOGINS")  // Replace with the actual table name if different
+public class LtMastLogins {
 
-	private static final long serialVersionUID = 1L;
-	@Id
-	@Basic(optional = false)
-	//@GeneratedValue(strategy = GenerationType.AUTO)
-//	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "logins_seq")
-//	@SequenceGenerator(name = "logins_seq", sequenceName = "LT_MAST_LOGINS_S", allocationSize = 1)
-	@JsonView(DataTablesOutput.View.class)
-	@Column(name = "LOGIN_ID")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long loginId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)  // For auto_increment in the database
+    @Column(name = "login_id")
+    private int loginId;
 
-	@JsonView(DataTablesOutput.View.class)
-	@Column(name = "USER_ID")
-	private long userId;
+    @Column(name = "user_id")
+    private Integer userId;
 
-	@NotNull
-	@JsonView(DataTablesOutput.View.class)
-	@Column(name = "START_DATE")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date startDate;
-	
-	@JsonView(DataTablesOutput.View.class)
-	@Column(name = "END_DATE")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date endDate;
+    @Column(name = "device_token")
+    private String deviceToken;
 
-	@JsonView(DataTablesOutput.View.class)
-	@Column(name = "IP_ADDRESS")
-	private String ipAddress;
+    @Column(name = "device_type")
+    private String deviceType;
 
-	@JsonView(DataTablesOutput.View.class)
-	@Column(name = "OLD_PASSWORD")
-	private String oldPassword;
-	
-	@JsonView(DataTablesOutput.View.class)
-	@Column(name = "TEMP_END_DATE")
-	private Date tmpEndDate;
+    @Column(name = "ip_address")
+    private String ipAddress;
 
-	public LtMastLogins() {
-	}
+    @Column(name = "login_date")
+    private Date loginDate;
 
-	public Long getLoginId() {
-		return loginId;
-	}
+    @Column(name = "logout_date")
+    private Date logoutDate;
 
-	public void setLoginId(Long loginId) {
-		this.loginId = loginId;
-	}
+    @Column(name = "status")
+    private String status;
 
-	public long getUserId() {
-		return userId;
-	}
+    @Column(name = "creation_date")
+    private Date creationDate;
 
-	public void setUserId(long userId) {
-		this.userId = userId;
-	}
+    @Column(name = "created_by")
+    private Integer createdBy;
 
-	public Date getStartDate() {
-		return startDate;
-	}
+    @Column(name = "last_update_date")
+    private Date lastUpdateDate;
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
+    @Column(name = "last_update_login")
+    private Integer lastUpdateLogin;
 
-	public Date getEndDate() {
-		return endDate;
-	}
+    @Column(name = "last_updated_by")
+    private Integer lastUpdatedBy;
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
+    // Getters and Setters
 
-	public String getIpAddress() {
-		return ipAddress;
-	}
+    public int getLoginId() {
+        return loginId;
+    }
 
-	public void setIpAddress(String ipAddress) {
-		this.ipAddress = ipAddress;
-	}
+    public void setLoginId(int loginId) {
+        this.loginId = loginId;
+    }
 
-	public String getOldPassword() {
-		return oldPassword;
-	}
+    public Integer getUserId() {
+        return userId;
+    }
 
-	public void setOldPassword(String oldPassword) {
-		this.oldPassword = oldPassword;
-	}
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
-	public Date getTmpEndDate() {
-		return tmpEndDate;
-	}
+    public String getDeviceToken() {
+        return deviceToken;
+    }
 
-	public void setTmpEndDate(Date tmpEndDate) {
-		this.tmpEndDate = tmpEndDate;
-	}
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((loginId == null) ? 0 : loginId.hashCode());
-		return result;
-	}
+    public String getDeviceType() {
+        return deviceType;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		LtMastLogins other = (LtMastLogins) obj;
-		if (loginId == null) {
-			if (other.loginId != null)
-				return false;
-		} else if (!loginId.equals(other.loginId))
-			return false;
-		return true;
-	}
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
+
+    public Date getLoginDate() {
+        return loginDate;
+    }
+
+    public void setLoginDate(Date loginDate) {
+        this.loginDate = loginDate;
+    }
+
+    public Date getLogoutDate() {
+        return logoutDate;
+    }
+
+    public void setLogoutDate(Date logoutDate) {
+        this.logoutDate = logoutDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public Integer getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(Integer createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
+
+    public Integer getLastUpdateLogin() {
+        return lastUpdateLogin;
+    }
+
+    public void setLastUpdateLogin(Integer lastUpdateLogin) {
+        this.lastUpdateLogin = lastUpdateLogin;
+    }
+
+    public Integer getLastUpdatedBy() {
+        return lastUpdatedBy;
+    }
+
+    public void setLastUpdatedBy(Integer lastUpdatedBy) {
+        this.lastUpdatedBy = lastUpdatedBy;
+    }
 
 	@Override
 	public String toString() {
-		return "LtMastLogins [loginId=" + loginId + ", userId=" + userId + ", startDate=" + startDate + ", endDate="
-				+ endDate + ", ipAddress=" + ipAddress + "]";
+		return "LtMastLogins [loginId=" + loginId + ", userId=" + userId + ", deviceToken=" + deviceToken
+				+ ", deviceType=" + deviceType + ", ipAddress=" + ipAddress + ", loginDate=" + loginDate
+				+ ", logoutDate=" + logoutDate + ", status=" + status + ", creationDate=" + creationDate
+				+ ", createdBy=" + createdBy + ", lastUpdateDate=" + lastUpdateDate + ", lastUpdateLogin="
+				+ lastUpdateLogin + ", lastUpdatedBy=" + lastUpdatedBy + "]";
 	}
 
+    // Override toString, equals, hashCode if necessary
 }

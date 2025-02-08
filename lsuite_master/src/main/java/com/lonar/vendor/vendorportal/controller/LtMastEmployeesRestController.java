@@ -213,4 +213,9 @@ public class LtMastEmployeesRestController implements CodeMaster {
 				 status =  ltMastEmployeesService.getCompanyByBuyer(buyerId);
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 		}
+		
+		@RequestMapping(value = "/getAllBuyer/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<List<LtMastEmployees>> getAllBuyer(@PathVariable("logTime") String logTime) throws ServiceException {	
+				return ltMastEmployeesService.getAllBuyer();
+		}
 }

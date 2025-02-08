@@ -100,7 +100,6 @@ public class LtMastSysVariablesDaoImpl implements LtMastSysVariablesDao
 						
 						sysVariableWithValues.setLtMastSysVariables(ltMastSysVariables);
 						sysVariableWithValues.setLtMastSysVariableValues(list);
-						
 						return sysVariableWithValues;
 					}
 		});

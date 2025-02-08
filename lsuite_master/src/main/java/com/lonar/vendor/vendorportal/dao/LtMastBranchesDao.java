@@ -40,7 +40,7 @@ public interface LtMastBranchesDao {
 
 	public List<LtMastBranches> getAllActiveBillingAddrByBuyer(Long id) throws ServiceException ;
 
-	public List<LtMastBranches> getAllActiveShippingAddrByBuyer(Long id) throws ServiceException ;
+	public List<LtMastBranches> getAllActiveShippingAddrByBuyer(Long companyId,Long poheaderid) throws ServiceException ;
 
 	public List<LtMastBranches> getLtMastBranchesByCompID(Long id) throws ServiceException ;
 

@@ -64,6 +64,12 @@ public class LtVendCompany extends WhoColumns
 	@Column(name = "BUSINESS_GROUP_NAME")
 	private String businessGroupName;
 	
+	@Column(name ="SUPPORT_EMAIL")
+	private String supportEmail;
+	
+	@Column(name = "SUPPORT_CONTACT_NO")
+	private String supportContactNo;
+	
 	@Transient
 	private String fileName;
 	
@@ -72,6 +78,24 @@ public class LtVendCompany extends WhoColumns
 	
 	@Transient
 	private String stateValue;
+	
+	
+
+	public String getSupportEmail() {
+		return supportEmail;
+	}
+
+	public void setSupportEmail(String supportEmail) {
+		this.supportEmail = supportEmail;
+	}
+
+	public String getSupportContactNo() {
+		return supportContactNo;
+	}
+
+	public void setSupportContactNo(String supportContactNo) {
+		this.supportContactNo = supportContactNo;
+	}
 
 	public Long getCompanyId() {
 		return companyId;
@@ -199,8 +223,9 @@ public class LtVendCompany extends WhoColumns
 		return "LtVendCompany [companyId=" + companyId + ", companyName=" + companyName + ", regdAddress=" + regdAddress
 				+ ", city=" + city + ", stateId=" + stateId + ", status=" + status + ", pinCode=" + pinCode
 				+ ", panNumber=" + panNumber + ", orgId=" + orgId + ", logoPath=" + logoPath + ", businessGroupId="
-				+ businessGroupId + ", businessGroupName=" + businessGroupName + ", fileName=" + fileName
-				+ ", statusValue=" + statusValue + ", stateValue=" + stateValue + "]";
+				+ businessGroupId + ", businessGroupName=" + businessGroupName + ", supportEmail=" + supportEmail
+				+ ", supportContactNo=" + supportContactNo + ", fileName=" + fileName + ", statusValue=" + statusValue
+				+ ", stateValue=" + stateValue + "]";
 	}
 
 	

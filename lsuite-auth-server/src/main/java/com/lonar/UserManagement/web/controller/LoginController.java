@@ -24,14 +24,17 @@ import com.lonar.UserManagement.common.CommonMethod;
 import com.lonar.UserManagement.common.ServiceException;
 import com.lonar.UserManagement.web.dao.UserDao;
 import com.lonar.UserManagement.web.model.CodeMaster;
+import com.lonar.UserManagement.web.model.LtMastLogins;
 import com.lonar.UserManagement.web.model.LtMastPasswords;
 import com.lonar.UserManagement.web.model.LtMastUsers;
+import com.lonar.UserManagement.web.model.Menu;
 import com.lonar.UserManagement.web.model.ResponceEntity;
 import com.lonar.UserManagement.web.model.Status;
 import com.lonar.UserManagement.web.repository.LtMastPasswordsRepository;
 import com.lonar.UserManagement.web.repository.LtMastUsersRepository;
 import com.lonar.UserManagement.web.service.LoginService;
 import com.lonar.UserManagement.web.service.LtMastCommonMessageService;
+import com.lonar.UserManagement.web.service.LtMastLoginsService;
 import com.lonar.UserManagement.web.service.LtMastPasswordsService;
 
 @RestController
@@ -55,6 +58,9 @@ public class LoginController implements CodeMaster{
 	 
 	 @Autowired
 	 LtMastPasswordsService ltMastPasswordsService;
+	 
+	 @Autowired
+	 LtMastLoginsService ltMastLoginsService ;
 	/*
 	@RequestMapping(value="/logout", method = RequestMethod.GET)
 	public ResponceEntity logoutUser (HttpServletRequest request, HttpServletResponse response) {
@@ -81,6 +87,41 @@ public class LoginController implements CodeMaster{
 	public ResponceEntity loginUser(@RequestBody LtMastUsers user,  HttpServletResponse response) throws ServiceException {
 		
 		return loginService.loginUser(user, response);
+	}
+	
+	@RequestMapping(value="/mfaCheck", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE )
+	@ResponseBody
+	public Status mfaCheck(@RequestBody LtMastUsers user) throws ServiceException {
+		
+		return loginService.mfaCheck(user);
+	}
+	
+	@RequestMapping(value="/sendMfaOtp", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE )
+	@ResponseBody
+	public Status sendMfaOtp(@RequestBody LtMastUsers user) throws ServiceException {
+		
+		return loginService.sendMfaOtp(user);
+	}
+	
+	@RequestMapping(value="/verifyMfaOtp", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE )
+	@ResponseBody
+	public Status verifyMfaOtp(@RequestBody LtMastUsers user) throws ServiceException {
+		
+		return loginService.verifyMfaOtp(user);
+	}
+	
+	@RequestMapping(value="/saveLoginDetails", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE )
+	@ResponseBody
+	public Status saveLoginDetails(@RequestBody LtMastLogins ltMastLogins) throws ServiceException {
+		
+		return ltMastLoginsService.saveLoginDetails(ltMastLogins);
+	}
+	
+	@RequestMapping(value="/updateLoginDetails", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE )
+	@ResponseBody
+	public Status updateLoginDetails(@RequestBody LtMastLogins ltMastLogins) throws ServiceException {
+		
+		return ltMastLoginsService.updateLoginDetails(ltMastLogins);
 	}
 	
 	@RequestMapping(value="/mobileLogin", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE )
@@ -245,6 +286,16 @@ public class LoginController implements CodeMaster{
 		status =loginService.changePasswordUtility(jsonInputString);
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/getReports/{userId}/{companyId}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	 public List<Menu> getModulesByUserId(@PathVariable Long userId,@PathVariable Long companyId,@PathVariable String logTime,
+	    		@RequestParam(required = false) String moduleType,	@RequestParam(required = false) String searchTerm) {
+		 List<Menu> response = loginService.getModulesByUserId(userId, companyId,moduleType,searchTerm);
+	        if (response.isEmpty()) {
+	            return null;  
+	        }
+	        return response;  
+	    }
 	
 
 

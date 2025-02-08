@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Transient;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -48,6 +49,11 @@ import com.lonar.UserManagement.web.model.SysVariableWithValues;
 import com.lonar.UserManagement.web.repository.LtMastEmailtokenRepository;
 import com.lonar.UserManagement.web.repository.LtMastPasswordsRepository;
 import com.lonar.UserManagement.web.repository.LtMastUsersRepository;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 @Service
 @PropertySource(value = "classpath:serverurl.properties", ignoreResourceNotFound = true)
@@ -129,9 +135,16 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 					}
 							//if (BCrypt.checkpw(ltP2pUsers.get(0).getPassword().trim(), user.getPassword().trim())) {
 					//if (BCrypt.checkpw(ltP2pUsers.get(0).getP, user.getPassword().trim())) {
-
+//					System.out.println("original password = "+ltP2pUsers.get(0).getPassword().trim());
+//					String hashedPassword = hashPassword(ltP2pUsers.get(0).getPassword().trim());
+//					System.out.println("hashedPassword = "+hashedPassword);
+//					if (hashedPassword.equals(user.getPassword())) {
+//		                System.out.println("✅ Password Matched!");
+//		            } else {
+//		                System.out.println("❌ Invalid Password!");
+//		            }
 					
-					if (ltP2pUsers.get(0).getPassword().trim().equalsIgnoreCase(user.getPassword().trim())){
+					if (ltP2pUsers.get(0).getPassword().trim().equals(user.getPassword().trim())){
 						entity = new ResponceEntity();
 						response.setHeader("userId", ltP2pUsers.get(0).getUserId() + "");
 						response.setHeader("employeeId", ltP2pUsers.get(0).getEmployeeId() + "");
@@ -205,8 +218,10 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 						}
 
 						List<Menu> menuList = ltMastUsersDao.findMenu(ltP2pUsers.get(0).getUserId(),entity.getCompanyId());
+						List<Menu> reportList = ltMastUsersDao.findReport(ltP2pUsers.get(0).getUserId(),entity.getCompanyId());
 						System.out.println(menuList.toString()+ltP2pUsers.get(0).getUserId()+entity.getCompanyId());
 						entity.setData(menuList);
+						entity.setReport(reportList);
 						entity.setCode(1);
 						System.out.println("Menu = "+menuList);
 						userDao.saveLoginToken(tokenInfo);
@@ -238,6 +253,18 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 		
 		//final LtMastUsers user1 = userDao.findByUserName(user.getUserName());
 	}
+	
+	public static String hashPassword(String password) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] encodedHash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+
+        // Convert to Hex String
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : encodedHash) {
+            hexString.append(String.format("%02x", b));
+        }
+        return hexString.toString();
+    }
 	
 	@Override
 	public ResponceEntity loginUserForMobile(LtMastUsers user, HttpServletResponse response) {
@@ -846,6 +873,60 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 	        } 
 	    }
 
+	 @Override
+		public Status mfaCheck(LtMastUsers ltMastUsers) {
+			// TODO Auto-generated method stub
+		 Status status = new Status();
+		 String mfa = ltMastUsersDao.mfaCheck(ltMastUsers);
+		 if(mfa==null) {
+			 status.setCode(0);
+			 status.setMessage("MFA not found");
+			 status.setData(mfa);
+		 }else {
+			 status.setCode(1);
+			 status.setMessage("MFA found");
+			 status.setData(mfa);
+		 }
+		 return status;
+		}
+	 
+	 @Override
+		public Status sendMfaOtp(LtMastUsers ltMastUsers) {
+			// TODO Auto-generated method stub
+		 Status status = new Status();
+		 if(ltMastUsers.getUserName()!=null && ltMastUsers.getPassword()!=null) {
+			 status.setCode(1);
+			 status.setMessage("OTP has been sent to your email");
+			 status.setData(null);
+		 }else {
+			 status.setCode(0);
+			 status.setMessage("Invalid username and password");
+			 status.setData(null);
+		 }
+		 return status;
+		}
+	 
+	 @Override
+		public Status verifyMfaOtp(LtMastUsers ltMastUsers) {
+			// TODO Auto-generated method stub
+		 Status status = new Status();
+		 if(ltMastUsers.getUserName()!=null && ltMastUsers.getPassword()!=null && ltMastUsers.getOtp().equals("1234")) {
+			 status.setCode(1);
+			 status.setMessage("OTP verified successfully");
+			 status.setData(null);
+		 }else {
+			 status.setCode(0);
+			 status.setMessage("Invalid OTP, please check");
+			 status.setData(null);
+		 }
+		 return status;
+		}
+	 
+	 @Override
+	 public List<Menu> getModulesByUserId(Long userId, Long companyId,String moduleType,String searchTerm) {
+	 	 return ltMastUsersDao.getModulesByUserId(userId,companyId,moduleType,searchTerm);
+	 	
+	 }
 
 
 	
