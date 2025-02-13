@@ -53,5 +53,12 @@ public interface LtMastComnMasterValuesService {
 	
 	public List<LtMastComnMasterValues>  getDataTable(LtMastComnMasterValues input,Long masterId) throws ServiceException;
 
+	public List<LtMastComnMasterValues> getById(LtMastComnMasterValues input, Long masterId)throws ServiceException;
+
+
+
+	
+;
+
 
 }

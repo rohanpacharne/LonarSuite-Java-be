@@ -427,6 +427,14 @@ public class LtPoHeadersDaoImpl implements LtPoHeadersDao {
 		return poReportList;
 	}
 
+	@Override
+	public List<LtPoHeaders> getAllActivePo(Long companyId) throws ServiceException {
+		String query = env.getProperty("getAllActivePo");
+		List<LtPoHeaders> list = jdbcTemplate.query(query, new Object[] {companyId },
+				new BeanPropertyRowMapper<LtPoHeaders>(LtPoHeaders.class));
+		return list;
+	}
+
 	 
 	 
 }

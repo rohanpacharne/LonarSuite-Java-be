@@ -1,10 +1,6 @@
 package com.lonar.vendor.vendorportal.dao;
-
-import java.util.Date;
 import java.util.List;
-
 import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -12,7 +8,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.lonar.vendor.vendorportal.model.LtExpExpenseLines;
 import com.lonar.vendor.vendorportal.repository.LtExpExpenseLinesRepository;
 
@@ -267,6 +262,7 @@ public class LtExpExpenseLinesDaoImpl implements LtExpExpenseLinesDao{
 		else
 			return false;
 	}
+	
 	
 	public boolean updateHeader(Long expHeaderId, List<Long> expLineIds) {
 	    // Ensure the query updates the header ID for a given line ID

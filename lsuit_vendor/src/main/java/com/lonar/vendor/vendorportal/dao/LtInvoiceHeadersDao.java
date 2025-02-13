@@ -3,9 +3,11 @@ package com.lonar.vendor.vendorportal.dao;
 import java.util.Date;
 import java.util.List;
 
+import com.lonar.vendor.vendorportal.model.BusinessException;
 import com.lonar.vendor.vendorportal.model.DashboardDetails;
 import com.lonar.vendor.vendorportal.model.InvoiceApproval;
 import com.lonar.vendor.vendorportal.model.LtInvoiceHeaders;
+import com.lonar.vendor.vendorportal.model.ProcedureCall;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.model.Status;
 
@@ -22,7 +24,7 @@ public interface LtInvoiceHeadersDao
 
 	List<DashboardDetails> getCountAndStatusByVendorId(Long vendorId) throws ServiceException;
 
-	List<LtInvoiceHeaders> getAllInvoice() throws ServiceException;
+	List<LtInvoiceHeaders> getAllInvoice(Long companyId) throws ServiceException;
 
 	List<LtInvoiceHeaders> getAllInvoiceByInitiator(Long initiatorId) throws ServiceException;
 
@@ -71,4 +73,9 @@ public interface LtInvoiceHeadersDao
 	Status callUpdatePoShipmentQuantitiesProc(Long companyId,Long userId,Long invoiceHeaderId) throws ServiceException;
 
 	void loadLines(LtInvoiceHeaders ltInvoiceHeaders);
+
+	ProcedureCall checkDuplicateInvoice(Long companyId, String invoiceNum, Long vendorId, Long vendorAddId,
+			Date invoiceDate);
+
+
 }

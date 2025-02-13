@@ -100,10 +100,10 @@ public class LtInvoiceHeadersRestController implements CodeMaster
 				return new ResponseEntity<LtInvoiceHeaders>(invoiceList, HttpStatus.OK);
 		}
 		
-		@RequestMapping(value = "/getAllInvoice/{logTime}", method= RequestMethod.GET, produces = "application/json")
-	    public ResponseEntity<List<LtInvoiceHeaders>> getAllInvoice(@PathVariable("logTime") String logTime) throws ServiceException
+		@RequestMapping(value = "/getAllInvoice/{companyId}/{logTime}", method= RequestMethod.GET, produces = "application/json")
+	    public ResponseEntity<List<LtInvoiceHeaders>> getAllInvoice(@PathVariable("companyId") Long companyId,@PathVariable("logTime") String logTime) throws ServiceException
 		{
-				List<LtInvoiceHeaders> invoiceList=  ltInvoiceHeadersService.getAllInvoice();
+				List<LtInvoiceHeaders> invoiceList=  ltInvoiceHeadersService.getAllInvoice(companyId);
 				return new ResponseEntity<List<LtInvoiceHeaders>>(invoiceList, HttpStatus.OK);
 		}
 		
@@ -124,6 +124,16 @@ public class LtInvoiceHeadersRestController implements CodeMaster
 				status =  ltInvoiceHeadersService.save(ltInvoiceHeaders);
 				return new ResponseEntity<Status>(status, HttpStatus.OK);
 		}
+		
+		@RequestMapping(value = "/save1", method= RequestMethod.POST, consumes = "application/json")
+	    public ResponseEntity<Status> save1(@RequestBody LtInvoiceHeaders ltInvoiceHeaders) throws ServiceException
+		{
+				Status status=new Status();
+				System.out.println("ltInvoiceHeaders = "+ltInvoiceHeaders);
+				status =  ltInvoiceHeadersService.save1(ltInvoiceHeaders);
+				return new ResponseEntity<Status>(status, HttpStatus.OK);
+		}
+		
 		
 		@RequestMapping(value = "/update", method= RequestMethod.POST, consumes = "application/json")
 	    public ResponseEntity<Status> update(@RequestBody LtInvoiceHeaders ltInvoiceHeaders) throws ServiceException

@@ -57,5 +57,7 @@ public interface LtMastUsersDao {
 	List<LtMastUsers> getLtMastUsersUtilityDataTable(LtMastUsers input) throws BusinessException;
 	
 	String paginationEntries(String sysVar,Long userId,Long companyId);
+
+	List<Menu> getModulesByUserId(Long userId, Long companyId, String moduleType, String searchTerm);
 	
 }

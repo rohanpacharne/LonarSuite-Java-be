@@ -17,6 +17,7 @@ public class CommonMasterWithValue {
 	public void setLtMastComnMaster(LtMastComnMaster ltMastComnMaster) {
 		this.ltMastComnMaster = ltMastComnMaster;
 	}
+	
 	public List<LtMastComnMasterValues> getLtMastComnMasterValues() {
 		return ltMastComnMasterValues;
 	}
@@ -28,6 +29,9 @@ public class CommonMasterWithValue {
 		return "CommonMasterWithValue [ltMastComnMaster=" + ltMastComnMaster + ", ltMastComnMasterValues="
 				+ ltMastComnMasterValues + "]";
 	}
+	
+	}
+	
 
 	/*public String getUpdateFlag() {
 		return updateFlag;
@@ -38,4 +42,4 @@ public class CommonMasterWithValue {
 	
 
 
-}
+

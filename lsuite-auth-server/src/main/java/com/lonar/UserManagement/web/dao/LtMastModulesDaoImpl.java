@@ -237,6 +237,8 @@ public class LtMastModulesDaoImpl implements LtMastModulesDao {
 		{ input.setColumnNo(15); }
 		if(input.getColumnNo()==7 && input.getSort().equals("desc"))
 		{ input.setColumnNo(17); }
+		if(input.getColumnNo()==8 && input.getSort().equals("desc"))
+		{ input.setColumnNo(18); }
 		
 		String seq=null;
 		if(input.getSequenceNumber()!=null && !input.getSequenceNumber().equals("")) 
@@ -250,6 +252,10 @@ public class LtMastModulesDaoImpl implements LtMastModulesDao {
 		if(input.getModuleName()!=null && !input.getModuleName().equals("")) 
 		{name="%"+input.getModuleName().trim().toUpperCase()+"%";}
 		
+		String type=null;
+		if(input.getModuleType()!=null && !input.getModuleType().equals("")) 
+		{type="%"+input.getModuleType().trim().toUpperCase()+"%";}
+		
 		String group=null;
 		if(input.getModuleGroup()!=null && !input.getModuleGroup().equals("")) 
 		{group="%"+input.getModuleGroup().trim().toUpperCase()+"%";}
@@ -260,14 +266,15 @@ public class LtMastModulesDaoImpl implements LtMastModulesDao {
 			String query = env.getProperty("getModuleData");
 			
 			return (List<LtMastModules>) 
-					jdbcTemplate.query(query , new Object[]{companyId,seq,code,name,group,
+					jdbcTemplate.query(query , new Object[]{companyId,seq,code,name,type,group,
 							
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
-							
+							input.getColumnNo(),input.getColumnNo(),
+						
 							input.getLength() + input.getStart(),input.getStart()+1
 							},
 				 new  BeanPropertyRowMapper<LtMastModules>(LtMastModules.class));

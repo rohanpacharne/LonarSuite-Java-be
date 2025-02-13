@@ -54,7 +54,17 @@
 			<attribute name="m2e-apt" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/Lexa/Vpal-Lexa/Vpal_Lexa_22_JUL_24/vendorPortal_10March2023/mysql-connector-j-8.0.31-javadoc.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Administrator/Downloads/jna-5.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/LonarSuite/LonarSuite-Java-be/mysql-connector-j-8.0.31-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Admin/Downloads/jna-5.0.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Admin/.m2/repository/org/apache/poi/poi-ooxml/3.9/poi-ooxml-3.9.jar" sourcepath="C:/Users/Admin/.m2/repository/org/apache/poi/poi-ooxml/3.9/poi-ooxml-3.9-sources.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="org.eclipse.jst.component.archivename" value="poi-ooxml-3.9.jar"/>
+			<attribute name="maven.groupId" value="org.apache.poi"/>
+			<attribute name="maven.artifactId" value="poi-ooxml"/>
+			<attribute name="maven.version" value="3.9"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

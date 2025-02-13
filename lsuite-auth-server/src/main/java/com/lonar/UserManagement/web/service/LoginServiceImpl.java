@@ -49,6 +49,7 @@ import com.lonar.UserManagement.web.repository.LtMastEmailtokenRepository;
 import com.lonar.UserManagement.web.repository.LtMastPasswordsRepository;
 import com.lonar.UserManagement.web.repository.LtMastUsersRepository;
 
+
 @Service
 @PropertySource(value = "classpath:serverurl.properties", ignoreResourceNotFound = true)
 public class LoginServiceImpl implements LoginService, CodeMaster {
@@ -844,6 +845,12 @@ public class LoginServiceImpl implements LoginService, CodeMaster {
 	            return null; 
 	        } 
 	    }
+
+	 @Override
+	 public List<Menu> getModulesByUserId(Long userId, Long companyId,String moduleType,String searchTerm) {
+	 	 return ltMastUsersDao.getModulesByUserId(userId,companyId,moduleType,searchTerm);
+	 	
+	 }
 
 
 

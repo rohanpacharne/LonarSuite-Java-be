@@ -96,6 +96,8 @@ public class LtPoLines {
 	@Transient
 	private String productCategory;
 	
+	
+	
 	public Long getPoLineId() {
 		return poLineId;
 	}

@@ -835,6 +835,11 @@ public class LtMastEmployeesServiceImpl implements LtMastEmployeesService,CodeMa
 		List<LtMastEmployees>  employees = ltMastEmployeesDao.getAllBuyerByDivId( divisionId);
 		return new ResponseEntity(employees, HttpStatus.OK); 
 	}
+	@Override
+	public ResponseEntity<List<LtMastEmployees>> getAllBuyer() throws ServiceException {
+		List<LtMastEmployees>  employees = ltMastEmployeesDao.getAllBuyer();
+		return new ResponseEntity(employees, HttpStatus.OK); 
+	}
 
 	@Transactional
 	@Override

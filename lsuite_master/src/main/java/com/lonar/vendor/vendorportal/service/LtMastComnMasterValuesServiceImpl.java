@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.lonar.vendor.vendorportal.dao.LtMastComnMasterValuesDao;
 import com.lonar.vendor.vendorportal.model.CodeMaster;
+import com.lonar.vendor.vendorportal.model.CommonMasterWithValue;
 import com.lonar.vendor.vendorportal.model.LtMastComnMaster;
 import com.lonar.vendor.vendorportal.model.LtMastComnMasterValues;
 import com.lonar.vendor.vendorportal.model.ServiceException;
@@ -366,6 +367,42 @@ public class LtMastComnMasterValuesServiceImpl implements LtMastComnMasterValues
 	@Override
 	public Long getCount(LtMastComnMasterValues input, Long masterId){
 		return ltMastComnMasterValuesDao.getCount(input,masterId);
+	}
+	
+	
+	@Override
+	@Transactional
+	public List<LtMastComnMasterValues> getById(LtMastComnMasterValues input, Long masterId)
+			throws ServiceException {
+		if(input.getColumnNo()==1 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(11);
+		}
+		if(input.getColumnNo()==2 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(12);
+		}
+		if(input.getColumnNo()==3 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(13);
+		}
+		if(input.getColumnNo()==4 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(14);
+		}
+		if(input.getColumnNo()==5 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(15);
+		}
+		if(input.getColumnNo()==6 && input.getSort().equals("asc"))
+		{
+			input.setColumnNo(16);
+		}
+		if(input.getColumnNo()==0)
+		{
+			input.setColumnNo(1);
+		}
+		return ltMastComnMasterValuesDao.getById(input, masterId);
 	}
 
 	@Override

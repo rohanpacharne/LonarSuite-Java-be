@@ -21,6 +21,7 @@ import com.lonar.vendor.vendorportal.model.BusinessException;
 import com.lonar.vendor.vendorportal.model.CodeMaster;
 import com.lonar.vendor.vendorportal.model.CustomeDataTable;
 import com.lonar.vendor.vendorportal.model.LtExpExpenseLines;
+import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.model.Status;
 import com.lonar.vendor.vendorportal.service.LtExpExpenseLinesService;
 
@@ -109,7 +110,7 @@ public class LtExpExpenseLinesRestController implements CodeMaster {
 					LtExpExpenseLines.class);
 			System.out.println("ltExpExpenseLine "+ltExpExpenseLine);
 			System.out.println(ltExpExpenseLine.getStartDate()+"  "+ltExpExpenseLine.getLastUpdateLogin());
-				status=ltExpExpenseLinesService.saveV1(ltExpExpenseLine,files,companyId);
+				status=ltExpExpenseLinesService.saveV1(ltExpExpenseLine, files, companyId);
 				System.out.println("status "+status);
 		}
 		catch (NullPointerException e)
@@ -122,6 +123,8 @@ public class LtExpExpenseLinesRestController implements CodeMaster {
 		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
+	
+	
 	
 	@RequestMapping(value = "/getExpenseLinesByExpHeaderId/{id}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<LtExpExpenseLines>> getExpenseLinesByExpHeaderId(@PathVariable("id") Long headerId,@PathVariable("logTime") String logTime) 

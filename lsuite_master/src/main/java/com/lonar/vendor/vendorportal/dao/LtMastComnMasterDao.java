@@ -2,8 +2,10 @@ package com.lonar.vendor.vendorportal.dao;
 
 import java.util.List;
 
+import com.lonar.vendor.vendorportal.model.CommonMasterPagination;
 import com.lonar.vendor.vendorportal.model.CommonMasterWithValue;
 import com.lonar.vendor.vendorportal.model.LtMastComnMaster;
+import com.lonar.vendor.vendorportal.model.LtMastComnMasterValues;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 
 
@@ -19,11 +21,19 @@ public interface LtMastComnMasterDao
 	public List<LtMastComnMaster> findActiveLikeName(String masterName) throws ServiceException;
 
 	//------------------------------------------------------------------------------
-	public CommonMasterWithValue getById(String id) throws ServiceException;
+
 
 	public List<LtMastComnMaster> getDataTable(LtMastComnMaster input) throws ServiceException;
 
 	public Long getCount(LtMastComnMaster input) throws ServiceException;
 
 	public LtMastComnMaster getLtMastComnMasterByID(Long commonMasterId) throws ServiceException;
+
+	public CommonMasterWithValue getById(String id) throws ServiceException;
+
+	public CommonMasterPagination getmById(Long masterId)throws ServiceException;
+
+
+	
+
 }

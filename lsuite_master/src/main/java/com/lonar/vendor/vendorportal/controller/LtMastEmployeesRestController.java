@@ -176,6 +176,11 @@ public class LtMastEmployeesRestController implements CodeMaster {
 		public ResponseEntity<List<LtMastEmployees>> getAllBuyerByDivId(@PathVariable("divisionId") String divisionId,@PathVariable("logTime") String logTime) throws ServiceException {	
 				return ltMastEmployeesService.getAllBuyerByDivId( divisionId);
 		}	
+		
+		@RequestMapping(value = "/getAllBuyer/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<List<LtMastEmployees>> getAllBuyer(@PathVariable("logTime") String logTime) throws ServiceException {	
+				return ltMastEmployeesService.getAllBuyer();
+		}	
 	//================================================================================================================================	
 		@RequestMapping(value = "/getLtMastEmployeesBySuperWiserId/{id}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 		public ResponseEntity<List<LtMastEmployees>> getLtMastEmployeesBySuperWiserId(@PathVariable("id") Long employeeId,@PathVariable("logTime") String logTime) throws ServiceException {

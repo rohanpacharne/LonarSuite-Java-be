@@ -29,6 +29,7 @@ import com.lonar.UserManagement.web.model.Menu;
 import com.lonar.UserManagement.web.model.SysVariableWithValues;
 import com.lonar.UserManagement.web.repository.LtMastUsersRepository;
 
+
 @Repository
 @PropertySource(value = "classpath:queries/userMasterQueries.properties", ignoreResourceNotFound = true)
 public class LtMastUsersDaoImpl implements LtMastUsersDao, CodeMaster
@@ -471,9 +472,37 @@ public class LtMastUsersDaoImpl implements LtMastUsersDao, CodeMaster
         // Call the function and get the result as an Integer
         return jdbcTemplate.queryForObject(sql, new Object[]{sysVar, userId, companyId}, String.class);
 	}
+
+	@Override
+	public List<Menu> getModulesByUserId(Long userId, Long companyId,String moduleType,String searchTerm) {
+		  String query = env.getProperty("findMenuQuery");
+		    
+		  return jdbcTemplate.query(query,new Object[]{userId,companyId,moduleType,searchTerm}, new RowMapper<Menu>(){
+				@Override
+				public Menu mapRow(ResultSet rs, int row)
+						throws SQLException {
+					System.out.println(rs.getFetchSize());
+						Menu menu=new Menu();
+						menu.setModuleId(rs.getLong("MODULE_ID"));
+						menu.setModuleName(rs.getString("MODULE_NAME"));
+						menu.setModuleCode(rs.getString("MODULE_CODE"));
+						menu.setModuleUrl(rs.getString("MODULE_URL"));
+						menu.setModuleGroup(rs.getString("MODULE_GROUP"));
+						menu.setCreate(rs.getString("CREATE_FLAG"));
+						menu.setRead(rs.getString("READ_FLAG"));
+						menu.setEdit(rs.getString("EDIT_FLAG"));
+						menu.setDelete(rs.getString("DELETE_FLAG"));
+						menu.setUpdate(rs.getString("UPDATE_FLAG"));
+						return menu;
+					}
+					
+			   });
+			   
+		}
+}
 	
 	
 	  
 	
  
-}
+

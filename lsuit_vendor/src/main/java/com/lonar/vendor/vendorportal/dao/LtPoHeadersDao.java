@@ -43,4 +43,6 @@ public interface LtPoHeadersDao
 
 	public List<LtPoReport> createPOPDFReport(Long poNumber,Long companyId);
 
+	List<LtPoHeaders> getAllActivePo(Long companyId)throws ServiceException;
+
 }

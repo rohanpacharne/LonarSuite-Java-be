@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lonar.vendor.vendorportal.model.BusinessException;
 import com.lonar.vendor.vendorportal.model.DashboardDetails;
 import com.lonar.vendor.vendorportal.model.LtInvoiceHeaders;
 import com.lonar.vendor.vendorportal.model.ServiceException;
@@ -24,7 +25,7 @@ public interface LtInvoiceHeadersService
 
 	List<DashboardDetails> getCountAndStatusByVendorId(Long vendorId) throws ServiceException;
 
-	List<LtInvoiceHeaders> getAllInvoice() throws ServiceException;
+	List<LtInvoiceHeaders> getAllInvoice(Long companyId) throws ServiceException;
 
 	List<LtInvoiceHeaders> getAllInvoiceByInitiator(Long initiatorId) throws ServiceException;
 
@@ -50,6 +51,10 @@ public interface LtInvoiceHeadersService
 	Long getLtInvoiceHeadersCountById(LtInvoiceHeaders input, Long id) throws ServiceException;
 
 	List<LtInvoiceHeaders> getLtInvoiceHeadersDataTableById(LtInvoiceHeaders input, Long id) throws ServiceException;
+
+	Status save1(LtInvoiceHeaders ltInvoiceHeaders) throws ServiceException;
+
+	
 
 	
 	

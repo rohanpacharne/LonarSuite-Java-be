@@ -21,6 +21,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.lonar.vendor.vendorportal.model.Approval;
+import com.lonar.vendor.vendorportal.model.BusinessException;
 import com.lonar.vendor.vendorportal.model.CodeMaster;
 import com.lonar.vendor.vendorportal.model.DashboardDetails;
 import com.lonar.vendor.vendorportal.model.InvoiceApproval;
@@ -29,6 +30,7 @@ import com.lonar.vendor.vendorportal.model.LtInvoiceLines;
 import com.lonar.vendor.vendorportal.model.LtMastEmployeeDelegation;
 import com.lonar.vendor.vendorportal.model.LtMastModuleApprovals;
 import com.lonar.vendor.vendorportal.model.LtPoLines;
+import com.lonar.vendor.vendorportal.model.ProcedureCall;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.model.Status;
 import com.lonar.vendor.vendorportal.repository.LtInvoiceHeadersRepository;
@@ -343,14 +345,6 @@ public class LtInvoiceHeadersDaoImpl implements LtInvoiceHeadersDao,CodeMaster{
 		 return list;
 	}
 
-	@Override
-	public List<LtInvoiceHeaders> getAllInvoice() throws ServiceException {
-		String query = env.getProperty("getAllInvoice");
-		List<LtInvoiceHeaders> list=   jdbcTemplate.query(query, new Object[]{  }, 
-				 new BeanPropertyRowMapper<LtInvoiceHeaders>(LtInvoiceHeaders.class)); 
-		
-		 return list;
-	}
 
 	@Override
 	public List<LtInvoiceHeaders> getAllInvoiceByInitiator(Long initiatorId) throws ServiceException {
@@ -764,6 +758,64 @@ public class LtInvoiceHeadersDaoImpl implements LtInvoiceHeadersDao,CodeMaster{
 		 return list.get(0);
 	}
 
+	@Transactional
+	@Override
+	public ProcedureCall checkDuplicateInvoice(Long companyId, String invoiceNum, Long vendorId, 
+	                                           Long vendorAddId, Date invoiceDate) {
+	    ProcedureCall procedureCall = new ProcedureCall();
+
+	    try {
+	        // Create stored procedure query
+	        StoredProcedureQuery query = em.createStoredProcedureQuery("Check_Duplicate_Invoice")
+	            .registerStoredProcedureParameter("p_company_id", Long.class, ParameterMode.IN)
+	            .registerStoredProcedureParameter("p_invoice_num", String.class, ParameterMode.IN)
+	            .registerStoredProcedureParameter("p_vendor_id", Long.class, ParameterMode.IN)
+	            .registerStoredProcedureParameter("p_vendor_add_id", Long.class, ParameterMode.IN)
+	            .registerStoredProcedureParameter("p_invoice_date", Date.class, ParameterMode.IN)
+	            .registerStoredProcedureParameter("p_x_status", String.class, ParameterMode.OUT)
+	            .registerStoredProcedureParameter("p_x_message", String.class, ParameterMode.OUT)
+	            .setParameter("p_company_id", companyId)
+	            .setParameter("p_invoice_num", invoiceNum)
+	            .setParameter("p_vendor_id", vendorId)
+	            .setParameter("p_vendor_add_id", vendorAddId)
+	            .setParameter("p_invoice_date", invoiceDate);
+
+	        // Execute stored procedure
+	        query.execute();
+
+	        // Retrieve output parameters safely
+	        String xStatus = (String) query.getOutputParameterValue(6);
+	        String xMessage = (String) query.getOutputParameterValue(7);
+
+	        // Ensure non-null values
+	        xStatus = (xStatus != null) ? xStatus.trim() : "UNKNOWN";
+	        xMessage = (xMessage != null) ? xMessage.trim() : "No message provided";
+
+	        // Set values in ProcedureCall object
+	        procedureCall.setCompanyId(companyId);
+	        procedureCall.setInvoiceNum(invoiceNum);
+	        procedureCall.setVendorId(vendorId);
+	        procedureCall.setVendorAddId(vendorAddId);
+	        procedureCall.setInvoiceDate(invoiceDate);
+	        procedureCall.setStatusCode(xStatus);
+	        procedureCall.setStatusMessage(xMessage);
+
+	        // Log the output
+	        System.out.println("Procedure executed: Status=" + xStatus + ", Message=" + xMessage);
+
+	    } catch (Exception e) {
+	        // Handle the exception by setting error status in ProcedureCall
+	        procedureCall.setStatusCode("ERROR");
+	        procedureCall.setStatusMessage("Error checking duplicate invoice: " + e.getMessage());
+
+	        // Log the error
+	        System.err.println("Error executing stored procedure: " + e.getMessage());
+	    }
+
+	    return procedureCall;
+	}
+
+	
 	@Override
 	public boolean delete(Long invoiceHeaderId) throws ServiceException {
 		String query = env.getProperty("deleteInvoiceHeaderById");
@@ -881,6 +933,13 @@ public class LtInvoiceHeadersDaoImpl implements LtInvoiceHeadersDao,CodeMaster{
 		
 	}
 
-	
+	@Override
+	public List<LtInvoiceHeaders> getAllInvoice(Long companyId) throws ServiceException {
+		String query = env.getProperty("getAllInvoice");
+		List<LtInvoiceHeaders> list=   jdbcTemplate.query(query, new Object[]{companyId  }, 
+				 new BeanPropertyRowMapper<LtInvoiceHeaders>(LtInvoiceHeaders.class)); 
+		
+		 return list;
+	}
 
 }

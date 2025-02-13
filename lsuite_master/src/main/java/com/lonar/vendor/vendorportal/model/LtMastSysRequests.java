@@ -17,6 +17,7 @@ public class LtMastSysRequests {
     private String status;
     private String requestorName;
     private String requestName;
+  
     
     @Transient
 	private Long draw;
@@ -145,7 +146,8 @@ public class LtMastSysRequests {
 				+ ", sort=" + sort + "]";
 	}
 
-	
+
+
 
 	
     

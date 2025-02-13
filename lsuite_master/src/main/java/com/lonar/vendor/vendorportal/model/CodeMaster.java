@@ -1,5 +1,6 @@
 package com.lonar.vendor.vendorportal.model;
 
+import java.util.List;
 
 public interface CodeMaster {
 	public static final String SELF_REJECTED = "SELF_REJECTED";
@@ -197,6 +198,7 @@ public interface CodeMaster {
 //	public static final int BUDGET_ALREADY_SELECTED = 76;
 	public static final String CONTACT_NAME = "ABC";
 	public static final String CONTACT_NUMBER = "123";
+
 	
 	
 	

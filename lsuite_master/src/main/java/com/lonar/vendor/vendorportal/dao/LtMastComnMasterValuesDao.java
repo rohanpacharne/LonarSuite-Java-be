@@ -40,8 +40,13 @@ public interface LtMastComnMasterValuesDao {
 	public List<LtMastComnMasterValues> getMasterList(String masterName) throws ServiceException;
 	
 	public Long getCount(LtMastComnMasterValues input, Long masterId);
+
+	public List<LtMastComnMasterValues> getById(LtMastComnMasterValues input, Long masterId) throws ServiceException;
+
+	public List<LtMastComnMasterValues> getDataTable(LtMastComnMasterValues input, Long masterId)throws ServiceException;
+
 	
-	public List<LtMastComnMasterValues> getDataTable(LtMastComnMasterValues input,Long masterId) throws ServiceException;
+
 
 
 

@@ -28,6 +28,4 @@ public interface LtExpExpenseLinesService extends CodeMaster{
 	
 	public Status updateHeader(Long expHeaderId, List<Long> expLineIds);
 
-
-
 }

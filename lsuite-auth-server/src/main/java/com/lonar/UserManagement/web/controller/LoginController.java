@@ -26,6 +26,7 @@ import com.lonar.UserManagement.web.dao.UserDao;
 import com.lonar.UserManagement.web.model.CodeMaster;
 import com.lonar.UserManagement.web.model.LtMastPasswords;
 import com.lonar.UserManagement.web.model.LtMastUsers;
+import com.lonar.UserManagement.web.model.Menu;
 import com.lonar.UserManagement.web.model.ResponceEntity;
 import com.lonar.UserManagement.web.model.Status;
 import com.lonar.UserManagement.web.repository.LtMastPasswordsRepository;
@@ -246,7 +247,14 @@ public class LoginController implements CodeMaster{
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
 	
-
-
+	 @RequestMapping(value = "/getReports/{userId}/{companyId}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	    public List<Menu> getModulesByUserId(@PathVariable Long userId,@PathVariable Long companyId,
+	    		@RequestParam(required = false) String moduleType,	@RequestParam(required = false) String searchTerm) {
+		 List<Menu> response = loginService.getModulesByUserId(userId, companyId,moduleType,searchTerm);
+	        if (response.isEmpty()) {
+	            return null;  
+	        }
+	        return response;  
+	    }
 	
 }

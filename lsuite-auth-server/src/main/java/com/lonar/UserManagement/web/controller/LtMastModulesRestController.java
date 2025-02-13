@@ -185,7 +185,7 @@ public class LtMastModulesRestController implements CodeMaster {
 				List<LtMastRoleModules> list = ltMastRoleModulesService.getByModuleId(Long.parseLong(id));
 //			System.out.println("list = "+list);
 //			System.out.println("list size is " +list.size());
-				if(list.size()<1)
+				if(list.size() < 1)
 				{
 					ltMastModulesRepository.delete(Long.parseLong(id));
 					if(! ltMastModulesRepository.exists(Long.parseLong(id))){

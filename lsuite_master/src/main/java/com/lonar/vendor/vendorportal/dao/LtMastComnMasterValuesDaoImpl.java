@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lonar.vendor.vendorportal.model.CommonMasterWithValue;
 import com.lonar.vendor.vendorportal.model.LtMastComnMaster;
 import com.lonar.vendor.vendorportal.model.LtMastComnMasterValues;
 import com.lonar.vendor.vendorportal.model.ServiceException;
@@ -227,9 +228,63 @@ public class LtMastComnMasterValuesDaoImpl implements LtMastComnMasterValuesDao
 				return Long.parseLong(count);
 	}
 
+	@Transactional
+	@Override
+	public List<LtMastComnMasterValues> getById(LtMastComnMasterValues input, Long masterId) throws ServiceException {
+	    // Query that will be loaded from properties or defined directly
+	    String query = env.getProperty("getByMasterIdAll");
+
+	    // Handle input parameters
+	    String valueCode = null;
+	    if (input.getValueCode() != null) {
+	        valueCode = "%" + input.getValueCode().toUpperCase() + "%";
+	    }
+
+	    String valueName = null;
+	    if (input.getValueName() != null) {
+	        valueName = "%" + input.getValueName().toUpperCase() + "%";
+	    } else {
+	        valueName = "%";
+	    }
+
+	    String valueDesc = null;
+	    if (input.getValueDescription() != null) {
+	        valueDesc = "%" + input.getValueDescription().toUpperCase() + "%";
+	    }
+
+	    String valueTag = null;
+	    if (input.getValueTag() != null) {
+	        valueTag = "%" + input.getValueTag().toUpperCase() + "%";
+	    }
+
+	    // Handle start and end dates
+	    if (input.getStartDate() == null || input.getStartDate().equals("")) {
+	        input.setStartDate(null);
+	    }
+	    if (input.getEndDate() == null || input.getEndDate().equals("")) {
+	        input.setEndDate(null);
+	    }
+
+	    // Prepare the parameters for the query
+	    Object[] queryParams = new Object[]{
+	        valueCode, valueName, valueDesc, valueTag,
+	        input.getStartDate(), input.getEndDate(),
+	        input.getColumnNo(), input.getColumnNo(),
+	        input.getColumnNo(), input.getColumnNo(),
+	        input.getColumnNo(), input.getColumnNo(),
+	        input.getColumnNo(), input.getColumnNo(),
+	        input.getColumnNo(), input.getColumnNo(),
+	        input.getColumnNo(), input.getColumnNo(),input.getColumnNo(),
+	        input.getStart() + 1, input.getLength() + input.getStart()
+	    };
+
+	    // Execute the query with the parameters
+	    return jdbcTemplate.query(query, queryParams, new BeanPropertyRowMapper<>(LtMastComnMasterValues.class));
+	}
+
 	@Override
 	public List<LtMastComnMasterValues> getDataTable(LtMastComnMasterValues input, Long masterId) throws ServiceException {
-		String query = env.getProperty("getLtMastComnMasterValuesDataTable");
+		String query = env.getProperty("getByMasterIdAll");
 		
 		String valueCode=null;
 		   if(input.getValueCode()!=null)
@@ -262,7 +317,7 @@ public class LtMastComnMasterValuesDaoImpl implements LtMastComnMasterValuesDao
 			
 			
 	return (List<LtMastComnMasterValues>) 
-			jdbcTemplate.query(query , new Object[]{masterId,valueCode,valueName,valueDesc,valueTag,
+			jdbcTemplate.query(query , new Object[]{valueCode,valueName,valueDesc,valueTag,
 					input.getStartDate(),input.getEndDate(),
 					input.getColumnNo(),input.getColumnNo(),
 					input.getColumnNo(),input.getColumnNo(),
@@ -270,9 +325,10 @@ public class LtMastComnMasterValuesDaoImpl implements LtMastComnMasterValuesDao
 					input.getColumnNo(),input.getColumnNo(),
 					input.getColumnNo(),input.getColumnNo(),
 					input.getColumnNo(),input.getColumnNo(),
-					input.getColumnNo(),input.getColumnNo(),
+					input.getColumnNo(),
 					input.getStart()+1,input.getLength() +input.getStart()
 					},
 		 new  BeanPropertyRowMapper<LtMastComnMasterValues>(LtMastComnMasterValues.class));
 	}
 }
+

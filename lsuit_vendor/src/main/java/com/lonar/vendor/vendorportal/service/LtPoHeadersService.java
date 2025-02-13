@@ -53,5 +53,11 @@ public interface LtPoHeadersService
 	Status createPOPDFReportWithTemplate(Long poHeaderId,long companyId);
 	
 	Status createPOPDFReportWithTemplate_Testing(Long poHeaderId,long companyId);
+	
+	String generateHtml(Long po_Header_Id);
+
+	List<LtPoHeaders> getAllActivePo(Long companyId)throws ServiceException;
+
+	Status createPoPdfReport(Long poHeaderId)throws ServiceException;
 
 }

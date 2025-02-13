@@ -12,7 +12,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.lonar.vendor.vendorportal.model.CommonMasterPagination;
 import com.lonar.vendor.vendorportal.model.CommonMasterWithValue;
+import com.lonar.vendor.vendorportal.model.CustomeDataTable;
 import com.lonar.vendor.vendorportal.model.LtMastComnMaster;
 import com.lonar.vendor.vendorportal.model.LtMastComnMasterValues;
 import com.lonar.vendor.vendorportal.model.ServiceException;
@@ -112,7 +114,7 @@ public class LtMastComnMasterDaoImpl implements LtMastComnMasterDao
 			 
 		return commonMasterWithValue;
 	}
-
+	
 	@Override
 	public List<LtMastComnMaster> getDataTable(LtMastComnMaster input) throws ServiceException 
 	{
@@ -203,8 +205,23 @@ public class LtMastComnMasterDaoImpl implements LtMastComnMasterDao
 		return list.get(0);
 	}
 
-	
-
-	
+	@Override
+	public CommonMasterPagination getmById(Long masterId) throws ServiceException {
+		String query = env.getProperty("getById");
+		CommonMasterPagination commonMasterWithValue=new CommonMasterPagination();
+		
+		List<LtMastComnMaster> list=   jdbcTemplate.query(query, new Object[]{masterId}, 
+					 new BeanPropertyRowMapper<LtMastComnMaster>(LtMastComnMaster.class)); 
+		
+		commonMasterWithValue.setLtMastComnMaster(list.get(0));
+		
+		String query1 = env.getProperty("getById");
+		List<CustomeDataTable> list1 =   jdbcTemplate.query(query, new Object[]{masterId}, 
+					 new BeanPropertyRowMapper<CustomeDataTable>(CustomeDataTable.class)); 
+		
+		commonMasterWithValue.setCustomDataTable(list1);
+		
+			 	return commonMasterWithValue;
+	}
 
 }

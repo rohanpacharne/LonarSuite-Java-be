@@ -33,6 +33,9 @@ public class LtMastModules implements Serializable {
 	@Column(name = "MODULE_NAME")
 	private String moduleName;
 	
+	@Column(name = "MODULE_TYPE")
+	private String moduleType;
+	
 	@Column(name = "MODULE_DESC")
 	private String moduleDesc;
 	
@@ -350,6 +353,22 @@ public class LtMastModules implements Serializable {
 	}
 
 
+	public String getModuleType() {
+		return moduleType;
+	}
+
+
+	public void setModuleType(String moduleType) {
+		this.moduleType = moduleType;
+	}
+
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+
+
 	@Override
 	public String toString() {
 		return "LtMastModules [moduleId=" + moduleId + ", moduleCode=" + moduleCode + ", moduleName=" + moduleName
@@ -361,6 +380,7 @@ public class LtMastModules implements Serializable {
 				+ length + ", stDate=" + stDate + ", enDate=" + enDate + ", columnNo=" + columnNo + ", sort=" + sort
 				+ ", statusValue=" + statusValue + ", moduleGroupValue=" + moduleGroupValue + "]";
 	}
+
 
 
 	

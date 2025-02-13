@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 
+import com.lonar.vendor.vendorportal.model.CommonMasterPagination;
 import com.lonar.vendor.vendorportal.model.CommonMasterWithValue;
 import com.lonar.vendor.vendorportal.model.LtMastComnMaster;
 import com.lonar.vendor.vendorportal.model.LtMastComnMasterValues;
@@ -22,13 +23,14 @@ public interface LtMastComnMasterService
 
 	public ResponseEntity findActiveLikeName(String masterName) throws ServiceException;
 
-	//*------------------------------
-	public CommonMasterWithValue getById(String id) throws ServiceException;
-
+	//*----------------------------
+	
 	public List<LtMastComnMaster>  getDataTable(LtMastComnMaster input) throws ServiceException;
 
 	public Long getCount(LtMastComnMaster input) throws ServiceException;
-
+	
+	
+	
 	public ResponseEntity getLtMastComnMasterByID(Long commonMasterId) throws ServiceException;
 
 	public ResponseEntity saveMasterWithValue(CommonMasterWithValue commonMasterWithValue, BindingResult bindingResult);
@@ -44,6 +46,20 @@ public interface LtMastComnMasterService
 	public ResponseEntity<Status> delete(Long id)  throws ServiceException;
 
 	public List<LtMastComnMasterValues> getLikeNameWithMaster(String masterName, String valueName) throws ServiceException;
+
+	public CommonMasterWithValue getById(String id)throws ServiceException;
+
+	public CommonMasterPagination getBymId(Long masterId)throws ServiceException;
+
+
+
+
+	
+
+
+
+
+
 	
 	//public String checkCommonMasterDetails(LtMastComnMaster ltMastComnMaster) throws Exception;
 }

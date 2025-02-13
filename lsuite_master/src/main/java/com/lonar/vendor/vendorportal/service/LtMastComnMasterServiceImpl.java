@@ -14,6 +14,7 @@ import com.lonar.vendor.vendorportal.dao.LtMastComnMasterDao;
 import com.lonar.vendor.vendorportal.dao.LtMastComnMasterValuesDao;
 import com.lonar.vendor.vendorportal.model.BusinessException;
 import com.lonar.vendor.vendorportal.model.CodeMaster;
+import com.lonar.vendor.vendorportal.model.CommonMasterPagination;
 import com.lonar.vendor.vendorportal.model.CommonMasterWithValue;
 import com.lonar.vendor.vendorportal.model.LtMastComnMaster;
 import com.lonar.vendor.vendorportal.model.LtMastComnMasterValues;
@@ -78,7 +79,13 @@ public  class LtMastComnMasterServiceImpl implements LtMastComnMasterService,Cod
 	public CommonMasterWithValue getById(String id) throws ServiceException {
 		return ltMastComnMasterDao.getById(id);
 	}
-
+	
+	@Transactional
+	@Override
+	public  CommonMasterPagination getBymId(Long masterId) throws ServiceException {
+		return ltMastComnMasterDao.getmById(masterId);
+	}
+	
 	@Transactional
 	@Override
 	public List<LtMastComnMaster> getDataTable(LtMastComnMaster input) throws ServiceException 

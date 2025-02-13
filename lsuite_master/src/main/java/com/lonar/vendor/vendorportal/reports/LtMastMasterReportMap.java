@@ -3,6 +3,7 @@ package com.lonar.vendor.vendorportal.reports;
 public class LtMastMasterReportMap {
 	
 	private Long keyId;
+	private Long companyId;
 	private String masterName;
 	private String tableColName;
 	private String reportColName;
@@ -41,6 +42,12 @@ public class LtMastMasterReportMap {
 	public String toString() {
 		return "LtMastMasterReportMap [keyId=" + keyId + ", masterName=" + masterName + ", tableColName=" + tableColName
 				+ ", reportColName=" + reportColName + ", sequence=" + sequence + "]";
+	}
+	public Long getCompanyId() {
+		return companyId;
+	}
+	public void setCompanyId(Long companyId) {
+		this.companyId = companyId;
 	}
 	
 	

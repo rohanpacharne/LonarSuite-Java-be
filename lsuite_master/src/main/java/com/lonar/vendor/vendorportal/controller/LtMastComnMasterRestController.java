@@ -1,5 +1,7 @@
 package com.lonar.vendor.vendorportal.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lonar.vendor.vendorportal.model.BusinessException;
 import com.lonar.vendor.vendorportal.model.CodeMaster;
+import com.lonar.vendor.vendorportal.model.CommonMasterPagination;
 import com.lonar.vendor.vendorportal.model.CommonMasterWithValue;
 import com.lonar.vendor.vendorportal.model.CustomeDataTable;
 import com.lonar.vendor.vendorportal.model.LtMastComnMaster;
@@ -151,8 +154,31 @@ public class LtMastComnMasterRestController implements CodeMaster
 		commonMasterWithValue=ltMastComnMasterService.getById(id);
 		return new ResponseEntity<CommonMasterWithValue>(commonMasterWithValue, HttpStatus.OK);
 	}
-			
-			
+	//==========================================================================================================
+	@RequestMapping(value = "/getById/{masterId}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public CommonMasterPagination listLtMastComnMasterAllData(@Valid LtMastComnMasterValues input,@PathVariable("masterId") Long masterId,@PathVariable("logTime") String logTime) throws ServiceException 
+	{ 
+		CommonMasterPagination commonMasterWithValues = new CommonMasterPagination();
+		CustomeDataTable customeDataTable = new CustomeDataTable();
+		try  {
+			    commonMasterWithValues=ltMastComnMasterService.getBymId(masterId);
+			    Long count=ltMastComnMasterValuesService.getCount(input,masterId);
+			    customeDataTable.setRecordsTotal(count);
+			    customeDataTable.setRecordsFiltered(count);
+			    List<LtMastComnMasterValues> ltMastComnMasterValues = ltMastComnMasterValuesService.getById(input,masterId);
+		        customeDataTable.setData(ltMastComnMasterValues);
+		        List<CustomeDataTable> customeDataTableList = new ArrayList<>();
+		        customeDataTableList.add(customeDataTable);
+		        commonMasterWithValues.setCustomDataTable(customeDataTableList);
+		        
+		}
+		catch (Exception e) 
+		{
+			throw new BusinessException(0, null, e);
+		}
+		return  commonMasterWithValues;
+	}
+
 	//---------------------update commonmaster
 	@RequestMapping(value = "/updateMasterWithValue", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Status> updateMasterWithValue(@Valid @RequestBody CommonMasterWithValue commonMasterWithValue,

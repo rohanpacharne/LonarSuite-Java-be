@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Purchase Order</title>
+  <style>
+
+		body {
+
+			font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 10px;
+		}
+
+
+
+		table {
+
+			width: 100%;
+
+			border-collapse: collapse;
+
+		}
+
+
+
+		table,
+
+		th,
+
+		td {
+
+			border: 0.5px solid black;
+
+		}
+
+
+
+		th,
+
+		td {
+
+			text-align: left;
+
+			padding: 5px;
+
+		}
+
+
+
+		th {
+
+			background-color: #f2f2f2;
+
+		}
+
+
+
+		.header-section {
+
+
+
+			text-align: center;
+
+		}
+
+
+
+		.header-section h3,
+
+		.header-section h4 {
+
+			margin: 0;
+
+		}
+
+
+
+		.container {
+
+			max-width: 800px;
+
+			margin: 0 auto;
+
+		}
+
+
+
+		/* Reduce the size of the header and tables */
+
+		.po-header img {
+
+			width: 100px;
+
+			height: auto;
+
+		}
+
+
+
+		.po-header td {
+
+			padding: 5px;
+
+		}
+
+
+
+		/* Reduce space between table rows */
+
+		td {
+
+			padding: 3px;
+
+		}
+
+
+
+		/* Ensure everything fits on one page */
+
+		@media print {
+
+			body {
+
+				font-size: 10px;
+
+			}
+
+ p {
+      margin-bottom: 40px; /* Adds space below each paragraph */
+    }
+
+			table {
+
+				width: 100%;
+
+				page-break-before: always;
+                  margin-bottom: 40px;
+			}
+
+		}
+
+	</style>
+</head>
+<body>
+
+<!-- Header Section -->
+<table>
+  <tr>
+    <td style="width: 20%; text-align: center;">
+      <img src="{{logo_path}}" alt="Company Logo" style="max-height: 100px;" />
+    </td>
+    <td colspan="2" class="header-section" style="  text-align: center;">
+      <h3>Purchase Order</h3>&nbsp;&nbsp;&nbsp;&nbsp;
+      <h4>{{company_name}}</h4>&nbsp;&nbsp;&nbsp;&nbsp;
+      <p>{{vendor_address}}</p>&nbsp;&nbsp;&nbsp;&nbsp;
+      <p><strong>GST No:</strong> {{company_gst}} &nbsp;&nbsp;&nbsp;&nbsp;
+        <strong>Email ID:</strong> {{contact_email}}</p>
+    </td>
+  </tr>
+</table>
+
+<!-- Vendor Details -->
+<table>
+  <tr>
+    <td style="width: 50%;">
+      <p><strong>Vendor Code:</strong> {{address_code}}</p>&nbsp;&nbsp;&nbsp;&nbsp;
+      <p><strong>Vendor Name:</strong> {{vendor_name}}</p>&nbsp;&nbsp;&nbsp;&nbsp;
+      <p><strong>Vendor GST:</strong> {{vendor_gst}}</p>&nbsp;&nbsp;&nbsp;&nbsp;
+      <p><strong>Contact Person:</strong> {{contact_person}} &nbsp;&nbsp;&nbsp;&nbsp;
+        <strong>Contact Mobile:</strong> {{contact_mobile}}</p>&nbsp;&nbsp;&nbsp;&nbsp;
+      <p><strong>Contact Email:</strong> {{contact_email}}</p>
+    </td>
+    <td style="width: 50%;">
+      <p><strong>PO Number:</strong> {{po_number}} &nbsp;&nbsp;&nbsp;&nbsp;
+        <strong>PO Date:</strong> {{po_date}}</p> &nbsp;&nbsp;&nbsp;&nbsp;
+      <p><strong>Branch Name:</strong> {{branch_name}}</p>&nbsp;&nbsp;&nbsp;&nbsp;
+      <p><strong>Currency Code:</strong> {{currency_code}} &nbsp;&nbsp;&nbsp;&nbsp;
+        <strong>Payment Term:</strong> {{payment_term}}</p> &nbsp;&nbsp;&nbsp;&nbsp;
+      <p><strong>Buyer Name:</strong> {{buyer}} &nbsp;&nbsp;&nbsp;&nbsp;
+        <strong>Buyer Email:</strong> {{buyer_email}}</p> &nbsp;&nbsp;&nbsp;&nbsp;
+    </td>
+  </tr>
+</table>
+
+<!-- Product Details Table -->
+<table style="width: 100%;">
+  <thead>
+  <tr>
+    <th>Line No</th>
+    <th>Line Type</th>
+    <th>Product Code</th>
+    <th>Product Name</th>
+    <th>Quantity</th>
+    <th>Unit Price</th>
+    <th>UOM</th>
+    <th>Product Desc</th>
+    <th>Note To Vendor</th>
+    <th>Total Amount</th>
+  </tr>
+  </thead>
+  <tbody>
+  {{table_body}}
+  </tbody>
+</table>
+
+<!-- Tax Details -->
+<table>
+  <thead>
+  <tr>
+    <th>Line No</th>
+    <th>HSN/SAC</th>
+    <th>Tax Name</th>
+    <th>Line Amount</th>
+    <th>Tax Rate (%)</th>
+    <th>Tax Amount</th>
+  </tr>
+  </thead>
+  <tbody>
+  {{tax_table}}
+  </tbody>
+</table>
+
+<!-- Summary Section -->
+<table>
+  <tr>
+    <td style=" width: 60%; text-align: right;"><strong>Total:</strong></td>
+    <td>{{total_amount}}</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;"><strong>Levies (ISD 9%):</strong></td>
+    <td>{{levies}}</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;"><strong>Grand Total:</strong></td>
+    <td>{{grand_total}}</td>
+  </tr>
+</table>
+
+<!-- Remarks Section -->
+<table >
+  <tr>
+    <td style="width: 20%;"><strong>Amount in Words:</strong></td>
+    <td>{{amount_in_words}}</td>
+  </tr>
+  <tr>
+    <td style="width: 20%;"><strong>Tax Amount in Words:</strong></td>
+    <td>{{tax_amount_in_words}}</td>
+  </tr>
+  <tr>
+    <th colspan="2">Remarks</th>
+  </tr>
+  <tr>
+    <td colspan="2">{{remarks}}</td>
+  </tr>
+</table>
+
+</body>
+</html>

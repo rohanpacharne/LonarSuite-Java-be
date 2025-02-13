@@ -43,6 +43,17 @@ public class LtMastReportRequest {
 	@Column(name = "STATUS")
 	private String status;
 
+	@Column(name = "TYPE")
+	private String type;
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	@Column(name = "USER_ID")
 	private Long userId;
 
@@ -99,6 +110,18 @@ public class LtMastReportRequest {
 
 	@Transient
 	private String sort;
+	
+
+	@Transient
+	private String company_id;
+
+	public String getCompany_id() {
+		return company_id;
+	}
+
+	public void setCompany_id(String company_id) {
+		this.company_id = company_id;
+	}
 
 	@Transient
 	private String requestIdStr;

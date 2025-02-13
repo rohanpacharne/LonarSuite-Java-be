@@ -1,6 +1,9 @@
 package com.lonar.vendor.vendorportal.controller;
 
+import java.io.StringReader;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.tool.xml.XMLWorkerHelper;
 import com.lonar.vendor.vendorportal.model.CustomeDataTable;
 import com.lonar.vendor.vendorportal.model.DashboardDetails;
 import com.lonar.vendor.vendorportal.model.LtPoHeaders;
@@ -83,6 +89,13 @@ public class LtMastPoHeadersRestController {
 	public ResponseEntity<List<LtPoHeaders>> getActivePoHeadersByPoNumber(@PathVariable("companyId") Long companyId,
 			@PathVariable("userId") Long userId, @PathVariable("number") String poNumber,@PathVariable("logTime") String logTime) throws ServiceException {
 		List<LtPoHeaders> poHeaderList = ltPoHeadersService.getActivePoHeadersByPoNumber(companyId, userId, poNumber);
+		return new ResponseEntity<List<LtPoHeaders>>(poHeaderList, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/getAllPo/{companyId}/{logTime}", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<List<LtPoHeaders>> getAllActivePo(@PathVariable("companyId") Long companyId,
+			@PathVariable("logTime") String logTime) throws ServiceException {
+		List<LtPoHeaders> poHeaderList = ltPoHeadersService.getAllActivePo(companyId);
 		return new ResponseEntity<List<LtPoHeaders>>(poHeaderList, HttpStatus.OK);
 	}
 
@@ -174,4 +187,21 @@ public class LtMastPoHeadersRestController {
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
  
+	 @RequestMapping("/generatePdf/{po_header_id}")
+	    public void generatePdf(@PathVariable long po_header_id, HttpServletResponse response) {
+	        try { String htmlContent = ltPoHeadersService.generateHtml(po_header_id); response.setContentType("application/pdf");
+	        response.setHeader("Content-Disposition", "attachment; filename=PurchaseOrder_" + po_header_id + ".pdf"); Document document = new Document();
+	        PdfWriter writer = PdfWriter.getInstance(document, response.getOutputStream()); document.open();  XMLWorkerHelper.getInstance().parseXHtml(writer, document, new StringReader(htmlContent));  document.close();
+	        } catch (Exception e) {e.printStackTrace(); }
+	        
+	 }
+	 
+
+	//This API is for testing purpose...
+		@RequestMapping(value = "/createPoPdfReport/{poHeaderId}/{logTime}", method = RequestMethod.GET, produces = "application/json")
+		public ResponseEntity<Status> createPoPdfReport(@PathVariable("poHeaderId") Long poHeaderId,@PathVariable("logTime") String logTime) throws ServiceException{
+			Status status = ltPoHeadersService.createPoPdfReport(poHeaderId);
+			return new ResponseEntity<Status>(status, HttpStatus.OK);
+		}
 }
+

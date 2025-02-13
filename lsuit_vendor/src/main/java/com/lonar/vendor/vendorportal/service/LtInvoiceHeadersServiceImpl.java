@@ -3,6 +3,8 @@ package com.lonar.vendor.vendorportal.service;
 import java.util.Date;
 import java.util.List;
 
+import javax.jdo.annotations.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,10 +14,12 @@ import com.lonar.vendor.vendorportal.dao.LtInvoiceLinesDao;
 import com.lonar.vendor.vendorportal.dao.LtMastEmployeesDao;
 import com.lonar.vendor.vendorportal.dao.LtMastVendorsDao;
 import com.lonar.vendor.vendorportal.dao.LtVendorApprovalDao;
+import com.lonar.vendor.vendorportal.model.BusinessException;
 import com.lonar.vendor.vendorportal.model.CodeMaster;
 import com.lonar.vendor.vendorportal.model.DashboardDetails;
 import com.lonar.vendor.vendorportal.model.LtInvoiceHeaders;
 import com.lonar.vendor.vendorportal.model.LtInvoiceLines;
+import com.lonar.vendor.vendorportal.model.ProcedureCall;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.model.Status;
 
@@ -141,10 +145,10 @@ public class LtInvoiceHeadersServiceImpl implements LtInvoiceHeadersService,Code
 		return ltInvoiceHeadersDao.getCountAndStatusByVendorId(vendorId);
 	}
 
-	@Override
-	public List<LtInvoiceHeaders> getAllInvoice() throws ServiceException{
-		return ltInvoiceHeadersDao.getAllInvoice();
-	}
+//	@Override
+//	public List<LtInvoiceHeaders> getAllInvoice() throws ServiceException{
+//		return ltInvoiceHeadersDao.getAllInvoice();
+//	}
 
 	@Override
 	public List<LtInvoiceHeaders> getAllInvoiceByInitiator(Long initiatorId) throws ServiceException {
@@ -697,6 +701,109 @@ public class LtInvoiceHeadersServiceImpl implements LtInvoiceHeadersService,Code
 		return ltInvoiceHeadersDao.getLtInvoiceHeadersDataTable(input,Long.parseLong(companyId));
 	}
 
+	@Override
+	public List<LtInvoiceHeaders> getAllInvoice(Long companyId) throws ServiceException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
+	@Override
+	@Transactional
+	public Status save1(LtInvoiceHeaders ltInvoiceHeaders) throws ServiceException {
+	    Status status = new Status();
+	    String chknull = checkNull(ltInvoiceHeaders);
+
+	    if ("null".equals(chknull)) {
+	        try {
+	            status.setCode(0);
+	            status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INPUT_IS_EMPTY").getMessageName());
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            status.setCode(0);
+	            status.setMessage("Error in finding message! The action was unsuccessful");
+	        }
+	        return status;
+	    }
+
+	    try {
+	        // Call stored procedure to check for duplicate invoices
+	        ProcedureCall procedureCall = ltInvoiceHeadersDao.checkDuplicateInvoice(
+	            ltInvoiceHeaders.getCompanyId(),
+	            ltInvoiceHeaders.getInvoiceNum(),
+	            ltInvoiceHeaders.getVendorId(),
+	            ltInvoiceHeaders.getVendorAddId(),
+	            ltInvoiceHeaders.getInvoiceDate()
+	        );
+
+	        // Set data from procedure call
+	        status.setData(procedureCall);
+
+	        if ("ERROR".equalsIgnoreCase(procedureCall.getStatusCode())) {
+	            status.setCode(0);
+	            status.setMessage("Duplicate invoice found: " + procedureCall.getStatusMessage());
+	            return status;
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        status.setCode(0);
+	        status.setMessage("Error checking duplicate invoice: " + e.getMessage());
+	        return status;
+	    }
+
+	    // Set metadata for new invoice
+	    ltInvoiceHeaders.setCreatedBy(ltInvoiceHeaders.getLastUpdateLogin());
+	    ltInvoiceHeaders.setLastUpdatedBy(ltInvoiceHeaders.getLastUpdateLogin());
+	    ltInvoiceHeaders.setCreationDate(new Date());
+	    ltInvoiceHeaders.setLastUpdateDate(new Date());
+
+	    Long invoiceHeaderId = ltInvoiceHeadersDao.save(ltInvoiceHeaders);
+
+	    if (invoiceHeaderId != null) {
+	        ltInvoiceHeaders.setInvoiceHeaderId(invoiceHeaderId);
+	        ltInvoiceHeadersDao.save(ltInvoiceHeaders);
+
+	        if (ltInvoiceHeaders.getPoHeaderId() != null) {
+	            // ltInvoiceHeadersDao.loadLines(ltInvoiceHeaders);
+	        }
+
+	        if (!ltInvoiceHeadersDao.loadApprovers(ltInvoiceHeaders)) {
+	            try {
+	                status.setCode(0);
+	                status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INTERNAL_SERVER_ERROR").getMessageName());
+	            } catch (Exception e) {
+	                e.printStackTrace();
+	                status.setCode(0);
+	                status.setMessage("Error in finding message! The action was unsuccessful.");
+	            }
+	            return status;
+	        }
+
+	        try {
+	            status.setCode(1);
+	            status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_SUCCESSFULLY").getMessageName());
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            status.setCode(1);
+	            status.setMessage("Error in finding message! The action was completed successfully.");
+	        }
+
+	        // Set inserted invoice header ID as data
+	        status.setData(invoiceHeaderId);
+	    } else {
+	        try {
+	            status.setCode(0);
+	            status.setMessage(ltMastCommonMessageService.getMessageNameByCode("INSERT_FAIL").getMessageName());
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            status.setCode(0);
+	            status.setMessage("Error in finding message! The action was unsuccessful");
+	        }
+	    }
+
+	    return status;
+	}
+
+	
 	
 }
