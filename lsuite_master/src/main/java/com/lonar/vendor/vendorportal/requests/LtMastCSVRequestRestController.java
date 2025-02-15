@@ -24,10 +24,10 @@ import com.lonar.vendor.vendorportal.model.Status;
 
 @RestController
 @RequestMapping("/API/requests")
-public class LtMastExcelRequestRestController implements CodeMaster{
+public class LtMastCSVRequestRestController implements CodeMaster{
 	
 	@Autowired
-	LtMastExcelRequestsService ltMastExcelRequestsService;
+	LtMastCSVRequestsService ltMastExcelRequestsService;
 
 	@RequestMapping(value = "/exportVendorToErp", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Status> exportVendorToErp(@RequestBody RequestParameters requestParameters) throws ServiceException, IOException{

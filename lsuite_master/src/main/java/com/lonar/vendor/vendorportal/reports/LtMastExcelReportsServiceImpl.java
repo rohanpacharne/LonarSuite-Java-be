@@ -888,7 +888,7 @@ public Status generateRentalInvoiceDetailsReport(ReportParameter reportParameter
     		"Description", "Status", "Initiator", "Vendor_Name", "Address", "Division", "Agreement_Number",
     		"Source", "Source_Ref_Number", "Billing_Address", "Shipping_Address", "Invoice_Currency", 
     		"Exchange_Rate", "Invoice_Amount", "Line_No", "Invoice_Qty", "Invoice_Rate", "Base_Amount",
-    		"Tax_Amount", "Total_Amount", "Terms" };
+    		"Tax_Amount", "Total_Amount", "Terms"};
 
     	System.out.println("colNameList = " + Arrays.toString(colNameList));
 

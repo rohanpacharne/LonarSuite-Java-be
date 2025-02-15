@@ -36,6 +36,7 @@ public class LtMastExcelReportsDaoImpl implements LtMastExcelReportsDao{
 
 
 	private JdbcTemplate jdbcTemplate;
+	
 	@Autowired
 	LtMastReportRequestRepository ltMastReportRequestRepository;
 	

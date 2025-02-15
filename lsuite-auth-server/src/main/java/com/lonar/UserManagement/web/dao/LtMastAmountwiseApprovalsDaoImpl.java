@@ -76,7 +76,47 @@ public class LtMastAmountwiseApprovalsDaoImpl implements LtMastAmountwiseApprova
 	@Override
 	public List<LtMastAmountwiseApprovals> getLtMastUsersDatatableRecords(LtMastAmountwiseApprovals input,
 			Long companyId) {
-
+		if(input.getColumnNo()==2 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(12);
+		}
+		if(input.getColumnNo()==3 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(13);
+		}
+		if(input.getColumnNo()==4 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(14);
+		}
+		if(input.getColumnNo()==5 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(15);
+		}
+		if(input.getColumnNo()==6 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(16);
+		}
+		if(input.getColumnNo()==7 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(17);
+		}
+		if(input.getColumnNo()==8 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(18);
+		}
+		if(input.getColumnNo()==9 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(19);
+		}
+	
+		if(input.getColumnNo()==1 && input.getSort().equals("asc"))
+		{
+			input.setColumnNo(20);
+		}
+		if(input.getColumnNo()==0)
+		{
+			input.setColumnNo(1);
+		}
 		String query = env.getProperty("getModuleAmountwiseApprovals");
 		   String transactionCode=null;
 		   if(input.getTransactionCode()!=null)
