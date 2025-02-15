@@ -64,9 +64,9 @@ public class LtMastAmountwiseApprovalsDaoImpl implements LtMastAmountwiseApprova
 			}
 		
 		   Long count  = getJdbcTemplate().queryForObject(
-					query, new Object[] {companyId,transactionCode,transactionType,approverId,
-							input.getFromAmount(),input.getToAmount(),
-//							input.getStartDate(),input.getEndDate(),
+					query, new Object[] {companyId,transactionCode,transactionType,
+							input.getFromAmount(),input.getToAmount(),approverId,
+						input.getStartDate(),input.getEndDate(),
 							}, Long.class);
 		
 			return count;
@@ -143,19 +143,16 @@ public class LtMastAmountwiseApprovalsDaoImpl implements LtMastAmountwiseApprova
 			
 				  
 			return (List<LtMastAmountwiseApprovals>) 
-					jdbcTemplate.query(query , new Object[]{companyId,transactionCode,transactionType,approverId,
-							input.getFromAmount(),input.getToAmount(),
-//							input.getStartDate(),input.getEndDate(),
+					jdbcTemplate.query(query , new Object[]{companyId,transactionCode,transactionType,
+							input.getFromAmount(),input.getToAmount(),approverId,
+						input.getStartDate(),input.getEndDate(),
 							
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
-							input.getColumnNo(),input.getColumnNo(),
-							input.getColumnNo(),input.getColumnNo(),
-							input.getColumnNo(),input.getColumnNo(),
-							input.getColumnNo(),input.getColumnNo(),
+							input.getColumnNo(),
 							input.getLength() + input.getStart(),input.getStart()+1
 							},
 				 new  BeanPropertyRowMapper<LtMastAmountwiseApprovals>(LtMastAmountwiseApprovals.class));

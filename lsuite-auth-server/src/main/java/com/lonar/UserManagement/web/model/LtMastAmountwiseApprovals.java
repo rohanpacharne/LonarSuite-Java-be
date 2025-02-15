@@ -45,6 +45,12 @@ public class LtMastAmountwiseApprovals {
 
     @Column(name = "company_id")
     private Long companyId;
+    
+    @Column(name = "start_date")
+    private String startDate;
+
+    @Column(name = "end_date")
+    private Long endDate;
 
     @Transient
 	private Long draw;
@@ -157,7 +163,24 @@ public class LtMastAmountwiseApprovals {
         this.lastUpdatedBy = lastUpdatedBy;
     }
 
-    public Long getCompanyId() {
+    
+    public String getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+
+	public Long getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Long endDate) {
+		this.endDate = endDate;
+	}
+
+	public Long getCompanyId() {
         return companyId;
     }
 
