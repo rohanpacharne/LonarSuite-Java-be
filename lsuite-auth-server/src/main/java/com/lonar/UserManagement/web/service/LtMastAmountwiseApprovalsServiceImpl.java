@@ -1,5 +1,6 @@
 package com.lonar.UserManagement.web.service;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -32,19 +33,23 @@ public class LtMastAmountwiseApprovalsServiceImpl implements LtMastAmountwiseApp
 	@Autowired
 	LtMastAmountwiseApprovalsRepository ltMastAmountwiseApprovalsRepository;
 	
-	
 	@Override
 	public CustomeDataTable getLtMastAmountwiseApprovalsDataTable(LtMastAmountwiseApprovals input, Long companyId) {
-		CustomeDataTable customeDataTable = new CustomeDataTable();
-		Long count = ltMastAmountwiseApprovalsDao.getLtMastUsersCount(input,companyId);
+	    CustomeDataTable customeDataTable = new CustomeDataTable();
+
+	    // Step 1: Get total records count
+	    Long count = ltMastAmountwiseApprovalsDao.getLtMastUsersCount(input, companyId);
 	    customeDataTable.setRecordsTotal(count);
 	    customeDataTable.setRecordsFiltered(count);
-	    System.out.println("in this");
-	    List<LtMastAmountwiseApprovals> ltMastAmountwiseApprovals= ltMastAmountwiseApprovalsDao.getLtMastUsersDatatableRecords(input,companyId);
+	    // Step 2: Fetch the records
+	    List<LtMastAmountwiseApprovals> ltMastAmountwiseApprovals = ltMastAmountwiseApprovalsDao.getLtMastUsersDatatableRecords(input, companyId);
+	    
+	    // Step 3: Set data ensuring non-null values
 	    customeDataTable.setData(ltMastAmountwiseApprovals);
-	    System.out.println(ltMastAmountwiseApprovals);
-		return customeDataTable;
+
+	    return customeDataTable;
 	}
+
 	
 	@Override
 	public Status save1(LtMastAmountwiseApprovals ltMastAmountwiseApprovals) throws Exception

@@ -37,6 +37,7 @@ public class LtAmountwiseApprovalsController {
 		@RequestMapping(value = "/datatable/{companyId}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 		public CustomeDataTable getDataTable(@PathVariable("companyId") Long companyId,LtMastAmountwiseApprovals input,@PathVariable("logTime") String logTime) {
 			try {
+				System.out.println(input);
 				return ltMastAmountwiseApprovalsService.getLtMastAmountwiseApprovalsDataTable(input,companyId);
 			}catch(Exception e) {
 					throw new BusinessException(0, null, e);
