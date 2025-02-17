@@ -50,7 +50,7 @@ public class LtMastAmountwiseApprovals {
     private String startDate;
 
     @Column(name = "end_date")
-    private Long endDate;
+    private String endDate;
 
     @Transient
 	private Long draw;
@@ -172,11 +172,11 @@ public class LtMastAmountwiseApprovals {
 		this.startDate = startDate;
 	}
 
-	public Long getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Long endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 

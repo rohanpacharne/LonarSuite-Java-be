@@ -4,6 +4,11 @@ import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -16,9 +21,9 @@ public class ReportParameter {
     private String startDate;
     private String endDate;
     private String employeeId;
-    private String employee;
+    private String employeeName;
     private String divisionId;
-    private String division;
+    private String divisionName;
     private String vendorId;
     private String vendorName;
     private String buyerId;
@@ -34,8 +39,24 @@ public class ReportParameter {
   
   
 
+	public String getEmployeeName() {
+		return employeeName;
+	}
+
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
+	}
+
+	public String getDivisionName() {
+		return divisionName;
+	}
+
+	public void setDivisionName(String divisionName) {
+		this.divisionName = divisionName;
+	}
+
 	public ReportParameter(Long companyId, Long userId, String startDate, String endDate, String employeeId,
-			String employee, String divisionId, String division, String vendorId, String vendorName, String buyerId,
+			String employeeName, String divisionId, String divisionName, String vendorId, String vendorName, String buyerId,
 			String buyerName, String address, String status, String poNumberFrom, String poNumberTo,
 			String invoiceNumberFrom, String invoiceNumberTo, String rentalType, String agreementNumber) {
 		super();
@@ -44,9 +65,9 @@ public class ReportParameter {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.employeeId = employeeId;
-		this.employee = employee;
+		this.employeeName = employeeName;
 		this.divisionId = divisionId;
-		this.division = division;
+		this.divisionName = divisionName;
 		this.vendorId = vendorId;
 		this.vendorName = vendorName;
 		this.buyerId = buyerId;
@@ -194,11 +215,6 @@ public class ReportParameter {
         this.agreementNumber = agreementNumber;
     }
     
-    public String getEmployee() { return employee; }
-    public void setEmployee(String employee) { this.employee = employee; }
-
-    public String getDivision() { return division; }
-    public void setDivision(String division) { this.division = division; }
 
     public String getVendorName() { return vendorName; }
     public void setVendorName(String vendorName) { this.vendorName = vendorName; }
@@ -207,46 +223,78 @@ public class ReportParameter {
     public void setBuyerName(String buyerName) { this.buyerName = buyerName; }
     
 
-    public void setFilterData(String filterData) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+    public void setFilterData(String filterData) throws NoSuchFieldException, IllegalAccessException {
         if (filterData == null || filterData.isEmpty()) {
-            return; // Avoid processing null or empty input
+            System.out.println("Warning: filterData is empty or null. No fields will be updated.");
+            return;
         }
 
-        filterData = filterData.substring(filterData.indexOf('[') + 1, filterData.lastIndexOf(']')); // Extract key-value pairs
-        String[] properties = filterData.split(",");
+        // If filterData does not contain brackets, use entire string
+        int startIdx = filterData.indexOf('[');
+        int endIdx = filterData.lastIndexOf(']');
+
+        if (startIdx == -1 || endIdx == -1 || startIdx >= endIdx) {
+            System.out.println("Warning: filterData does not contain brackets. Using full string.");
+            startIdx = -1; // Start from the beginning
+            endIdx = filterData.length(); // Use full string
+        }
+
+        String extractedData = filterData.substring(startIdx + 1, endIdx).trim();
+
+        // Regex pattern to correctly split key=value pairs (allows missing values)
+        Pattern pattern = Pattern.compile("([^=,]+)=([^,]*)");
+        Matcher matcher = pattern.matcher(extractedData);
 
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        for (String item : properties) {
-            String[] keyValue = item.split("=");
+        // Store parsed key-value pairs
+        Map<String, String> fieldValues = new HashMap<>();
 
-            if (keyValue.length != 2) {
-                continue; // Skip if key=value pair is not valid
-            }
+        while (matcher.find()) {
+            String fieldName = matcher.group(1).trim();
+            String fieldValue = matcher.group(2).trim();
+            fieldValues.put(fieldName, fieldValue.isEmpty() ? null : fieldValue);
+        }
 
-            String fieldName = keyValue[0].trim();
-            String fieldValue = keyValue[1].trim();
+        // Iterate over declared fields and set values
+        for (Field field : this.getClass().getDeclaredFields()) {
+            field.setAccessible(true);
+            String fieldName = field.getName();
 
-            Field field = this.getClass().getDeclaredField(fieldName);
-            field.setAccessible(true); // Allow modification of private fields
+            if (fieldValues.containsKey(fieldName)) {
+                String fieldValue = fieldValues.get(fieldName);
 
-            // Convert types correctly
-            if (field.getType() == Long.class) {
-                field.set(this, Long.valueOf(fieldValue));
-            } else if (field.getType() == String.class && (fieldName.equals("startDate") || fieldName.equals("endDate"))) {
-                // Convert ISO Date format to "yyyy-MM-dd"
-                LocalDate localDate = LocalDate.parse(fieldValue, inputFormatter);
-                field.set(this, localDate.format(outputFormatter));
+                try {
+                    if (field.getType() == Long.class) {
+                        field.set(this, (fieldValue != null) ? Long.valueOf(fieldValue) : null);
+                    } else if (field.getType() == String.class && (fieldName.equals("startDate") || fieldName.equals("endDate"))) {
+                        if (fieldValue != null) {
+                            try {
+                                LocalDate localDate = LocalDate.parse(fieldValue, inputFormatter);
+                                field.set(this, localDate.format(outputFormatter));
+                            } catch (Exception e) {
+                                System.out.println("Warning: Invalid date format for field: " + fieldName);
+                            }
+                        } else {
+                            field.set(this, null);
+                        }
+                    } else {
+                        field.set(this, fieldValue);
+                    }
+                } catch (Exception e) {
+                    System.out.println("Error setting field '" + fieldName + "': " + e.getMessage());
+                }
             } else {
-                field.set(this, fieldValue);
+                // If field is missing, set default null
+                if (field.getType() == Long.class) {
+                    field.set(this, null);
+                } else if (field.getType() == String.class) {
+                    field.set(this, null);
+                }
             }
         }
     }
-
-    
-  
-   
 
     // ✅ Override toString() for Debugging
     @Override
@@ -260,9 +308,9 @@ public class ReportParameter {
                 ", startDate='" +  formattedStartDate  + '\'' +
                 ", endDate='" + formattedEndDate + '\'' +
                 ", employeeId='" + employeeId + '\'' +
-                 ", employeeName='" + employee + '\'' +
+                 ", employeeName='" + employeeName + '\'' +
                 ", divisionId='" + divisionId + '\'' +
-                ", divisionName='" + division + '\'' +
+                ", divisionName='" + divisionName + '\'' +
                 ", vendorId='" + vendorId + '\'' +
                  ", vendorName='" + vendorName + '\'' +
                  ", buyerId='" + buyerId + '\'' +

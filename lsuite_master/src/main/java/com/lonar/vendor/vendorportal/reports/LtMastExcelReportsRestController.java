@@ -127,8 +127,8 @@ public class LtMastExcelReportsRestController implements CodeMaster{
 	            reportParameter.setFilterData(reportRequest.getFilterData());
 
 	            // Fetch additional details based on IDs
-	            reportParameter.setEmployee(ltMastExcelReportsService.getEmployeeName(reportParameter.getEmployeeId()));
-	            reportParameter.setDivision(ltMastExcelReportsService.getDivisionName(reportParameter.getDivisionId()));
+	            reportParameter.setEmployeeName(ltMastExcelReportsService.getEmployeeName(reportParameter.getEmployeeId()));
+	            reportParameter.setDivisionName(ltMastExcelReportsService.getDivisionName(reportParameter.getDivisionId()));
 	            reportParameter.setVendorName(ltMastExcelReportsService.getVendorName(reportParameter.getVendorId()));
 	            reportParameter.setBuyerName(ltMastExcelReportsService.getBuyerName(reportParameter.getBuyerId()));
 

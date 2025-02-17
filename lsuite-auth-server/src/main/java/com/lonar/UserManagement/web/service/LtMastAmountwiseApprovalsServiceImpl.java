@@ -39,8 +39,10 @@ public class LtMastAmountwiseApprovalsServiceImpl implements LtMastAmountwiseApp
 		Long count = ltMastAmountwiseApprovalsDao.getLtMastUsersCount(input,companyId);
 	    customeDataTable.setRecordsTotal(count);
 	    customeDataTable.setRecordsFiltered(count);
+	    System.out.println("in this");
 	    List<LtMastAmountwiseApprovals> ltMastAmountwiseApprovals= ltMastAmountwiseApprovalsDao.getLtMastUsersDatatableRecords(input,companyId);
-	    customeDataTable.setData(ltMastAmountwiseApprovals);	
+	    customeDataTable.setData(ltMastAmountwiseApprovals);
+	    System.out.println(ltMastAmountwiseApprovals);
 		return customeDataTable;
 	}
 	

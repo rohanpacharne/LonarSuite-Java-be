@@ -44,10 +44,10 @@ public interface LtMastExcelReportsDao {
 	List<ReportField> getRentalInvoiceDetailsData(ReportParameter reportParameter)throws ServiceException;
 
 	List<ReportField> getRentalAgreementInvoiceData(ReportParameter reportParameter)throws ServiceException;
+	List<ModuleDTO> getModulesByUserId(Long userId, Long companyId);
+
 
 	LtMastReportRequest findById(Long requestId)throws ServiceException;
-
-	List<ModuleDTO> getModulesByUserId(Long userId, Long companyId);
 
 	String findBuyerNameById(String buyerId);
 
