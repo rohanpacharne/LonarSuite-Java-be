@@ -29,12 +29,32 @@ public class LtMastPoLinesTaxesDaoImpl implements LtMastPoLinesTaxesDao {
 		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
  
+//	@Override
+//	public List<LtPoLineTaxes> getAllPoLinesByLineId(Long id) throws ServiceException {
+//		String query = env.getProperty("getAllPoLinesByTaxesLineId");
+//		List<LtPoLineTaxes> list=   jdbcTemplate.query(query, new Object[]{id }, 
+//				 new BeanPropertyRowMapper<LtPoLineTaxes>(LtPoLineTaxes.class)); 
+//		return list;
+//	}
+	
 	@Override
 	public List<LtPoLineTaxes> getAllPoLinesByLineId(Long id) throws ServiceException {
 		String query = env.getProperty("getAllPoLinesByTaxesLineId");
-		List<LtPoLineTaxes> list=   jdbcTemplate.query(query, new Object[]{id }, 
+		List<LtPoLineTaxes> list=   jdbcTemplate.query(query, new Object[]{id,id }, 
 				 new BeanPropertyRowMapper<LtPoLineTaxes>(LtPoLineTaxes.class)); 
 		return list;
+	}
+	
+	@Override
+	public void deleteTax(Long poLineId) {
+		String query = " DELETE * FROM LT_PO_LINE_TAXES WHERE PO_LINE_ID = ? ";
+		int res=jdbcTemplate.update(query,poLineId);
+ 
+		/*if(res!= 0)
+			return true;
+		else
+			return false;*/
+		
 	}
  
 }

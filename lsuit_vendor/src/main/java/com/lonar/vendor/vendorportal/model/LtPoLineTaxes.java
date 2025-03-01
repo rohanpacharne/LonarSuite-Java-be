@@ -53,7 +53,19 @@ public class LtPoLineTaxes {
 		private String taxName;
 		@Transient 
 		private String taxDesc;
+		@Transient 
+		private Double totalTaxAmount;
+		@Transient 
+		private Double totalAmount;
 
+ 
+		public Double getTotalAmount() {
+			return totalAmount;
+		}
+ 
+		public void setTotalAmount(Double totalAmount) {
+			this.totalAmount = totalAmount;
+		}
  
 		public String getTaxName() {
 			return taxName;
@@ -159,13 +171,22 @@ public class LtPoLineTaxes {
 			this.lastUpdateDate = lastUpdateDate;
 		}
  
+		public Double getTotalTaxAmount() {
+			return totalTaxAmount;
+		}
+ 
+		public void setTotalTaxAmount(Double totalTaxAmount) {
+			this.totalTaxAmount = totalTaxAmount;
+		}
+ 
 		@Override
 		public String toString() {
 			return "LtPoLineTaxes [poLineTaxId=" + poLineTaxId + ", poHeaderId=" + poHeaderId + ", poLineId=" + poLineId
 					+ ", taxId=" + taxId + ", taxRate=" + taxRate + ", taxAmount=" + taxAmount + ", createdBy="
 					+ createdBy + ", creationDate=" + creationDate + ", lastUpdateLogin=" + lastUpdateLogin
 					+ ", lastUpdatedBy=" + lastUpdatedBy + ", lastUpdateDate=" + lastUpdateDate + ", taxName=" + taxName
-					+ ", taxDesc=" + taxDesc + "]";
+					+ ", taxDesc=" + taxDesc + ", totalTaxAmount=" + totalTaxAmount + ", totalAmount=" + totalAmount
+					+ "]";
 		}
  
 	

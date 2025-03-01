@@ -1183,12 +1183,12 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 				ltMastUsers.setStartDate(ltMastVendors.getStartDate());
 				ltMastUsers.setEndDate(ltMastVendors.getEndDate());
 				ltMastUsers.setLoginFailureAttempt(0L);
-				String SHA256 = passwordGenater(randomPassword);
+				String SHA256 = passwordGenerator(randomPassword);
 
 				//ltMastUsers.setPassword(SHA256);
                 //System.out.println("encrypted password id" + SHA256);   
 
-				ltMastUsers.setPassword(randomPassword);
+				ltMastUsers.setPassword(SHA256);
                 System.out.println("password id" + randomPassword);   
 				
 				ltMastUsers = ltMastUsersRepository.save(ltMastUsers);
@@ -1447,6 +1447,29 @@ public class LtMastVendorsServiceImpl implements LtMastVendorsService
 		}
 		return hexString.toString();
 	}
+	
+	public String passwordGenerator(String input) {
+        String shaVersion = "SHA-256";
+        MessageDigest digest = null;
+        StringBuffer hexString = new StringBuffer();
+        
+        try {
+            digest = MessageDigest.getInstance(shaVersion);
+            byte[] encodedhash = digest.digest(input.getBytes(StandardCharsets.UTF_8));
+            
+            for (int i = 0; i < encodedhash.length; i++) {
+                String hex = Integer.toHexString(0xff & encodedhash[i]);
+                if (hex.length() == 1) {
+                    hexString.append('0'); // Add leading zero if necessary
+                }
+                hexString.append(hex);
+            }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        
+        return hexString.toString();
+    }
 
 	public String getToken() {
 		String token = new BigInteger(130, random).toString(32);

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Purchase Order</title>
+  <style>
+      /* General page settings */
+      @page {
+          size: A4;
+          margin: 20mm; /* Adjust the margins as needed */
+      }
+ 
+      /* Ensure the page content doesn't overflow */
+      body {
+          font-family: Arial, sans-serif;
+          font-size: 10px; /* Adjust the font size to fit content */
+          margin: 0;
+          padding: 0;
+          line-height: 1.2;
+          word-wrap: break-word;
+      }
+ 
+      /* Container for the PO report */
+      .po-report-container {
+          width: 100%;
+          page-break-before: always;
+      }
+ 
+      /* Table styling to ensure it fits */
+      table {
+          width: 100%;
+          border-collapse: collapse;
+          table-layout: fixed;
+      }
+ 
+      th, td {
+          border: 1px solid #ddd;
+          padding: 5px;
+          text-align: left;
+      }
+ 
+      /* For smaller text and ensuring line breaks happen properly */
+      .text-right {
+          text-align: right;
+      }
+ 
+      /* Adjust the table column width if needed */
+      .po-report-table th, .po-report-table td {
+          word-wrap: break-word;
+          max-width: 100px;
+      }
+  </style>
+ 
+</head>
+<body>
+<table>
+ 
+<!-- Header Section -->
+<table>
+  <tr>
+    <td style="width: 25%; text-align: center;">
+      <img src="{{logo_path}}" alt="Company Logo" style="max-height: 80px;" />
+    </td>
+    <td colspan="2" class="header-section" style=" text-align: center;">
+      <h3>Purchase Order</h3>
+      <h4>{{company_name}}</h4>
+      <p>{{vendor_address}}</p>
+      <p><strong>GST No:</strong> {{company_gst}} &nbsp;&nbsp;&nbsp;&nbsp;
+         <strong>Email ID:</strong> {{contact_email}}</p>
+    </td>
+  </tr>
+</table>
+ 
+<!-- Vendor Details -->
+<table>
+  <tr>
+    <td style="width: 50%;">
+      <p><strong>Vendor Code:</strong> {{vendor_code}}</p>
+      <p><strong>Vendor Name:</strong> {{vendor_name}}</p>
+      <p><strong>Vendor GST:</strong> {{vendor_gst}}</p>
+      <p><strong>Contact Person:</strong> {{contact_person}} &nbsp;&nbsp;&nbsp;&nbsp;
+        <strong>Contact Mobile:</strong> {{contact_mobile}}</p>
+      <p><strong>Contact Email:</strong> {{contact_email}}</p>
+    </td>
+    <td style="width: 50%;">
+      <p><strong>PO Number:</strong> {{po_number}} &nbsp;&nbsp;&nbsp;&nbsp;
+        <strong>PO Date:</strong> {{po_date}}</p>
+      <p><strong>Branch Name:</strong> {{branch_name}}</p>
+      <p><strong>Currency Code:</strong> {{currency_code}} &nbsp;&nbsp;&nbsp;&nbsp;
+        <strong>Payment Term:</strong> {{payment_term}}</p>
+      <p><strong>Buyer Name:</strong> {{buyer}} &nbsp;&nbsp;&nbsp;&nbsp;
+        <strong>Buyer Email:</strong> {{buyer_email}}</p>
+    </td>
+  </tr>
+</table>
+ 
+<!-- Product Details Table -->
+<table style="width: 100%;">
+  <thead>
+    <tr>
+      <th>Line No</th>
+      <th>Line Type</th>
+      <th style="width: 20%;">Product</th>
+      <th>Quantity</th>
+      <th>Unit Price</th>
+      <th>UOM</th>
+      <th>Note To Vendor</th>
+      <th>Total Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{lines_table}}
+  </tbody>
+</table>
+ 
+<!-- Summary Section -->
+<table>
+  <tr>
+    <td style="width: 80%; text-align: right;"><strong>Total:</strong></td>
+    <td>{{total_amount}}</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;"><strong>Levies (ISD 9%):</strong></td>
+    <td>{{levies}}</td>
+  </tr>
+  <tr>
+    <td style="text-align: right;"><strong>Grand Total:</strong></td>
+    <td>{{grand_total}}</td>
+  </tr>
+</table>
+ 
+<!-- Tax Details -->
+<table>
+  <thead>
+    <tr>
+      <th>Line No</th>
+      <th>HSN/SAC</th>
+      <th>Tax Name</th>
+      <th>Line Amount</th>
+      <th>Tax Rate (%)</th>
+      <th>Tax Amount</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{tax_table}}
+  </tbody>
+</table>
+ 
+<!-- Remarks Section -->
+<table>
+  <tr>
+    <td style="width: 20%;"><strong>Amount in Words:</strong></td>
+    <td>{{amount_in_words}}</td>
+  </tr>
+  <tr>
+    <td style="width: 20%;"><strong>Tax Amount in Words:</strong></td>
+    <td>{{tax_amount_in_words}}</td>
+  </tr>
+  <tr>
+    <th colspan="2">Remarks</th>
+  </tr>
+  <tr>
+    <td colspan="2">{{remarks}}</td>
+  </tr>
+</table>
+</table>
+ 
+</body>
+</html>

@@ -43,6 +43,14 @@ public interface LtMastExcelReportsService {
 	Status generateVendorProgressReport(ReportParameter reportParameter)throws ServiceException;
 	 
 	LtMastReportRequest getAllParameters(Long requestId)throws Exception;
+		 
+	String getVendorName(String vendorId);
+ 
+	String getBuyerName(String buyerId);
+ 
+	String getEmployeeName(String employeeId);
+ 
+	String getDivisionName(String divisionId);
 	 
 
 }

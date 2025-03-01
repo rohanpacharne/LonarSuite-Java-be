@@ -22,6 +22,8 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import com.lonar.vendor.vendorportal.dao.LtInvoiceHeadersDao;
 import com.lonar.vendor.vendorportal.dao.LtMastUsersDao;
 import com.lonar.vendor.vendorportal.dao.LtMastVendorsDao;
+import com.lonar.vendor.vendorportal.dao.LtPoHeadersDao;
+import com.lonar.vendor.vendorportal.dao.LtPrHeadersDao;
 import com.lonar.vendor.vendorportal.dao.LtRentalAgreementHeadersDao;
 import com.lonar.vendor.vendorportal.dao.LtVendorApprovalDao;
 import com.lonar.vendor.vendorportal.model.BusinessException;
@@ -31,11 +33,18 @@ import com.lonar.vendor.vendorportal.model.LtInvoiceApprovalHistory;
 import com.lonar.vendor.vendorportal.model.LtInvoiceHeaders;
 import com.lonar.vendor.vendorportal.model.LtMastEmailtoken;
 import com.lonar.vendor.vendorportal.model.LtMastVendors;
+import com.lonar.vendor.vendorportal.model.LtPoApprovalHistory;
+import com.lonar.vendor.vendorportal.model.LtPoHeaders;
+import com.lonar.vendor.vendorportal.model.LtPrApproval;
+import com.lonar.vendor.vendorportal.model.LtPrApprovalHistory;
+import com.lonar.vendor.vendorportal.model.LtPrHeaders;
 import com.lonar.vendor.vendorportal.model.LtRentalAgrApprovalHistory;
 import com.lonar.vendor.vendorportal.model.LtRentalAgreementApproval;
 import com.lonar.vendor.vendorportal.model.LtRentalAgreementHeaders;
 import com.lonar.vendor.vendorportal.model.LtVendorApprovalHistory;
 import com.lonar.vendor.vendorportal.model.Mail;
+import com.lonar.vendor.vendorportal.model.PoApproval;
+import com.lonar.vendor.vendorportal.model.PrApproval;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.model.VendorApproval;
 import com.lonar.vendor.vendorportal.repository.LtMastEmailtokenRepository;
@@ -77,10 +86,16 @@ public class ScheduledTasks implements CodeMaster{
 	LtMastUsersDao ltMastUsersDao;
 	
 	@Autowired
+	LtPoHeadersDao ltPoHeadersDao;
+	
+	@Autowired
 	Mailer mailer;
 	
 	@Autowired
 	LtVendorApprovalService ltVendorApprovalService;
+	
+	@Autowired
+	LtPrHeadersDao ltPrHeadersDao;
 	
 	@Autowired
 	private Environment env;
@@ -109,13 +124,17 @@ public class ScheduledTasks implements CodeMaster{
 		//sendMail();
 		
 		rentalAgreementChronJob();
+		
+		prChronJob();
+		
+		poCronJob();
     }
 
     private void invoiceChronJob() {
     	
     	try {
     		//get list of inprocess vendor
-    		List<LtInvoiceHeaders> inprocessListOfInvoice = ltInvoiceHeadersDao.getInprocessInvoiceList(INVOICE_INPROGRESS);	
+    		List<LtInvoiceHeaders> inprocessListOfInvoice = ltInvoiceHeadersDao.getInprocessInvoiceList(INVOICE_INPROGRESS);
     		
 			String currentApprovalLavel = null ;
 			List<InvoiceApproval> invoiceApprovalsList = null;
@@ -693,4 +712,295 @@ public class ScheduledTasks implements CodeMaster{
 		}
 		}
 	}
+	
+	private void prChronJob() {
+    	
+    	try {
+    		//get list of inprocess vendor
+    		List<LtPrHeaders> inprocessListOfPr = ltPrHeadersDao.getInprocessPrList(INPROCESS);	
+//    		System.out.println("inprocessListOfPr = "+inprocessListOfPr);
+			String currentApprovalLavel = null ;
+			List<PrApproval> prApprovalsList = null;
+			
+    		for (Iterator iterator = inprocessListOfPr.iterator(); iterator.hasNext();) {
+				LtPrHeaders ltPrHeaders = (LtPrHeaders) iterator.next();
+				
+				PrApproval approvalLavel =  ltPrHeadersDao.getApprovalLevel(ltPrHeaders.getPrHeaderId().longValue());
+				
+				if(approvalLavel != null){
+					if( approvalLavel.getCurrentApprovalLevel() != null &&  !approvalLavel.getCurrentApprovalLevel().trim().equals("")){ 
+						 currentApprovalLavel = approvalLavel.getCurrentApprovalLevel();
+						 prApprovalsList = ltPrHeadersDao.getApprovalList(ltPrHeaders.getPrHeaderId(), approvalLavel.getCurrentApprovalLevel());
+					}
+					else { 
+						currentApprovalLavel = approvalLavel.getApprovalLevel();
+						prApprovalsList = ltPrHeadersDao.getApprovalList(ltPrHeaders.getPrHeaderId(), approvalLavel.getApprovalLevel());
+					}
+				}
+				
+				boolean isApproved = false;
+				boolean isNoAction = false;
+				
+				for (PrApproval prApproval : prApprovalsList) {
+					
+					if(prApproval.getStatus().equals(NO_ACTION)) {	
+						isNoAction = true;
+						break;
+					}else if(prApproval.getStatus().equals(APPROVED) && 
+							( prApproval.getApprovedByAnyone() != null && prApproval.getApprovedByAnyone().equals("N"))){
+						isApproved = true;						
+					} else if( !prApproval.getStatus().equals(APPROVED) && 
+							( prApproval.getApprovedByAnyone() != null && prApproval.getApprovedByAnyone().equals("N") )){
+						isApproved = false;
+						break;
+					}
+					else if (prApproval.getStatus().equals(APPROVED) &&
+							( prApproval.getApprovedByAnyone() == null || prApproval.getApprovedByAnyone().equals("Y"))){
+						isApproved = true;						
+						break;
+					}
+				} 
+				
+				
+				
+				if(isNoAction || isApproved ){
+					
+					if(isApproved) {
+						currentApprovalLavel = ltPrHeadersDao.getNextApprovalLevel(ltPrHeaders.getPrHeaderId().longValue() , currentApprovalLavel);
+						
+						if(currentApprovalLavel != null && !currentApprovalLavel.trim().equals("") ){		
+							//ltExpExpenseHeadersService.updateCurrentApprovalLevel(ltExpExpenseHeader.getExpHeaderId(), currentApprovalLavel);
+							prApprovalsList = ltPrHeadersDao.getApprovalList(ltPrHeaders.getPrHeaderId(), currentApprovalLavel);
+						}else {
+					
+							if(ltPrHeadersDao.submitForApproval(new Date(),
+									ltPrHeaders.getPrHeaderId().longValue(), APPROVED, new Date())) {
+						
+								List<PrApproval> approvalsList = new ArrayList<PrApproval>();
+								PrApproval prApproval = new PrApproval();
+								prApproval.setApprovalId(ltPrHeaders.getCreatedBy().longValue());
+								prApproval.setLastUpdateDate(new Date());
+							//invoiceApprovalsList.get(0).setApprovalId(ltInvoiceHeaders.getInitiatorId());
+							//invoiceApprovalsList.get(0).setApprovalId(ltInvoiceHeaders.getCreatedBy());
+							//invoiceApprovalsList.get(0).setLastUpdateDate(new Date());
+								approvalsList.add(prApproval);
+							
+							/////Remaining 
+//							saveInvoiceEmailTokan(approvalsList,"invoiceApproval",ltPrHeaders); 
+							}
+							
+							//ltExpenseApprovalDao.callProceduere(ltExpExpenseHeader);
+						}
+					}  
+					
+					if(currentApprovalLavel != null && !currentApprovalLavel.trim().equals("") )
+					{	
+						ltPrHeadersDao.upDateStatus(ltPrHeaders.getPrHeaderId().longValue(), PENDING, currentApprovalLavel);
+						ltPrHeadersDao.updateCurrentApprovalLevel(ltPrHeaders.getPrHeaderId().longValue(), currentApprovalLavel);
+								
+						//--------------------------chk for delegation here
+						PrApproval obj = new PrApproval();
+						for(PrApproval prApproval : prApprovalsList)
+						{
+							if(prApproval.getDelegationId()!=null)
+							{
+								obj.setApprovalId(prApproval.getDelegationId());
+								obj.setApprovalLevel(prApproval.getApprovalLevel());
+								obj.setApprovedByAnyone(prApproval.getApprovedByAnyone());
+								obj.setCurrentApprovalLevel(prApproval.getCurrentApprovalLevel());
+								obj.setPrHeaderId(prApproval.getPrHeaderId());
+								obj.setModuleApprovalId(prApproval.getModuleApprovalId());
+								obj.setStatus(prApproval.getStatus());
+							}
+							
+						}
+						if(obj!=null && obj.getPrHeaderId()!=null)
+						{ prApprovalsList.add(obj); }
+						
+						System.out.println("prApprovalsList for debugging.."+prApprovalsList);
+		
+						//---------------------SAVE HISTORY-----------------------------
+						savePrApprovalHistoryData(prApprovalsList, PENDING);
+//						saveInvoiceEmailTokan(prApprovalsList,"invoiceApprovalNotification",ltPrHeaders); 
+					}
+					
+				} 
+				
+				
+			}
+    		
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    }
+	
+	private void savePrApprovalHistoryData(List<PrApproval> prApprovalList ,String status) throws Exception
+	{
+		for(PrApproval prApproval:prApprovalList)
+		{
+			LtPrApprovalHistory ltPrApprovalHistory = new LtPrApprovalHistory();
+			
+			ltPrApprovalHistory.setStatus(status);
+			ltPrApprovalHistory.setPrHeaderId(prApproval.getPrHeaderId().longValue());
+			ltPrApprovalHistory.setPrApprovalId(prApproval.getPrApprovalId());
+			ltPrApprovalHistory.setEmployeeId(prApproval.getApprovalId());
+			ltPrApprovalHistory.setLastUpdateDate(prApproval.getLastUpdateDate());
+			
+		try
+		{
+			ltVendorApprovalHistoryService.savePrApprovalHistory(ltPrApprovalHistory);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		}
+	}
+	
+	private void poCronJob() {
+    	
+    	try {
+    		//get list of inprocess vendor
+    		List<LtPoHeaders> inprocessListOfPo = ltPoHeadersDao.getInprocessPoList(INPROCESS);
+    		
+    		System.out.println("inprocessListOfPo = "+inprocessListOfPo);
+    		
+			String currentApprovalLavel = null ;
+			List<PoApproval> poApprovalsList = null;
+			
+    		for (Iterator iterator = inprocessListOfPo.iterator(); iterator.hasNext();) {
+				LtPoHeaders ltPoHeaders = (LtPoHeaders) iterator.next();
+				
+				PoApproval approvalLavel =  ltPoHeadersDao.getApprovalLevel(ltPoHeaders.getPoHeaderId());
+				
+				if(approvalLavel != null){
+					if( approvalLavel.getCurrentApprovalLevel() != null &&  !approvalLavel.getCurrentApprovalLevel().trim().equals("")){
+						 currentApprovalLavel = approvalLavel.getCurrentApprovalLevel();
+						 poApprovalsList = ltPoHeadersDao.getApprovalList(ltPoHeaders.getPoHeaderId(), approvalLavel.getCurrentApprovalLevel());
+					}
+					else {
+						currentApprovalLavel = approvalLavel.getApprovalLevel();
+						poApprovalsList = ltPoHeadersDao.getApprovalList(ltPoHeaders.getPoHeaderId(), approvalLavel.getApprovalLevel());
+					}
+				}
+				
+				boolean isApproved = false;
+				boolean isNoAction = false;
+				
+				for (PoApproval poApproval : poApprovalsList) {
+					
+					if(poApproval.getStatus().equals(NO_ACTION)) {	
+						isNoAction = true;
+						break;
+					}else if(poApproval.getStatus().equals(APPROVED) &&
+							( poApproval.getApprovedByAnyone() != null && poApproval.getApprovedByAnyone().equals("N"))){
+						isApproved = true;						
+					} else if( !poApproval.getStatus().equals(APPROVED) &&
+							( poApproval.getApprovedByAnyone() != null && poApproval.getApprovedByAnyone().equals("N") )){
+						isApproved = false;
+						break;
+					}
+					else if (poApproval.getStatus().equals(APPROVED) &&
+							( poApproval.getApprovedByAnyone() == null || poApproval.getApprovedByAnyone().equals("Y"))){
+						isApproved = true;						
+						break;
+					}
+				}
+				
+				
+				
+				if(isNoAction || isApproved ){
+					
+					if(isApproved) {
+						currentApprovalLavel = ltPoHeadersDao.getNextApprovalLevel(ltPoHeaders.getPoHeaderId() , currentApprovalLavel);
+						
+						if(currentApprovalLavel != null && !currentApprovalLavel.trim().equals("") ){		
+							//ltExpExpenseHeadersService.updateCurrentApprovalLevel(ltExpExpenseHeader.getExpHeaderId(), currentApprovalLavel);
+							poApprovalsList = ltPoHeadersDao.getApprovalList(ltPoHeaders.getPoHeaderId(), currentApprovalLavel);
+						}else {
+					
+							if(ltPoHeadersDao.submitForApproval(new Date(),
+									ltPoHeaders.getPoHeaderId(), APPROVED, new Date())) {
+						
+								List<PoApproval> approvalsList = new ArrayList<PoApproval>();
+								PoApproval po = new PoApproval();
+								po.setApprovalId(ltPoHeaders.getCreatedBy());
+								po.setLastUpdateDate(new Date());
+							//invoiceApprovalsList.get(0).setApprovalId(ltInvoiceHeaders.getInitiatorId());
+							//invoiceApprovalsList.get(0).setApprovalId(ltInvoiceHeaders.getCreatedBy());
+							//invoiceApprovalsList.get(0).setLastUpdateDate(new Date());
+								approvalsList.add(po);
+							
+							/////Remaining
+//							savePoEmailTokan(approvalsList,"poApproval",ltPoHeaders);
+							}
+							
+							//ltExpenseApprovalDao.callProceduere(ltExpExpenseHeader);
+						}
+					}  
+					
+					if(currentApprovalLavel != null && !currentApprovalLavel.trim().equals("") )
+					{	
+						ltPoHeadersDao.upDateStatus(ltPoHeaders.getPoHeaderId(), PENDING, currentApprovalLavel);
+						ltPoHeadersDao.updateCurrentApprovalLevel(ltPoHeaders.getPoHeaderId(), currentApprovalLavel);
+								
+						//--------------------------chk for delegation here
+						PoApproval obj = new PoApproval();
+						for(PoApproval poApproval : poApprovalsList)
+						{
+							if(poApproval.getDelegationId()!=null)
+							{
+								obj.setApprovalId(poApproval.getDelegationId());
+								obj.setApprovalLevel(poApproval.getApprovalLevel());
+								obj.setApprovedByAnyone(poApproval.getApprovedByAnyone());
+								obj.setCurrentApprovalLevel(poApproval.getCurrentApprovalLevel());
+								obj.setPoHeaderId(poApproval.getPoHeaderId());
+								obj.setModuleApprovalId(poApproval.getModuleApprovalId());
+								obj.setStatus(poApproval.getStatus());
+							}
+							
+						}
+						if(obj!=null && obj.getPoHeaderId()!=null)
+						{ poApprovalsList.add(obj); }
+						
+						System.out.println("poApprovalsList for debugging.."+poApprovalsList);
+		
+						//---------------------SAVE HISTORY-----------------------------
+						savePoApprovalHistoryData(poApprovalsList, PENDING);
+//						savePoEmailTokan(poApprovalsList,"poApprovalNotification",ltPoHeaders);
+					}
+					
+				}
+				
+				
+			}
+    		
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    }
+	
+	private void savePoApprovalHistoryData(List<PoApproval> poApprovalList ,String status) throws Exception
+	{
+		for(PoApproval poApproval:poApprovalList)
+		{
+			LtPoApprovalHistory ltPoApprovalHistory = new LtPoApprovalHistory();
+			
+			ltPoApprovalHistory.setStatus(status);
+			ltPoApprovalHistory.setPoHeaderId(poApproval.getPoHeaderId());
+			ltPoApprovalHistory.setPoApprovalId(poApproval.getPoApprovalId());
+			ltPoApprovalHistory.setEmployeeId(poApproval.getApprovalId());
+			ltPoApprovalHistory.setLastUpdateDate(poApproval.getLastUpdateDate());
+			
+		try
+		{
+			ltVendorApprovalHistoryService.savePoApprovalHistory(ltPoApprovalHistory);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		}
+	}
+ 
 }

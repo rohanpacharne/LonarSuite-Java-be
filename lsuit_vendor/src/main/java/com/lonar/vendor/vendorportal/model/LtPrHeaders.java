@@ -62,7 +62,18 @@ public class LtPrHeaders {
     @Column(name = "last_updated_by")
     private Integer lastUpdatedBy;
     
-    @Transient
+    @Column(name = "initiatorId")
+    private Integer initiatorId;
+    
+    public Integer getInitiatorId() {
+		return initiatorId;
+	}
+
+	public void setInitiatorId(Integer initiatorId) {
+		this.initiatorId = initiatorId;
+	}
+
+	@Transient
 	private Long draw;
 
 	@Transient
@@ -79,6 +90,73 @@ public class LtPrHeaders {
 
 	@Transient
 	private String requesterName;
+	
+	@Transient
+	private String statusValueName;
+	
+	@Transient
+	private String prTypeValueName;
+	
+	@Transient
+	private String prEnteredByName;
+	
+	@Transient
+	private String divisionName;
+	
+	@Transient
+	private Date prDate;
+	
+	@Transient
+	private String valueCode;
+
+	public String getValueCode() {
+		return valueCode;
+	}
+
+	public void setValueCode(String valueCode) {
+		this.valueCode = valueCode;
+	}
+
+	public String getStatusValueName() {
+		return statusValueName;
+	}
+
+	public void setStatusValueName(String statusValueName) {
+		this.statusValueName = statusValueName;
+	}
+
+	public String getPrTypeValueName() {
+		return prTypeValueName;
+	}
+
+	public void setPrTypeValueName(String prTypeValueName) {
+		this.prTypeValueName = prTypeValueName;
+	}
+
+	public Date getPrDate() {
+		return prDate;
+	}
+
+	public void setPrDate(Date prDate) {
+		this.prDate = prDate;
+	}
+
+	public String getPrEnteredByName() {
+		return prEnteredByName;
+	}
+
+	public void setPrEnteredByName(String prEnteredByName) {
+		this.prEnteredByName = prEnteredByName;
+	}
+
+	public String getDivisionName() {
+		return divisionName;
+	}
+
+	public void setDivisionName(String divisionName) {
+		this.divisionName = divisionName;
+	}
+
 
 	public Integer getPrHeaderId() {
 		return prHeaderId;
@@ -271,10 +349,24 @@ public class LtPrHeaders {
 				+ requesterId + ", noteToApprover=" + noteToApprover + ", divisionId=" + divisionId + ", companyId="
 				+ companyId + ", currency=" + currency + ", prAmount=" + prAmount + ", createdBy=" + createdBy
 				+ ", creationDate=" + creationDate + ", lastUpdateDate=" + lastUpdateDate + ", lastUpdateLogin="
-				+ lastUpdateLogin + ", lastUpdatedBy=" + lastUpdatedBy + ", draw=" + draw + ", start=" + start
-				+ ", length=" + length + ", columnNo=" + columnNo + ", sort=" + sort + ", requesterName="
-				+ requesterName + "]";
+				+ lastUpdateLogin + ", lastUpdatedBy=" + lastUpdatedBy + ", initiatorId=" + initiatorId + ", draw="
+				+ draw + ", start=" + start + ", length=" + length + ", columnNo=" + columnNo + ", sort=" + sort
+				+ ", requesterName=" + requesterName + ", statusValueName=" + statusValueName + ", prTypeValueName="
+				+ prTypeValueName + ", prEnteredByName=" + prEnteredByName + ", divisionName=" + divisionName
+				+ ", prDate=" + prDate + ", valueCode=" + valueCode + "]";
 	}
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
 	
 	
     

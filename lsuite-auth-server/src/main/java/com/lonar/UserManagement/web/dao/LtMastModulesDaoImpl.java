@@ -224,8 +224,58 @@ public class LtMastModulesDaoImpl implements LtMastModulesDao {
 		return Long.parseLong(count);
 	}
 
+//	@Override
+//	public List<LtMastModules> getModuleData(LtMastModules input,Long companyId) 
+//	{
+//		if(input.getColumnNo()==2 && input.getSort().equals("desc"))
+//		{ input.setColumnNo(11); }
+//		if(input.getColumnNo()==3 && input.getSort().equals("desc"))
+//		{ input.setColumnNo(12); }
+//		if(input.getColumnNo()==4 && input.getSort().equals("desc"))
+//		{ input.setColumnNo(13); }
+//		if(input.getColumnNo()==5 && input.getSort().equals("desc"))
+//		{ input.setColumnNo(15); }
+//		if(input.getColumnNo()==7 && input.getSort().equals("desc"))
+//		{ input.setColumnNo(17); }
+//		
+//		String seq=null;
+//		if(input.getSequenceNumber()!=null && !input.getSequenceNumber().equals("")) 
+//		{seq="%"+input.getSequenceNumber()+"%";}
+//		   
+//		String code=null;
+//		if(input.getModuleCode()!=null && !input.getModuleCode().equals("")) 
+//		{code="%"+input.getModuleCode().trim().toUpperCase()+"%";}
+//		   
+//		String name=null;
+//		if(input.getModuleName()!=null && !input.getModuleName().equals("")) 
+//		{name="%"+input.getModuleName().trim().toUpperCase()+"%";}
+//		
+//		String group=null;
+//		if(input.getModuleGroup()!=null && !input.getModuleGroup().equals("")) 
+//		{group="%"+input.getModuleGroup().trim().toUpperCase()+"%";}
+//		if(input.getColumnNo()==0)	
+//		{
+//			input.setColumnNo(2);
+//		}
+//			String query = env.getProperty("getModuleData");
+//			
+//			return (List<LtMastModules>) 
+//					jdbcTemplate.query(query , new Object[]{companyId,seq,code,name,group,
+//							
+//							input.getColumnNo(),input.getColumnNo(),
+//							input.getColumnNo(),input.getColumnNo(),
+//							input.getColumnNo(),input.getColumnNo(),
+//							input.getColumnNo(),input.getColumnNo(),
+//							input.getColumnNo(),input.getColumnNo(),
+//							
+//							input.getLength() + input.getStart(),input.getStart()+1
+//							},
+//				 new  BeanPropertyRowMapper<LtMastModules>(LtMastModules.class));
+//			
+//	}
+	
 	@Override
-	public List<LtMastModules> getModuleData(LtMastModules input,Long companyId) 
+	public List<LtMastModules> getModuleData(LtMastModules input,Long companyId)
 	{
 		if(input.getColumnNo()==2 && input.getSort().equals("desc"))
 		{ input.setColumnNo(11); }
@@ -237,21 +287,27 @@ public class LtMastModulesDaoImpl implements LtMastModulesDao {
 		{ input.setColumnNo(15); }
 		if(input.getColumnNo()==7 && input.getSort().equals("desc"))
 		{ input.setColumnNo(17); }
+		if(input.getColumnNo()==8 && input.getSort().equals("desc"))
+		{ input.setColumnNo(18); }
 		
 		String seq=null;
-		if(input.getSequenceNumber()!=null && !input.getSequenceNumber().equals("")) 
+		if(input.getSequenceNumber()!=null && !input.getSequenceNumber().equals(""))
 		{seq="%"+input.getSequenceNumber()+"%";}
 		   
 		String code=null;
-		if(input.getModuleCode()!=null && !input.getModuleCode().equals("")) 
+		if(input.getModuleCode()!=null && !input.getModuleCode().equals(""))
 		{code="%"+input.getModuleCode().trim().toUpperCase()+"%";}
 		   
 		String name=null;
-		if(input.getModuleName()!=null && !input.getModuleName().equals("")) 
+		if(input.getModuleName()!=null && !input.getModuleName().equals(""))
 		{name="%"+input.getModuleName().trim().toUpperCase()+"%";}
 		
+		String type=null;
+		if(input.getModuleType()!=null && !input.getModuleType().equals(""))
+		{type="%"+input.getModuleType().trim().toUpperCase()+"%";}
+		
 		String group=null;
-		if(input.getModuleGroup()!=null && !input.getModuleGroup().equals("")) 
+		if(input.getModuleGroup()!=null && !input.getModuleGroup().equals(""))
 		{group="%"+input.getModuleGroup().trim().toUpperCase()+"%";}
 		if(input.getColumnNo()==0)	
 		{
@@ -259,15 +315,16 @@ public class LtMastModulesDaoImpl implements LtMastModulesDao {
 		}
 			String query = env.getProperty("getModuleData");
 			
-			return (List<LtMastModules>) 
-					jdbcTemplate.query(query , new Object[]{companyId,seq,code,name,group,
+			return (List<LtMastModules>)
+					jdbcTemplate.query(query , new Object[]{companyId,seq,code,name,type,group,
 							
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
-							
+							input.getColumnNo(),input.getColumnNo(),
+						
 							input.getLength() + input.getStart(),input.getStart()+1
 							},
 				 new  BeanPropertyRowMapper<LtMastModules>(LtMastModules.class));

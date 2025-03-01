@@ -334,4 +334,80 @@ String query = env.getProperty("getRentalAgreementApprovalByAgreementId");
 		return ltExpenseApprovalList;
 	}
 
+	@Override
+	public List<LtVendorApproval> getPrApprovalByPrHeaderId(Long prHeaderId) throws ServiceException {
+		// TODO Auto-generated method stub
+		String query = env.getProperty("getPrApprovalByPrHeaderId");
+		
+		
+		List<LtVendorApproval> ltExpenseApprovalList = jdbcTemplate.query(query, new Object[] { prHeaderId },
+				new RowMapper<LtVendorApproval>() {
+					public LtVendorApproval mapRow(ResultSet rs, int arg1) throws SQLException {
+
+						LtVendorApproval ltVendorApproval = new LtVendorApproval();
+						
+						ltVendorApproval.setVendorApprovalId(rs.getLong("PR_APPROVAL_ID"));
+						ltVendorApproval.setDelegationId(rs.getLong("DELEGATION_ID"));
+						ltVendorApproval.setModuleApprovalId(rs.getLong("MODULE_APPROVAL_ID"));
+						ltVendorApproval.setApprovalId(rs.getLong("APPROVAL_ID"));
+						ltVendorApproval.setApprovalLevel(rs.getString("APPROVAL_LEVEL"));
+						ltVendorApproval.setCurrentApprovalLevel(rs.getString("CURRENT_APPROVAL_LEVEL"));
+						ltVendorApproval.setVendorId(rs.getLong("PR_HEADER_ID"));
+						ltVendorApproval.setStatus(rs.getString("STATUS"));
+						ltVendorApproval.setStartDate(rs.getDate("START_DATE"));
+						ltVendorApproval.setEndDate(rs.getDate("END_DATE"));
+						ltVendorApproval.setCreatedBy(rs.getLong("CREATED_BY"));
+						ltVendorApproval.setCreationDate(rs.getDate("CREATION_DATE"));
+						ltVendorApproval.setLastUpdateDate(rs.getDate("LAST_UPDATE_DATE"));
+						ltVendorApproval.setLastUpdateLogin(rs.getLong("LAST_UPDATE_LOGIN"));
+						ltVendorApproval.setLastUpdatedBy(rs.getLong("LAST_UPDATED_BY"));
+						ltVendorApproval.setModuleAppEmployeesId(rs.getLong("MODULE_APP_EMPLOYEES_ID"));
+						ltVendorApproval.setApprovalName(rs.getString("approval_Name"));
+						ltVendorApproval.setApprovalLevelName(rs.getString("approval_level_name"));
+						return ltVendorApproval;
+
+					}
+				});
+			return ltExpenseApprovalList;
+	}
+	
+	@Override
+	public List<LtVendorApproval> getPoApprovalByPoId(Long poheaderId) throws ServiceException {
+		
+		System.out.println("In Dao");
+		
+		String query = env.getProperty("getPoApprovalByPoId");
+		
+		
+		List<LtVendorApproval> ltExpenseApprovalList = jdbcTemplate.query(query, new Object[] { poheaderId },
+				new RowMapper<LtVendorApproval>() {
+					public LtVendorApproval mapRow(ResultSet rs, int arg1) throws SQLException {
+ 
+						LtVendorApproval ltVendorApproval = new LtVendorApproval();
+						
+						ltVendorApproval.setVendorApprovalId(rs.getLong("PO_APPROVAL_ID"));
+						ltVendorApproval.setDelegationId(rs.getLong("DELEGATION_ID"));
+						ltVendorApproval.setModuleApprovalId(rs.getLong("MODULE_APPROVAL_ID"));
+						ltVendorApproval.setApprovalId(rs.getLong("APPROVAL_ID"));
+						ltVendorApproval.setApprovalLevel(rs.getString("APPROVAL_LEVEL"));
+						ltVendorApproval.setCurrentApprovalLevel(rs.getString("CURRENT_APPROVAL_LEVEL"));
+						ltVendorApproval.setVendorId(rs.getLong("PO_HEADER_ID"));
+						ltVendorApproval.setStatus(rs.getString("STATUS"));
+						ltVendorApproval.setStartDate(rs.getDate("START_DATE"));
+						ltVendorApproval.setEndDate(rs.getDate("END_DATE"));
+						ltVendorApproval.setCreatedBy(rs.getLong("CREATED_BY"));
+						ltVendorApproval.setCreationDate(rs.getDate("CREATION_DATE"));
+						ltVendorApproval.setLastUpdateDate(rs.getDate("LAST_UPDATE_DATE"));
+						ltVendorApproval.setLastUpdateLogin(rs.getLong("LAST_UPDATE_LOGIN"));
+						ltVendorApproval.setLastUpdatedBy(rs.getLong("LAST_UPDATED_BY"));
+						ltVendorApproval.setModuleAppEmployeesId(rs.getLong("MODULE_APP_EMPLOYEES_ID"));
+						ltVendorApproval.setApprovalName(rs.getString("approval_Name"));
+						ltVendorApproval.setApprovalLevelName(rs.getString("approval_level_name"));
+						return ltVendorApproval;
+ 
+					}
+				});
+		return ltExpenseApprovalList;
+	}
+
 }

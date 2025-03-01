@@ -29,6 +29,7 @@ import com.lonar.vendor.vendorportal.model.LtInvoiceLines;
 import com.lonar.vendor.vendorportal.model.LtMastEmployeeDelegation;
 import com.lonar.vendor.vendorportal.model.LtMastModuleApprovals;
 import com.lonar.vendor.vendorportal.model.LtPoLines;
+import com.lonar.vendor.vendorportal.model.ProcedureCall;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.model.Status;
 import com.lonar.vendor.vendorportal.repository.LtInvoiceHeadersRepository;
@@ -879,6 +880,66 @@ public class LtInvoiceHeadersDaoImpl implements LtInvoiceHeadersDao,CodeMaster{
 		
 		
 		
+	}
+	
+	@Transactional
+	@Override
+	public ProcedureCall checkDuplicateInvoice(String action,Long companyId, String invoiceNum, Long vendorId,
+	                                           Long vendorAddId, Date invoiceDate) {
+	    ProcedureCall procedureCall = new ProcedureCall();
+	    System.out.println("invoiceDate = "+invoiceDate);
+	    System.out.println("action in dao = "+action);
+	    try {
+	        // Create stored procedure query
+	        StoredProcedureQuery query = em.createStoredProcedureQuery("Check_Duplicate_Invoice")
+	        		.registerStoredProcedureParameter(1, String.class, ParameterMode.IN)
+	        		.registerStoredProcedureParameter(2, Long.class, ParameterMode.IN)
+	        	    .registerStoredProcedureParameter(3, String.class, ParameterMode.IN)
+	        	    .registerStoredProcedureParameter(4, Long.class, ParameterMode.IN)
+	        	    .registerStoredProcedureParameter(5, Long.class, ParameterMode.IN)
+	        	    .registerStoredProcedureParameter(6, Date.class, ParameterMode.IN)
+	        	    .registerStoredProcedureParameter(7, String.class, ParameterMode.OUT)
+	        	    .registerStoredProcedureParameter(8, String.class, ParameterMode.OUT)
+	        	    .setParameter(1, action)
+	        	    .setParameter(2, companyId)
+	        	    .setParameter(3, invoiceNum)
+	        	    .setParameter(4, vendorId)
+	        	    .setParameter(5, vendorAddId)
+	        	    .setParameter(6, invoiceDate);
+ 
+	        // Execute stored procedure
+	        query.execute();
+ 
+	        // Retrieve output parameters safely
+	        String xStatus = (String) query.getOutputParameterValue(7);
+	        String xMessage = (String) query.getOutputParameterValue(8);
+ 
+	        // Ensure non-null values
+//	        xStatus = (xStatus != null) ? xStatus.trim() : "UNKNOWN";
+//	        xMessage = (xMessage != null) ? xMessage.trim() : "No message provided";
+ 
+	        // Set values in ProcedureCall object
+	        procedureCall.setCompanyId(companyId);
+	        procedureCall.setInvoiceNum(invoiceNum);
+	        procedureCall.setVendorId(vendorId);
+	        procedureCall.setVendorAddId(vendorAddId);
+	        procedureCall.setInvoiceDate(invoiceDate);
+	        procedureCall.setStatusCode(xStatus);
+	        procedureCall.setStatusMessage(xMessage);
+ 
+	        // Log the output
+	        System.out.println("Procedure executed: Status=" + xStatus + ", Message=" + xMessage);
+ 
+	    } catch (Exception e) {
+	        // Handle the exception by setting error status in ProcedureCall
+	        procedureCall.setStatusCode("ERROR");
+	        procedureCall.setStatusMessage("Error checking duplicate invoice: " + e.getMessage());
+ 
+	        // Log the error
+	        System.err.println("Error executing stored procedure: " + e.getMessage());
+	    }
+ 
+	    return procedureCall;
 	}
 
 	

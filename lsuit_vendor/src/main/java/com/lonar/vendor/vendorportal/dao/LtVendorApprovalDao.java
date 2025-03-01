@@ -37,5 +37,10 @@ public interface LtVendorApprovalDao
 	List<LtVendorApproval> getRentalAgreementApprovalByAgreementId(Long agreementId) throws ServiceException;
 
 	List<LtVendorApprovalSummary> getDataForReport(ReportParameters reportParameters) throws ServiceException;
+	
+	List<LtVendorApproval> getPrApprovalByPrHeaderId(Long prHeaderId) throws ServiceException;
+
+	List<LtVendorApproval> getPoApprovalByPoId(Long poheaderId) throws ServiceException;
+
 
 }

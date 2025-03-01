@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.lonar.vendor.vendorportal.model.LtPoLines;
 import com.lonar.vendor.vendorportal.model.ServiceException;
+import com.lonar.vendor.vendorportal.repository.LtPoLinesRepository;
 
 @Repository
 @PropertySource(value = "classpath:queries/poLineQueries.properties", ignoreResourceNotFound = true)
@@ -23,6 +24,9 @@ public class LtPoLinesDaoImpl implements LtPoLinesDao{
 	private Environment env;
 	
 	private JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	LtPoLinesRepository ltPoLinesRepository;
 	
 	private JdbcTemplate getJdbcTemplate() {
 		return jdbcTemplate;
@@ -100,7 +104,7 @@ public class LtPoLinesDaoImpl implements LtPoLinesDao{
 			}
 			
 			List<LtPoLines> list = (List<LtPoLines>) 
-					jdbcTemplate.query(query , new Object[]{headerId,lineNumber,proCode,quantity,category,
+					jdbcTemplate.query(query , new Object[]{headerId,headerId,lineNumber,proCode,quantity,category,
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
@@ -116,7 +120,7 @@ public class LtPoLinesDaoImpl implements LtPoLinesDao{
 	@Override
 	public List<LtPoLines> getAllPoLinesByHeaderId(Long headerId) throws ServiceException {
 		String query = env.getProperty("getAllPoLinesByHeaderId");
-		List<LtPoLines> list=   jdbcTemplate.query(query, new Object[]{ headerId }, 
+		List<LtPoLines> list=   jdbcTemplate.query(query, new Object[]{ headerId ,headerId}, 
 				 new BeanPropertyRowMapper<LtPoLines>(LtPoLines.class)); 
 		return list;
 	}
@@ -124,7 +128,7 @@ public class LtPoLinesDaoImpl implements LtPoLinesDao{
 	@Override
 	public LtPoLines getPoLinesByPolineId(Long poLineId) throws ServiceException {
 		String query = env.getProperty("getPoLinesByPolineId");
-		LtPoLines ltPoLine =   jdbcTemplate.queryForObject(query, new Object[]{poLineId }, 
+		LtPoLines ltPoLine =   jdbcTemplate.queryForObject(query, new Object[]{poLineId,poLineId }, 
 				new BeanPropertyRowMapper<LtPoLines>(LtPoLines.class));
 		return ltPoLine;
 	}
@@ -137,6 +141,34 @@ public class LtPoLinesDaoImpl implements LtPoLinesDao{
 			return true;
 		else
 			return false;
+	}
+	
+	@Override
+	public Long save(LtPoLines ltPoLines) {
+		ltPoLines.setLastUpdateDate(new Date());
+		ltPoLines.setLastUpdatedBy(ltPoLines.getLastUpdateLogin());
+		ltPoLines = ltPoLinesRepository.save(ltPoLines);
+		if(ltPoLines.getPoLineId()!=null)
+		return ltPoLines.getPoLineId();
+		else
+			return null;
+	}
+	
+	@Override
+	public boolean updateAmount(LtPoLines ltPoLines) throws ServiceException {
+		String query = " UPDATE LT_PO_HEADERS SET PO_AMOUNT = "
+				+ " ( SELECT ROUND(SUM( TOTAL_AMOUNT),2) FROM LT_PO_LINES WHERE PO_HEADER_ID = ? )  "
+				+ " WHERE PO_HEADER_ID = ?  ";
+		
+		int res=jdbcTemplate.update(
+				query,ltPoLines.getPoHeaderId(),ltPoLines.getPoHeaderId());
+		
+		if(res!=0) {
+			return true;
+		}else {
+			return false;
+		}
+		
 	}
 
 }

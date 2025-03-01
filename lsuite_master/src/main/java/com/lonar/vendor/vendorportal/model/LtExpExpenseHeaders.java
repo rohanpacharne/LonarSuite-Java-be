@@ -232,6 +232,9 @@ public class LtExpExpenseHeaders extends WhoColumns implements Serializable
 	private String employeeName;
 	
 	@Transient
+	private Long userId;
+	
+	@Transient
 	private String vendorName;
 	
 	@JsonView(DataTablesOutput.View.class)
@@ -268,6 +271,14 @@ public class LtExpExpenseHeaders extends WhoColumns implements Serializable
 	private String valueName;
 	
 	
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 
 	public Long getCompanyId() {
 		return companyId;

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Repository;
 
 import com.lonar.vendor.vendorportal.model.LtInvoiceApprovalHistory;
 import com.lonar.vendor.vendorportal.model.LtMastModuleApprovals;
+import com.lonar.vendor.vendorportal.model.LtPoApprovalHistory;
+import com.lonar.vendor.vendorportal.model.LtPrApprovalHistory;
 import com.lonar.vendor.vendorportal.model.LtRentalAgrApprovalHistory;
 import com.lonar.vendor.vendorportal.model.LtVendorApproval;
 import com.lonar.vendor.vendorportal.model.LtVendorApprovalHistory;
@@ -115,5 +117,48 @@ public class LtMastModuleApprovalsDaoImpl implements LtMastModuleApprovalsDao{
 		{	 flag= false; }
 		return flag;
 	}
+
+
+	@Override
+	public boolean chkPrIsAprovedByAnyOne(LtPrApprovalHistory approvalHistory) throws ServiceException {
+		// TODO Auto-generated method stub
+		String query = env.getProperty("chkPrIsAprovedByAnyOne");
+		
+		List<LtMastModuleApprovals> ltExpModuleApprovalsList = jdbcTemplate.query(query,  new Object[] 
+				{approvalHistory.getPrApprovalId()},
+				new BeanPropertyRowMapper<LtMastModuleApprovals> (LtMastModuleApprovals.class));
+		
+		boolean flag=false;
+				
+		if(!ltExpModuleApprovalsList.isEmpty() && ltExpModuleApprovalsList.size()>0)
+		{
+			 if(ltExpModuleApprovalsList.get(0).getApprovedByAnyone().equals("Y"))
+			 { flag= true; }
+		}
+		else
+		{	 flag= false; }
+		return flag;
+	}
+	
+	@Override
+	public boolean chkPoIsAprovedByAnyOne(LtPoApprovalHistory approvalHistory) throws ServiceException {
+		String query = env.getProperty("chkPoIsAprovedByAnyOne");
+		
+		List<LtMastModuleApprovals> ltExpModuleApprovalsList = jdbcTemplate.query(query,  new Object[]
+				{approvalHistory.getPoApprovalId()},
+				new BeanPropertyRowMapper<LtMastModuleApprovals> (LtMastModuleApprovals.class));
+		
+		boolean flag=false;
+				
+		if(!ltExpModuleApprovalsList.isEmpty() && ltExpModuleApprovalsList.size()>0)
+		{
+			 if(ltExpModuleApprovalsList.get(0).getApprovedByAnyone().equals("Y"))
+			 { flag= true; }
+		}
+		else
+		{	 flag= false; }
+		return flag;
+	}
+ 
 
 }

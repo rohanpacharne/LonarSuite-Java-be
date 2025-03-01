@@ -16,6 +16,7 @@ import com.lonar.vendor.vendorportal.model.CodeMaster;
 import com.lonar.vendor.vendorportal.model.DashboardDetails;
 import com.lonar.vendor.vendorportal.model.LtInvoiceHeaders;
 import com.lonar.vendor.vendorportal.model.LtInvoiceLines;
+import com.lonar.vendor.vendorportal.model.ProcedureCall;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.model.Status;
 
@@ -179,7 +180,7 @@ public class LtInvoiceHeadersServiceImpl implements LtInvoiceHeadersService,Code
 		}
 		else
 		{
-			String chkDuplicate= checkDuplicate(ltInvoiceHeaders,"save");
+			String chkDuplicate= checkDuplicateByProcedure(ltInvoiceHeaders,"A");
 			if(chkDuplicate.equals("null"))
 			{
 				ltInvoiceHeaders.setCreatedBy(ltInvoiceHeaders.getLastUpdateLogin());
@@ -276,6 +277,42 @@ public class LtInvoiceHeadersServiceImpl implements LtInvoiceHeadersService,Code
 		else
 			return "null";
 	}
+	
+	public String checkDuplicateByProcedure(LtInvoiceHeaders ltInvoiceHeaders, String flag) throws ServiceException{
+		Status status = new Status();
+		ProcedureCall procedureCall = new ProcedureCall();
+		try {
+	        // Call stored procedure to check for duplicate invoices
+	        procedureCall = ltInvoiceHeadersDao.checkDuplicateInvoice(
+	        	flag,
+	            ltInvoiceHeaders.getCompanyId(),
+	            ltInvoiceHeaders.getInvoiceNum(),
+	            ltInvoiceHeaders.getVendorId(),
+	            ltInvoiceHeaders.getVendorAddId(),
+	            ltInvoiceHeaders.getInvoiceDate()
+	        );
+ 
+	        // Set data from procedure call
+//	        status.setData(procedureCall);
+ 
+	        if ("ERROR".equalsIgnoreCase(procedureCall.getStatusCode())) {
+	            status.setCode(0);
+	            status.setMessage("Duplicate invoice found: " + procedureCall.getStatusMessage());
+	            return procedureCall.getStatusMessage();
+	        }else {
+	        	status.setCode(1);
+	            status.setMessage("Duplicate invoice not found: " + procedureCall.getStatusMessage());
+	            return "null";
+	        }
+ 
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        status.setCode(0);
+	        status.setMessage("Error checking duplicate invoice: " + e.getMessage());
+	        return procedureCall.getStatusMessage();
+	    }
+	}
+
 
 	private String checkNull(LtInvoiceHeaders ltInvoiceHeaders)
 	{
@@ -313,7 +350,7 @@ public class LtInvoiceHeadersServiceImpl implements LtInvoiceHeadersService,Code
 			}
 			else
 			{
-				String chkDuplicate= checkDuplicate(ltInvoiceHeaders,"update");
+				String chkDuplicate= checkDuplicateByProcedure(ltInvoiceHeaders,"U");
 				if(chkDuplicate.equals("null"))
 				{
 					ltInvoiceHeaders.setLastUpdatedBy(ltInvoiceHeaders.getLastUpdateLogin());

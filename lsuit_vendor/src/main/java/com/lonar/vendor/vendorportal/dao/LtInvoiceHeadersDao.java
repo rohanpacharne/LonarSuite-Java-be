@@ -6,6 +6,7 @@ import java.util.List;
 import com.lonar.vendor.vendorportal.model.DashboardDetails;
 import com.lonar.vendor.vendorportal.model.InvoiceApproval;
 import com.lonar.vendor.vendorportal.model.LtInvoiceHeaders;
+import com.lonar.vendor.vendorportal.model.ProcedureCall;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.model.Status;
 
@@ -71,4 +72,7 @@ public interface LtInvoiceHeadersDao
 	Status callUpdatePoShipmentQuantitiesProc(Long companyId,Long userId,Long invoiceHeaderId) throws ServiceException;
 
 	void loadLines(LtInvoiceHeaders ltInvoiceHeaders);
+	
+	public ProcedureCall checkDuplicateInvoice(String action,Long companyId, String invoiceNum, Long vendorId,
+            Long vendorAddId, Date invoiceDate);
 }

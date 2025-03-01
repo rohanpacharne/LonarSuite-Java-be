@@ -787,10 +787,11 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 	    LtMastReportRequest ltMastReportRequest = new LtMastReportRequest();
 	    ltMastReportRequest.setUserId(reportParameter.getUserId());
 	    ltMastReportRequest.setFilterData(reportParameter.toString());
-	    ltMastReportRequest.setRequestName( requestName);
+	    ltMastReportRequest.setRequestName(requestName);
 	    ltMastReportRequest.setRequestDate(new Date());
 	    ltMastReportRequest.setStatus("Normal");
 	    ltMastReportRequest.setPhase("PENDING") ;//phase = PENDING
+	    ltMastReportRequest.setType("REPORT") ;//type = REPORT
 	    ltMastReportRequest.setSubmittedDate(new Date());
 	    ltMastReportRequest.setStartDate(new Date());
 	    ltMastReportRequest = ltMastReportRequestRepository.save(ltMastReportRequest);
@@ -801,6 +802,28 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 	public LtMastReportRequest getAllParameters(Long requestId) throws Exception{
 	    return ltMastExcelReportsDao.findById(requestId);
 	}
+	 
+	@Override
+	public String getEmployeeName(String employeeId) {
+	    return ltMastExcelReportsDao.findEmployeeNameById(employeeId);
+	}
+	 
+	@Override
+	public String getDivisionName(String divisionId) {
+	    return ltMastExcelReportsDao.findDivisionNameById(divisionId);
+	}
+	 
+	@Override
+	public String getVendorName(String vendorId) {
+	    return ltMastExcelReportsDao.findVendorNameById(vendorId);
+	}
+	 
+	@Override
+	public String getBuyerName(String buyerId) {
+	    return ltMastExcelReportsDao.findBuyerNameById(buyerId);
+	}
+	
+	
 	
 
 }

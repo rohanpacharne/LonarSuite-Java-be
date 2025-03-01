@@ -1,7 +1,9 @@
 package com.lonar.vendor.vendorportal.reports;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -124,16 +126,62 @@ public class LtMastExcelReportsRestController implements CodeMaster{
            return new ResponseEntity<Status>(status,HttpStatus.OK);
    }
     
-    @RequestMapping(value = "/getAllParameter/{requestId}/{logTime}", method = RequestMethod.GET)
-    public String getAllParameters(@PathVariable Long requestId,@PathVariable String logTime) throws Exception {
-        LtMastReportRequest reportRequest = ltMastExcelReportsService.getAllParameters(requestId);
+//    @RequestMapping("/getAllParameter/{requestId}/{logTime}")
+//	public ResponseEntity<?> getAllParameters(@PathVariable Long requestId,@PathVariable String logTime) {
+//	    try {
+//	        // Fetch report request from service
+//	        LtMastReportRequest reportRequest = ltMastExcelReportsService.getAllParameters(requestId);
+// 
+//	        if (reportRequest != null && reportRequest.getFilterData() != null) {
+//	            ReportParameter reportParameter = new ReportParameter();
+//	            reportParameter.setFilterData(reportRequest.getFilterData());
+// 
+//	            // Fetch additional details based on IDs
+//	            reportParameter.setEmployee(ltMastExcelReportsService.getEmployeeName(reportParameter.getEmployeeId()));
+//	            reportParameter.setDivision(ltMastExcelReportsService.getDivisionName(reportParameter.getDivisionId()));
+//	            reportParameter.setVendorName(ltMastExcelReportsService.getVendorName(reportParameter.getVendorId()));
+//	            reportParameter.setBuyerName(ltMastExcelReportsService.getBuyerName(reportParameter.getBuyerId()));
+// 
+//	            return ResponseEntity.ok(reportParameter);
+//	        } else {
+//	            return ResponseEntity.status(404).body("{\"message\": \"No data found for requestId: " + requestId + "\"}");
+//	        }
+//	    } catch (Exception e) {
+//	    	e.printStackTrace();
+//	        return ResponseEntity.status(500).body("{\"error\": \"Error processing request: " + e.getMessage() + "\"}");
+//	    }
+//	}
+    
+    @RequestMapping(value ="/getAllParameter/{requestId}/{logTime}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getAllParameters(@PathVariable Long requestId,@PathVariable String logTime) {
+	    try {
+	        LtMastReportRequest reportRequest = ltMastExcelReportsService.getAllParameters(requestId);
  
-        if (reportRequest != null && reportRequest.getFilterData() != null) {
-            return reportRequest.getFilterData();// ✅ Return string
-        } else {
-            return null;
-        }
-    }
+	        if (reportRequest != null && reportRequest.getFilterData() != null) {
+	            ReportParameter reportParameter = new ReportParameter();
+	            reportParameter.setFilterData(reportRequest.getFilterData());
+	            reportParameter.setEmployeeName(ltMastExcelReportsService.getEmployeeName(reportParameter.getEmployeeId()));
+	            reportParameter.setDivisionName(ltMastExcelReportsService.getDivisionName(reportParameter.getDivisionId()));
+	            reportParameter.setVendorName(ltMastExcelReportsService.getVendorName(reportParameter.getVendorId()));
+	            reportParameter.setBuyerName(ltMastExcelReportsService.getBuyerName(reportParameter.getBuyerId()));
+ 
+	            return ResponseEntity.ok(reportParameter);
+	        } else {
+	            Map<String, String> errorResponse = new HashMap<>();
+	            errorResponse.put("message", "No data found for requestId: " + requestId);
+ 
+	            return ResponseEntity.status(404).body(errorResponse); // ResponseEntity automatically converts this map to JSON
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+ 
+	        Map<String, String> errorResponse = new HashMap<>();
+	        errorResponse.put("error", "Error processing request: " + e.getMessage());
+ 
+	        return ResponseEntity.status(500).body(errorResponse); // ResponseEntity automatically converts this map to JSON
+	    }
+	}
+    
 	
 	
 

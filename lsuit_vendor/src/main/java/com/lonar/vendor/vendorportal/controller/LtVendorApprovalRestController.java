@@ -136,5 +136,23 @@ public class LtVendorApprovalRestController implements CodeMaster
             return new ResponseEntity<List<LtVendorApproval>>(ltVendorApproval, HttpStatus.OK);
     }
 	
+	@RequestMapping(value = "/getPrApprovalByPrHeaderId/{id}/{logTime}", method= RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<List<LtVendorApproval>> getPrApprovalByPrHeaderId(@PathVariable("id") Long prHeaderId,@PathVariable("logTime") String logTime) throws ServiceException
+    {
+            List<LtVendorApproval> ltVendorApproval=
+            			ltVendorApprovalService.getPrApprovalByPrHeaderId(prHeaderId);
+            return new ResponseEntity<List<LtVendorApproval>>(ltVendorApproval, HttpStatus.OK);
+    }
+	
+	@RequestMapping(value = "/getApprovalByPoId/{poheaderId}/{logTime}", method= RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<List<LtVendorApproval>> getPoApprovalByPoId(@PathVariable("poheaderId") Long poheaderId,@PathVariable("logTime") String logTime) throws ServiceException
+	{
+		System.out.println("In Contoller");
+		
+		List<LtVendorApproval> ltVendorApproval=
+				ltVendorApprovalService.getPoApprovalByPoId(poheaderId);
+		return new ResponseEntity<List<LtVendorApproval>>(ltVendorApproval, HttpStatus.OK);
+	}
+	
 	
 }

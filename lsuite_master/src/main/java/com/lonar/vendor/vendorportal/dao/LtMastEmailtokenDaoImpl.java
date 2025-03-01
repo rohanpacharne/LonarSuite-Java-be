@@ -18,6 +18,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import com.lonar.vendor.vendorportal.model.LtExpEmailTokenlLine;
+import com.lonar.vendor.vendorportal.model.LtExpExpenseHeaders;
 import com.lonar.vendor.vendorportal.model.LtMastEmailtoken;
 import com.lonar.vendor.vendorportal.repository.LtMastEmailtokenRepository;
 
@@ -308,6 +309,36 @@ public class LtMastEmailtokenDaoImpl implements LtMastEmailtokenDao
 
 	    }
 		
+	}
+
+	@Override
+	public LtExpExpenseHeaders getEmpName(Long empId) {
+		String sqlQuery = "select concat(lme.FIRST_NAME,' ',lme.LAST_NAME) as employee_name from lt_mast_employees lme where lme.EMPLOYEE_ID = ?";
+		
+		List<LtExpExpenseHeaders> list=   jdbcTemplate.query(sqlQuery, new Object[]{empId }, 
+				 new BeanPropertyRowMapper<LtExpExpenseHeaders>(LtExpExpenseHeaders.class)); 
+		
+		if(list!=null && !list.isEmpty()) {
+			return list.get(0);
+		}else {
+			return null;
+		}
+		
+	}
+
+	@Override
+	public LtExpExpenseHeaders getApproverUserId(Long empId) {
+		// TODO Auto-generated method stub
+		String sqlQuery = "select lmu.user_id from lt_mast_users lmu where lmu.EMPLOYEE_ID = ?";
+		
+		List<LtExpExpenseHeaders> list=   jdbcTemplate.query(sqlQuery, new Object[]{empId}, 
+				 new BeanPropertyRowMapper<LtExpExpenseHeaders>(LtExpExpenseHeaders.class)); 
+		
+		if(list!=null && !list.isEmpty()) {
+			return list.get(0);
+		}else {
+			return null;
+		}
 	}
 
 

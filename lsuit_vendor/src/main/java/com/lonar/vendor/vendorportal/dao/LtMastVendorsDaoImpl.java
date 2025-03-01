@@ -22,6 +22,8 @@ import com.lonar.vendor.vendorportal.model.LtInvoiceHeaders;
 import com.lonar.vendor.vendorportal.model.LtMastEmployeeDelegation;
 import com.lonar.vendor.vendorportal.model.LtMastEmployees;
 import com.lonar.vendor.vendorportal.model.LtMastVendors;
+import com.lonar.vendor.vendorportal.model.LtPoHeaders;
+import com.lonar.vendor.vendorportal.model.LtPrHeaders;
 import com.lonar.vendor.vendorportal.model.LtRentalAgreementHeaders;
 import com.lonar.vendor.vendorportal.model.SendBroadCastEmail;
 import com.lonar.vendor.vendorportal.model.ServiceException;
@@ -954,6 +956,141 @@ public class LtMastVendorsDaoImpl implements LtMastVendorsDao,CodeMaster
 			return true;
 		else
 			return false;
+	}
+	
+	@Override
+	public LtMastEmployees getSupervisorIdByRequesterId(Long requesterId) {
+		// TODO Auto-generated method stub
+//		String query = env.getProperty("getPrById");
+		String query = "Select * from lt_mast_employees where employee_id = ?";
+		List<LtMastEmployees> list=   jdbcTemplate.query(query, new Object[]{requesterId  }, 
+				 new BeanPropertyRowMapper<LtMastEmployees>(LtMastEmployees.class)); 
+		if(list.isEmpty())
+			return null;
+		else
+		 return list.get(0);
+	}
+	
+	@Override
+	public boolean loadPrApprovers(LtPrHeaders ltPrHeaders) throws ServiceException {
+		 String query = " SELECT a.module_app_employees_id,a.employees_id,b.approval_level,b.module, "
+				+ " a.MODULE_APPROVAL_ID ,a.START_DATE,a.END_DATE  "
+				+ " FROM lt_mast_module_app_emp a,lt_mast_module_approvals b "
+				+ " WHERE a.MODULE_APPROVAL_ID=b.MODULE_APPROVAL_ID "
+				+ " AND DIVISION_ID= ? "
+				+ " AND MODULE= 'PURCHASE_REQUEST'  "
+				+ " AND STATUS= 'DRAFT' "
+				+ " AND ( a.START_DATE <= SYSDATE() AND (a.END_DATE is null or a.END_DATE > SYSDATE()) ) ";
+		
+		List<Approval> approvalList=   jdbcTemplate.query(query, new Object[]{ ltPrHeaders.getDivisionId()}, 
+			 new BeanPropertyRowMapper<Approval>(Approval.class)); 
+	 
+		List<LtMastEmployees>  empList=ltMastEmployeesDao.getByEmpId(ltPrHeaders.getRequesterId().longValue());
+		
+			Approval superviserApproval = new Approval();
+			superviserApproval.setEmployeesId(getSupervisorIdByRequesterId(ltPrHeaders.getRequesterId().longValue()).getSupervisorEmpId());
+			superviserApproval.setApprovalLevel("00");
+			superviserApproval.setModuleApprovalId(00L);
+			
+			System.out.println("sup 1 id : "+superviserApproval.getEmployeesId());
+
+		
+			approvalList.add(superviserApproval);
+		
+		boolean flag=false;
+	if(approvalList.size()>0)
+	{
+		for(Approval approvalObj:approvalList)
+		{
+			System.out.println("approval = "+approvalObj);
+			Approval approval=approvalObj;
+			List<LtMastEmployeeDelegation> ltMastEmployeeDelegation = ltMastEmployeeDelegationDao
+					.findForDelegation(approvalObj.getEmployeesId());
+			if(ltMastEmployeeDelegation!= null && ltMastEmployeeDelegation.size()>0)
+			{
+				approval.setDelegationId(ltMastEmployeeDelegation.get(0).getDelegationId());
+			}
+			
+			int res=0;
+			if(approval.getEmployeesId()!=null && approval.getModuleApprovalId()!=null && approval.getApprovalLevel()!=null)
+			{
+				res=jdbcTemplate.update(" INSERT INTO lt_pr_approval "
+						+ " (MODULE_APPROVAL_ID,APPROVAL_ID,APPROVAL_LEVEL,CURRENT_APPROVAL_LEVEL,DELEGATION_ID, "
+						+ " PR_HEADER_ID, STATUS,START_DATE,END_DATE, CREATED_BY,CREATION_DATE,LAST_UPDATE_LOGIN,"
+						+ " LAST_UPDATED_BY,LAST_UPDATE_DATE ,MODULE_APP_EMPLOYEES_ID)  "
+		 		+ " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ",
+		 		approval.getModuleApprovalId(),approval.getEmployeesId(),approval.getApprovalLevel(),
+		 		null,approval.getDelegationId(),ltPrHeaders.getPrHeaderId(),NO_ACTION,new Date(),
+		 		null,ltPrHeaders.getCreatedBy(),new Date(),
+		 		ltPrHeaders.getLastUpdateLogin(),ltPrHeaders.getLastUpdatedBy(),
+		 		new Date(),approval.getModuleAppEmployeesId());
+				if(res!=0)
+					flag=true;
+			}
+			
+		}
+	}
+	
+	return flag;
+	}
+	
+	@Override
+	public boolean loadPoApprovers(LtPoHeaders poHeaders) throws ServiceException {
+		 String query = " SELECT a.module_app_employees_id,a.employees_id,b.approval_level,b.module, "
+				+ " a.MODULE_APPROVAL_ID ,a.START_DATE,a.END_DATE  "
+				+ " FROM lt_mast_module_app_emp a,lt_mast_module_approvals b "
+				+ " WHERE a.MODULE_APPROVAL_ID=b.MODULE_APPROVAL_ID "
+				+ " AND DIVISION_ID= ? "
+				+ " AND MODULE= 'PURCHASE'  "
+				+ " AND STATUS= 'DRAFT' "
+				+ " AND ( a.START_DATE <= SYSDATE() AND (a.END_DATE is null or a.END_DATE > SYSDATE()) ) ";
+		
+		List<Approval> approvalList=   jdbcTemplate.query(query, new Object[]{ poHeaders.getDivisionId()},
+			 new BeanPropertyRowMapper<Approval>(Approval.class));
+	
+		List<LtMastEmployees>  empList=ltMastEmployeesDao.getByEmpId(poHeaders.getBuyerId());
+		
+			Approval superviserApproval = new Approval();
+			superviserApproval.setEmployeesId(poHeaders.getBuyerId());
+			superviserApproval.setApprovalLevel("00");
+			superviserApproval.setModuleApprovalId(00L);
+		
+			approvalList.add(superviserApproval);
+		
+		boolean flag=false;
+	if(approvalList.size()>0)
+	{
+		for(Approval approvalObj:approvalList)
+		{
+			Approval approval=approvalObj;
+			List<LtMastEmployeeDelegation> ltMastEmployeeDelegation = ltMastEmployeeDelegationDao
+					.findForDelegation(approvalObj.getEmployeesId());
+			if(ltMastEmployeeDelegation!= null && ltMastEmployeeDelegation.size()>0)
+			{
+				approval.setDelegationId(ltMastEmployeeDelegation.get(0).getDelegationId());
+			}
+			
+			int res=0;
+			if(approval.getEmployeesId()!=null && approval.getModuleApprovalId()!=null && approval.getApprovalLevel()!=null)
+			{
+				res=jdbcTemplate.update(" INSERT INTO lt_po_approval "
+						+ " (MODULE_APPROVAL_ID,APPROVAL_ID,APPROVAL_LEVEL,CURRENT_APPROVAL_LEVEL,DELEGATION_ID, "
+						+ " PO_HEADER_ID, STATUS,START_DATE,END_DATE, CREATED_BY,CREATION_DATE,LAST_UPDATE_LOGIN,"
+						+ " LAST_UPDATED_BY,LAST_UPDATE_DATE ,MODULE_APP_EMPLOYEES_ID)  "
+		 		+ " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ",
+		 		approval.getModuleApprovalId(),approval.getEmployeesId(),approval.getApprovalLevel(),
+		 		null,approval.getDelegationId(),poHeaders.getPoHeaderId(),NO_ACTION,new Date(),
+		 		null,poHeaders.getCreatedBy(),new Date(),
+		 		poHeaders.getLastUpdateLogin(),poHeaders.getLastUpdatedBy(),
+		 		new Date(),approval.getModuleAppEmployeesId());
+				if(res!=0)
+					flag=true;
+			}
+			
+		}
+	}
+	
+	return flag;
 	}
 
 }

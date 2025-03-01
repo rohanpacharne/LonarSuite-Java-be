@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lonar.vendor.vendorportal.model.CustomeDataTable;
 import com.lonar.vendor.vendorportal.model.LtPoLines;
 import com.lonar.vendor.vendorportal.model.ServiceException;
+import com.lonar.vendor.vendorportal.model.Status;
 import com.lonar.vendor.vendorportal.service.LtPoLinesService;
 
 @RestController
@@ -54,5 +56,31 @@ public class LtMastPoLinesRestController {
 	{
 			LtPoLines ltPoLine =  ltPoLinesService.getPoLinesByPolineId(poLineId);
 			return new ResponseEntity<LtPoLines>(ltPoLine, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/save", method= RequestMethod.POST, consumes = "application/json")
+    public ResponseEntity<Status> save(@RequestBody LtPoLines ltPoLines) throws ServiceException
+	{
+		System.out.println("In controller");
+		System.out.println("ltPoLines = "+ltPoLines);
+			Status status=new Status();
+			status =  ltPoLinesService.save(ltPoLines);
+			return new ResponseEntity<Status>(status, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/update", method= RequestMethod.POST, consumes = "application/json")
+    public ResponseEntity<Status> update(@RequestBody LtPoLines ltPoLines) throws ServiceException
+	{
+			Status status=new Status();
+			status =  ltPoLinesService.update(ltPoLines);
+			return new ResponseEntity<Status>(status, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/delete/{id}/{logTime}", method= RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<Status> delete(@PathVariable("id") Long poLineId,@PathVariable("logTime") String logTime) throws ServiceException
+	{
+			Status status=new Status();
+			status =  ltPoLinesService.delete(poLineId);
+			return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
 }

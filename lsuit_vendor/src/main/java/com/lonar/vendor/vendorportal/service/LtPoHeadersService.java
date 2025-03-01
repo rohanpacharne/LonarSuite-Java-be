@@ -1,5 +1,6 @@
 package com.lonar.vendor.vendorportal.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.lonar.vendor.vendorportal.controller.VendorBuyerDetails;
@@ -53,5 +54,19 @@ public interface LtPoHeadersService
 	Status createPOPDFReportWithTemplate(Long poHeaderId,long companyId);
 	
 	Status createPOPDFReportWithTemplate_Testing(Long poHeaderId,long companyId);
+	
+	Status createPoPdfReport(Long poHeaderId,Long companyId)throws ServiceException;
+
+	Status submitForApproval(Date date, Long poHeaderId, String statusStr, Object object, Long userId, Long companyId)
+			throws ServiceException;
+
+	String checkforApprovals(Long poHeaderId) throws ServiceException;
+	
+	public boolean checkStatusIsPending(Long poHeaderId, Long approvalId) throws ServiceException;
+
+	LtPoHeaders getPoStatusById(Long poHeaderId) throws ServiceException;
+
+	Status delete(Long id);
+
 
 }

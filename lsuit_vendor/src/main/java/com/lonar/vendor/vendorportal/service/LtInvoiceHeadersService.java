@@ -50,6 +50,9 @@ public interface LtInvoiceHeadersService
 	Long getLtInvoiceHeadersCountById(LtInvoiceHeaders input, Long id) throws ServiceException;
 
 	List<LtInvoiceHeaders> getLtInvoiceHeadersDataTableById(LtInvoiceHeaders input, Long id) throws ServiceException;
+	
+	String checkDuplicateByProcedure(LtInvoiceHeaders ltInvoiceHeaders, String flag) throws ServiceException;
+
 
 	
 	

@@ -39,9 +39,11 @@ import com.lonar.vendor.vendorportal.model.ExpenseApproval;
 import com.lonar.vendor.vendorportal.model.LtExpExpenseHeaders;
 import com.lonar.vendor.vendorportal.model.LtExpenseApprovalHistory;
 import com.lonar.vendor.vendorportal.model.LtMastEmailtoken;
+import com.lonar.vendor.vendorportal.model.LtMastNotifications;
 import com.lonar.vendor.vendorportal.model.Mail;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.repository.LtMastEmailtokenRepository;
+import com.lonar.vendor.vendorportal.repository.LtMastNotificationsRepository;
 import com.lonar.vendor.vendorportal.service.LtExpenseApprovalHistoryService;
 import com.lonar.vendor.vendorportal.service.LtExpenseApprovalService;
 import com.lonar.vendor.vendorportal.service.LtMastEmailtokenService;
@@ -53,6 +55,9 @@ public class ExpenseApprovalLogic  implements CodeMaster{
 	
 	@Autowired
 	private Environment env;
+	
+	@Autowired
+	LtMastNotificationsRepository ltMastNotificationsRepository;
 	
 	private JdbcTemplate jdbcTemplate;
 	
@@ -178,6 +183,7 @@ public class ExpenseApprovalLogic  implements CodeMaster{
 							}else {
 //								System.out.println("in else of saveEmailTokan");
 								saveEmailTokan(expenseApprovals,"eExpenseApproval",ltExpExpenseHeader); 
+								saveNotificationsDetails(expenseApprovals,ltExpExpenseHeader);
 							}
 							
 							//ltExpenseApprovalDao.callProceduere(ltExpExpenseHeader);
@@ -218,7 +224,8 @@ public class ExpenseApprovalLogic  implements CodeMaster{
 						if(ltExpExpenseHeader.getExpenseCategory().equals(ADVANCE)) {
 							saveEmailTokan(expenseApprovals1,"eAdvanceApprovalNotification",ltExpExpenseHeader); 
 						} else {
-							saveEmailTokan(expenseApprovals1,"eExpenseApprovalNotification",ltExpExpenseHeader); 
+							saveEmailTokan(expenseApprovals1,"eExpenseApprovalNotification",ltExpExpenseHeader);
+							saveNotificationsDetails(expenseApprovals1,ltExpExpenseHeader);
 						}
 					}
 					
@@ -298,6 +305,46 @@ public class ExpenseApprovalLogic  implements CodeMaster{
 			e.printStackTrace();
 		}
 	}
+    
+    private void saveNotificationsDetails(List<ExpenseApproval> expenseApprovals,LtExpExpenseHeaders ltExpExpenseHeader) {
+    	
+    	System.out.println("in saveNotificationsDetails");
+    	for(ExpenseApproval expenseApproval:expenseApprovals) {
+    	String empName = "Employee";
+    	Long userId = 0l;
+    	LtMastNotifications ltMastNotifications = new LtMastNotifications();
+    	
+    	LtExpExpenseHeaders ltExpExpenseHeaders = ltMastEmailtokenService.getApproverUserId(expenseApproval.getApprovalId());
+    	if(ltExpExpenseHeaders!=null) {
+    		userId = ltExpExpenseHeaders.getUserId();
+    	}
+    	
+    	ltMastNotifications.setUserId(userId);
+    	ltMastNotifications.setNotificationTitle("PENDING APPROVAL");
+    	
+    	LtExpExpenseHeaders ltExpExpenseHeaders1 = ltMastEmailtokenService.getEmpName(ltExpExpenseHeader.getEmployeeId());
+    	if(ltExpExpenseHeaders!=null) {
+    		empName = ltExpExpenseHeaders1.getEmployeeName();
+    	}
+    	String notificationBody = empName + " has created expense " + ltExpExpenseHeader.getExpenseNumber() + " and is pending for approval";
+    	ltMastNotifications.setNotificationBody(notificationBody);
+    	ltMastNotifications.setNotificationStatus("SENDING");
+    	ltMastNotifications.setReadFlag("N");
+    	ltMastNotifications.setSendDate(new Date());
+    	ltMastNotifications.setModule("EXPENSE");
+    	ltMastNotifications.setHeaderId(ltExpExpenseHeader.getExpHeaderId());
+    	ltMastNotifications.setCreationDate(new Date());
+    	ltMastNotifications.setCreatedBy(0l);
+    	ltMastNotifications.setLastUpdateBy(0l);
+    	ltMastNotifications.setLastUpdateDate(new Date());
+    	ltMastNotifications.setLastUpdateLogin(0l);
+    	
+    	ltMastNotificationsRepository.save(ltMastNotifications);
+    	
+    	}
+    	System.out.println("in saveNotificationsDetails end");
+    	
+    }
     
     
     private void sendMail() throws ServiceException

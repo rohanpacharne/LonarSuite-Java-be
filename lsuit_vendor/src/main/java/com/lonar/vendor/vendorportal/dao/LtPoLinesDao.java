@@ -17,4 +17,8 @@ public interface LtPoLinesDao {
 
 	boolean updateFlage(Long ltPoLineId) throws ServiceException;
 
+	Long save(LtPoLines ltPoLines);
+
+	boolean updateAmount(LtPoLines ltPoLines) throws ServiceException;
+
 }

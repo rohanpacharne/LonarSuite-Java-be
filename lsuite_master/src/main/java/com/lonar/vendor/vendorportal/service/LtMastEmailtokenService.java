@@ -23,6 +23,11 @@ public interface LtMastEmailtokenService {
 	public void makeEntryInEmailToken(List<ExpenseApproval> expenseApproval,String emailTemplate,LtExpExpenseHeaders ltExpExpenseHeaders,String type) throws Exception;
 	
 	public void updateStatus(Long tokenId, String status, Integer count) throws Exception;
+	
+	public LtExpExpenseHeaders getEmpName(Long empId);
+	
+	public LtExpExpenseHeaders getApproverUserId(Long empId);
+
 
 
 	

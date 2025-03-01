@@ -127,6 +127,12 @@ public class LtPoHeaders
 	@Column(name = "ACK_MSG")
 	private String ackMsg;
 	
+	@Column(name = "COMPANY_ID")
+	private Integer companyId; 
+	
+	@Column(name = "INITIATOR_ID")
+	private Integer initiatorId; 
+	
 	@Transient
 	private Long draw;
 
@@ -179,6 +185,22 @@ public class LtPoHeaders
 	
 	
 	
+	public Integer getInitiatorId() {
+		return initiatorId;
+	}
+
+	public void setInitiatorId(Integer initiatorId) {
+		this.initiatorId = initiatorId;
+	}
+
+	public Integer getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(Integer companyId) {
+		this.companyId = companyId;
+	}
+
 	public String getContactPerson() {
 		return contactPerson;
 	}
@@ -596,13 +618,18 @@ public class LtPoHeaders
 				+ termsId + ", termsDate=" + termsDate + ", currencyCode=" + currencyCode + ", poPdf=" + poPdf
 				+ ", createdBy=" + createdBy + ", creationDate=" + creationDate + ", lastUpdateLogin=" + lastUpdateLogin
 				+ ", lastUpdatedBy=" + lastUpdatedBy + ", lastUpdateDate=" + lastUpdateDate + ", ackFlag=" + ackFlag
-				+ ", ackMsg=" + ackMsg + ", draw=" + draw + ", start=" + start + ", length=" + length + ", pDate="
-				+ pDate + ", revDate=" + revDate + ", columnNo=" + columnNo + ", sort=" + sort + ", vendorName="
-				+ vendorName + ", vendorAddress=" + vendorAddress + ", billingAddress=" + billingAddress + ", agent="
-				+ agent + ", buyer=" + buyer + ", contactPerson=" + contactPerson + ", firstName=" + firstName
-				+ ", lastName=" + lastName + ", employeeNumber=" + employeeNumber + ", venderContact=" + venderContact
-				+ ", buyerName=" + buyerName + "]";
+				+ ", ackMsg=" + ackMsg + ", companyId=" + companyId + ", initiatorId=" + initiatorId + ", draw=" + draw
+				+ ", start=" + start + ", length=" + length + ", pDate=" + pDate + ", revDate=" + revDate
+				+ ", columnNo=" + columnNo + ", sort=" + sort + ", vendorName=" + vendorName + ", vendorAddress="
+				+ vendorAddress + ", billingAddress=" + billingAddress + ", agent=" + agent + ", buyer=" + buyer
+				+ ", contactPerson=" + contactPerson + ", firstName=" + firstName + ", lastName=" + lastName
+				+ ", employeeNumber=" + employeeNumber + ", venderContact=" + venderContact + ", buyerName=" + buyerName
+				+ "]";
 	}
+
+	
+
+	
 
 	
 	

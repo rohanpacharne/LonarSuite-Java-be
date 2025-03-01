@@ -3,8 +3,13 @@ package com.lonar.vendor.vendorportal.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.ParameterMode;
+import javax.persistence.PersistenceContext;
+import javax.persistence.StoredProcedureQuery;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +19,25 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lonar.vendor.vendorportal.controller.VendorBuyerDetails;
+import com.lonar.vendor.vendorportal.model.Approval;
+import com.lonar.vendor.vendorportal.model.CodeMaster;
 import com.lonar.vendor.vendorportal.model.DashboardDetails;
+import com.lonar.vendor.vendorportal.model.LtMastEmployeeDelegation;
+import com.lonar.vendor.vendorportal.model.LtMastModuleApprovals;
 import com.lonar.vendor.vendorportal.model.LtPoHeaders;
 import com.lonar.vendor.vendorportal.model.LtPoLineReport;
 import com.lonar.vendor.vendorportal.model.LtPoReport;
+import com.lonar.vendor.vendorportal.model.PoApproval;
 import com.lonar.vendor.vendorportal.model.ServiceException;
+import com.lonar.vendor.vendorportal.model.Status;
+import com.lonar.vendor.vendorportal.repository.LtPoHeadersRepository;
 
 @Repository
 @PropertySource(value = "classpath:queries/poHeaderQueries.properties", ignoreResourceNotFound = true)
-public class LtPoHeadersDaoImpl implements LtPoHeadersDao {
+public class LtPoHeadersDaoImpl implements LtPoHeadersDao,CodeMaster {
 
 	@Autowired
 	private Environment env;
@@ -34,6 +47,15 @@ public class LtPoHeadersDaoImpl implements LtPoHeadersDao {
 	private JdbcTemplate getJdbcTemplate() {
 		return jdbcTemplate;
 	}
+	
+	@PersistenceContext(name = "em")
+	private EntityManager em;
+	
+	@Autowired
+	LtPoHeadersRepository ltPoHeadersRepository;
+	
+	@Autowired
+	LtMastEmployeeDelegationDao ltMastEmployeeDelegationDao;
 
 	@Autowired
 	public void setDataSource(DataSource dataSource) {
@@ -426,6 +448,371 @@ public class LtPoHeadersDaoImpl implements LtPoHeadersDao {
 		//========================================================================
 		return poReportList;
 	}
+	
+	@Override
+	public boolean upDateStatus(Long poHeaderId, String status, String currentApprovalLavel)
+			throws ServiceException {
+		int res=0;
+		if(currentApprovalLavel!=null)
+		{
+			//String query = env.getProperty("upDateStatus1");
+			String query = " UPDATE LT_PO_APPROVAL SET STATUS=?,LAST_UPDATE_DATE=? " +
+					" WHERE PO_HEADER_ID=? AND APPROVAL_LEVEL =? AND STATUS <> ? ";
+			 res=jdbcTemplate.update(query,
+				        status,new Date(),poHeaderId,currentApprovalLavel,"APPROVED");
+		}
+		else
+		{
+			//String query = env.getProperty("upDateStatus2");
+			String query =" UPDATE LT_PO_APPROVAL SET " +
+					"STATUS=? ,LAST_UPDATE_DATE= ?, CURRENT_APPROVAL_LEVEL=? WHERE PO_HEADER_ID=?";
+			
+			res=jdbcTemplate.update(query,
+			        status,new Date(),currentApprovalLavel,poHeaderId);
+		}
+		if(res!=0)
+			return true;
+		else
+			return false;
+	}
+	
+	@Override
+	public boolean chkForApprovers(Long poHeaderId) throws ServiceException {
+		
+		String query = "SELECT ea.*, \n" +
+	               "       COALESCE(CONCAT( \n" +
+	               "           COALESCE(CONCAT(em.FIRST_NAME, ' ', em.LAST_NAME, ' (', em.EMPLOYEE_NUMBER, ')'), ''), \n" +
+	               "           COALESCE(ea.DELEGATION_ID, CONCAT(' (', CONCAT(emm.FIRST_NAME, ' ', emm.LAST_NAME, ' (', emm.EMPLOYEE_NUMBER, ')')), '') \n" +
+	               "       )) AS approval_Name, \n" +
+	               "       CASE \n" +
+	               "           WHEN ea.MODULE_APPROVAL_ID = 0 THEN 'Invitor' \n" +
+	               "           ELSE ema.approval_role_name \n" +
+	               "       END AS approval_level_name \n" +
+	               "FROM lt_Po_Approval ea \n" +
+	               "LEFT JOIN lt_mast_employees em ON ea.APPROVAL_ID = em.EMPLOYEE_ID \n" +
+	               "LEFT JOIN lt_mast_employees emm ON ea.DELEGATION_ID = emm.EMPLOYEE_ID \n" +
+	               "LEFT JOIN lt_mast_module_approvals ema ON ea.APPROVAL_LEVEL = ema.APPROVAL_LEVEL \n" +
+	               "    AND ea.MODULE_APPROVAL_ID = ema.MODULE_APPROVAL_ID \n" +
+	               "WHERE ea.PO_HEADER_ID = ? \n" +
+	               "ORDER BY ea.APPROVAL_LEVEL";
+ 
+ 
+		List<PoApproval> poApprovalList = jdbcTemplate.query(query, new Object[] {poHeaderId},
+				new RowMapper<PoApproval>() {
+					public PoApproval mapRow(ResultSet rs, int arg1) throws SQLException {
+ 
+						PoApproval poApproval = new PoApproval();
+						
+						poApproval.setPoApprovalId(rs.getLong("PO_APPROVAL_ID"));
+						poApproval.setModuleApprovalId(rs.getLong("MODULE_APPROVAL_ID"));
+						poApproval.setApprovalId(rs.getLong("APPROVAL_ID"));
+						poApproval.setApprovalLevel(rs.getString("APPROVAL_LEVEL"));
+						poApproval.setCurrentApprovalLevel(rs.getString("CURRENT_APPROVAL_LEVEL"));
+						
+						poApproval.setPoHeaderId(rs.getLong("PO_HEADER_ID"));
+						
+						return poApproval;
+					}
+				});
+		
+		
+		if(poApprovalList.size() > 0){
+			return true;
+		}else
+			return false;
+	}
+	
+	@Override
+	public boolean submitForApproval(Date date, Long poHeaderId, String status, Object object)
+			throws ServiceException {
+		String query ="UPDATE LT_PO_HEADERS SET Status = ? , Last_update_date =? WHERE PO_HEADER_ID = ? ";
+		
+		int res=jdbcTemplate.update(query,status ,new Date(), poHeaderId);
+		
+		if(res!=0)
+			return true;
+		else
+			return false;
+	}
+	
+	@Override
+	public Status callPoValidationProc(Long poHeaderId) throws ServiceException {
+		Status status = new Status();
+		StoredProcedureQuery query = em
+			    .createStoredProcedureQuery("validate_po")
+			    .registerStoredProcedureParameter(1, Long.class,
+				         ParameterMode.IN)
+			    .registerStoredProcedureParameter(2, String.class,
+			         ParameterMode.OUT)
+		        .registerStoredProcedureParameter(3, String.class,
+		         ParameterMode.OUT)
+			    .setParameter(1, poHeaderId);
+			query.execute();
+ 
+			if(query.getOutputParameterValue(2).toString().trim().equals("ERROR")){
+				status.setCode(0);
+				status.setMessage(query.getOutputParameterValue(3).toString().trim());
+			}
+			else if(query.getOutputParameterValue(2).toString().trim().equals("SUCCESS")){
+				status.setCode(1);
+				status.setMessage(query.getOutputParameterValue(3).toString().trim());
+				
+			}
+			return status;
+	}
+	
+	@Override
+	public String checkforApprovals(Long poHeaderId) throws ServiceException {
+		String query = " SELECT ma.*  "
+				+" FROM LT_MAST_MODULE_APPROVALS ma "
+				+" WHERE ma.DIVISION_ID = "
+				+"  (SELECT e.DIVISION_ID FROM LT_MAST_EMPLOYEES e,LT_PO_HEADERS inv WHERE e.EMPLOYEE_ID = inv.buyer_id and inv.PO_HEADER_ID = ? ) ";
+				
+		List<LtMastModuleApprovals> list=   jdbcTemplate.query(query, new Object[]{poHeaderId},
+					 new BeanPropertyRowMapper<LtMastModuleApprovals>(LtMastModuleApprovals.class));
+		
+		if(list.isEmpty())
+			return "null";
+		else
+		return "present";
+	}
+	
+	@Override
+	public boolean checkStatusIsPending(Long poHeaderId, Long approvalId) throws ServiceException {
+		String query = " select * from LT_PO_APPROVAL "
+				 		+" where PO_HEADER_ID = ? "
+						 +" AND (APPROVAL_ID = ? OR DELEGATION_ID = ? ) "
+						 +" AND APPROVAL_LEVEL = CURRENT_APPROVAL_LEVEL "
+						 +" AND STATUS = 'PENDING' ";
+				
+		List<PoApproval> list=   jdbcTemplate.query(query, new Object[]{poHeaderId, approvalId,approvalId},
+					 new BeanPropertyRowMapper<PoApproval>(PoApproval.class));
+		
+		if(list.size() > 0)
+			return true;
+		else
+		return false;
+	}
+	
+	@Override
+	public LtPoHeaders getPoStatusById(Long poHeaderId) throws ServiceException {
+		
+		Status status = new Status();
+		String query = " select STATUS, CREATED_BY from LT_PO_HEADERS where PO_HEADER_ID = ? ";
+		
+		List<LtPoHeaders> ltPoHeadersList = jdbcTemplate.query(query, new Object[] {poHeaderId},
+				new RowMapper<LtPoHeaders>() {
+					public LtPoHeaders mapRow(ResultSet rs, int arg1) throws SQLException {
+ 
+						LtPoHeaders poHeaders = new LtPoHeaders();
+						
+						poHeaders.setStatus(rs.getString("STATUS"));
+						poHeaders.setCreatedBy(rs.getLong("CREATED_BY"));
+						
+						return poHeaders;
+					}
+				});
+		
+		
+		if(ltPoHeadersList.size() > 0){
+			return ltPoHeadersList.get(0);
+		}else {
+			return null;
+		}
+		
+		
+	}
+	
+	@Override
+	public Long save(LtPoHeaders ltPoHeaders) throws ServiceException {
+//		if(ltPoHeaders.getPoHeaderId()!=null) {
+//		String internalPoNum =  (String) em.createNativeQuery(
+//			        "SELECT get_internal_invoice_number(:p_invoice_header_id) FROM DUAL"
+//			    )
+//			    .setParameter("p_invoice_header_id", ltPoHeaders.getPoHeaderId())
+//			    .getSingleResult();
+//	    		  
+//		ltPoHeaders.setInternalPoNumber(internalPoNum);
+//		}
+		System.out.println("company Id = "+ltPoHeaders.getCompanyId());
+		ltPoHeaders = ltPoHeadersRepository.save(ltPoHeaders);
+		if(ltPoHeaders.getPoHeaderId()!=null) {
+			
+			return ltPoHeaders.getPoHeaderId();
+		}
+			
+		else
+		return null;
+	}
+	
+	@Transactional
+	@Override
+	public boolean loadApprovers(LtPoHeaders ltPoHeaders) throws ServiceException {
+		
+		List<PoApproval> poApprovalsList = getApprovalList(ltPoHeaders.getPoHeaderId(),null);
+		if(poApprovalsList.isEmpty()) {
+		 String query = " SELECT a.module_app_employees_id,a.employees_id,b.approval_level,b.module, "
+					+ " a.MODULE_APPROVAL_ID ,a.START_DATE,a.END_DATE  "
+					+ " FROM lt_mast_module_app_emp a,lt_mast_module_approvals b "
+					+ " WHERE a.MODULE_APPROVAL_ID=b.MODULE_APPROVAL_ID "
+					+ " AND DIVISION_ID= ? "
+					+ " AND MODULE= 'PURCHASE'  "
+					+ " AND STATUS= 'ACTIVE' "
+					+ " AND ( a.START_DATE <= SYSDATE() AND (a.END_DATE is null or a.END_DATE > SYSDATE()) ) ";
+			
+			List<Approval> approvalList=   jdbcTemplate.query(query, new Object[]{ ltPoHeaders.getDivisionId()},
+				 new BeanPropertyRowMapper<Approval>(Approval.class));
+		
+			//List<LtMastEmployees>  empList=ltMastEmployeesDao.getByEmpId(ltInvoiceHeaders.getBuyerId());
+			
+				Approval superviserApproval = new Approval();
+				superviserApproval.setEmployeesId(ltPoHeaders.getBuyerId());
+				superviserApproval.setApprovalLevel("00");
+				superviserApproval.setModuleApprovalId(00L);
+			
+				approvalList.add(superviserApproval);
+			
+			boolean flag=false;
+		if(approvalList.size()>0)
+		{
+			
+			for(Approval approvalObj:approvalList)
+			{
+				System.out.println("approvalObj = "+approvalObj);
+				Approval approval=approvalObj;
+				List<LtMastEmployeeDelegation> ltMastEmployeeDelegation = ltMastEmployeeDelegationDao
+						.findForDelegation(approvalObj.getEmployeesId());
+				if(ltMastEmployeeDelegation!= null && ltMastEmployeeDelegation.size()>0)
+				{
+					approval.setDelegationId(ltMastEmployeeDelegation.get(0).getDelegationId());
+				}
+				
+				int res=0;
+				if(approval.getEmployeesId()!=null && approval.getModuleApprovalId()!=null && approval.getApprovalLevel()!=null)
+				{
+					res=jdbcTemplate.update(" INSERT INTO lt_po_approval "
+							+ " (MODULE_APPROVAL_ID,APPROVAL_ID,APPROVAL_LEVEL,CURRENT_APPROVAL_LEVEL,DELEGATION_ID, "
+							+ " PO_HEADER_ID, STATUS,START_DATE,END_DATE, CREATED_BY,CREATION_DATE,LAST_UPDATE_LOGIN,"
+							+ " LAST_UPDATED_BY,LAST_UPDATE_DATE ,MODULE_APP_EMPLOYEES_ID)  "
+			 		+ " VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ",
+			 		approval.getModuleApprovalId(),approval.getEmployeesId(),approval.getApprovalLevel(),
+			 		null,approval.getDelegationId(),ltPoHeaders.getPoHeaderId(),NO_ACTION,new Date(),
+			 		null,ltPoHeaders.getCreatedBy(),new Date(),
+			 		ltPoHeaders.getLastUpdateLogin(),ltPoHeaders.getLastUpdatedBy(),
+			 		new Date(),approval.getModuleAppEmployeesId());
+					if(res!=0)
+						flag=true;
+				}
+				
+			}
+		}
+		
+		return flag;
+		}else {
+			boolean flag=false;
+			poApprovalsList.get(0).setApprovalId(ltPoHeaders.getBuyerId());
+			//for(InvoiceApproval invoiceApproval : invoiceApprovalsList ) {
+				int res=0;
+				res=jdbcTemplate.update(" UPDATE lt_po_approval SET APPROVAL_ID = ?,LAST_UPDATE_DATE = ? "
+						+ "  WHERE APPROVAL_ID = ? AND APPROVAL_LEVEL = ? ",
+						poApprovalsList.get(0).getApprovalId(),new Date(),poApprovalsList.get(0).getPoApprovalId(),"00");
+				if(res!=0) {
+					return flag=true;
+				}
+			//}
+			return flag;
+		}
+	}
+	
+	@Override
+	public List<PoApproval> getApprovalList(Long poHeaderId, String currentApprovalLevel)
+			throws ServiceException {
+		
+		String query = " SELECT a.*,'N' as APPROVED_BY_ANYONE " +
+				" FROM LT_PO_APPROVAL a left outer join lt_mast_module_approvals b " +
+				" on a.MODULE_APPROVAL_ID=b.MODULE_APPROVAL_ID  " +
+				" WHERE a.PO_HEADER_ID = ? AND a.APPROVAL_LEVEL = ifnull(?,a.APPROVAL_LEVEL) ORDER BY a.APPROVAL_LEVEL ASC ";
+		List<PoApproval> list=   jdbcTemplate.query(query, new Object[]{ poHeaderId,currentApprovalLevel},
+				 new BeanPropertyRowMapper<PoApproval>(PoApproval.class));
+			return list;
+	}
+	
+	@Override
+	public LtPoHeaders getByPoNumVendAndAddr(String poNumber, Long vendorId, Long vendorAddId)
+			throws ServiceException {
+		String query = env.getProperty("getByPoNumVendAndAddr");
+		List<LtPoHeaders> list=   jdbcTemplate.query(query, new Object[]{poNumber.toUpperCase(),vendorId, vendorAddId },
+				 new BeanPropertyRowMapper<LtPoHeaders>(LtPoHeaders.class));
+		if(list.isEmpty())
+			return null;
+		else
+		 return list.get(0);
+	}
+	
+	@Override
+	public List<LtPoHeaders> getInprocessPoList(String inprogressStr) throws ServiceException {
+		String query = " SELECT  po.*, apr.APPROVAL_LEVEL  " +
+				" FROM LT_PO_HEADERS po, LT_PO_APPROVAL apr " +
+				" WHERE apr.PO_HEADER_ID = po.PO_HEADER_ID" +
+				" AND po.Status= 'INPROCESS' " +
+				" AND ((apr.APPROVAL_LEVEL = apr.CURRENT_APPROVAL_LEVEL AND apr.STATUS = 'PO_APPROVED') " +
+				" OR (apr.CURRENT_APPROVAL_LEVEL IS NULL AND apr.STATUS = 'NO_ACTION') " +
+				" OR  (apr.APPROVAL_LEVEL = apr.CURRENT_APPROVAL_LEVEL AND apr.STATUS = 'NO_ACTION'))";
+		List<LtPoHeaders> list=   jdbcTemplate.query(query, new Object[]{  },
+			 new BeanPropertyRowMapper<LtPoHeaders>(LtPoHeaders.class));
+		return list;
+	}
+	
+	@Override
+	public PoApproval getApprovalLevel(Long poHeaderId) throws ServiceException {
+		//String query = env.getProperty("getApprovalLevel");
+		
+		String query = "select   MIN( APPROVAL_LEVEL) as MIN_LEVEL,  CURRENT_APPROVAL_LEVEL ,MODULE_APPROVAL_ID " +
+				" from LT_PO_APPROVAL where PO_HEADER_ID = ? " +
+				" group by APPROVAL_LEVEL,  CURRENT_APPROVAL_LEVEL ,MODULE_APPROVAL_ID order by MIN_LEVEL";
+		
+		List<PoApproval> poApprovalList = jdbcTemplate.query(query, new Object[] {poHeaderId},
+				
+				new RowMapper<PoApproval>() {
+					public PoApproval mapRow(ResultSet rs, int arg1) throws SQLException {
+ 
+						PoApproval poApproval = new PoApproval();
+ 
+						poApproval.setApprovalLevel(rs.getString("MIN_LEVEL"));
+						poApproval.setCurrentApprovalLevel(rs.getString("CURRENT_APPROVAL_LEVEL"));
+						poApproval.setModuleApprovalId(rs.getLong("MODULE_APPROVAL_ID"));
+						
+						
+						return poApproval;
+					}
+				});
+		if(poApprovalList.size()>0)
+			return poApprovalList.get(0);
+		else
+			return null;
+	}
+	
+ 
+	@Override
+	public String getNextApprovalLevel(Long poHeaderId, String currentApprovalLavel) throws ServiceException {
+		String query = "select MIN(APPROVAL_LEVEL) AS  CURRENT_APPROVAL_LEVEL " +
+				" from LT_PO_APPROVAL where PO_HEADER_ID = ? AND APPROVAL_LEVEL > ? AND STATUS <> ? ";
+		
+		String nextlavel  = (String)getJdbcTemplate().queryForObject(
+				query, new Object[] { poHeaderId, currentApprovalLavel,APPROVED}, String.class);
+ 
+		return nextlavel;
+	}
+	
+	
+	@Override
+	public void updateCurrentApprovalLevel(Long poHeaderId, String currentApprovalLavel) throws ServiceException {
+		//String query = env.getProperty("updateCurrentApprovalLevel");
+		String query = "UPDATE LT_PO_APPROVAL SET " +
+				"CURRENT_APPROVAL_LEVEL = ?  WHERE PO_HEADER_ID=? ";
+		int res=jdbcTemplate.update(query,
+				currentApprovalLavel, poHeaderId );
+	}
 
 	 
 	 
@@ -499,4 +886,6 @@ class LtPoReportRowMapper implements RowMapper<LtPoReport>
 		
 		return poReport;
 	}
+	
+	
 }

@@ -6,7 +6,10 @@ import java.util.List;
 import com.lonar.vendor.vendorportal.model.VendorApproval;
 import com.lonar.vendor.vendorportal.reports.ReportParameters;
 import com.lonar.vendor.vendorportal.model.LtInvoiceHeaders;
+import com.lonar.vendor.vendorportal.model.LtMastEmployees;
 import com.lonar.vendor.vendorportal.model.LtMastVendors;
+import com.lonar.vendor.vendorportal.model.LtPoHeaders;
+import com.lonar.vendor.vendorportal.model.LtPrHeaders;
 import com.lonar.vendor.vendorportal.model.LtRentalAgreementHeaders;
 import com.lonar.vendor.vendorportal.model.SendBroadCastEmail;
 import com.lonar.vendor.vendorportal.model.ServiceException;
@@ -95,6 +98,12 @@ public interface LtMastVendorsDao
 	boolean loadRentalAgreementApprovers(LtRentalAgreementHeaders ltRentalAgreementHeaders) throws ServiceException;
 	
 	boolean checkStatusIsPending(Long vendorId, Long approvalId) throws ServiceException;
+	
+	public boolean loadPrApprovers(LtPrHeaders ltPrHeaders) throws ServiceException;
+
+	boolean loadPoApprovers(LtPoHeaders poHeaders) throws ServiceException;
+
+	LtMastEmployees getSupervisorIdByRequesterId(Long requesterId);
 
 
 	

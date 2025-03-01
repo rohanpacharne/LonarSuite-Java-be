@@ -35,6 +35,14 @@ public interface LtMastExcelReportsDao {
 	List<ReportField> getVendorProgressData(ReportParameter reportParameter)throws ServiceException;
 	
 	LtMastReportRequest findById(Long requestId)throws ServiceException;
+		 
+	String findBuyerNameById(String buyerId);
+ 
+	String findVendorNameById(String vendorId);
+ 
+	String findDivisionNameById(String divisionId);
+ 
+	String findEmployeeNameById(String employeeId);
 	 
 	 
 

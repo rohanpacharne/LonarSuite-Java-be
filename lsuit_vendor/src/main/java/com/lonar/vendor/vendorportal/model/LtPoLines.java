@@ -71,6 +71,16 @@ public class LtPoLines {
 	
 	@Column(name = "LINE_AMOUNT")
 	private Double lineAmount;
+	
+	@Column(name = "SUB_CATEGORY_ID")
+	private Long subCategoryId;
+	
+	@Column(name = "TAX_AMOUNT")
+	private Double taxAmount;
+	
+	@Column(name = "TOTAL_AMOUNT")
+	private Double totalAmount;
+ 
 
 	@Transient
 	private Long draw;
@@ -111,17 +121,32 @@ public class LtPoLines {
 	@Transient
 	private String categoryName;
 	
-	@Transient 	
-	private Float taxAmount;
-	
-	@Transient 	
-	private Float totalAmount;
-	
 	@Transient
 	private String productCategory;
 	
+	@Transient
+	private String subCategory;
 	
 	
+	
+	
+	
+	public String getSubCategory() {
+		return subCategory;
+	}
+
+	public void setSubCategory(String subCategory) {
+		this.subCategory = subCategory;
+	}
+
+	public Long getSubCategoryId() {
+		return subCategoryId;
+	}
+
+	public void setSubCategoryId(Long subCategoryId) {
+		this.subCategoryId = subCategoryId;
+	}
+
 	public Long getSubcategoryId() {
 		return subcategoryId;
 	}
@@ -370,19 +395,21 @@ public class LtPoLines {
 		this.categoryName = categoryName;
 	}
 
-	public Float getTaxAmount() {
+	
+
+	public Double getTaxAmount() {
 		return taxAmount;
 	}
 
-	public void setTaxAmount(Float taxAmount) {
+	public void setTaxAmount(Double taxAmount) {
 		this.taxAmount = taxAmount;
 	}
 
-	public Float getTotalAmount() {
+	public Double getTotalAmount() {
 		return totalAmount;
 	}
 
-	public void setTotalAmount(Float totalAmount) {
+	public void setTotalAmount(Double totalAmount) {
 		this.totalAmount = totalAmount;
 	}
 
@@ -393,27 +420,18 @@ public class LtPoLines {
 				+ productDescription + ", quantity=" + quantity + ", noteToVendor=" + noteToVendor + ", categoryId="
 				+ categoryId + ", createdBy=" + createdBy + ", creationDate=" + creationDate + ", lastUpdateLogin="
 				+ lastUpdateLogin + ", lastUpdatedBy=" + lastUpdatedBy + ", lastUpdateDate=" + lastUpdateDate
-				+ ", unitPrice=" + unitPrice + ", lineType=" + lineType + ", lineAmount=" + lineAmount + ", draw="
-				+ draw + ", start=" + start + ", length=" + length + ", pDate=" + pDate + ", revDate=" + revDate
-				+ ", columnNo=" + columnNo + ", sort=" + sort + ", subcategoryId=" + subcategoryId + ", uom=" + uom
-				+ ", poNumber=" + poNumber + ", taxName=" + taxName + ", productName=" + productName + ", categoryName="
-				+ categoryName + ", taxAmount=" + taxAmount + ", totalAmount=" + totalAmount + ", productCategory="
-				+ productCategory + ", getSubcategoryId()=" + getSubcategoryId() + ", getUom()=" + getUom()
-				+ ", getPoNumber()=" + getPoNumber() + ", getPoLineId()=" + getPoLineId() + ", getPoHeaderId()="
-				+ getPoHeaderId() + ", getLineNum()=" + getLineNum() + ", getProductId()=" + getProductId()
-				+ ", getProductCode()=" + getProductCode() + ", getProductDescription()=" + getProductDescription()
-				+ ", getQuantity()=" + getQuantity() + ", getNoteToVendor()=" + getNoteToVendor() + ", getCategoryId()="
-				+ getCategoryId() + ", getCreatedBy()=" + getCreatedBy() + ", getCreationDate()=" + getCreationDate()
-				+ ", getLastUpdateLogin()=" + getLastUpdateLogin() + ", getLastUpdatedBy()=" + getLastUpdatedBy()
-				+ ", getLastUpdateDate()=" + getLastUpdateDate() + ", getUnitPrice()=" + getUnitPrice()
-				+ ", getLineType()=" + getLineType() + ", getLineAmount()=" + getLineAmount() + ", getDraw()="
-				+ getDraw() + ", getStart()=" + getStart() + ", getLength()=" + getLength() + ", getpDate()="
-				+ getpDate() + ", getRevDate()=" + getRevDate() + ", getColumnNo()=" + getColumnNo() + ", getSort()="
-				+ getSort() + ", getProductCategory()=" + getProductCategory() + ", getTaxName()=" + getTaxName()
-				+ ", getProductName()=" + getProductName() + ", getCategoryName()=" + getCategoryName()
-				+ ", getTaxAmount()=" + getTaxAmount() + ", getTotalAmount()=" + getTotalAmount() + ", getClass()="
-				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
+				+ ", unitPrice=" + unitPrice + ", lineType=" + lineType + ", lineAmount=" + lineAmount
+				+ ", subCategoryId=" + subCategoryId + ", draw=" + draw + ", start=" + start + ", length=" + length
+				+ ", pDate=" + pDate + ", revDate=" + revDate + ", columnNo=" + columnNo + ", sort=" + sort
+				+ ", subcategoryId=" + subcategoryId + ", uom=" + uom + ", poNumber=" + poNumber + ", taxName="
+				+ taxName + ", productName=" + productName + ", categoryName=" + categoryName + ", taxAmount="
+				+ taxAmount + ", totalAmount=" + totalAmount + ", productCategory=" + productCategory + ", subCategory="
+				+ subCategory + "]";
 	}
+
+	
+
+	
 
 	
 

@@ -336,6 +336,19 @@ public class LtVendorApprovalServiceImpl implements LtVendorApprovalService,Code
 		return ltVendorApprovalDao.getRentalAgreementApprovalByAgreementId(agreementId);
 	}
 
+	@Override
+	public List<LtVendorApproval> getPrApprovalByPrHeaderId(Long prHeaderId) throws ServiceException {
+		// TODO Auto-generated method stub
+		return ltVendorApprovalDao.getPrApprovalByPrHeaderId(prHeaderId);
+	}
+	
+	@Override
+	public List<LtVendorApproval> getPoApprovalByPoId(Long poheaderId) throws ServiceException {
+		System.out.println("In Service");
+		// TODO Auto-generated method stub
+		return ltVendorApprovalDao.getPoApprovalByPoId(poheaderId);
+	}
+
 	/*//@Transactional
 	public LtMastVendors getdetails(Long expenseHeaderId) throws Exception
 	{

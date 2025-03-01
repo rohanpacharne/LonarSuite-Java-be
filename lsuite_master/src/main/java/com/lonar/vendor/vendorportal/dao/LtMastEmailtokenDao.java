@@ -3,6 +3,7 @@ package com.lonar.vendor.vendorportal.dao;
 import java.util.List;
 
 import com.lonar.vendor.vendorportal.model.LtExpEmailTokenlLine;
+import com.lonar.vendor.vendorportal.model.LtExpExpenseHeaders;
 import com.lonar.vendor.vendorportal.model.LtMastEmailtoken;
 
 public interface LtMastEmailtokenDao {
@@ -30,5 +31,10 @@ public interface LtMastEmailtokenDao {
 	public Long getCount(LtMastEmailtoken input)throws Exception;
 
 	public LtMastEmailtoken getLtMastEmailtokenById(String emailtokenid);
+	
+	public LtExpExpenseHeaders getEmpName(Long empId);
+	
+	public LtExpExpenseHeaders getApproverUserId(Long empId);
+
 
 }

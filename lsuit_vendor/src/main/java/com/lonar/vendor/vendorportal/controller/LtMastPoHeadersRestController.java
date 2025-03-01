@@ -1,5 +1,6 @@
 package com.lonar.vendor.vendorportal.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lonar.vendor.vendorportal.model.BusinessException;
+import com.lonar.vendor.vendorportal.model.CodeMaster;
 import com.lonar.vendor.vendorportal.model.CustomeDataTable;
 import com.lonar.vendor.vendorportal.model.DashboardDetails;
 import com.lonar.vendor.vendorportal.model.LtPoHeaders;
@@ -21,7 +24,7 @@ import com.lonar.vendor.vendorportal.service.LtPoHeadersService;
 
 @RestController
 @RequestMapping("/API/poheader")
-public class LtMastPoHeadersRestController {
+public class LtMastPoHeadersRestController implements CodeMaster {
 
 	@Autowired
 	LtPoHeadersService ltPoHeadersService;
@@ -161,9 +164,17 @@ public class LtMastPoHeadersRestController {
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
 	
+	//This is original method
 	@RequestMapping(value = "/createPOPDFReportWithTemplate/{poHeaderId}/{companyId}/{logTime}", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<Status> createPOPDFReportWithTemplate(@PathVariable("poHeaderId") Long poHeaderId,@PathVariable("companyId") long companyId,@PathVariable("logTime") String logTime){
-		Status status = ltPoHeadersService.createPOPDFReportWithTemplate(poHeaderId,companyId);
+//		Status status = ltPoHeadersService.createPOPDFReportWithTemplate(poHeaderId,companyId);
+		Status status = new Status();
+		try {
+			status = ltPoHeadersService.createPoPdfReport(poHeaderId,companyId);
+		} catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
 	
@@ -172,6 +183,75 @@ public class LtMastPoHeadersRestController {
 	public ResponseEntity<Status> createPOPDFReportWithTemplate_Testing(@PathVariable("poHeaderId") Long poHeaderId,@PathVariable("companyId") long companyId,@PathVariable("logTime") String logTime){
 		Status status = ltPoHeadersService.createPOPDFReportWithTemplate_Testing(poHeaderId,companyId);
 		return new ResponseEntity<Status>(status, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/submitforapproval/{poheaderid}/{logTime}", method = RequestMethod.GET)
+	public ResponseEntity<Status> submitForApproval( @PathVariable("poheaderid") Long poheaderid,@PathVariable("logTime") String logTime)
+	{
+		Status status=new Status();
+		try
+		{		
+			String stat =checkforApprovals(poheaderid);
+			if(stat.equals("null"))
+			{
+				status.setCode(0);
+				status.setMessage("No approvers found for employee's division.");
+				return new ResponseEntity<Status>(status, HttpStatus.OK);
+			}else {
+				
+				LtPoHeaders ltPoHeaders =ltPoHeadersService.getPoHeaderById(poheaderid);
+				Long userId = ltPoHeaders.getCreatedBy();
+				Long companyId = ltPoHeaders.getCompanyId().longValue();
+				System.out.println("companyId in controller = "+companyId);
+				System.out.println("ltPoHeaders = "+ltPoHeaders);
+				if(  ltPoHeaders.getPoAmount()!=null &&  ltPoHeaders.getPoAmount()>0) {
+					System.out.println("in if");
+					status=ltPoHeadersService.submitForApproval(new Date(),poheaderid,INPROCESS,null,userId,companyId);
+					System.out.println("status = "+status);
+				}else {
+					System.out.println("in else");
+					status.setCode(0);
+					status.setMessage("Po with zero amount can not be sent for approval.");
+					return new ResponseEntity<Status>(status, HttpStatus.OK);
+				}
+			}
+			
+		}
+		catch(Exception e)
+		{
+			System.out.println("e = "+e.getMessage());
+			e.printStackTrace();
+			throw new BusinessException(0, null, e);
+		}
+		System.out.println("status 1 = "+status);
+		return new ResponseEntity<Status>(status, HttpStatus.OK);
+	}
+	
+	private String checkforApprovals(Long poheaderid) throws ServiceException
+	{
+		String stat = ltPoHeadersService.checkforApprovals(poheaderid);
+		return stat;
+	}
+	
+	@RequestMapping(value = "/checkStatusIsPending/{poHeaderId}/{approvalId}/{logTime}", method= RequestMethod.GET, produces = "application/json")
+    public boolean checkStatusIsPending(@PathVariable("poHeaderId") Long poHeaderId, @PathVariable("approvalId") Long approvalId,@PathVariable("logTime") String logTime) throws ServiceException
+	{
+		return  ltPoHeadersService.checkStatusIsPending(poHeaderId,approvalId);
+	}
+	
+	@RequestMapping(value = "/getPoStatusById/{poHeaderId}/{logTime}", method= RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<LtPoHeaders> getPoStatusById(@PathVariable("poHeaderId") Long poHeaderId,@PathVariable("logTime") String logTime) throws ServiceException
+	{
+		LtPoHeaders poHeaders=  ltPoHeadersService.getPoStatusById(poHeaderId);
+			return new ResponseEntity<LtPoHeaders>(poHeaders, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/delete/{id}/{logTime}", method= RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<Status> delete(@PathVariable("id") Long poHeaderId,@PathVariable("logTime") String logTime) throws ServiceException
+	{
+			Status status=new Status();
+			status =  ltPoHeadersService.delete(poHeaderId);
+			return new ResponseEntity<Status>(status, HttpStatus.OK);
 	}
  
 }

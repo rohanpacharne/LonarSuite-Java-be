@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -440,6 +441,46 @@ public class LtMastExcelReportsDaoImpl implements LtMastExcelReportsDao{
 		    }
 		    return list.get(0);
 		}
+	
+	@Override
+	public String findEmployeeNameById(String employeeId) {
+	    try {
+	    	String query = env.getProperty("getEmployeeIdQuery");
+	        return jdbcTemplate.queryForObject(query, new Object[]{employeeId}, String.class);
+	    } catch (EmptyResultDataAccessException e) {
+	        return null; // Return null if no employee is found
+	    }
+	}
+ 
+	@Override
+	public String findDivisionNameById(String divisionId) {
+	    try {
+	    	String query = env.getProperty("getDivisionIdQuery");
+	        return jdbcTemplate.queryForObject(query, new Object[]{divisionId}, String.class);
+	    } catch (EmptyResultDataAccessException e) {
+	        return null;
+	    }
+	}
+ 
+	@Override
+	public String findVendorNameById(String vendorId) {
+	    try {
+	    	String query = env.getProperty("getVendorIdQuery");
+	        return jdbcTemplate.queryForObject(query, new Object[]{vendorId}, String.class);
+	    } catch (EmptyResultDataAccessException e) {
+	        return null;
+	    }
+	}
+ 
+	@Override
+	public String findBuyerNameById(String buyerId) {
+	    try {
+	    	String query = env.getProperty("getBuyerIdQuery");
+	        return jdbcTemplate.queryForObject(query, new Object[]{buyerId}, String.class);
+	    } catch (EmptyResultDataAccessException e) {
+	        return null;
+	    }
+	}
 	
 
 }

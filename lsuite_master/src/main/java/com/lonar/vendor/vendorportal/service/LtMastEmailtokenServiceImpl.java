@@ -237,4 +237,16 @@ public class LtMastEmailtokenServiceImpl implements LtMastEmailtokenService,Code
 		ltMastEmailtokenDao.updateStatus(tokenId, status, list.get(0).getFailureCount()+1L);
 
 	}
+
+	@Override
+	public LtExpExpenseHeaders getEmpName(Long empId) {
+		// TODO Auto-generated method stub
+		return ltMastEmailtokenDao.getEmpName(empId);
+	}
+
+	@Override
+	public LtExpExpenseHeaders getApproverUserId(Long empId) {
+		// TODO Auto-generated method stub
+		return ltMastEmailtokenDao.getApproverUserId(empId);
+	}
 }

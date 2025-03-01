@@ -8,6 +8,8 @@ import com.lonar.vendor.vendorportal.model.ServiceException;
 public interface LtMastPoLinesTaxesDao {
  
 	List<LtPoLineTaxes> getAllPoLinesByLineId(Long id) throws ServiceException;
+
+	void deleteTax(Long poLineId);
  
 	
  
