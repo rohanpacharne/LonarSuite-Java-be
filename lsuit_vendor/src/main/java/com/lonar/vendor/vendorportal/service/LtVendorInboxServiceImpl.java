@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.lonar.vendor.vendorportal.dao.LtVendorInboxDao;
 import com.lonar.vendor.vendorportal.model.VendorApproval;
 import com.lonar.vendor.vendorportal.model.InvoiceApproval;
+import com.lonar.vendor.vendorportal.model.LtMastNotifications;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 
 @Service
@@ -111,6 +112,12 @@ public class LtVendorInboxServiceImpl implements LtVendorInboxService{
 			}
 		}
 		return list;
+	}
+
+	@Override
+	public List<LtMastNotifications> getApprovalNotification(String status, Long userId,Long start,Long length) throws ServiceException {
+		// TODO Auto-generated method stub
+		return ltVendorInboxDao.getApprovalNotification(status, userId,start,length);
 	}
 
 }

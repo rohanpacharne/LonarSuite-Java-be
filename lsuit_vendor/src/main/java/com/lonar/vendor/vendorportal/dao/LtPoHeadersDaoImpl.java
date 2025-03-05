@@ -755,7 +755,7 @@ public class LtPoHeadersDaoImpl implements LtPoHeadersDao,CodeMaster {
 				" FROM LT_PO_HEADERS po, LT_PO_APPROVAL apr " +
 				" WHERE apr.PO_HEADER_ID = po.PO_HEADER_ID" +
 				" AND po.Status= 'INPROCESS' " +
-				" AND ((apr.APPROVAL_LEVEL = apr.CURRENT_APPROVAL_LEVEL AND apr.STATUS = 'PO_APPROVED') " +
+				" AND ((apr.APPROVAL_LEVEL = apr.CURRENT_APPROVAL_LEVEL AND apr.STATUS = 'APPROVED') " +
 				" OR (apr.CURRENT_APPROVAL_LEVEL IS NULL AND apr.STATUS = 'NO_ACTION') " +
 				" OR  (apr.APPROVAL_LEVEL = apr.CURRENT_APPROVAL_LEVEL AND apr.STATUS = 'NO_ACTION'))";
 		List<LtPoHeaders> list=   jdbcTemplate.query(query, new Object[]{  },

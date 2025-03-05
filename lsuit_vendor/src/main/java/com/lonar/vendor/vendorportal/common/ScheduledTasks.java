@@ -32,6 +32,7 @@ import com.lonar.vendor.vendorportal.model.InvoiceApproval;
 import com.lonar.vendor.vendorportal.model.LtInvoiceApprovalHistory;
 import com.lonar.vendor.vendorportal.model.LtInvoiceHeaders;
 import com.lonar.vendor.vendorportal.model.LtMastEmailtoken;
+import com.lonar.vendor.vendorportal.model.LtMastNotifications;
 import com.lonar.vendor.vendorportal.model.LtMastVendors;
 import com.lonar.vendor.vendorportal.model.LtPoApprovalHistory;
 import com.lonar.vendor.vendorportal.model.LtPoHeaders;
@@ -48,6 +49,7 @@ import com.lonar.vendor.vendorportal.model.PrApproval;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 import com.lonar.vendor.vendorportal.model.VendorApproval;
 import com.lonar.vendor.vendorportal.repository.LtMastEmailtokenRepository;
+import com.lonar.vendor.vendorportal.repository.LtMastNotificationsRepository;
 import com.lonar.vendor.vendorportal.service.LtMastEmailtokenService;
 import com.lonar.vendor.vendorportal.service.LtRentalAgreementApprovalService;
 import com.lonar.vendor.vendorportal.service.LtVendorApprovalHistoryService;
@@ -96,6 +98,9 @@ public class ScheduledTasks implements CodeMaster{
 	
 	@Autowired
 	LtPrHeadersDao ltPrHeadersDao;
+	
+	@Autowired
+	LtMastNotificationsRepository ltMastNotificationsRepository;
 	
 	@Autowired
 	private Environment env;
@@ -264,6 +269,46 @@ public class ScheduledTasks implements CodeMaster{
 		}
 		
 	}
+	
+private void saveNotificationsDetails(List<InvoiceApproval> invoiceApprovals,LtInvoiceHeaders ltInvoiceHeader) {
+    	
+    	System.out.println("in saveNotificationsDetails");
+    	for(InvoiceApproval invoiceApproval:invoiceApprovals) {
+    	String empName = "Employee";
+    	Long userId = 0l;
+    	LtMastNotifications ltMastNotifications = new LtMastNotifications();
+    	
+    	LtInvoiceHeaders ltInvoiceHeaders = ltMastEmailtokenService.getApproverUserId(invoiceApproval.getApprovalId());
+    	if(ltInvoiceHeaders!=null) {
+    		userId = ltInvoiceHeaders.getUserId();
+    	}
+    	
+    	ltMastNotifications.setUserId(userId);
+    	ltMastNotifications.setNotificationTitle("PENDING APPROVAL");
+    	
+    	LtInvoiceHeaders ltInvoiceHeaders1 = ltMastEmailtokenService.getEmpName(ltInvoiceHeader.getCreatedBy());
+    	if(ltInvoiceHeaders1!=null) {
+    		empName = ltInvoiceHeaders1.getEmployeeName();
+    	}
+    	String notificationBody = empName + " has created invoice " + ltInvoiceHeaders1.getInvoiceNum() + " and is pending for approval";
+    	ltMastNotifications.setNotificationBody(notificationBody);
+    	ltMastNotifications.setNotificationStatus("SENDING");
+    	ltMastNotifications.setReadFlag("N");
+    	ltMastNotifications.setSendDate(new Date());
+    	ltMastNotifications.setModule("INVOICE");
+    	ltMastNotifications.setHeaderId(ltInvoiceHeader.getInvoiceHeaderId());
+    	ltMastNotifications.setCreationDate(new Date());
+    	ltMastNotifications.setCreatedBy(0l);
+    	ltMastNotifications.setLastUpdateBy(0l);
+    	ltMastNotifications.setLastUpdateDate(new Date());
+    	ltMastNotifications.setLastUpdateLogin(0l);
+    	
+    	ltMastNotificationsRepository.save(ltMastNotifications);
+    	
+    	}
+    	System.out.println("in saveNotificationsDetails end");
+    	
+    }
 
 	private void vendorChronJob() 
 	{

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.lonar.vendor.vendorportal.model.VendorApproval;
 import com.lonar.vendor.vendorportal.model.InvoiceApproval;
+import com.lonar.vendor.vendorportal.model.LtMastNotifications;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 
 public interface LtVendorInboxDao {
@@ -17,5 +18,8 @@ public interface LtVendorInboxDao {
 	Long getInvoiceCount(String status1, String approvalId, InvoiceApproval input) throws ServiceException;
 
 	List<InvoiceApproval> getInvoiceByStatus(String status1, String approvalId, InvoiceApproval input) throws ServiceException;
+	
+	List<LtMastNotifications> getApprovalNotification(String status, Long userId,Long start,Long length) throws ServiceException;
+
 
 }

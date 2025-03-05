@@ -58,9 +58,56 @@ public class LtPrHeadersDaoImpl implements LtPrHeadersDao,CodeMaster {
 	}
 //	SELECT lph.pr_number,lph.creation_date as pr_date,lph.description,concat(lme.first_name,' ',lme.last_name) as requester_name,lph.status
 //	FROM lt_pr_headers lph
+//	@Override
+//	public List<LtPrHeaders> getLtPrHeadersDataTable(LtPrHeaders input, Long companyId) throws ServiceException {
+//		// TODO Auto-generated method stub
+//		String query = env.getProperty("getLtPrHeadersDataTable");
+//		String prNum=null;
+//		   if(input.getPrNumber()!=null && !input.getPrNumber().equals(""))
+//		   {prNum="%"+input.getPrNumber().trim().toUpperCase() + "%";}
+//		   
+//		   
+//			if(input.getCreationDate() == null || input.getCreationDate().equals(""))
+//			{
+//				input.setCreationDate(null);
+//			}
+//			
+//		   String desc=null;
+//		   if(input.getDescription()!=null &&  !input.getDescription().equals("")) 
+//		   {desc="%"+input.getDescription().trim().trim().toUpperCase()+"%";}
+//		   
+//		   String reqName=null;
+//		   if(input.getRequesterName()!=null && !input.getRequesterName().equals(""))
+//		   {reqName="%"+input.getRequesterName().trim().toUpperCase()+"%";}
+//			
+//		   
+//		   String status=null;
+//		   if(input.getStatus()!=null &&  !input.getStatus().equals("")) 
+//		   {status="%"+input.getStatus().trim().toUpperCase()+"%";}
+//		   
+//		  System.out.println("input = "+input);
+//				
+//				List<LtPrHeaders> list = (List<LtPrHeaders>) 
+//						jdbcTemplate.query(query , new Object[]{companyId,
+//								prNum,input.getCreationDate(),desc,reqName,status,
+//								input.getColumnNo(),input.getColumnNo(),
+//								input.getColumnNo(),input.getColumnNo(),
+//								input.getColumnNo(),input.getColumnNo(),
+//								input.getColumnNo(),input.getColumnNo(),
+//								input.getColumnNo(),input.getColumnNo(),
+//								
+//								input.getStart()+input.getLength(),input.getStart()+1},
+//					 new  BeanPropertyRowMapper<LtPrHeaders>(LtPrHeaders.class));
+//					System.out.println("count of invoice is "+list.size());
+//					
+//				return list;
+//	}
+	
 	@Override
 	public List<LtPrHeaders> getLtPrHeadersDataTable(LtPrHeaders input, Long companyId) throws ServiceException {
 		// TODO Auto-generated method stub
+		System.out.println("All Input::"+input);
+		System.out.println("input.sort = "+input.getSort());
 		String query = env.getProperty("getLtPrHeadersDataTable");
 		String prNum=null;
 		   if(input.getPrNumber()!=null && !input.getPrNumber().equals(""))
@@ -73,7 +120,7 @@ public class LtPrHeadersDaoImpl implements LtPrHeadersDao,CodeMaster {
 			}
 			
 		   String desc=null;
-		   if(input.getDescription()!=null &&  !input.getDescription().equals("")) 
+		   if(input.getDescription()!=null &&  !input.getDescription().equals(""))
 		   {desc="%"+input.getDescription().trim().trim().toUpperCase()+"%";}
 		   
 		   String reqName=null;
@@ -82,14 +129,24 @@ public class LtPrHeadersDaoImpl implements LtPrHeadersDao,CodeMaster {
 			
 		   
 		   String status=null;
-		   if(input.getStatus()!=null &&  !input.getStatus().equals("")) 
+		   if(input.getStatus()!=null &&  !input.getStatus().equals(""))
 		   {status="%"+input.getStatus().trim().toUpperCase()+"%";}
 		   
 		  System.out.println("input = "+input);
+		  
+		  if(input.getColumnNo()==0)
+			{
+				 input.setColumnNo(1);
 				
-				List<LtPrHeaders> list = (List<LtPrHeaders>) 
+			}
+		  
+		  System.out.println("ColumnNo() = "+input.getColumnNo());
+ 
+				
+				List<LtPrHeaders> list = (List<LtPrHeaders>)
 						jdbcTemplate.query(query , new Object[]{companyId,
 								prNum,input.getCreationDate(),desc,reqName,status,
+								input.getColumnNo(),input.getColumnNo(),
 								input.getColumnNo(),input.getColumnNo(),
 								input.getColumnNo(),input.getColumnNo(),
 								input.getColumnNo(),input.getColumnNo(),
@@ -98,9 +155,11 @@ public class LtPrHeadersDaoImpl implements LtPrHeadersDao,CodeMaster {
 								
 								input.getStart()+input.getLength(),input.getStart()+1},
 					 new  BeanPropertyRowMapper<LtPrHeaders>(LtPrHeaders.class));
-					System.out.println("count of invoice is "+list.size());
+					System.out.println(" PR List :: "+list);
 					
 				return list;
+				
+				
 	}
 
 	@Override

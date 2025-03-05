@@ -183,7 +183,7 @@ public class ExpenseApprovalLogic  implements CodeMaster{
 							}else {
 //								System.out.println("in else of saveEmailTokan");
 								saveEmailTokan(expenseApprovals,"eExpenseApproval",ltExpExpenseHeader); 
-								saveNotificationsDetails(expenseApprovals,ltExpExpenseHeader);
+//								saveNotificationsDetails(expenseApprovals,ltExpExpenseHeader);
 							}
 							
 							//ltExpenseApprovalDao.callProceduere(ltExpExpenseHeader);
@@ -222,7 +222,8 @@ public class ExpenseApprovalLogic  implements CodeMaster{
 						//---------------------------------------------------
 						saveApprovalHistoryData(expenseApprovals1, PENDING);
 						if(ltExpExpenseHeader.getExpenseCategory().equals(ADVANCE)) {
-							saveEmailTokan(expenseApprovals1,"eAdvanceApprovalNotification",ltExpExpenseHeader); 
+							saveEmailTokan(expenseApprovals1,"eAdvanceApprovalNotification",ltExpExpenseHeader);
+							saveNotificationsDetailsForAdv(expenseApprovals1,ltExpExpenseHeader);
 						} else {
 							saveEmailTokan(expenseApprovals1,"eExpenseApprovalNotification",ltExpExpenseHeader);
 							saveNotificationsDetails(expenseApprovals1,ltExpExpenseHeader);
@@ -327,6 +328,46 @@ public class ExpenseApprovalLogic  implements CodeMaster{
     		empName = ltExpExpenseHeaders1.getEmployeeName();
     	}
     	String notificationBody = empName + " has created expense " + ltExpExpenseHeader.getExpenseNumber() + " and is pending for approval";
+    	ltMastNotifications.setNotificationBody(notificationBody);
+    	ltMastNotifications.setNotificationStatus("SENDING");
+    	ltMastNotifications.setReadFlag("N");
+    	ltMastNotifications.setSendDate(new Date());
+    	ltMastNotifications.setModule("EXPENSE");
+    	ltMastNotifications.setHeaderId(ltExpExpenseHeader.getExpHeaderId());
+    	ltMastNotifications.setCreationDate(new Date());
+    	ltMastNotifications.setCreatedBy(0l);
+    	ltMastNotifications.setLastUpdateBy(0l);
+    	ltMastNotifications.setLastUpdateDate(new Date());
+    	ltMastNotifications.setLastUpdateLogin(0l);
+    	
+    	ltMastNotificationsRepository.save(ltMastNotifications);
+    	
+    	}
+    	System.out.println("in saveNotificationsDetails end");
+    	
+    }
+    
+private void saveNotificationsDetailsForAdv(List<ExpenseApproval> expenseApprovals,LtExpExpenseHeaders ltExpExpenseHeader) {
+    	
+    	System.out.println("in saveNotificationsDetails Adv");
+    	for(ExpenseApproval expenseApproval:expenseApprovals) {
+    	String empName = "Employee";
+    	Long userId = 0l;
+    	LtMastNotifications ltMastNotifications = new LtMastNotifications();
+    	
+    	LtExpExpenseHeaders ltExpExpenseHeaders = ltMastEmailtokenService.getApproverUserId(expenseApproval.getApprovalId());
+    	if(ltExpExpenseHeaders!=null) {
+    		userId = ltExpExpenseHeaders.getUserId();
+    	}
+    	
+    	ltMastNotifications.setUserId(userId);
+    	ltMastNotifications.setNotificationTitle("PENDING APPROVAL");
+    	
+    	LtExpExpenseHeaders ltExpExpenseHeaders1 = ltMastEmailtokenService.getEmpName(ltExpExpenseHeader.getEmployeeId());
+    	if(ltExpExpenseHeaders!=null) {
+    		empName = ltExpExpenseHeaders1.getEmployeeName();
+    	}
+    	String notificationBody = empName + " has created advance " + ltExpExpenseHeader.getExpenseNumber() + " and is pending for approval";
     	ltMastNotifications.setNotificationBody(notificationBody);
     	ltMastNotifications.setNotificationStatus("SENDING");
     	ltMastNotifications.setReadFlag("N");

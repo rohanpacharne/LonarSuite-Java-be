@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lonar.vendor.vendorportal.model.BulkIdWithName;
@@ -20,6 +21,7 @@ import com.lonar.vendor.vendorportal.model.CodeMaster;
 import com.lonar.vendor.vendorportal.model.CustomeDataTable;
 import com.lonar.vendor.vendorportal.model.InboxBulkInput;
 import com.lonar.vendor.vendorportal.model.InvoiceApproval;
+import com.lonar.vendor.vendorportal.model.LtMastNotifications;
 import com.lonar.vendor.vendorportal.model.LtMastVendors;
 import com.lonar.vendor.vendorportal.model.LtVendorApprovalHistory;
 import com.lonar.vendor.vendorportal.model.Status;
@@ -136,6 +138,21 @@ public class LtVendorInboxRestController implements CodeMaster {
 			throw new BusinessException(0, null, e);
 		}
 		return customeDataTable;
+	}
+	
+	@RequestMapping(value = "/getapprovalnotification/{userId}/{logTime}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<LtMastNotifications> getApprovalNotification(@PathVariable("userId") Long userId,
+			@PathVariable("logTime") String logTime,@RequestParam Long start, @RequestParam Long length) {
+		String status = "SEND";
+		try {
+
+			List<LtMastNotifications> list = ltVendorInboxService.getApprovalNotification(status,
+					userId,start,length);
+			
+			return list;
+		} catch (Exception e) {
+			throw new BusinessException(0, null, e);
+		}
 	}
 
 	

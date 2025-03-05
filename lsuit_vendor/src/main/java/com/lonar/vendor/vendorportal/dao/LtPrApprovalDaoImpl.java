@@ -89,7 +89,7 @@ public class LtPrApprovalDaoImpl implements LtPrApprovalDao{
 
 						PrApproval prApproval = new PrApproval();
 						
-						prApproval.setPrApprovalId(rs.getLong("INVOICE_APPROVAL_ID"));
+						prApproval.setPrApprovalId(rs.getLong("PR_APPROVAL_ID"));
 						
 						return prApproval;
 					}

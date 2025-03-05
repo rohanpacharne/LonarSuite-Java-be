@@ -483,9 +483,6 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 	        return out;
 	    }
 
-
-
-
 	@Override
 	public List<LtMastReportRequest> getLtMastReportRequestDataTable(LtMastReportRequest input, Long companyId,Long userId)
 			throws ServiceException {
@@ -521,6 +518,11 @@ public class LtMastExcelReportsServiceImpl implements LtMastExcelReportsService,
 		{
 			input.setColumnNo(18);
 		}
+		if(input.getColumnNo()==9 && input.getSort().equals("desc"))
+		{
+			input.setColumnNo(19);
+		}
+		
 		return ltMastExcelReportsDao.getLtMastReportRequestDataTable(input,companyId,userId);
 	}
 

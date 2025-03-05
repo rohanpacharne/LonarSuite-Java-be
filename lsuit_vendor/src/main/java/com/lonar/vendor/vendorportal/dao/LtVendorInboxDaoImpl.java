@@ -1,5 +1,6 @@
 package com.lonar.vendor.vendorportal.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import com.lonar.vendor.vendorportal.model.CodeMaster;
 import com.lonar.vendor.vendorportal.model.InvoiceApproval;
+import com.lonar.vendor.vendorportal.model.LtMastNotifications;
 import com.lonar.vendor.vendorportal.model.VendorApproval;
 import com.lonar.vendor.vendorportal.model.ServiceException;
 
@@ -180,6 +182,20 @@ public class LtVendorInboxDaoImpl implements LtVendorInboxDao,CodeMaster {
 						
 						(input.getStart()+input.getLength()),input.getStart()+1  },
 			 new  BeanPropertyRowMapper<InvoiceApproval>(InvoiceApproval.class));
+	}
+
+	@Override
+	public List<LtMastNotifications> getApprovalNotification(String status, Long userId,Long start,Long length) throws ServiceException {
+		// TODO Auto-generated method stub
+		
+		String query = env.getProperty("getApprovalNotification");
+				
+		List<LtMastNotifications> list = new ArrayList<>();
+		
+		list = jdbcTemplate.query(query , new Object[]{ status, userId,start+length,start+1},
+			 new  BeanPropertyRowMapper<LtMastNotifications>(LtMastNotifications.class));
+		
+		return list;
 	}
 
 }

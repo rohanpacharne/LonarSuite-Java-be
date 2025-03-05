@@ -106,6 +106,19 @@ public class LtMastReportRequest {
 	@Transient
 	private String requestIdStr;
 	
+	@Transient
+	private String valueName;
+	
+	
+	
+	public String getValueName() {
+		return valueName;
+	}
+
+	public void setValueName(String valueName) {
+		this.valueName = valueName;
+	}
+
 	public String getType() {
 		return type;
 	}
@@ -323,7 +336,9 @@ public class LtMastReportRequest {
 				+ ", startDate=" + startDate + ", endDate=" + endDate + ", type=" + type + ", userName=" + userName
 				+ ", requestorName=" + requestorName + ", draw=" + draw + ", start=" + start + ", length=" + length
 				+ ", reqDate=" + reqDate + ", compDate=" + compDate + ", columnNo=" + columnNo + ", sort=" + sort
-				+ ", requestIdStr=" + requestIdStr + "]";
+				+ ", requestIdStr=" + requestIdStr + ", valueName=" + valueName + "]";
 	}
+
+	
 
 }

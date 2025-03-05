@@ -483,5 +483,17 @@ public class LtMastEmailtokenServiceImpl implements LtMastEmailtokenService, Cod
 		}
 		return saveDirectory + fileName;
 	}
+	
+	@Override
+	public LtInvoiceHeaders getApproverUserId(Long empId) {
+		// TODO Auto-generated method stub
+		return ltMastEmailtokenDao.getApproverUserId(empId);
+	}
+	
+	@Override
+	public LtInvoiceHeaders getEmpName(Long empId) {
+		// TODO Auto-generated method stub
+		return ltMastEmailtokenDao.getEmpName(empId);
+	}
 
 }

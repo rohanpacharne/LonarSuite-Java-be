@@ -182,9 +182,21 @@ public class LtPoHeaders
 	private String venderContact;
 	@Transient
 	private String buyerName;
+	@Transient
+	private String valueCode;
 	
 	
 	
+	
+	
+	public String getValueCode() {
+		return valueCode;
+	}
+
+	public void setValueCode(String valueCode) {
+		this.valueCode = valueCode;
+	}
+
 	public Integer getInitiatorId() {
 		return initiatorId;
 	}

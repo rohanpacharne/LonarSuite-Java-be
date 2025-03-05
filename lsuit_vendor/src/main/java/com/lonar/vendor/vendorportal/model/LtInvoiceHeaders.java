@@ -177,8 +177,30 @@ public class LtInvoiceHeaders {
 	@Transient
 	private String valueName;
 	
+	@Transient
+	private Long userId;
+	
+	@Transient
+	private String employeeName;
 	
 	
+	
+	public String getEmployeeName() {
+		return employeeName;
+	}
+
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
+	}
+
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
 	public Long getCompanyId() {
 		return companyId;
 	}

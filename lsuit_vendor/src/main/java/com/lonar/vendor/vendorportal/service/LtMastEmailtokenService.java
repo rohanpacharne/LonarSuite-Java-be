@@ -36,4 +36,8 @@ public interface LtMastEmailtokenService
 
 	Status sendBroadCastMsgAndEmail(String emailList, MultipartFile[] files) throws ServiceException, JsonParseException, JsonMappingException, IOException;
 
+	LtInvoiceHeaders getApproverUserId(Long empId);
+
+	LtInvoiceHeaders getEmpName(Long empId);
+
 }

@@ -275,16 +275,17 @@ public class LtMastExcelReportsDaoImpl implements LtMastExcelReportsDao{
 		}
 	   
 	   String status=null;
-	   if(input.getStatus()!=null && !input.getStatus().equals(" ") && !input.getStatus().isEmpty()) 
+	   if(input.getStatus()!=null && !input.getStatus().equals(" ") && !input.getStatus().isEmpty())
 	   {status="%"+input.getStatus().toUpperCase()+"%";}
 		
 	   if(input.getColumnNo()==0) {
 		   input.setColumnNo(12);
 	   }
 	   
-			List<LtMastReportRequest> list = (List<LtMastReportRequest>) 
+			List<LtMastReportRequest> list = (List<LtMastReportRequest>)
 					jdbcTemplate.query(query , new Object[]{companyId,userId,reqId,requestName,input.getReqDate(),input.getCompDate(),
 							status,
+							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
 							input.getColumnNo(),input.getColumnNo(),
@@ -295,6 +296,7 @@ public class LtMastExcelReportsDaoImpl implements LtMastExcelReportsDao{
 							input.getStart()+input.getLength(),input.getStart()+1},
 				 new  BeanPropertyRowMapper<LtMastReportRequest>(LtMastReportRequest.class));
 			
+			System.out.println("ltMastdatatableReportRequest::"+list);
 				return list;
 	}
 

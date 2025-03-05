@@ -103,11 +103,10 @@ public class LtMastAmountwiseApprovalsDaoImpl implements LtMastAmountwiseApprova
 	        List<LtMastAmountwiseApprovals> result = jdbcTemplate.query(
 	            query,
 	            new Object[]{
-	                companyId,transactionCode,transactionType, input.getApproverName(),
-	                 input.getColumnNo(), input.getColumnNo(), input.getColumnNo(), input.getColumnNo(),
-	                input.getColumnNo(), input.getColumnNo(), input.getColumnNo(), input.getColumnNo(),
-	                input.getColumnNo(), input.getColumnNo(), input.getColumnNo(),input.getColumnNo(),input.getColumnNo(),input.getColumnNo(),input.getColumnNo(),input.getColumnNo(),
-	                input.getStart() + 1,
+	                companyId,transactionCode,transactionType,input.getFromAmount(),input.getToAmount(),input.getStartDate(),input.getEndDate(), input.getApproverName()
+	                , input.getColumnNo(),input.getColumnNo(), input.getColumnNo(),input.getColumnNo(),
+	                input.getColumnNo(),input.getColumnNo(), input.getColumnNo(), input.getColumnNo(),
+	                input.getColumnNo(), input.getColumnNo(), input.getColumnNo(), input.getStart() + 1,
 	                input.getLength() + input.getStart()
 	            },
 	            new BeanPropertyRowMapper<>(LtMastAmountwiseApprovals.class)
